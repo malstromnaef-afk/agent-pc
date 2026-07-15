@@ -26,6 +26,10 @@
   --glow-green: 0 0 22px rgba(46, 242, 138, 0.32);
   --glow-cyan: 0 0 22px rgba(32, 230, 230, 0.28);
   --glow-purple: 0 0 24px rgba(155, 92, 255, 0.32);
+  --subscreen-w: 1440px;
+  --subscreen-h: 720px;
+  --subscreen-ratio: 1440 / 720;
+  --subscreen-radius: 14px;
 }
 
 * {
@@ -86,7 +90,7 @@ button {
   height: 42px;
   place-items: center;
   border: 1px solid rgba(46, 242, 138, 0.46);
-  border-radius: 8px;
+  border-radius: var(--subscreen-radius);
   background: linear-gradient(145deg, rgba(46, 242, 138, 0.18), rgba(32, 230, 230, 0.08));
   box-shadow: var(--glow-green);
   color: var(--green);
@@ -147,9 +151,34 @@ button {
   font-weight: 900;
 }
 
+.nav-sub {
+  display: grid;
+  gap: 8px;
+  margin: -4px 0 2px 54px;
+}
+
+.nav-subitem {
+  min-height: 36px;
+  width: auto;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  text-align: left;
+  padding: 0 14px;
+  font-weight: 850;
+}
+
+.nav-subitem:hover,
+.nav-subitem.active {
+  background: transparent;
+  color: var(--green);
+}
+
 .main {
   min-width: 0;
   padding: 24px;
+  overflow-x: auto;
 }
 
 .topbar {
@@ -267,6 +296,7 @@ p {
 }
 
 .panel {
+  container-type: inline-size;
   border: 1px solid var(--line);
   border-radius: 8px;
   background: rgba(32, 34, 38, 0.9);
@@ -409,14 +439,19 @@ p {
 .subscreen {
   position: relative;
   overflow: hidden;
-  aspect-ratio: 2 / 1;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
   margin-top: 16px;
-  border: 10px solid #080a0d;
-  border-radius: 8px;
+  border: 2px solid rgba(32, 230, 230, 0.96);
+  border-radius: var(--subscreen-radius);
+  aspect-ratio: var(--subscreen-ratio);
   background:
     radial-gradient(circle at 18% 18%, rgba(46, 242, 138, 0.16), transparent 30%),
     radial-gradient(circle at 74% 30%, rgba(155, 92, 255, 0.15), transparent 34%),
     #15171b;
+  box-shadow:
+    0 0 28px rgba(32, 230, 230, 0.22);
 }
 
 .sub-top {
@@ -606,16 +641,12 @@ p {
 
 .detail-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 330px;
+  grid-template-columns: minmax(0, 1fr);
   gap: 18px;
   align-items: start;
 }
 
-.detail-layout.no-side {
-  grid-template-columns: minmax(0, 1fr);
-}
-
-.detail-layout.no-side #detail-side {
+#detail-side {
   display: none;
 }
 
@@ -923,17 +954,21 @@ p {
 }
 
 .agent-subscreen-preview {
-  width: 100%;
-  aspect-ratio: 2 / 1;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 8px;
+  border: 2px solid rgba(32, 230, 230, 0.96);
+  border-radius: var(--subscreen-radius);
   background:
     radial-gradient(circle at 22% 18%, rgba(46, 242, 138, 0.12), transparent 28%),
     radial-gradient(circle at 82% 76%, rgba(32, 230, 230, 0.1), transparent 30%),
     rgba(32, 34, 38, 0.92);
-  box-shadow: var(--shadow);
-  padding: 14px;
+  box-shadow:
+    var(--shadow),
+    0 0 28px rgba(32, 230, 230, 0.22);
+  padding: 6px;
 }
 
 .agent-subscreen-console {
@@ -947,13 +982,9 @@ p {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
-  border: 1px solid rgba(129, 242, 234, 0.62);
-  border-radius: 8px;
-  background:
-    linear-gradient(155deg, rgba(32, 230, 230, 0.14), rgba(0, 0, 0, 0.68) 42%),
-    rgba(255, 255, 255, 0.035);
-  box-shadow: var(--glow-cyan);
-  padding: 16px;
+  border-radius: 0;
+  background: transparent;
+  padding: 4px;
 }
 
 .agent-subscreen-main.single {
@@ -970,11 +1001,11 @@ p {
   display: grid;
   align-content: start;
   gap: 8px;
-  min-height: 88px;
+  min-height: 76px;
   border: 1px solid var(--line-soft);
   border-radius: 8px;
   background: rgba(21, 23, 30, 0.74);
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 
 .agent-subscreen-kpi span {
@@ -1024,7 +1055,7 @@ p {
   display: grid;
   grid-template-rows: minmax(0, 1fr);
   min-height: 0;
-  padding-top: 14px;
+  padding-top: 10px;
 }
 
 .agent-subscreen-steps-panel {
@@ -1035,7 +1066,7 @@ p {
   border: 1px solid var(--line-soft);
   border-radius: 8px;
   background: rgba(21, 23, 30, 0.68);
-  padding: 14px 16px;
+  padding: 12px 14px;
 }
 
 .agent-subscreen-steps-head {
@@ -1061,7 +1092,7 @@ p {
 
 .agent-subscreen-steps {
   display: grid;
-  gap: 8px;
+  gap: 7px;
   overflow: hidden;
 }
 
@@ -1069,12 +1100,12 @@ p {
   display: grid;
   grid-template-columns: 34px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
-  min-height: 54px;
+  gap: 10px;
+  min-height: 48px;
   border: 1px solid transparent;
   border-radius: 8px;
   background: rgba(8, 9, 18, 0.64);
-  padding: 10px 12px;
+  padding: 8px 10px;
   color: var(--muted);
 }
 
@@ -1145,12 +1176,6 @@ p {
 
 .agent-step-row.waiting {
   opacity: 0.48;
-}
-
-.agent-step-row.active .bar {
-  grid-column: 2 / 4;
-  height: 6px;
-  margin: 0;
 }
 
 .agent-subscreen-foot {
@@ -1406,8 +1431,10 @@ pre {
   display: grid;
   grid-template-rows: minmax(0, 1fr) minmax(0, 0.95fr);
   gap: 12px;
-  width: min(100%, 1440px);
-  aspect-ratio: 2 / 1;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
+  aspect-ratio: var(--subscreen-ratio);
   margin: 0 auto;
   overflow: hidden;
 }
@@ -1418,8 +1445,10 @@ pre {
 .security-preview,
 .pet-preview {
   position: relative;
-  width: min(100%, 1440px);
-  aspect-ratio: 2 / 1;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
+  aspect-ratio: var(--subscreen-ratio);
   margin: 0 auto;
 }
 
@@ -1958,9 +1987,8 @@ pre {
 
 .voice-console-preview {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background:
     radial-gradient(circle at 76% 18%, rgba(46, 242, 138, 0.12), transparent 28%),
@@ -1979,12 +2007,8 @@ pre {
 
 .voice-assistant-panel {
   overflow: hidden;
-  border: 1px solid rgba(129, 242, 234, 0.78);
-  border-radius: 8px;
-  background:
-    radial-gradient(circle at 58% 62%, rgba(32, 230, 230, 0.36), transparent 32%),
-    rgba(255, 255, 255, 0.035);
-  box-shadow: var(--glow-cyan);
+  border-radius: 0;
+  background: transparent;
 }
 
 .voice-assistant-title {
@@ -2366,9 +2390,8 @@ pre {
 
 .meeting-preview {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background:
     radial-gradient(circle at 20% 18%, rgba(32, 230, 230, 0.12), transparent 28%),
@@ -2389,12 +2412,8 @@ pre {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
-  border: 1px solid rgba(129, 242, 234, 0.62);
-  border-radius: 8px;
-  background:
-    linear-gradient(168deg, rgba(32, 230, 230, 0.18), rgba(0, 0, 0, 0.74) 34%),
-    rgba(255, 255, 255, 0.035);
-  box-shadow: var(--glow-cyan);
+  border-radius: 0;
+  background: transparent;
 }
 
 .meeting-live-panel.recording {
@@ -2402,8 +2421,8 @@ pre {
 }
 
 @keyframes meeting-panel-recording {
-  0%, 100% { box-shadow: var(--glow-cyan); }
-  50% { box-shadow: 0 0 42px rgba(46, 242, 138, 0.2), inset 0 0 24px rgba(32, 230, 230, 0.08); }
+  0%, 100% { box-shadow: inset 0 0 18px rgba(46, 242, 138, 0.05); }
+  50% { box-shadow: inset 0 0 30px rgba(46, 242, 138, 0.1); }
 }
 
 .meeting-live-head {
@@ -2730,9 +2749,8 @@ pre {
 
 .security-preview {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background:
     radial-gradient(circle at 78% 16%, rgba(255, 92, 92, 0.12), transparent 28%),
@@ -2753,12 +2771,8 @@ pre {
   grid-template-rows: auto minmax(0, 1fr) auto;
   overflow: hidden;
   height: 100%;
-  border: 1px solid rgba(255, 92, 92, 0.42);
-  border-radius: 8px;
-  background:
-    linear-gradient(155deg, rgba(255, 92, 92, 0.12), rgba(0, 0, 0, 0.62) 38%),
-    rgba(255, 255, 255, 0.035);
-  box-shadow: 0 0 32px rgba(255, 92, 92, 0.14);
+  border-radius: 0;
+  background: transparent;
 }
 
 .security-summary-head {
@@ -2904,9 +2918,8 @@ pre {
 
 .pet-preview {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background:
     radial-gradient(circle at 50% 30%, rgba(46, 242, 138, 0.12), transparent 30%),
@@ -2927,12 +2940,8 @@ pre {
   display: grid;
   grid-template-rows: auto minmax(0, 1fr);
   overflow: hidden;
-  border: 1px solid rgba(129, 242, 234, 0.58);
-  border-radius: 8px;
-  background:
-    linear-gradient(165deg, rgba(32, 230, 230, 0.12), rgba(0, 0, 0, 0.64) 40%),
-    rgba(255, 255, 255, 0.035);
-  box-shadow: var(--glow-cyan);
+  border-radius: 0;
+  background: transparent;
 }
 
 .pet-live-head {
@@ -3669,6 +3678,40 @@ pre {
   padding: 0;
 }
 
+.config-section-tabs {
+  display: inline-flex;
+  gap: 8px;
+  margin-top: 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.035);
+  padding: 6px;
+}
+
+.config-section-tab {
+  min-height: 38px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--muted);
+  padding: 0 18px;
+  font-weight: 900;
+}
+
+.config-section-tab.active {
+  background: rgba(46, 242, 138, 0.14);
+  color: var(--green);
+  box-shadow: inset 0 0 0 1px rgba(46, 242, 138, 0.32);
+}
+
+.config-section-panel {
+  display: none;
+}
+
+.config-section-panel.active {
+  display: block;
+}
+
 .device-preview-panel {
   margin-top: 18px;
 }
@@ -3717,6 +3760,124 @@ pre {
   background: #505b69;
   color: var(--text);
   padding: 0 16px;
+}
+
+.api-settings-panel {
+  margin-top: 18px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.api-settings-list {
+  display: grid;
+  gap: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: #384352;
+}
+
+.api-setting-row {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.42fr) minmax(320px, 0.58fr);
+  align-items: center;
+  gap: 24px;
+  min-height: 76px;
+  padding: 16px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.api-setting-row:last-child {
+  border-bottom: 0;
+}
+
+.api-setting-name {
+  display: grid;
+  gap: 4px;
+}
+
+.api-setting-name label,
+.api-setting-name span {
+  color: var(--muted);
+  font-size: 16px;
+  font-weight: 760;
+}
+
+.api-setting-name small {
+  color: var(--muted-2);
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+.api-setting-control {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: 0;
+}
+
+.api-setting-control strong {
+  color: var(--text);
+}
+
+.api-setting-control input,
+.api-setting-control select {
+  width: 100%;
+  max-width: 520px;
+  min-height: 42px;
+  border: 0;
+  border-radius: 8px;
+  background: #505b69;
+  color: var(--text);
+  padding: 0 16px;
+}
+
+.api-setting-control input::placeholder {
+  color: rgba(255, 255, 255, 0.42);
+}
+
+.api-scope-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.api-scope-list span {
+  border: 1px solid rgba(32, 230, 230, 0.26);
+  border-radius: 999px;
+  background: rgba(32, 230, 230, 0.08);
+  color: var(--text);
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.api-status-line {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.api-status-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 999px;
+  background: var(--yellow);
+  box-shadow: 0 0 12px rgba(245, 185, 78, 0.5);
+}
+
+.api-status-dot.connected {
+  background: var(--green);
+  box-shadow: var(--glow-green);
+}
+
+.api-status-dot.error {
+  background: var(--red);
+  box-shadow: 0 0 12px rgba(255, 92, 92, 0.42);
 }
 
 .check-row {
@@ -3885,9 +4046,8 @@ pre {
 
 .schedule-preview {
   width: 100%;
-  aspect-ratio: 2 / 1;
+  aspect-ratio: var(--subscreen-ratio);
   overflow: hidden;
-  border: 1px solid var(--line);
   border-radius: 8px;
   background:
     radial-gradient(circle at 76% 12%, rgba(46, 242, 138, 0.12), transparent 28%),
@@ -4430,8 +4590,16 @@ pre {
 .meeting-preview,
 .security-preview,
 .pet-preview {
-  width: min(100%, 1440px);
-  aspect-ratio: 2 / 1;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
+  aspect-ratio: var(--subscreen-ratio);
+  overflow: hidden;
+  border: 2px solid rgba(32, 230, 230, 0.96);
+  border-radius: var(--subscreen-radius);
+  box-shadow:
+    var(--shadow),
+    0 0 28px rgba(32, 230, 230, 0.22);
   margin-left: auto;
   margin-right: auto;
 }
@@ -4515,9 +4683,15 @@ pre {
     display: grid;
   }
 
-  .subscreen {
-    aspect-ratio: auto;
-    min-height: 520px;
+  .subscreen,
+  .agent-subscreen-preview,
+  .token-preview-canvas,
+  .schedule-preview,
+  .voice-console-preview,
+  .meeting-preview,
+  .security-preview,
+  .pet-preview {
+    height: min(50cqw, var(--subscreen-h));
   }
 
   .step-strip {
@@ -4570,6 +4744,9 @@ pre {
           <button class="nav-item" data-view="screen-config">
             <span class="nav-ico">08</span><span>全局配置</span>
           </button>
+          <div class="nav-sub" aria-label="全局配置二级导航">
+            <button class="nav-subitem" data-config-subpage="api">API 接入</button>
+          </div>
         </nav>
 
       </aside>
@@ -4584,8 +4761,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -4724,8 +4901,8 @@ pre {
                   <h3>Token 算力消耗</h3>
                 </div>
                 <div class="preview-config-switch">
-                  <span>副屏展示</span>
-                  <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                  <span>副屏展示效果</span>
+                  <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                   <small data-toggle-label>打开</small>
                 </div>
               </div>
@@ -4881,8 +5058,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -4977,8 +5154,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -5041,8 +5218,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -5104,8 +5281,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -5179,8 +5356,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示已打开"></button>
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -5222,15 +5399,15 @@ pre {
             <section class="panel config-panel">
               <div class="panel-head">
                 <div>
-                  <h2>全局配置</h2>
+                  <h2 id="config-page-title">全局配置</h2>
                 </div>
-                <div class="action-row">
+                <div class="action-row" id="config-page-actions">
                   <button class="soft-button" id="reset-config">恢复默认</button>
                   <button class="primary-button" id="save-config">保存设置</button>
                 </div>
               </div>
 
-              <section class="inner-card device-preview-panel">
+              <section class="inner-card device-preview-panel config-section-panel active" data-config-panel="device">
                 <div class="device-settings-grid">
                   <article class="device-setting-card">
                     <label for="device-brightness">亮度</label>
@@ -5284,6 +5461,78 @@ pre {
                       <strong id="device-touch-feedback-label">开启</strong>
                     </div>
                     <button class="toggle" id="device-touch-feedback" aria-pressed="true" aria-label="触控反馈已开启"></button>
+                  </article>
+                </div>
+              </section>
+
+              <section class="inner-card api-settings-panel config-section-panel" data-config-panel="api">
+                <div class="api-settings-list">
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <span>接入状态</span>
+                      <small>检查当前 API Key 和服务地址是否可用</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <div class="api-status-line">
+                        <i class="api-status-dot" id="api-status-dot" aria-hidden="true"></i>
+                        <strong id="api-status-text">未配置</strong>
+                      </div>
+                      <button class="soft-button" id="api-test-connection">测试连接</button>
+                    </div>
+                  </article>
+
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <label for="api-provider">服务商</label>
+                      <small>统一选择 AI 功能点调用的模型服务</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <select id="api-provider">
+                        <option>OpenAI</option>
+                        <option>Anthropic</option>
+                        <option>自定义兼容 API</option>
+                      </select>
+                    </div>
+                  </article>
+
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <label for="api-base-url">API Base URL</label>
+                      <small>兼容 OpenAI 格式的服务地址</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <input id="api-base-url" type="text" placeholder="https://api.openai.com/v1" />
+                    </div>
+                  </article>
+
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <label for="api-key">API Key</label>
+                      <small>保存后用于 AI 语音、会议、任务分析等能力</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <input id="api-key" type="password" placeholder="输入 API Key" autocomplete="off" />
+                    </div>
+                  </article>
+
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <label for="api-model">默认模型</label>
+                      <small>功能点未单独指定时使用该模型</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <input id="api-model" type="text" placeholder="gpt-4.1" />
+                    </div>
+                  </article>
+
+                  <article class="api-setting-row">
+                    <div class="api-setting-name">
+                      <span>功能点使用范围</span>
+                      <small>第一版统一接入，不做单功能独立配置</small>
+                    </div>
+                    <div class="api-setting-control">
+                      <div class="api-scope-list" id="api-scope-list"></div>
+                    </div>
                   </article>
                 </div>
               </section>
@@ -5572,6 +5821,7 @@ const FEATURE_CONFIG = {
 
 const APP_STATE = {
   currentPage: "monitor",
+  configSubpage: "device",
   currentMode: "工作模式",
   selectedFeature: "Agent 任务进度可视化",
   selectedTrigger: "normal",
@@ -5585,6 +5835,23 @@ const APP_STATE = {
     alwaysOn: false,
     alertWake: true,
     touchFeedback: true,
+  },
+  apiSettings: {
+    status: "未配置",
+    provider: "OpenAI",
+    baseUrl: "https://api.openai.com/v1",
+    apiKey: "",
+    model: "gpt-4.1",
+    lastTest: "",
+    scopes: [
+      "Agent 任务进度可视化",
+      "Token 算力消耗",
+      "定时任务看板",
+      "AI智能语音",
+      "AI 会议助手",
+      "安全告警面板",
+      "虚拟桌面宠物",
+    ],
   },
   previewEnabled: {
     monitor: true,
@@ -5788,6 +6055,7 @@ const APP_STATE = {
 
 const DEFAULT_SECONDARY_CONFIG = JSON.parse(JSON.stringify(APP_STATE.secondaryScreenConfig));
 const DEFAULT_DEVICE_SETTINGS = JSON.parse(JSON.stringify(APP_STATE.deviceSettings));
+const DEFAULT_API_SETTINGS = JSON.parse(JSON.stringify(APP_STATE.apiSettings));
 
 function escapeHtml(value) {
   return String(value)
@@ -5811,6 +6079,15 @@ function getTrigger() {
 
 function setActiveTab(viewId) {
   APP_STATE.currentPage = viewId;
+  if (viewId === "screen-config") APP_STATE.configSubpage = "device";
+  renderApp();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function setConfigSubpage(subpage) {
+  if (!["device", "api"].includes(subpage)) return;
+  APP_STATE.currentPage = "screen-config";
+  APP_STATE.configSubpage = subpage;
   renderApp();
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
@@ -5820,6 +6097,7 @@ function setConfigFeature(featureName) {
   APP_STATE.selectedFeature = featureName;
   APP_STATE.selectedTrigger = FEATURE_CONFIG[featureName].defaultTrigger;
   APP_STATE.currentPage = "screen-config";
+  APP_STATE.configSubpage = "device";
   renderApp();
 }
 
@@ -5850,7 +6128,7 @@ function saveCurrentFeatureConfig() {
   const counts = countDisplayStates();
   showSheet({
     type: "Toast",
-    title: "副屏展示已保存",
+    title: "副屏展示效果已保存",
     copy: `${APP_STATE.selectedFeature}：${counts.persistent} 个常驻，${counts.triggered} 个触发时出现，${counts.hidden} 个不显示。`,
     detail: "screen-config",
   });
@@ -5899,8 +6177,8 @@ function renderDetailView() {
   const currentCrumb = $("#detail-current-crumb");
   const main = $("#detail-main");
   const side = $("#detail-side");
-  if (!title || !subtitle || !main || !side) return;
-  side.parentElement.classList.toggle("no-side", !detail.actions.length);
+  if (!title || !subtitle || !main) return;
+  if (side) side.innerHTML = "";
   if (currentCrumb) currentCrumb.textContent = PAGE_TITLES[detail.fromPage] || "功能页";
   title.textContent = detail.title || "详情页";
   subtitle.textContent = detail.subtitle || "完整详情会在这里展示。";
@@ -5925,16 +6203,6 @@ function renderDetailView() {
     </div>
     <div class="detail-field-grid">${fields}</div>
     ${sections}
-  `;
-  side.innerHTML = `
-    <div class="detail-side-stack">
-      <div>
-        <span class="tag ${detail.statusClass || tagClassForStatus(detail.status || "")}">${escapeHtml(detail.status || "详情")}</span>
-      </div>
-      ${detail.actions.length ? detail.actions.map((action) => `
-        <button class="${action.primary ? "primary-button" : "soft-button"}" data-detail-action="${escapeHtml(action.action)}" data-detail-id="${escapeHtml(action.id || "")}" data-detail-jump="${escapeHtml(action.jump || "")}">${escapeHtml(action.label)}</button>
-      `).join("") : ""}
-    </div>
   `;
 }
 
@@ -6434,7 +6702,7 @@ function renderAgentPage() {
     stopButton.textContent = running ? "停止监控" : "已停止";
     stopButton.disabled = !running;
   }
-  const stepIndex = running ? Math.min(5, Math.max(0, Math.ceil(monitor.progress / 18) - 1)) : 5;
+  const stepIndex = running ? Math.min(4, Math.max(0, Math.ceil(monitor.progress / 18) - 1)) : 4;
   const steps = running
     ? [
       { title: "读取窗口", desc: `已连接 ${agentWindow.name} 窗口`, duration: "已完成 · 18秒" },
@@ -6442,7 +6710,6 @@ function renderAgentPage() {
       { title: "同步进度", desc: "进度、日志和输出已写入副屏", duration: "已完成 · 1分20秒" },
       { title: "校验状态", desc: agentWindow.currentOutput, duration: "进行中 · 4分50秒" },
       { title: "写入记录", desc: "完成后沉淀到 Agent 任务记录", duration: "待执行" },
-      { title: "等待更新", desc: "持续监听窗口变化", duration: "待执行" },
     ]
     : [
       { title: "读取窗口", desc: `已连接 ${agentWindow.name} 窗口`, duration: "已完成" },
@@ -6450,18 +6717,15 @@ function renderAgentPage() {
       { title: "同步进度", desc: "保留最后一次识别结果", duration: "已完成" },
       { title: "停止监控", desc: "用户已停止当前窗口监控", duration: "当前" },
       { title: "保留结果", desc: "任务记录可继续查看", duration: "已完成" },
-      { title: "等待恢复", desc: "选择窗口后恢复监控", duration: "待恢复" },
     ];
   $("#agent-step-strip").innerHTML = steps.map((step, index) => {
     const stateClass = index < stepIndex ? "done" : index === stepIndex ? "active" : "waiting";
     const stateIcon = index < stepIndex ? "✓" : index === stepIndex ? "●" : "○";
-    const activeProgress = index === stepIndex ? `<div class="bar"><i style="width:${Math.max(18, monitor.progress)}%"></i></div>` : "";
     return `
       <div class="agent-step-row ${stateClass}">
         <span class="agent-step-icon">${stateIcon}</span>
         <span class="agent-step-copy"><strong>${escapeHtml(step.title)}</strong><span>${escapeHtml(step.desc)}</span></span>
         <span class="agent-step-state">${escapeHtml(step.duration)}</span>
-        ${activeProgress}
       </div>
     `;
   }).join("");
@@ -6627,8 +6891,8 @@ function toggleFeatureOnSecondary(featureName) {
   renderApp();
   showSheet({
     type: "Toast",
-    title: enabled ? "已关闭副屏展示" : "已打开副屏展示",
-    copy: `${featureName} ${enabled ? "已从副屏隐藏，主屏仍保留功能页。" : "已恢复推荐的副屏展示规则。"}`,
+    title: enabled ? "已关闭副屏展示效果" : "已打开副屏展示效果",
+    copy: `${featureName} ${enabled ? "已从副屏隐藏，主屏仍保留功能页。" : "已恢复推荐的副屏展示效果规则。"}`,
     detail: "screen-config",
   });
 }
@@ -7544,6 +7808,9 @@ function renderApp() {
 function renderNavigation() {
   $$(".view").forEach((view) => view.classList.toggle("active", view.id === APP_STATE.currentPage));
   $$(".nav-item").forEach((item) => item.classList.toggle("active", item.dataset.view === APP_STATE.currentPage));
+  $$(".nav-subitem").forEach((item) => {
+    item.classList.toggle("active", APP_STATE.currentPage === "screen-config" && item.dataset.configSubpage === APP_STATE.configSubpage);
+  });
   const pageTitle = $("#page-title");
   if (pageTitle) pageTitle.textContent = APP_STATE.currentPage === "detail-view" ? APP_STATE.detailView.title : (PAGE_TITLES[APP_STATE.currentPage] || PAGE_TITLES.monitor);
 }
@@ -7554,7 +7821,7 @@ function renderPreviewToggles() {
     const page = view?.id;
     const enabled = page ? APP_STATE.previewEnabled[page] !== false : true;
     toggle.setAttribute("aria-pressed", String(enabled));
-    toggle.setAttribute("aria-label", `副屏展示已${enabled ? "打开" : "关闭"}`);
+    toggle.setAttribute("aria-label", `副屏展示效果已${enabled ? "打开" : "关闭"}`);
     toggle.classList.toggle("off", !enabled);
     const label = toggle.parentElement.querySelector("[data-toggle-label]");
     if (label) label.textContent = enabled ? "打开" : "关闭";
@@ -7567,7 +7834,7 @@ function setPreviewEnabled(page, enabled) {
   renderPreviewToggles();
   showSheet({
     type: "Toast",
-    title: `副屏展示已${enabled ? "打开" : "关闭"}`,
+    title: `副屏展示效果已${enabled ? "打开" : "关闭"}`,
     copy: `${PAGE_TITLES[page]} ${enabled ? "会继续同步到副屏预览。" : "已从副屏临时隐藏，主屏记录不受影响。"}`,
     detail: page,
   });
@@ -7629,8 +7896,99 @@ function saveDeviceSettings() {
   });
 }
 
+function renderApiSettings() {
+  const settings = APP_STATE.apiSettings;
+  const provider = $("#api-provider");
+  if (!provider) return;
+  provider.value = settings.provider;
+  $("#api-base-url").value = settings.baseUrl;
+  $("#api-key").value = settings.apiKey;
+  $("#api-model").value = settings.model;
+  $("#api-status-text").textContent = settings.status;
+  $("#api-status-dot").classList.toggle("connected", settings.status === "已连接");
+  $("#api-scope-list").innerHTML = settings.scopes.map((scope) => `<span>${escapeHtml(scope)}</span>`).join("");
+}
+
+function updateApiSetting(key, value) {
+  APP_STATE.apiSettings[key] = value;
+  APP_STATE.apiSettings.status = APP_STATE.apiSettings.apiKey ? "待测试" : "未配置";
+  renderApiSettings();
+}
+
+function resetApiSettings() {
+  APP_STATE.apiSettings = JSON.parse(JSON.stringify(DEFAULT_API_SETTINGS));
+  renderApiSettings();
+  showSheet({
+    type: "Toast",
+    title: "API 接入已恢复默认",
+    copy: "服务商、Base URL、默认模型和连接状态已恢复默认。",
+    detail: "screen-config",
+  });
+}
+
+function saveApiSettings() {
+  const settings = APP_STATE.apiSettings;
+  settings.status = settings.apiKey ? settings.status : "未配置";
+  renderApiSettings();
+  showSheet({
+    type: "Toast",
+    title: "API 接入已保存",
+    copy: settings.apiKey ? `${settings.provider} 已保存，默认模型：${settings.model}。` : "API 接入信息已保存，填写 API Key 后可测试连接。",
+    detail: "screen-config",
+  });
+}
+
+function testApiConnection() {
+  const settings = APP_STATE.apiSettings;
+  if (!settings.apiKey.trim()) {
+    settings.status = "未配置";
+    renderApiSettings();
+    showSheet({
+      type: "Toast",
+      title: "请先填写 API Key",
+      copy: "填写 API Key 后再测试连接。",
+      detail: "screen-config",
+    });
+    return;
+  }
+  settings.status = "已连接";
+  settings.lastTest = nowText();
+  renderApiSettings();
+  showSheet({
+    type: "Toast",
+    title: "API 连接正常",
+    copy: `${settings.provider} 连接成功，默认模型 ${settings.model} 可用于全部 AI 功能点。`,
+    detail: "screen-config",
+  });
+}
+
+function resetConfigPage() {
+  if (APP_STATE.configSubpage === "api") {
+    resetApiSettings();
+    return;
+  }
+  resetDeviceSettings();
+}
+
+function saveConfigPage() {
+  if (APP_STATE.configSubpage === "api") {
+    saveApiSettings();
+    return;
+  }
+  saveDeviceSettings();
+}
+
 function renderConfigPage() {
+  const isApi = APP_STATE.configSubpage === "api";
+  const title = $("#config-page-title");
+  if (title) title.textContent = isApi ? "API 接入" : "全局配置";
+  const actions = $("#config-page-actions");
+  if (actions) actions.style.display = isApi ? "none" : "flex";
+  $$("[data-config-panel]").forEach((panel) => {
+    panel.classList.toggle("active", panel.dataset.configPanel === APP_STATE.configSubpage);
+  });
   renderDeviceSettings();
+  renderApiSettings();
 }
 
 function renderSheet() {
@@ -7715,6 +8073,9 @@ function handlePetTouch() {
 function bindEvents() {
   $$(".nav-item").forEach((item) => {
     item.addEventListener("click", () => setActiveTab(item.dataset.view));
+  });
+  $$(".nav-subitem").forEach((item) => {
+    item.addEventListener("click", () => setConfigSubpage(item.dataset.configSubpage));
   });
 
   $$("[data-jump]").forEach((el) => {
@@ -7802,8 +8163,8 @@ function bindEvents() {
     }
     setActiveTab(target);
   });
-  $("#reset-config").addEventListener("click", resetDeviceSettings);
-  $("#save-config").addEventListener("click", saveDeviceSettings);
+  $("#reset-config").addEventListener("click", resetConfigPage);
+  $("#save-config").addEventListener("click", saveConfigPage);
   $("#device-brightness").addEventListener("input", (event) => updateDeviceSetting("brightness", Number(event.target.value)));
   $("#device-sleep-time").addEventListener("change", (event) => updateDeviceSetting("sleepTime", event.target.value));
   $("#device-wake-touch").addEventListener("change", (event) => updateDeviceSetting("wakeTouch", event.target.checked));
@@ -7812,6 +8173,11 @@ function bindEvents() {
   $("#device-always-on").addEventListener("click", () => updateDeviceSetting("alwaysOn", !APP_STATE.deviceSettings.alwaysOn));
   $("#device-alert-wake").addEventListener("click", () => updateDeviceSetting("alertWake", !APP_STATE.deviceSettings.alertWake));
   $("#device-touch-feedback").addEventListener("click", () => updateDeviceSetting("touchFeedback", !APP_STATE.deviceSettings.touchFeedback));
+  $("#api-provider").addEventListener("change", (event) => updateApiSetting("provider", event.target.value));
+  $("#api-base-url").addEventListener("input", (event) => updateApiSetting("baseUrl", event.target.value));
+  $("#api-key").addEventListener("input", (event) => updateApiSetting("apiKey", event.target.value));
+  $("#api-model").addEventListener("input", (event) => updateApiSetting("model", event.target.value));
+  $("#api-test-connection").addEventListener("click", testApiConnection);
   const tokenQuotaModal = $("#token-quota-modal");
   const hideTokenQuotaModal = () => {
     tokenQuotaModal.classList.remove("show");
