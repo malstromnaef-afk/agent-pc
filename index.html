@@ -199,6 +199,41 @@ button {
   font-weight: 800;
 }
 
+.auth-error.success {
+  color: var(--green);
+}
+
+.auth-text-action {
+  justify-self: end;
+  border: 0;
+  background: transparent;
+  color: var(--green);
+  padding: 0;
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.auth-code-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 116px;
+  align-items: end;
+  gap: 10px;
+}
+
+.auth-code-button,
+.auth-back-button {
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #20242a;
+  color: var(--text);
+  font-weight: 850;
+}
+
+.auth-back-button {
+  width: 100%;
+}
+
 @media (max-width: 900px) {
   .auth-shell { padding: 24px 18px; }
 }
@@ -6683,6 +6718,7 @@ pre {
             <h1>登录 Agent PC</h1>
             <label class="auth-field">手机号或邮箱<input id="auth-login-account" name="account" type="text" autocomplete="username" placeholder="请输入手机号或邮箱" /></label>
             <label class="auth-field">密码<input id="auth-login-password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" /></label>
+            <button class="auth-text-action" id="auth-forgot-password" type="button">忘记密码</button>
             <p class="auth-error" id="auth-login-error" role="alert"></p>
             <button class="auth-submit" type="submit">登录</button>
           </form>
@@ -6694,6 +6730,28 @@ pre {
             <label class="auth-field">确认密码<input id="auth-register-confirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="请再次输入密码" /></label>
             <p class="auth-error" id="auth-register-error" role="alert"></p>
             <button class="auth-submit" type="submit">注册并进入</button>
+          </form>
+          <form class="auth-form" id="auth-reset-form" novalidate hidden>
+            <h1>重置密码</h1>
+            <label class="auth-field">手机号或邮箱<input id="auth-reset-account" type="text" placeholder="请输入手机号或邮箱" /></label>
+            <div class="auth-code-row">
+              <label class="auth-field">验证码<input id="auth-reset-code" type="text" inputmode="numeric" placeholder="请输入验证码" /></label>
+              <button class="auth-code-button" id="auth-send-code" type="button">获取验证码</button>
+            </div>
+            <label class="auth-field">新密码<input id="auth-reset-password" type="password" placeholder="请输入新密码" /></label>
+            <label class="auth-field">确认新密码<input id="auth-reset-confirm" type="password" placeholder="请再次输入新密码" /></label>
+            <p class="auth-error" id="auth-reset-error" role="alert"></p>
+            <button class="auth-submit" type="submit">确认重置</button>
+            <button class="auth-back-button" id="auth-reset-back" type="button">返回登录</button>
+          </form>
+          <form class="auth-form" id="auth-change-form" novalidate hidden>
+            <h1>修改密码</h1>
+            <label class="auth-field">当前密码<input id="auth-change-current" type="password" placeholder="请输入当前密码" /></label>
+            <label class="auth-field">新密码<input id="auth-change-password" type="password" placeholder="请输入新密码" /></label>
+            <label class="auth-field">确认新密码<input id="auth-change-confirm" type="password" placeholder="请再次输入新密码" /></label>
+            <p class="auth-error" id="auth-change-error" role="alert"></p>
+            <button class="auth-submit" type="submit">确认修改</button>
+            <button class="auth-back-button" id="auth-change-back" type="button">返回</button>
           </form>
         </div>
       </div>
@@ -6741,6 +6799,7 @@ pre {
             </span>
           </button>
           <div class="account-menu" id="account-menu" role="menu" aria-hidden="true">
+            <button id="account-change-password" type="button" role="menuitem">修改密码</button>
             <button id="account-logout" type="button" role="menuitem">退出登录</button>
           </div>
         </div>
@@ -11368,15 +11427,40 @@ function writeLocalValue(key, value) {
 
 function setAuthError(selector, message = "") {
   const error = $(selector);
-  if (error) error.textContent = message;
+  if (!error) return;
+  error.classList.remove("success");
+  error.textContent = message;
+}
+
+function setAuthSuccess(selector, message = "") {
+  const feedback = $(selector);
+  if (!feedback) return;
+  feedback.classList.add("success");
+  feedback.textContent = message;
 }
 
 function setAuthMode(mode) {
-  const activeMode = mode === "register" ? "register" : "login";
-  const loginForm = $("#auth-login-form");
-  const registerForm = $("#auth-register-form");
-  if (loginForm) loginForm.hidden = activeMode !== "login";
-  if (registerForm) registerForm.hidden = activeMode !== "register";
+  const allowedModes = ["login", "register", "reset", "change"];
+  const activeMode = allowedModes.includes(mode) ? mode : "login";
+  const tabs = $(".auth-tabs");
+  if (tabs) tabs.hidden = !["login", "register"].includes(activeMode);
+  const formByMode = {
+    login: "#auth-login-form",
+    register: "#auth-register-form",
+    reset: "#auth-reset-form",
+    change: "#auth-change-form",
+  };
+  Object.entries(formByMode).forEach(([formMode, selector]) => {
+    const form = $(selector);
+    if (form) form.hidden = formMode !== activeMode;
+  });
+  if (activeMode === "reset") {
+    const codeButton = $("#auth-send-code");
+    if (codeButton) {
+      codeButton.disabled = false;
+      codeButton.textContent = "获取验证码";
+    }
+  }
   $$('[data-auth-mode]').forEach((tab) => {
     const active = tab.dataset.authMode === activeMode;
     tab.classList.toggle("active", active);
@@ -11384,6 +11468,8 @@ function setAuthMode(mode) {
   });
   setAuthError("#auth-login-error");
   setAuthError("#auth-register-error");
+  setAuthError("#auth-reset-error");
+  setAuthError("#auth-change-error");
 }
 
 function updateAccountProfile(profile) {
@@ -11450,12 +11536,67 @@ function handleLogin(event) {
   enterAuthenticatedApp(profile);
 }
 
+function handlePasswordReset(event) {
+  event.preventDefault();
+  const profile = readLocalValue(AUTH_PROFILE_KEY) || {
+    accountId: `account-${Date.now()}`,
+    phone: "13800138000",
+    email: "user@agentpc.com",
+  };
+  profile.password = $("#auth-reset-password").value || "prototype-password";
+  writeLocalValue(AUTH_PROFILE_KEY, profile);
+  event.currentTarget.reset();
+  setAuthMode("login");
+  setAuthSuccess("#auth-login-error", "密码重置成功，请重新登录");
+}
+
+function showPasswordChange() {
+  $("#auth-shell").hidden = false;
+  $("#app-shell").hidden = true;
+  $("#app-shell").setAttribute("aria-hidden", "true");
+  setAuthMode("change");
+}
+
+function handlePasswordChange(event) {
+  event.preventDefault();
+  const profile = readLocalValue(AUTH_PROFILE_KEY) || {
+    accountId: `account-${Date.now()}`,
+    phone: "13800138000",
+    email: "user@agentpc.com",
+  };
+  profile.password = $("#auth-change-password").value || "prototype-password";
+  writeLocalValue(AUTH_PROFILE_KEY, profile);
+  event.currentTarget.reset();
+  enterAuthenticatedApp(profile);
+  showSheet({
+    type: "Toast",
+    title: "密码修改成功",
+    copy: "新密码已保存，当前登录状态保持不变。",
+    detailLabel: "",
+  });
+}
+
 function bindEvents() {
   $$('[data-auth-mode]').forEach((tab) => {
     tab.addEventListener("click", () => setAuthMode(tab.dataset.authMode));
   });
   $("#auth-login-form")?.addEventListener("submit", handleLogin);
   $("#auth-register-form")?.addEventListener("submit", handleRegistration);
+  $("#auth-reset-form")?.addEventListener("submit", handlePasswordReset);
+  $("#auth-change-form")?.addEventListener("submit", handlePasswordChange);
+  $("#auth-forgot-password")?.addEventListener("click", () => setAuthMode("reset"));
+  $("#auth-reset-back")?.addEventListener("click", () => setAuthMode("login"));
+  $("#auth-send-code")?.addEventListener("click", () => {
+    const button = $("#auth-send-code");
+    if (!button) return;
+    button.textContent = "已发送";
+    button.disabled = true;
+    setAuthSuccess("#auth-reset-error", "验证码已发送（原型演示）");
+  });
+  $("#auth-change-back")?.addEventListener("click", () => {
+    const profile = readLocalValue(AUTH_PROFILE_KEY);
+    if (profile) enterAuthenticatedApp(profile);
+  });
 
   const accountToggle = $("#account-menu-toggle");
   const accountMenu = $("#account-menu");
@@ -11472,6 +11613,14 @@ function bindEvents() {
       accountToggle.setAttribute("aria-expanded", String(!isOpen));
       accountMenu.setAttribute("aria-hidden", String(isOpen));
       accountMenu.classList.toggle("show", !isOpen);
+    });
+  }
+  const accountChangePassword = $("#account-change-password");
+  if (accountChangePassword) {
+    accountChangePassword.addEventListener("click", (event) => {
+      event.stopPropagation();
+      closeAccountMenu();
+      showPasswordChange();
     });
   }
   const accountLogout = $("#account-logout");
