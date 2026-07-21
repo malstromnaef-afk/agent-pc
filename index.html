@@ -65,179 +65,6 @@ button {
   display: none !important;
 }
 
-.auth-shell {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  display: grid;
-  place-items: center;
-  min-height: 100vh;
-  background:
-    radial-gradient(circle at 50% 24%, rgba(46, 242, 138, 0.08), transparent 30%),
-    #121416;
-  padding: 32px 20px;
-}
-
-.auth-panel {
-  display: grid;
-  align-content: center;
-  gap: 22px;
-  width: min(420px, 100%);
-  padding: 0;
-}
-
-.auth-brand {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.auth-brand-mark {
-  display: grid;
-  width: 44px;
-  height: 44px;
-  place-items: center;
-  border: 1px solid rgba(46, 242, 138, 0.48);
-  border-radius: 8px;
-  background: rgba(46, 242, 138, 0.12);
-  box-shadow: var(--glow-green);
-  color: var(--green);
-  font-weight: 950;
-}
-
-.auth-brand strong,
-.auth-brand span {
-  display: block;
-}
-
-.auth-brand span {
-  margin-top: 3px;
-  color: var(--muted);
-  font-size: 12px;
-}
-
-.auth-card {
-  display: grid;
-  gap: 20px;
-}
-
-.auth-tabs {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 4px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.03);
-  padding: 4px;
-}
-
-.auth-tab {
-  min-height: 40px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--muted);
-  font-weight: 900;
-}
-
-.auth-tab.active {
-  background: #2a2e34;
-  color: var(--text);
-}
-
-.auth-form {
-  display: grid;
-  gap: 14px;
-}
-
-.auth-form h1 {
-  font-size: 26px;
-}
-
-.auth-field {
-  display: grid;
-  gap: 7px;
-  color: var(--text);
-  font-size: 13px;
-  font-weight: 850;
-}
-
-.auth-field input {
-  width: 100%;
-  min-height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  outline: 0;
-  background: #17191d;
-  color: var(--text);
-  padding: 0 13px;
-}
-
-.auth-field input:focus {
-  border-color: rgba(46, 242, 138, 0.72);
-  box-shadow: 0 0 0 3px rgba(46, 242, 138, 0.1);
-}
-
-.auth-field input[aria-invalid="true"] {
-  border-color: rgba(255, 92, 92, 0.72);
-}
-
-.auth-submit {
-  min-height: 46px;
-  border: 0;
-  border-radius: 8px;
-  background: var(--green);
-  color: #06130d;
-  font-weight: 950;
-}
-
-.auth-error {
-  min-height: 20px;
-  margin: 0;
-  color: #ff8a8a;
-  font-size: 13px;
-  font-weight: 800;
-}
-
-.auth-error.success {
-  color: var(--green);
-}
-
-.auth-text-action {
-  justify-self: end;
-  border: 0;
-  background: transparent;
-  color: var(--green);
-  padding: 0;
-  font-size: 13px;
-  font-weight: 850;
-}
-
-.auth-code-row {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) 116px;
-  align-items: end;
-  gap: 10px;
-}
-
-.auth-code-button,
-.auth-back-button {
-  min-height: 46px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #20242a;
-  color: var(--text);
-  font-weight: 850;
-}
-
-.auth-back-button {
-  width: 100%;
-}
-
-@media (max-width: 900px) {
-  .auth-shell { padding: 24px 18px; }
-}
-
 .app {
   display: grid;
   grid-template-columns: 292px minmax(0, 1fr);
@@ -363,108 +190,6 @@ button {
 .nav-subitem.active {
   background: transparent;
   color: var(--green);
-}
-
-.sidebar-account {
-  position: relative;
-  flex-shrink: 0;
-  margin-top: auto;
-  padding-top: 12px;
-  border-top: 1px solid var(--line-soft);
-}
-
-.account-button {
-  display: grid;
-  grid-template-columns: 36px minmax(0, 1fr);
-  align-items: center;
-  gap: 10px;
-  width: 100%;
-  min-height: 48px;
-  border: 0;
-  border-radius: 8px;
-  background: transparent;
-  color: var(--text);
-  text-align: left;
-  padding: 6px;
-  cursor: pointer;
-}
-
-.account-button:hover,
-.account-button[aria-expanded="true"] {
-  background: rgba(255, 255, 255, 0.055);
-}
-
-.account-avatar {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border-radius: 50%;
-  background: linear-gradient(145deg, rgba(46, 242, 138, 0.95), rgba(32, 230, 230, 0.68));
-  color: #06130d;
-  font-size: 13px;
-  font-weight: 950;
-}
-
-.account-meta {
-  display: grid;
-  gap: 2px;
-  min-width: 0;
-}
-
-.account-meta strong {
-  overflow: hidden;
-  color: var(--text);
-  font-size: 14px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.account-meta span {
-  overflow: hidden;
-  color: var(--muted);
-  font-size: 12px;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-.account-menu {
-  position: absolute;
-  left: 6px;
-  right: 6px;
-  bottom: calc(100% + 8px);
-  display: none;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background: #20242a;
-  box-shadow: var(--shadow);
-  padding: 6px;
-  z-index: 20;
-}
-
-.account-menu.show {
-  display: grid;
-}
-
-.account-menu button {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  width: 100%;
-  min-height: 38px;
-  border: 0;
-  border-radius: 6px;
-  background: transparent;
-  color: var(--text);
-  text-align: left;
-  padding: 0 10px;
-  font-weight: 850;
-  cursor: pointer;
-}
-
-.account-menu button:hover {
-  background: rgba(255, 92, 92, 0.1);
-  color: #ffb3b3;
 }
 
 .main {
@@ -7260,61 +6985,7 @@ pre {
     </style>
   </head>
   <body>
-    <section class="auth-shell" id="auth-shell" aria-label="账号认证">
-      <div class="auth-panel">
-        <div class="auth-brand">
-          <span class="auth-brand-mark" aria-hidden="true">AP</span>
-          <div><strong>Agent PC</strong><span>AI Agent 双屏工作台</span></div>
-        </div>
-        <div class="auth-card">
-          <div class="auth-tabs" role="tablist" aria-label="登录或注册">
-            <button class="auth-tab active" id="auth-login-tab" type="button" role="tab" aria-selected="true" data-auth-mode="login">登录</button>
-            <button class="auth-tab" id="auth-register-tab" type="button" role="tab" aria-selected="false" data-auth-mode="register">注册</button>
-          </div>
-          <form class="auth-form" id="auth-login-form" novalidate>
-            <h1>登录 Agent PC</h1>
-            <label class="auth-field">手机号或邮箱<input id="auth-login-account" name="account" type="text" autocomplete="username" placeholder="请输入手机号或邮箱" /></label>
-            <label class="auth-field">密码<input id="auth-login-password" name="password" type="password" autocomplete="current-password" placeholder="请输入密码" /></label>
-            <button class="auth-text-action" id="auth-forgot-password" type="button">忘记密码</button>
-            <p class="auth-error" id="auth-login-error" role="alert"></p>
-            <button class="auth-submit" type="submit">登录</button>
-          </form>
-          <form class="auth-form" id="auth-register-form" novalidate hidden>
-            <h1>注册 Agent PC</h1>
-            <label class="auth-field">手机号<input id="auth-register-phone" name="phone" type="tel" inputmode="numeric" autocomplete="tel" placeholder="请输入手机号" /></label>
-            <label class="auth-field">邮箱<input id="auth-register-email" name="email" type="email" autocomplete="email" placeholder="请输入邮箱" /></label>
-            <label class="auth-field">密码<input id="auth-register-password" name="password" type="password" autocomplete="new-password" placeholder="至少 6 位" /></label>
-            <label class="auth-field">确认密码<input id="auth-register-confirm" name="confirmPassword" type="password" autocomplete="new-password" placeholder="请再次输入密码" /></label>
-            <p class="auth-error" id="auth-register-error" role="alert"></p>
-            <button class="auth-submit" type="submit">注册并进入</button>
-          </form>
-          <form class="auth-form" id="auth-reset-form" novalidate hidden>
-            <h1>重置密码</h1>
-            <label class="auth-field">手机号或邮箱<input id="auth-reset-account" type="text" placeholder="请输入手机号或邮箱" /></label>
-            <div class="auth-code-row">
-              <label class="auth-field">验证码<input id="auth-reset-code" type="text" inputmode="numeric" placeholder="请输入验证码" /></label>
-              <button class="auth-code-button" id="auth-send-code" type="button">获取验证码</button>
-            </div>
-            <label class="auth-field">新密码<input id="auth-reset-password" type="password" placeholder="请输入新密码" /></label>
-            <label class="auth-field">确认新密码<input id="auth-reset-confirm" type="password" placeholder="请再次输入新密码" /></label>
-            <p class="auth-error" id="auth-reset-error" role="alert"></p>
-            <button class="auth-submit" type="submit">确认重置</button>
-            <button class="auth-back-button" id="auth-reset-back" type="button">返回登录</button>
-          </form>
-          <form class="auth-form" id="auth-change-form" novalidate hidden>
-            <h1>修改密码</h1>
-            <label class="auth-field">当前密码<input id="auth-change-current" type="password" placeholder="请输入当前密码" /></label>
-            <label class="auth-field">新密码<input id="auth-change-password" type="password" placeholder="请输入新密码" /></label>
-            <label class="auth-field">确认新密码<input id="auth-change-confirm" type="password" placeholder="请再次输入新密码" /></label>
-            <p class="auth-error" id="auth-change-error" role="alert"></p>
-            <button class="auth-submit" type="submit">确认修改</button>
-            <button class="auth-back-button" id="auth-change-back" type="button">返回</button>
-          </form>
-        </div>
-      </div>
-    </section>
-
-    <div class="app" id="app-shell" aria-hidden="true" hidden>
+    <div class="app" id="app-shell">
       <aside class="sidebar">
         <div class="brand">
           <div class="brand-logo">AP</div>
@@ -7349,20 +7020,6 @@ pre {
             <span class="nav-ico">08</span><span>API 接入</span>
           </button>
         </nav>
-
-        <div class="sidebar-account" id="sidebar-account">
-          <button class="account-button" id="account-menu-toggle" aria-expanded="false" aria-controls="account-menu">
-            <span class="account-avatar" id="account-avatar" aria-hidden="true">王</span>
-            <span class="account-meta">
-              <strong id="account-display-name">个人账号</strong>
-              <span id="account-display-id">未登录</span>
-            </span>
-          </button>
-          <div class="account-menu" id="account-menu" role="menu" aria-hidden="true">
-            <button id="account-change-password" type="button" role="menuitem">修改密码</button>
-            <button id="account-logout" type="button" role="menuitem">退出登录</button>
-          </div>
-        </div>
 
       </aside>
 
@@ -7517,7 +7174,7 @@ pre {
               </div>
               <div class="table" id="agent-record-table">
                 <div class="table-head"><span>任务</span><span>来源</span><span>状态</span><span>耗时</span><span>操作</span></div>
-                <div class="table-row"><span>修复登录 Bug</span><span>Terminal</span><span class="tag green">完成</span><span>18 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>修复构建 Bug</span><span>Terminal</span><span class="tag green">完成</span><span>18 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
                 <div class="table-row"><span>批量重构组件</span><span>Claude Code</span><span class="tag red">失败</span><span>11 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
                 <div class="table-row"><span>整理竞品资料</span><span>Codex</span><span class="tag green">完成</span><span>24 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
               </div>
@@ -8786,7 +8443,7 @@ const APP_STATE = {
   },
   agentRecords: [
     { id: "agent-live", task: "构建一个原型 文档", source: "Claude Code", status: "运行中", duration: "00:15:32", summary: "正在同步当前 Agent 窗口、任务进度和执行步骤。", log: "当前窗口识别正常，任务仍在执行。" },
-    { id: "agent-1", task: "修复登录 Bug", source: "Terminal", status: "完成", duration: "18 分钟", summary: "已完成登录态刷新逻辑修复。", log: "运行检查通过，未发现阻塞。" },
+    { id: "agent-1", task: "修复构建 Bug", source: "Terminal", status: "完成", duration: "18 分钟", summary: "已完成构建流程状态刷新逻辑修复。", log: "运行检查通过，未发现阻塞。" },
     { id: "agent-2", task: "批量重构组件", source: "Claude Code", status: "失败", duration: "11 分钟", summary: "失败于类型检查阶段。", log: "ButtonGroup props 类型不一致，需要回主屏查看完整日志。" },
     { id: "agent-3", task: "整理竞品资料", source: "Codex", status: "完成", duration: "24 分钟", summary: "已整理竞品功能差异和页面结构。", log: "产出摘要已保存到任务记录。" },
   ],
@@ -8989,7 +8646,7 @@ const APP_STATE = {
     updatedAt: "尚未修改",
   },
   securityAlerts: [
-    { id: "batch", title: "检测到批量文件修改", type: "批量文件修改", level: "高风险", source: "Claude Code", object: "src/auth、config 共 18 个文件", task: "登录模块重构", rule: "批量修改超过 10 个文件，并包含权限配置文件", impact: "18 个文件", time: "10:45", status: "待关注", riskReason: "影响文件数较多，并包含配置文件和权限相关文件，因此计入高风险统计。", copy: "Agent 可能影响 18 个文件，其中包含配置文件和权限相关文件。副屏只展示统计和摘要，不做审批请求。", suggestion: "处理建议：按需查看告警记录和影响范围。" },
+    { id: "batch", title: "检测到批量文件修改", type: "批量文件修改", level: "高风险", source: "Claude Code", object: "src/runtime、config 共 18 个文件", task: "运行时模块重构", rule: "批量修改超过 10 个文件，并包含权限配置文件", impact: "18 个文件", time: "10:45", status: "待关注", riskReason: "影响文件数较多，并包含配置文件和权限相关文件，因此计入高风险统计。", copy: "Agent 可能影响 18 个文件，其中包含配置文件和权限相关文件。副屏只展示统计和摘要，不做审批请求。", suggestion: "处理建议：按需查看告警记录和影响范围。" },
     { id: "command", title: "终端覆盖命令", type: "高风险命令", level: "高风险", source: "Terminal Agent", object: "rm -rf ./dist && cp -R build dist", task: "前端构建清理", rule: "命中删除/覆盖类命令规则", impact: "覆盖操作", time: "10:12", status: "已拦截", riskReason: "命令可能覆盖项目文件，属于破坏性操作；这类才计入拦截统计。", copy: "检测到可能覆盖项目文件的终端命令，已写入安全统计和告警记录。", suggestion: "处理建议：按需查看完整命令、路径和影响范围。" },
     { id: "permission", title: "日历权限申请", type: "权限申请", level: "中风险", source: "Meeting Agent", object: "系统日历读取权限", task: "会议助手同步", rule: "读取个人日历属于隐私权限", impact: "日历读取", time: "09:20", status: "已记录", riskReason: "读取日历属于隐私权限，但用途明确且影响范围有限，所以标为中风险。", copy: "会议助手请求读取日历，用于识别即将开始的会议和会前提醒。", suggestion: "处理建议：确认用途后允许；如不需要会议提醒，可关闭该权限。" },
     { id: "network", title: "网络访问异常", type: "异常行为", level: "低风险", source: "Codex", object: "api.github.com 请求失败", task: "依赖版本查询", rule: "外部请求失败但没有破坏性操作", impact: "外部请求", time: "08:58", status: "已记录", riskReason: "单次外部请求失败，当前没有破坏性影响，所以只记录为低风险。", copy: "检测到一次网络请求失败，目前未影响任务执行，已写入安全记录。", suggestion: "处理建议：无需处理；若重复出现，再查看网络来源。" },
@@ -12796,242 +12453,7 @@ function handlePetTouch() {
   }
 }
 
-const AUTH_SESSION_KEY = "agent-pc-auth-session";
-const AUTH_PROFILE_KEY = "agent-pc-auth-profile";
-
-function readLocalValue(key) {
-  try {
-    const value = localStorage.getItem(key);
-    return value ? JSON.parse(value) : null;
-  } catch (error) {
-    return null;
-  }
-}
-
-function writeLocalValue(key, value) {
-  try {
-    localStorage.setItem(key, JSON.stringify(value));
-    return true;
-  } catch (error) {
-    return false;
-  }
-}
-
-function setAuthError(selector, message = "") {
-  const error = $(selector);
-  if (!error) return;
-  error.classList.remove("success");
-  error.textContent = message;
-}
-
-function setAuthSuccess(selector, message = "") {
-  const feedback = $(selector);
-  if (!feedback) return;
-  feedback.classList.add("success");
-  feedback.textContent = message;
-}
-
-function setAuthMode(mode) {
-  const allowedModes = ["login", "register", "reset", "change"];
-  const activeMode = allowedModes.includes(mode) ? mode : "login";
-  const tabs = $(".auth-tabs");
-  if (tabs) tabs.hidden = !["login", "register"].includes(activeMode);
-  const formByMode = {
-    login: "#auth-login-form",
-    register: "#auth-register-form",
-    reset: "#auth-reset-form",
-    change: "#auth-change-form",
-  };
-  Object.entries(formByMode).forEach(([formMode, selector]) => {
-    const form = $(selector);
-    if (form) form.hidden = formMode !== activeMode;
-  });
-  if (activeMode === "reset") {
-    const codeButton = $("#auth-send-code");
-    if (codeButton) {
-      codeButton.disabled = false;
-      codeButton.textContent = "获取验证码";
-    }
-  }
-  $$('[data-auth-mode]').forEach((tab) => {
-    const active = tab.dataset.authMode === activeMode;
-    tab.classList.toggle("active", active);
-    tab.setAttribute("aria-selected", String(active));
-  });
-  setAuthError("#auth-login-error");
-  setAuthError("#auth-register-error");
-  setAuthError("#auth-reset-error");
-  setAuthError("#auth-change-error");
-}
-
-function updateAccountProfile(profile) {
-  const identity = profile?.email || profile?.phone || "个人账号";
-  const name = profile?.email ? profile.email.split("@")[0] : "个人账号";
-  const avatar = name.trim().slice(0, 1).toUpperCase() || "A";
-  if ($("#account-avatar")) $("#account-avatar").textContent = avatar;
-  if ($("#account-display-name")) $("#account-display-name").textContent = name;
-  if ($("#account-display-id")) $("#account-display-id").textContent = identity;
-}
-
-function enterAuthenticatedApp(profile) {
-  $("#auth-shell").hidden = true;
-  $("#app-shell").hidden = false;
-  $("#app-shell").setAttribute("aria-hidden", "false");
-  updateAccountProfile(profile);
-  renderApp();
-}
-
-function showAuthentication() {
-  $("#auth-shell").hidden = false;
-  $("#app-shell").hidden = true;
-  $("#app-shell").setAttribute("aria-hidden", "true");
-  setAuthMode(readLocalValue(AUTH_PROFILE_KEY) ? "login" : "register");
-}
-
-function renderAuthState() {
-  const profile = readLocalValue(AUTH_PROFILE_KEY);
-  const session = readLocalValue(AUTH_SESSION_KEY);
-  if (profile && session?.accountId === profile.accountId) {
-    enterAuthenticatedApp(profile);
-  } else {
-    showAuthentication();
-  }
-}
-
-function handleRegistration(event) {
-  event.preventDefault();
-  const phone = $("#auth-register-phone").value.trim();
-  const email = $("#auth-register-email").value.trim().toLowerCase();
-  const profile = {
-    accountId: `account-${Date.now()}`,
-    phone: phone || "13800138000",
-    email: email || "user@agentpc.com",
-  };
-  writeLocalValue(AUTH_PROFILE_KEY, profile);
-  writeLocalValue(AUTH_SESSION_KEY, { accountId: profile.accountId });
-  event.currentTarget.reset();
-  enterAuthenticatedApp(profile);
-}
-
-function handleLogin(event) {
-  event.preventDefault();
-  const account = $("#auth-login-account").value.trim().toLowerCase();
-  const savedProfile = readLocalValue(AUTH_PROFILE_KEY);
-  const profile = savedProfile || {
-    accountId: `account-${Date.now()}`,
-    phone: /^1[3-9]\d{9}$/.test(account) ? account : "13800138000",
-    email: account.includes("@") ? account : "user@agentpc.com",
-  };
-  writeLocalValue(AUTH_PROFILE_KEY, profile);
-  writeLocalValue(AUTH_SESSION_KEY, { accountId: profile.accountId });
-  event.currentTarget.reset();
-  enterAuthenticatedApp(profile);
-}
-
-function handlePasswordReset(event) {
-  event.preventDefault();
-  const profile = readLocalValue(AUTH_PROFILE_KEY) || {
-    accountId: `account-${Date.now()}`,
-    phone: "13800138000",
-    email: "user@agentpc.com",
-  };
-  profile.password = $("#auth-reset-password").value || "prototype-password";
-  writeLocalValue(AUTH_PROFILE_KEY, profile);
-  event.currentTarget.reset();
-  setAuthMode("login");
-  setAuthSuccess("#auth-login-error", "密码重置成功，请重新登录");
-}
-
-function showPasswordChange() {
-  $("#auth-shell").hidden = false;
-  $("#app-shell").hidden = true;
-  $("#app-shell").setAttribute("aria-hidden", "true");
-  setAuthMode("change");
-}
-
-function handlePasswordChange(event) {
-  event.preventDefault();
-  const profile = readLocalValue(AUTH_PROFILE_KEY) || {
-    accountId: `account-${Date.now()}`,
-    phone: "13800138000",
-    email: "user@agentpc.com",
-  };
-  profile.password = $("#auth-change-password").value || "prototype-password";
-  writeLocalValue(AUTH_PROFILE_KEY, profile);
-  event.currentTarget.reset();
-  enterAuthenticatedApp(profile);
-  showSheet({
-    type: "Toast",
-    title: "密码修改成功",
-    copy: "新密码已保存，当前登录状态保持不变。",
-    detailLabel: "",
-  });
-}
-
 function bindEvents() {
-  $$('[data-auth-mode]').forEach((tab) => {
-    tab.addEventListener("click", () => setAuthMode(tab.dataset.authMode));
-  });
-  $("#auth-login-form")?.addEventListener("submit", handleLogin);
-  $("#auth-register-form")?.addEventListener("submit", handleRegistration);
-  $("#auth-reset-form")?.addEventListener("submit", handlePasswordReset);
-  $("#auth-change-form")?.addEventListener("submit", handlePasswordChange);
-  $("#auth-forgot-password")?.addEventListener("click", () => setAuthMode("reset"));
-  $("#auth-reset-back")?.addEventListener("click", () => setAuthMode("login"));
-  $("#auth-send-code")?.addEventListener("click", () => {
-    const button = $("#auth-send-code");
-    if (!button) return;
-    button.textContent = "已发送";
-    button.disabled = true;
-    setAuthSuccess("#auth-reset-error", "验证码已发送（原型演示）");
-  });
-  $("#auth-change-back")?.addEventListener("click", () => {
-    const profile = readLocalValue(AUTH_PROFILE_KEY);
-    if (profile) enterAuthenticatedApp(profile);
-  });
-
-  const accountToggle = $("#account-menu-toggle");
-  const accountMenu = $("#account-menu");
-  const closeAccountMenu = () => {
-    if (!accountToggle || !accountMenu) return;
-    accountToggle.setAttribute("aria-expanded", "false");
-    accountMenu.setAttribute("aria-hidden", "true");
-    accountMenu.classList.remove("show");
-  };
-  if (accountToggle && accountMenu) {
-    accountToggle.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const isOpen = accountToggle.getAttribute("aria-expanded") === "true";
-      accountToggle.setAttribute("aria-expanded", String(!isOpen));
-      accountMenu.setAttribute("aria-hidden", String(isOpen));
-      accountMenu.classList.toggle("show", !isOpen);
-    });
-  }
-  const accountChangePassword = $("#account-change-password");
-  if (accountChangePassword) {
-    accountChangePassword.addEventListener("click", (event) => {
-      event.stopPropagation();
-      closeAccountMenu();
-      showPasswordChange();
-    });
-  }
-  const accountLogout = $("#account-logout");
-  if (accountLogout) {
-    accountLogout.addEventListener("click", (event) => {
-      event.stopPropagation();
-      closeAccountMenu();
-      try {
-        localStorage.removeItem(AUTH_SESSION_KEY);
-      } catch (error) {
-        // Logout still updates the visible prototype when storage is unavailable.
-      }
-      showAuthentication();
-    });
-  }
-  document.addEventListener("click", (event) => {
-    if (!event.target.closest("#sidebar-account")) closeAccountMenu();
-  });
-
   $$(".nav-item").forEach((item) => {
     item.addEventListener("click", () => setActiveTab(item.dataset.view));
   });
@@ -13548,7 +12970,6 @@ $("#pet")?.remove();
 restoreQuickActions();
 syncQuickFeatureConfig();
 renderApp();
-renderAuthState();
 loadWindowsInstalledApps();
     </script>
   </body>
