@@ -1315,6 +1315,10 @@ p {
   padding: 10px 12px;
 }
 
+.schedule-detail-grid div.schedule-detail-wide {
+  grid-column: 1 / -1;
+}
+
 .schedule-detail-grid span {
   color: var(--muted);
   font-size: 12px;
@@ -1881,9 +1885,9 @@ p {
 .agent-state-overlay {
   position: absolute;
   inset: 6px;
-  z-index: 170;
+  z-index: 190;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   border-radius: calc(var(--subscreen-radius) - 4px);
   background: linear-gradient(180deg, rgba(8, 10, 14, 0.08), rgba(8, 10, 14, 0.72));
@@ -1982,11 +1986,18 @@ p {
 }
 
 .agent-state-actions {
-  justify-content: flex-end;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 18px;
 }
 
 .agent-state-actions button {
-  min-height: 34px;
+  min-width: 176px;
+  min-height: 64px;
+  border-radius: 14px;
+  padding: 0 30px;
+  font-size: 20px;
+  font-weight: 950;
 }
 
 .agent-alert-triggers {
@@ -5745,6 +5756,550 @@ pre {
   position: relative;
 }
 
+/* Agent 快捷操作：沿用现有主屏配置 + 副屏预览结构 */
+.shortcut-page {
+  display: grid;
+  gap: 18px;
+}
+
+.physical-screen-preview {
+  display: grid;
+  gap: 10px;
+  width: min(100%, 980px);
+  margin: 2px auto 18px;
+}
+
+.physical-screen-preview-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+}
+
+.physical-screen-preview-head strong {
+  color: var(--text);
+  font-size: 14px;
+  font-weight: 950;
+}
+
+.physical-screen-preview-head span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.physical-screen-device {
+  position: relative;
+  padding: 24px 25px 26px;
+  border: 1px solid rgba(149, 164, 180, 0.48);
+  border-radius: 24px;
+  background:
+    linear-gradient(145deg, rgba(107, 119, 132, 0.26), rgba(11, 14, 18, 0.96) 22%, rgba(30, 35, 42, 0.98) 78%, rgba(104, 116, 130, 0.25)),
+    #11151a;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.42),
+    inset 0 1px 0 rgba(255, 255, 255, 0.18),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.05);
+}
+
+.physical-screen-device::before {
+  content: "";
+  position: absolute;
+  top: 9px;
+  left: 50%;
+  width: 42px;
+  height: 5px;
+  border-radius: 999px;
+  background: rgba(3, 5, 8, 0.95);
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.08);
+  transform: translateX(-50%);
+}
+
+.physical-screen-glass {
+  position: relative;
+  aspect-ratio: var(--subscreen-ratio);
+  overflow: hidden;
+  border: 2px solid rgba(5, 7, 10, 0.98);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 12% 88%, rgba(46, 242, 138, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 10%, rgba(32, 230, 230, 0.12), transparent 28%),
+    rgba(24, 27, 32, 0.98);
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.08),
+    inset 0 0 28px rgba(0, 0, 0, 0.38),
+    0 0 18px rgba(32, 230, 230, 0.12);
+  padding: 0;
+}
+
+.physical-screen-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0.08), transparent 28%, transparent 74%, rgba(255, 255, 255, 0.025));
+}
+
+.physical-screen-canvas {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  background: #171a1f;
+}
+
+.physical-screen-mirror-source {
+  width: 100% !important;
+  height: 100% !important;
+  max-height: none !important;
+  margin: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  pointer-events: none !important;
+}
+
+.physical-screen-mirror-source button,
+.physical-screen-mirror-source input,
+.physical-screen-mirror-source select,
+.physical-screen-mirror-source textarea,
+.physical-screen-mirror-source a {
+  pointer-events: none !important;
+}
+
+.physical-screen-mirror-source > :not(.subscreen-preview-chrome):not(.subscreen-device-panel) {
+  margin-top: 34px;
+}
+
+.physical-screen-mirror-source.token-preview-canvas > :not(.subscreen-preview-chrome):not(.subscreen-device-panel) {
+  margin-top: 0;
+}
+
+.physical-screen-mirror-source.pet-preview > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+.physical-screen-mirror-source.security-preview > :not(.subscreen-preview-chrome):not(.subscreen-device-panel) {
+  margin-top: 32px;
+}
+
+.physical-screen-grid {
+  gap: 10px;
+  position: relative;
+  z-index: 1;
+}
+
+.physical-screen-grid .quick-subscreen-key {
+  gap: 6px;
+  border-radius: 14px;
+}
+
+.physical-screen-grid .quick-key-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+}
+
+.physical-screen-grid .quick-brand-icon img {
+  width: 26px;
+  height: 26px;
+}
+
+.physical-screen-grid .quick-subscreen-key strong {
+  min-height: 17px;
+  font-size: 12px;
+  -webkit-line-clamp: 1;
+}
+
+.physical-screen-foot {
+  position: absolute;
+  left: 50%;
+  bottom: 8px;
+  width: 74px;
+  height: 3px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.13);
+  transform: translateX(-50%);
+}
+
+.quick-preview {
+  position: relative;
+  width: min(100%, var(--subscreen-w));
+  height: min(50cqw, var(--subscreen-h));
+  max-height: var(--subscreen-h);
+  aspect-ratio: var(--subscreen-ratio);
+  margin: 0 auto;
+  overflow: hidden;
+  padding: 66px 22px 22px;
+  background:
+    radial-gradient(circle at 12% 88%, rgba(46, 242, 138, 0.12), transparent 30%),
+    radial-gradient(circle at 88% 10%, rgba(32, 230, 230, 0.12), transparent 28%),
+    rgba(24, 27, 32, 0.96);
+}
+
+.quick-subscreen-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  height: 100%;
+  margin-top: 0 !important;
+}
+
+.quick-subscreen-key {
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 10px;
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgba(116, 224, 229, 0.38);
+  border-radius: 22px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.07), rgba(255, 255, 255, 0.025));
+  color: var(--text);
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.035), 0 8px 24px rgba(0, 0, 0, 0.16);
+  cursor: pointer;
+}
+
+.quick-subscreen-key:hover,
+.quick-subscreen-key:focus-visible {
+  border-color: rgba(46, 242, 138, 0.72);
+  background: rgba(46, 242, 138, 0.1);
+  box-shadow: var(--glow-green);
+  outline: none;
+}
+
+.quick-subscreen-key.is-opening {
+  border-color: rgba(46, 242, 138, 0.78);
+  background: rgba(46, 242, 138, 0.1);
+  cursor: wait;
+  opacity: 0.82;
+}
+
+.quick-subscreen-key.is-opening .quick-key-icon {
+  animation: quick-opening-spin 0.9s linear infinite;
+}
+
+@keyframes quick-opening-spin {
+  to { transform: rotate(360deg); }
+}
+
+.quick-key-icon {
+  display: grid;
+  width: 58px;
+  height: 58px;
+  place-items: center;
+  border-radius: 17px;
+  background: rgba(32, 230, 230, 0.13);
+  color: var(--cyan);
+  font-size: 22px;
+  box-shadow: 0 0 20px rgba(32, 230, 230, 0.16);
+}
+
+.quick-brand-icon img {
+  display: block;
+  width: 34px;
+  height: 34px;
+  object-fit: contain;
+}
+
+.quick-brand-fallback {
+  display: grid;
+  place-items: center;
+  color: currentColor;
+  font-size: 21px;
+  font-style: normal;
+  font-weight: 950;
+}
+
+.quick-brand-fallback[hidden] { display: none; }
+
+.quick-subscreen-key[data-quick-brand="codex"] .quick-key-icon { background: rgba(255,255,255,.13); box-shadow: 0 0 24px rgba(255,255,255,.16); }
+.quick-subscreen-key[data-quick-brand="claude"] .quick-key-icon { background: rgba(226,132,96,.16); box-shadow: 0 0 24px rgba(226,132,96,.18); }
+.quick-subscreen-key[data-quick-brand="cursor"] .quick-key-icon { background: rgba(203,210,255,.13); box-shadow: 0 0 24px rgba(177,188,255,.18); }
+.quick-subscreen-key[data-quick-brand="copilot"] .quick-key-icon { background: rgba(139,92,246,.15); box-shadow: 0 0 24px rgba(139,92,246,.2); }
+.quick-subscreen-key[data-quick-brand="windsurf"] .quick-key-icon { background: rgba(49,184,247,.14); box-shadow: 0 0 24px rgba(49,184,247,.18); }
+.quick-subscreen-key[data-quick-brand="gemini"] .quick-key-icon { background: rgba(139,117,255,.15); box-shadow: 0 0 24px rgba(139,117,255,.2); }
+.quick-subscreen-key[data-quick-brand="cline"] .quick-key-icon { background: rgba(255,145,95,.14); box-shadow: 0 0 24px rgba(255,145,95,.18); }
+.quick-subscreen-key[data-quick-brand="terminal"] .quick-key-icon { background: rgba(80,193,245,.15); box-shadow: 0 0 24px rgba(80,193,245,.18); }
+
+.quick-subscreen-key strong {
+  display: -webkit-box;
+  min-height: 32px;
+  max-width: 100%;
+  overflow: hidden;
+  font-size: 14px;
+  line-height: 1.2;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: normal;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.quick-subscreen-key small { display: none; }
+
+.quick-main-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.quick-slot-card span,
+.quick-editor-panel label > span {
+  display: block;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.quick-main-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(300px, 0.75fr);
+  gap: 16px;
+}
+
+.quick-slot-config-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.quick-slot-card {
+  display: grid;
+  align-content: start;
+  gap: 8px;
+  min-height: 132px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.028);
+  color: var(--text);
+  padding: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quick-slot-card:hover,
+.quick-slot-card.active {
+  border-color: rgba(32, 230, 230, 0.62);
+  background: rgba(32, 230, 230, 0.08);
+  box-shadow: var(--glow-cyan);
+}
+
+.quick-slot-card .quick-key-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 9px;
+  font-size: 19px;
+}
+
+.quick-slot-card strong {
+  overflow: hidden;
+  font-size: 14px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quick-editor-panel {
+  display: grid;
+  align-content: start;
+  gap: 14px;
+  min-height: 360px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.028);
+  padding: 16px;
+}
+
+.quick-editor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.quick-editor-head h4 {
+  margin: 0;
+  font-size: 16px;
+}
+
+.quick-editor-panel label {
+  display: grid;
+  gap: 7px;
+}
+
+.quick-editor-panel input,
+.quick-editor-panel select {
+  width: 100%;
+  min-height: 40px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 12, 16, 0.76);
+  color: var(--text);
+  padding: 0 11px;
+  font: inherit;
+}
+
+.quick-source-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.quick-source-field input {
+  flex: 1;
+  min-width: 0;
+}
+
+.quick-source-button {
+  flex: none;
+  min-height: 40px;
+  white-space: nowrap;
+}
+
+.quick-source-field .icon-button {
+  width: 40px;
+  height: 40px;
+  flex: none;
+  padding: 0;
+}
+
+.quick-source-note {
+  margin: -4px 0 0;
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.55;
+}
+
+.quick-app-picker-modal {
+  position: fixed;
+  z-index: 1001;
+  inset: 0;
+  display: none;
+  place-items: center;
+  padding: 20px;
+  background: rgba(3, 6, 9, 0.7);
+}
+
+.quick-app-picker-modal.show { display: grid; }
+
+.quick-app-picker-dialog {
+  display: grid;
+  width: min(680px, 100%);
+  max-height: min(720px, 88vh);
+  gap: 14px;
+  border: 1px solid rgba(32, 230, 230, 0.32);
+  border-radius: 12px;
+  background: #202226;
+  box-shadow: var(--shadow), var(--glow-cyan);
+  padding: 22px;
+}
+
+.quick-app-picker-dialog > header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.quick-app-picker-dialog header span,
+.quick-app-picker-dialog > p {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 750;
+}
+
+.quick-app-picker-dialog h3 { margin: 3px 0 0; }
+
+.quick-target-panel {
+  display: grid;
+  gap: 12px;
+  min-height: 260px;
+}
+
+.quick-target-panel > p,
+.quick-app-picker-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.55;
+}
+
+.quick-app-picker-dialog > input {
+  width: 100%;
+  min-height: 42px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(8, 12, 16, 0.76);
+  color: var(--text);
+  padding: 0 12px;
+  font: inherit;
+}
+
+.quick-app-picker-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px;
+  overflow: auto;
+  padding-right: 2px;
+}
+
+.quick-app-picker-item {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  min-height: 62px;
+  gap: 10px;
+  border: 1px solid var(--line);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+  color: var(--text);
+  padding: 9px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.quick-app-picker-item:hover,
+.quick-app-picker-item.selected {
+  border-color: rgba(32, 230, 230, 0.7);
+  background: rgba(32, 230, 230, 0.08);
+}
+
+.quick-app-picker-item .quick-key-icon {
+  width: 38px;
+  height: 38px;
+  flex: none;
+  border-radius: 10px;
+  font-size: 16px;
+}
+
+.quick-app-picker-item strong,
+.quick-app-picker-item small {
+  display: block;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.quick-app-picker-item strong { font-size: 13px; }
+.quick-app-picker-item small { margin-top: 3px; color: var(--muted); font-size: 11px; }
+
+.quick-editor-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.quick-modal-close {
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 28px;
+  cursor: pointer;
+}
+
+@media (max-width: 980px) {
+  .quick-main-workspace { grid-template-columns: 1fr; }
+}
+
 .schedule-preview {
   width: 100%;
   aspect-ratio: var(--subscreen-ratio);
@@ -5802,21 +6357,21 @@ pre {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   align-content: start;
-  gap: 18px;
+  gap: 14px;
   min-height: 0;
   padding: 0;
 }
 
 .schedule-task-card {
   display: grid;
-  min-height: 190px;
+  min-height: 184px;
   border: 1px solid rgba(32, 230, 230, 0.34);
   border-radius: 8px;
   background:
     radial-gradient(circle at 92% 8%, rgba(46, 242, 138, 0.1), transparent 30%),
     rgba(255, 255, 255, 0.04);
   color: var(--text);
-  padding: 22px;
+  padding: 16px 18px;
   text-align: left;
 }
 
@@ -5829,6 +6384,7 @@ pre {
   display: flex;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .schedule-task-icon {
@@ -5848,8 +6404,9 @@ pre {
 }
 
 .schedule-task-card p {
-  margin: 18px 0 34px;
+  margin: 12px 0 18px;
   color: var(--muted);
+  line-height: 1.5;
 }
 
 .schedule-card-foot {
@@ -5859,7 +6416,7 @@ pre {
   gap: 12px;
   margin-top: auto;
   border-top: 1px solid var(--line-soft);
-  padding-top: 14px;
+  padding-top: 10px;
 }
 
 .schedule-card-foot time {
@@ -6770,23 +7327,26 @@ pre {
           <button class="nav-item active" data-view="monitor">
             <span class="nav-ico">01</span><span>Agent 任务进度</span>
           </button>
+          <button class="nav-item" data-view="shortcut">
+            <span class="nav-ico">02</span><span>Agent 快捷操作</span>
+          </button>
           <button class="nav-item" data-view="usage">
-            <span class="nav-ico">02</span><span>Token 算力消耗</span>
+            <span class="nav-ico">03</span><span>Token 算力消耗</span>
           </button>
           <button class="nav-item" data-view="schedule">
-            <span class="nav-ico">03</span><span>定时任务</span>
+            <span class="nav-ico">04</span><span>定时任务</span>
           </button>
           <button class="nav-item" data-view="voice">
-            <span class="nav-ico">04</span><span>AI 智能语音</span>
+            <span class="nav-ico">05</span><span>AI 智能语音</span>
           </button>
           <button class="nav-item" data-view="meeting">
-            <span class="nav-ico">05</span><span>AI 会议助手</span>
+            <span class="nav-ico">06</span><span>AI 会议助手</span>
           </button>
           <button class="nav-item" data-view="security">
-            <span class="nav-ico">06</span><span>安全告警</span>
+            <span class="nav-ico">07</span><span>安全告警</span>
           </button>
           <button class="nav-item" data-view="screen-config">
-            <span class="nav-ico">07</span><span>API 接入</span>
+            <span class="nav-ico">08</span><span>API 接入</span>
           </button>
         </nav>
 
@@ -6965,6 +7525,65 @@ pre {
           </div>
         </section>
 
+        <section class="view" id="shortcut">
+          <div class="shortcut-page">
+            <section class="panel main-panel">
+              <div class="section-title">
+                <div class="preview-title-main"><h3>Agent 快捷操作</h3></div>
+                <div class="section-actions">
+                  <div class="preview-config-switch">
+                    <span>副屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <small data-toggle-label>打开</small>
+                  </div>
+                </div>
+              </div>
+              <div class="quick-preview" data-subscreen-preview="shortcut" data-subscreen-title="Agent 快捷操作" aria-label="2:1 横屏副屏 Agent 快捷操作预览">
+                <div class="quick-subscreen-grid" id="quick-subscreen-grid"></div>
+              </div>
+            </section>
+
+            <section class="panel main-panel">
+              <div class="section-title">
+                <h3>快捷操作配置</h3>
+              </div>
+              <div class="quick-main-panel">
+                <div class="quick-main-workspace">
+                  <div class="quick-slot-config-grid" id="quick-slot-config-grid"></div>
+                  <form class="quick-editor-panel" id="quick-slot-editor" novalidate>
+                    <div class="quick-editor-head"><h4 id="quick-editor-title">配置宫格 1</h4><span class="tag cyan" id="quick-editor-status">已配置</span></div>
+                    <label><span>显示名称</span><input id="quick-action-name" maxlength="12" placeholder="例如：Codex" /></label>
+                    <label><span>打开应用 / 终端</span>
+                      <span class="quick-source-field">
+                        <input id="quick-source-display" readonly placeholder="选择 Windows 已安装应用或终端" />
+                        <button class="soft-button quick-source-button" id="quick-open-target-picker" type="button">选择</button>
+                      </span>
+                    </label>
+                    <label><span>网页链接</span><input id="quick-action-link" type="url" maxlength="240" placeholder="https://example.com" /></label>
+                    <div class="quick-editor-actions">
+                      <button class="soft-button" type="button" id="quick-slot-clear">清空</button>
+                      <button class="primary-button" type="submit">保存</button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div class="quick-app-picker-modal" id="quick-app-picker-modal" aria-hidden="true">
+            <section class="quick-app-picker-dialog" role="dialog" aria-modal="true" aria-labelledby="quick-app-picker-title">
+              <header><div><span>选择启动目标</span><h3 id="quick-app-picker-title">Windows 已安装应用与终端</h3></div><button class="quick-modal-close" id="quick-app-picker-close" type="button" aria-label="关闭">×</button></header>
+              <section class="quick-target-panel" data-quick-target-panel="app">
+                <input id="quick-app-search" type="search" placeholder="搜索应用或终端…" autocomplete="off" />
+                <p class="quick-app-picker-status" id="quick-app-picker-status" role="status">正在读取 Windows 已安装应用…</p>
+                <div class="quick-app-picker-list" id="quick-app-picker-list"></div>
+                <p>应用名称、图标和启动标识均由 Windows 实际安装列表返回。</p>
+              </section>
+            </section>
+          </div>
+
+        </section>
+
 	        <section class="view" id="usage">
 	          <div class="token-page">
 	            <section class="panel main-panel token-dashboard">
@@ -7121,38 +7740,48 @@ pre {
                     <span class="schedule-head-spacer"></span>
                   </div>
                   <div class="schedule-task-grid" id="schedule-task-grid">
-                    <button class="schedule-task-card" data-schedule-preview-detail="daily">
-                      <header><span class="schedule-task-icon">⏱</span><strong>每日提醒</strong></header>
-                      <p>提醒写周报</p>
-                      <div class="schedule-card-foot"><time>每天 17:30</time><span>查看详情</span></div>
-                    </button>
-                    <button class="schedule-task-card" data-schedule-preview-detail="news">
-                      <header><span class="schedule-task-icon">⏱</span><strong>每日 AI 最新资讯</strong></header>
-                      <p>收集每日最新 AI 资讯，列表形式展示、行业分类。</p>
+                    <button class="schedule-task-card" data-schedule-preview-detail="tech-news-digest">
+                      <header><span class="schedule-task-icon">⏱</span><strong>每日技术资讯简报</strong></header>
+                      <p>聚合关注的技术方向、开源项目、竞品与关键词，生成每日技术简报。</p>
                       <div class="schedule-card-foot"><time>每天 08:30</time><span>查看详情</span></div>
+                    </button>
+                    <button class="schedule-task-card" data-schedule-preview-detail="dev-weekly-report">
+                      <header><span class="schedule-task-icon">⏱</span><strong>研发周报自动汇总</strong></header>
+                      <p>汇总代码提交、任务进展、Bug 与待办，自动生成研发周报。</p>
+                      <div class="schedule-card-foot"><time>每周五 18:00</time><span>查看详情</span></div>
+                    </button>
+                    <button class="schedule-task-card" data-schedule-preview-detail="tech-meeting-review">
+                      <header><span class="schedule-task-icon">⏱</span><strong>技术会议定时复盘</strong></header>
+                      <p>关联技术例会，会后整理纪要、技术结论和 Action Items。</p>
+                      <div class="schedule-card-foot"><time>每周三 17:30</time><span>查看详情</span></div>
+                    </button>
+                    <button class="schedule-task-card" data-schedule-preview-detail="tech-material-organize">
+                      <header><span class="schedule-task-icon">⏱</span><strong>定时技术资料整理</strong></header>
+                      <p>整理技术文档、网页、Issue 与本地资料，输出结构化摘要。</p>
+                      <div class="schedule-card-foot"><time>每天 21:00</time><span>查看详情</span></div>
                     </button>
                   </div>
                 </div>
                 <div class="schedule-screen schedule-detail-screen" id="schedule-detail-screen">
                   <div class="schedule-detail-head">
                     <button class="schedule-back" id="schedule-back" aria-label="返回定时任务">←</button>
-                    <h3 id="schedule-detail-title">每日提醒</h3>
+                    <h3 id="schedule-detail-title">每日技术资讯简报</h3>
                     <span></span>
                   </div>
                   <div class="schedule-detail-body">
                     <div class="schedule-chat">
                       <div class="schedule-chat-row assistant">
                         <span class="schedule-chat-name">Marvis</span>
-                        <p class="schedule-bubble" id="schedule-detail-copy">A市-豹姐～，周一啦，周报该安排上了！别拖到下班才想起来，早点写完早点轻松～</p>
+                        <p class="schedule-bubble" id="schedule-detail-copy">今日技术简报已生成：已按前端工程、AI Agent、开源项目与竞品动态完成分类，省去逐个平台浏览和筛选。</p>
                       </div>
                       <div class="schedule-chat-row user">
-                        <p class="schedule-bubble" id="schedule-detail-command">提醒写周报</p>
+                        <p class="schedule-bubble" id="schedule-detail-command">聚合关注的技术方向、开源项目、竞品与关键词，生成每日技术简报。</p>
                       </div>
                     </div>
                     <article class="schedule-task-summary">
                       <div>
-                        <header><span class="schedule-task-icon">⏱</span><strong id="schedule-detail-name">每日提醒</strong><span id="schedule-detail-time">每天 17:30</span></header>
-                        <p id="schedule-detail-desc">提醒写周报</p>
+                        <header><span class="schedule-task-icon">⏱</span><strong id="schedule-detail-name">每日技术资讯简报</strong><span id="schedule-detail-time">每天 08:30</span></header>
+                        <p><span id="schedule-detail-audience">开发者 / 极客用户</span> · <span id="schedule-detail-desc">聚合关注的技术方向、开源项目、竞品与关键词，生成每日技术简报。</span></p>
                       </div>
                       <div class="schedule-detail-actions">
                         <button class="soft-button" data-schedule-action="edit">编辑任务</button>
@@ -7177,9 +7806,10 @@ pre {
               </div>
               <div class="table" id="schedule-history-table">
                 <div class="table-head"><span>任务</span><span>执行时间</span><span>状态</span><span>结果</span><span>操作</span></div>
-                <div class="table-row"><span>每日提醒</span><span>今天 17:30</span><span class="tag cyan">待执行</span><span>等待触发</span><span><button class="table-action hot">查看详情</button></span></div>
-                <div class="table-row"><span>每日 AI 最新资讯</span><span>今天 08:30</span><span class="tag green">完成</span><span>已生成简报</span><span><button class="table-action hot">查看详情</button></span></div>
-                <div class="table-row"><span>竞品动态抓取</span><span>昨天 20:00</span><span class="tag red">失败</span><span>网页授权失效</span><span><button class="table-action warn">重试</button></span></div>
+                <div class="table-row"><span>每日技术资讯简报</span><span>每天 08:30</span><span class="tag green">完成</span><span>今日简报已生成</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>研发周报自动汇总</span><span>每周五 18:00</span><span class="tag cyan">待执行</span><span>周五自动汇总</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>技术会议定时复盘</span><span>每周三 17:30</span><span class="tag green">完成</span><span>复盘与待办已生成</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>定时技术资料整理</span><span>每天 21:00</span><span class="tag yellow">运行中</span><span>正在整理 23 项资料</span><span><button class="table-action hot">查看详情</button></span></div>
               </div>
             </section>
 
@@ -7745,6 +8375,7 @@ const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 
 const PAGE_TITLES = {
   monitor: "Agent 任务进度",
+  shortcut: "Agent 快捷操作",
   usage: "Token 算力消耗",
   schedule: "定时任务",
   voice: "AI 智能语音",
@@ -7757,6 +8388,7 @@ const PAGE_TITLES = {
 
 const FEATURE_PAGES = {
   "Agent 任务进度": "monitor",
+  "Agent 快捷操作": "shortcut",
   "Token 算力消耗": "usage",
   "定时任务": "schedule",
   "AI 智能语音": "voice",
@@ -7780,7 +8412,7 @@ const RULE_BUTTONS = [
 ];
 
 const SECONDARY_MODES = {
-  工作模式: ["Agent 任务进度", "Token 算力消耗", "安全告警"],
+  工作模式: ["Agent 任务进度", "Agent 快捷操作", "Token 算力消耗", "安全告警"],
   自动化模式: ["定时任务", "Agent 任务进度", "安全告警"],
   会议模式: ["AI 会议助手", "AI 智能语音", "安全告警"],
   安全模式: ["安全告警", "Agent 任务进度", "Token 算力消耗"],
@@ -7814,6 +8446,23 @@ const FEATURE_CONFIG = {
       { id: "empty", label: "空状态", title: "", copy: "" },
     ],
   },
+  "Agent 快捷操作": {
+    kicker: "QUICK ACTIONS",
+    defaultTrigger: "normal",
+    modules: [
+      { id: "slot1", title: "快捷宫格 1", desc: "副屏第 1 个快捷操作。", display: "persistent", value: "Codex", triggers: [] },
+      { id: "slot2", title: "快捷宫格 2", desc: "副屏第 2 个快捷操作。", display: "persistent", value: "Claude Code", triggers: [] },
+      { id: "slot3", title: "快捷宫格 3", desc: "副屏第 3 个快捷操作。", display: "persistent", value: "Cursor", triggers: [] },
+      { id: "slot4", title: "快捷宫格 4", desc: "副屏第 4 个快捷操作。", display: "persistent", value: "Copilot", triggers: [] },
+      { id: "slot5", title: "快捷宫格 5", desc: "副屏第 5 个快捷操作。", display: "persistent", value: "Windsurf", triggers: [] },
+      { id: "slot6", title: "快捷宫格 6", desc: "副屏第 6 个快捷操作。", display: "persistent", value: "Gemini CLI", triggers: [] },
+      { id: "slot7", title: "快捷宫格 7", desc: "副屏第 7 个快捷操作。", display: "persistent", value: "Cline", triggers: [] },
+      { id: "slot8", title: "快捷宫格 8", desc: "副屏第 8 个快捷操作。", display: "persistent", value: "终端", triggers: [] },
+    ],
+    triggers: [
+      { id: "normal", label: "快捷操作", title: "", copy: "" },
+    ],
+  },
   "Token 算力消耗": {
     kicker: "TOKEN USAGE",
     defaultTrigger: "normal",
@@ -7840,20 +8489,20 @@ const FEATURE_CONFIG = {
     defaultTrigger: "normal",
     modules: [
       { id: "upcoming", title: "即将执行任务", desc: "任务名称、任务类型、计划执行时间、倒计时。", display: "triggered", value: "12 分钟后", triggers: ["upcoming"] },
-      { id: "running", title: "执行中任务", desc: "任务名称、执行状态、当前阶段、已耗时。", display: "persistent", value: "资讯简报", triggers: [] },
-      { id: "fail", title: "执行失败提醒", desc: "任务名称、失败原因摘要、失败时间。", display: "triggered", value: "网页授权失效", triggers: ["fail"] },
-      { id: "complete", title: "执行完成提醒", desc: "完成时间、结果摘要。", display: "triggered", value: "日报已生成", triggers: ["complete"] },
-      { id: "next", title: "下次执行任务", desc: "下一条任务名称、执行时间、重复规则。", display: "persistent", value: "18:30 项目日报", triggers: [] },
-      { id: "output", title: "产出结果摘要", desc: "最新简报、周报、日报或资料摘要。", display: "persistent", value: "竞品简报", triggers: ["complete"] },
+      { id: "running", title: "执行中任务", desc: "任务名称、执行状态、当前阶段、已耗时。", display: "persistent", value: "技术资料整理", triggers: [] },
+      { id: "fail", title: "执行失败提醒", desc: "任务名称、失败原因摘要、失败时间。", display: "triggered", value: "Issue 来源失效", triggers: ["fail"] },
+      { id: "complete", title: "执行完成提醒", desc: "完成时间、结果摘要。", display: "triggered", value: "技术简报已生成", triggers: ["complete"] },
+      { id: "next", title: "下次执行任务", desc: "下一条任务名称、执行时间、重复规则。", display: "persistent", value: "18:00 研发周报", triggers: [] },
+      { id: "output", title: "产出结果摘要", desc: "最新简报、周报、日报或资料摘要。", display: "persistent", value: "研发周报", triggers: ["complete"] },
       { id: "create", title: "任务创建", desc: "复杂创建表单只在主屏。", display: "hidden", value: "主屏创建", triggers: [] },
       { id: "editPlan", title: "执行计划编辑", desc: "时间、重复规则、输入来源回主屏编辑。", display: "hidden", value: "主屏编辑", triggers: [] },
       { id: "history", title: "历史执行记录", desc: "完整历史记录不放副屏。", display: "hidden", value: "主屏查看", triggers: [] },
     ],
     triggers: [
       { id: "normal", label: "正常看板", title: "", copy: "" },
-      { id: "upcoming", label: "触发即将执行", title: "定时任务即将执行", copy: "项目日报将在 12 分钟后执行，可打开主屏查看任务配置。" },
-      { id: "fail", label: "触发执行失败", title: "定时任务执行失败", copy: "竞品动态简报失败：网页授权失效，需要回主屏补全输入来源。" },
-      { id: "complete", label: "触发完成", title: "定时任务完成", copy: "项目日报已生成，副屏展示摘要，完整内容在主屏查看。" },
+      { id: "upcoming", label: "触发即将执行", title: "定时任务即将执行", copy: "研发周报自动汇总将在 12 分钟后执行，可打开主屏查看任务配置。" },
+      { id: "fail", label: "触发执行失败", title: "定时任务执行失败", copy: "技术资料整理失败：Issue 来源授权失效，需要回主屏更新输入来源。" },
+      { id: "complete", label: "触发完成", title: "定时任务完成", copy: "每日技术资讯简报已生成，副屏展示摘要，完整内容在主屏查看。" },
       { id: "empty", label: "空状态", title: "", copy: "" },
     ],
   },
@@ -7950,6 +8599,24 @@ const FEATURE_CONFIG = {
   },
 };
 
+const QUICK_ACTIONS_STORAGE_KEY = "agent-pc-quick-actions-v1";
+const QUICK_ACTION_SLOT_COUNT = 8;
+const QUICK_ACTION_ALLOWED_TYPES = new Set(["应用", "终端", "链接"]);
+const DEFAULT_QUICK_ACTIONS = [
+  { type: "应用", name: "Codex", icon: "⌘", target: "Codex", source: "默认配置应用", brandName: "Codex", isDefault: true },
+  { type: "应用", name: "Claude Code", icon: "✦", target: "Claude Code", source: "默认配置应用", brandName: "Claude Code", isDefault: true },
+  { type: "应用", name: "Cursor", icon: "◢", target: "Cursor", source: "默认配置应用", brandName: "Cursor", isDefault: true },
+  { type: "应用", name: "Copilot", icon: "◉", target: "Visual Studio Code · GitHub Copilot", source: "默认配置应用", brandName: "GitHub Copilot", isDefault: true },
+  { type: "应用", name: "Windsurf", icon: "≈", target: "Windsurf", source: "默认配置应用", brandName: "Windsurf", isDefault: true },
+  { type: "应用", name: "Gemini CLI", icon: "✧", target: "Gemini CLI", source: "默认配置应用", brandName: "Gemini CLI", isDefault: true },
+  { type: "应用", name: "Cline", icon: "C", target: "Visual Studio Code · Cline", source: "默认配置应用", brandName: "Cline", isDefault: true },
+  { type: "终端", name: "终端", icon: ">_", target: "Windows Terminal", source: "默认配置应用", brandName: "终端", isDefault: true },
+];
+
+function cloneDefaultQuickActions() {
+  return JSON.parse(JSON.stringify(DEFAULT_QUICK_ACTIONS));
+}
+
 const APP_STATE = {
   currentPage: "monitor",
   configSubpage: "api",
@@ -7977,6 +8644,7 @@ const APP_STATE = {
     lastTest: "",
     scopes: [
       "Agent 任务进度",
+      "Agent 快捷操作",
       "Token 算力消耗",
       "定时任务",
       "AI 智能语音",
@@ -7986,12 +8654,22 @@ const APP_STATE = {
   },
   previewEnabled: {
     monitor: true,
+    shortcut: true,
     usage: true,
     schedule: true,
     voice: true,
     meeting: true,
     security: true,
     pet: true,
+  },
+  quickActions: {
+    selectedSlot: 0,
+    targetSearch: "",
+    pendingSource: null,
+    executingSlots: {},
+    installedAppsStatus: "loading",
+    installedAppsMessage: "正在读取 Windows 已安装应用…",
+    actions: cloneDefaultQuickActions(),
   },
   selectedAgentWindow: "claude",
   pendingAgentWindow: "claude",
@@ -8218,11 +8896,56 @@ const APP_STATE = {
     ],
   },
   scheduleTasks: [
-    { id: "daily", title: "每日提醒", desc: "提醒写周报", time: "每天 17:30", status: "待执行", result: "等待触发", action: "详情", copy: "A市-豹姐～，周一啦，周报该安排上了！别拖到下班才想起来，早点写完早点轻松～" },
-    { id: "news", title: "每日 AI 最新资讯", desc: "收集每日最新 AI 资讯，列表形式展示、行业分类。", time: "每天 08:30", status: "完成", result: "已生成简报", action: "查看", copy: "已准备今日 AI 资讯收集任务，08:30 会自动生成行业分类简报，完成后同步到副屏提醒。" },
-    { id: "competitor", title: "竞品动态抓取", desc: "抓取竞品官网与公开更新，生成变更摘要。", time: "昨天 20:00", status: "失败", result: "网页授权失效", action: "重试", copy: "竞品动态抓取失败，原因是网页授权失效。请回主屏补充输入来源后重试。" },
+    {
+      id: "tech-news-digest",
+      title: "每日技术资讯简报",
+      audience: "开发者 / 极客用户",
+      desc: "聚合关注的技术方向、开源项目、竞品与关键词，生成每日技术简报。",
+      value: "不用每天手动浏览技术社区和更新动态。",
+      time: "每天 08:30",
+      status: "完成",
+      result: "今日简报已生成",
+      action: "查看",
+      copy: "今日技术简报已生成：已按前端工程、AI Agent、开源项目与竞品动态完成分类，省去逐个平台浏览和筛选。",
+    },
+    {
+      id: "dev-weekly-report",
+      title: "研发周报自动汇总",
+      audience: "开发者 / 技术负责人",
+      desc: "汇总代码提交、任务进展、Bug 与待办，自动生成研发周报。",
+      value: "不用临时整理一周研发进展。",
+      time: "每周五 18:00",
+      status: "待执行",
+      result: "周五自动汇总",
+      action: "详情",
+      copy: "本周五 18:00 将自动汇总 Git 提交、任务进展、Bug 与待办，生成可直接同步的研发周报，避免临时补材料。",
+    },
+    {
+      id: "tech-meeting-review",
+      title: "技术会议定时复盘",
+      audience: "开发者 / 技术负责人",
+      desc: "关联技术例会，会后整理纪要、技术结论和 Action Items。",
+      value: "减少会后手动整理和待办遗漏。",
+      time: "每周三 17:30",
+      status: "完成",
+      result: "复盘与待办已生成",
+      action: "查看",
+      copy: "本次技术例会已完成复盘，技术结论与 Action Items 已按负责人和截止时间整理，避免会后遗漏。",
+    },
+    {
+      id: "tech-material-organize",
+      title: "定时技术资料整理",
+      audience: "开发者 / 极客用户",
+      desc: "整理技术文档、网页、Issue 与本地资料，输出结构化摘要。",
+      value: "降低技术资料收集和整理成本。",
+      time: "每天 21:00",
+      status: "运行中",
+      result: "正在整理 23 项资料",
+      action: "详情",
+      copy: "正在整理 23 项技术资料，将按主题、来源、关键结论与待跟进事项输出结构化摘要，降低收集和整理成本。",
+    },
   ],
-  selectedScheduleTask: "daily",
+  selectedScheduleTask: "tech-news-digest",
   scheduleEditingTask: null,
   voice: {
     phase: "idle",
@@ -8607,7 +9330,9 @@ function renderScheduleTaskDetail(detail, main) {
         <div class="schedule-detail-grid">
           <div><span>执行时间</span><strong>${escapeHtml(data.time)}</strong></div>
           <div><span>重复规则</span><strong>${escapeHtml(data.repeat)}</strong></div>
-          <div><span>任务内容</span><strong>${escapeHtml(data.desc)}</strong></div>
+          <div><span>核心人群</span><strong>${escapeHtml(data.audience)}</strong></div>
+          <div class="schedule-detail-wide"><span>操作流程</span><strong>${escapeHtml(data.desc)}</strong></div>
+          <div class="schedule-detail-wide"><span>解决价值</span><strong>${escapeHtml(data.value)}</strong></div>
         </div>
       </section>
       <section class="schedule-detail-card-main">
@@ -8940,7 +9665,7 @@ function showOverlay(eventKey) {
     security: { type: "Sheet", title: "安全统计已更新", copy: "检测到高风险命令，已计入今日风险统计和告警记录。", detail: "security" },
     token: { sheet: true, type: "Sheet", title: "Token 接近今日上限", copy: "今日已使用 84%，建议查看高消耗任务或调整任务范围。", detail: "usage" },
     failed: { sheet: true, type: "Sheet", title: "Agent 任务失败", copy: "任务失败于运行检查步骤。你可以查看日志，或在确认后重试。", detail: "monitor" },
-    "schedule-fail": { sheet: true, type: "Sheet", title: "定时任务执行失败", copy: "竞品动态简报失败：网页授权失效，需要补全输入来源后重试。", detail: "schedule" },
+    "schedule-fail": { sheet: true, type: "Sheet", title: "定时任务执行失败", copy: "技术资料整理失败：Issue 来源授权失效，需要更新输入来源后重试。", detail: "schedule" },
     meeting: { sheet: true, type: "Sheet", title: "会议 5 分钟后开始", copy: "需求评审会即将开始。你可以打开会议助手或继续保持当前页面。", detail: "meeting" },
   };
   const event = events[eventKey] || events.security;
@@ -9032,9 +9757,9 @@ function renderSchedulePreview(modules, triggerId) {
   if (triggerId === "empty") return renderEmptyPreview("暂无定时任务", "在主屏创建任务后，副屏同步展示今日概览和执行状态。");
   return `
     <div class="sub-main-card">
-      <strong>${hasModule("today") ? "今日 8 个任务" : moduleValue("running", "执行中")}</strong>
+      <strong>${hasModule("today") ? "开发者自动化任务" : moduleValue("running", "执行中")}</strong>
       <div class="table">
-        ${["09:00 行业简报 已完成", "14:30 竞品动态 执行中", "18:30 项目日报 待执行"].map((row) => `<div class="rank-row"><span>${row}</span><span class="tag green">同步</span></div>`).join("")}
+        ${["08:30 技术资讯简报 已完成", "17:30 技术会议复盘 已完成", "18:00 研发周报 待执行"].map((row) => `<div class="rank-row"><span>${row}</span><span class="tag green">同步</span></div>`).join("")}
       </div>
       <div class="sub-buttons"><button data-sub-action="read">收起提醒</button><button class="hot" data-sub-action="main-detail">在主屏查看任务配置</button></div>
     </div>
@@ -9456,7 +10181,29 @@ function renderAgentSecondaryAlert() {
   `).join("");
 }
 
-function openAgentSecondaryAlert(type) {
+function resetAgentAlertDemoState() {
+  const monitor = APP_STATE.agentMonitor;
+  const agentWindow = getSelectedAgentWindow();
+  const liveRecord = APP_STATE.agentRecords.find((item) => item.id === "agent-live");
+  monitor.status = "online";
+  monitor.label = "在线";
+  monitor.stateText = "运行中";
+  monitor.syncStatus = "正常同步";
+  monitor.lastUpdate = `${nowText()}:00`;
+  agentWindow.currentOutput = "正在同步当前任务步骤和最新输出";
+  agentWindow.pending = "无待确认事项。";
+  if (liveRecord) {
+    liveRecord.status = "运行中";
+    liveRecord.summary = "正在同步当前任务步骤和最新输出";
+    liveRecord.log = "状态正常同步中";
+  }
+}
+
+function openAgentSecondaryAlert(type, { autoClose = false } = {}) {
+  if (agentAlertAutoCloseTimer) {
+    window.clearTimeout(agentAlertAutoCloseTimer);
+    agentAlertAutoCloseTimer = null;
+  }
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
   APP_STATE.agentSecondaryAlert = { open: true, type };
@@ -9486,10 +10233,22 @@ function openAgentSecondaryAlert(type) {
     }
   }
   renderApp();
+  if (autoClose) {
+    agentAlertAutoCloseTimer = window.setTimeout(() => {
+      agentAlertAutoCloseTimer = null;
+      closeAgentSecondaryAlert({ reset: true, render: true });
+    }, 4200);
+  }
 }
 
-function closeAgentSecondaryAlert() {
+function closeAgentSecondaryAlert({ reset = false, render = false } = {}) {
+  if (agentAlertAutoCloseTimer) {
+    window.clearTimeout(agentAlertAutoCloseTimer);
+    agentAlertAutoCloseTimer = null;
+  }
   APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+  if (reset) resetAgentAlertDemoState();
+  if (render) renderApp();
 }
 
 function handleAgentSecondaryAlertAction(action) {
@@ -9752,7 +10511,10 @@ function renderSchedulePage() {
   }
   taskGrid.innerHTML = APP_STATE.scheduleTasks.slice(0, 4).map((task) => `
     <button class="schedule-task-card" data-schedule-preview-detail="${escapeHtml(task.id)}">
-      <header><span class="schedule-task-icon">⏱</span><strong>${escapeHtml(task.title)}</strong></header>
+      <header>
+        <span class="schedule-task-icon">⏱</span>
+        <strong>${escapeHtml(task.title)}</strong>
+      </header>
       <p>${escapeHtml(task.desc)}</p>
       <div class="schedule-card-foot"><time>${escapeHtml(task.time)}</time><span>查看详情</span></div>
     </button>
@@ -9763,6 +10525,537 @@ function renderSchedulePage() {
       <div class="table-row" data-schedule-detail="${escapeHtml(task.id)}"><span>${escapeHtml(task.title)}</span><span>${escapeHtml(task.time)}</span><span class="tag ${tagClassForStatus(task.status)}">${escapeHtml(task.status)}</span><span>${escapeHtml(task.result)}</span><span><button class="table-action ${task.action === "重试" ? "warn" : "hot"}" ${task.action === "重试" ? `data-schedule-action="retry" data-schedule-id="${escapeHtml(task.id)}"` : `data-schedule-detail="${escapeHtml(task.id)}"`}>${task.action === "重试" ? "重试" : "查看详情"}</button></span></div>
     `).join("")}
   `;
+}
+
+function getQuickAction(slotIndex = APP_STATE.quickActions.selectedSlot) {
+  return APP_STATE.quickActions.actions[slotIndex] || DEFAULT_QUICK_ACTIONS[slotIndex] || DEFAULT_QUICK_ACTIONS[0];
+}
+
+function isAllowedQuickLink(value) {
+  try {
+    return ["http:", "https:"].includes(new URL(value).protocol);
+  } catch (error) {
+    return false;
+  }
+}
+
+function sanitizeQuickIconUrl(value) {
+  const url = String(value || "").trim();
+  return /^(https?:\/\/|data:image\/)/i.test(url) ? url : "";
+}
+
+function sanitizeStoredQuickAction(action, index) {
+  const fallback = DEFAULT_QUICK_ACTIONS[index];
+  if (!fallback || !action || typeof action !== "object") return { ...fallback };
+  const type = action.type === "网址" ? "链接" : String(action.type || "");
+  const name = String(action.name || "").trim().slice(0, 12);
+  const target = String(action.target || "").trim();
+  if (!QUICK_ACTION_ALLOWED_TYPES.has(type) || !name || !target) return { ...fallback };
+  if (type === "链接" && !isAllowedQuickLink(target)) return { ...fallback };
+  const legacyDefault = ["默认应用", "默认配置应用"].includes(action.source)
+    && (action.brandName || action.name) === (fallback.brandName || fallback.name);
+  return {
+    type,
+    name,
+    icon: String(action.icon || (type === "链接" ? "↗" : fallback.icon || "▣")),
+    iconUrl: sanitizeQuickIconUrl(action.iconUrl),
+    target,
+    launchId: String(action.launchId || target),
+    appId: String(action.appId || ""),
+    source: String(action.source || (type === "链接" ? "网页链接" : "Windows 已安装应用")),
+    brandName: String(action.brandName || ""),
+    link: type === "链接" ? target : "",
+    available: action.available !== false,
+    systemError: action.systemError ? String(action.systemError) : "",
+    isDefault: Boolean(action.isDefault || legacyDefault),
+  };
+}
+
+function persistQuickActions() {
+  try {
+    localStorage.setItem(QUICK_ACTIONS_STORAGE_KEY, JSON.stringify(APP_STATE.quickActions.actions));
+    return true;
+  } catch (error) {
+    return false;
+  }
+}
+
+function restoreQuickActions() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(QUICK_ACTIONS_STORAGE_KEY) || "null");
+    if (!Array.isArray(saved)) return;
+    APP_STATE.quickActions.actions = DEFAULT_QUICK_ACTIONS.map((fallback, index) => sanitizeStoredQuickAction(saved[index], index));
+  } catch (error) {
+    APP_STATE.quickActions.actions = cloneDefaultQuickActions();
+  }
+}
+
+function findInstalledDefaultQuickAction(fallback) {
+  const expected = (fallback.brandName || fallback.name).toLowerCase();
+  if (fallback.type === "终端") {
+    return INSTALLED_APP_CATALOG.find((app) => app.type === "终端" && /windows terminal|^终端$/i.test(app.name))
+      || INSTALLED_APP_CATALOG.find((app) => app.type === "终端");
+  }
+  return INSTALLED_APP_CATALOG.find((app) => {
+    return app.name.toLowerCase() === expected;
+  });
+}
+
+function buildDefaultQuickAction(index) {
+  const fallback = DEFAULT_QUICK_ACTIONS[index];
+  const installed = findInstalledDefaultQuickAction(fallback);
+  if (installed) {
+    return {
+      ...fallback,
+      target: installed.target,
+      launchId: installed.launchId,
+      appId: installed.id,
+      icon: installed.icon || fallback.icon,
+      iconUrl: installed.iconUrl || "",
+      source: "默认配置应用",
+      available: true,
+      systemError: "",
+    };
+  }
+  if (APP_STATE.quickActions.installedAppsStatus === "ready") {
+    return {
+      ...fallback,
+      available: false,
+      systemError: `Windows 未检测到可启动的“${fallback.name}”。`,
+    };
+  }
+  return { ...fallback };
+}
+
+function restoreDefaultQuickAction(slotIndex) {
+  const index = Number(slotIndex);
+  if (!Number.isInteger(index) || index < 0 || index >= QUICK_ACTION_SLOT_COUNT) return;
+  const restored = buildDefaultQuickAction(index);
+  APP_STATE.quickActions.actions[index] = restored;
+  APP_STATE.quickActions.pendingSource = { ...restored };
+  const persisted = persistQuickActions();
+  syncQuickFeatureConfig();
+  renderQuickActionsPage();
+  showSheet({
+    type: "Toast",
+    title: persisted ? "已恢复默认配置应用" : "恢复后保存失败",
+    copy: persisted
+      ? `宫格 ${index + 1} 已恢复为默认配置应用“${DEFAULT_QUICK_ACTIONS[index].name}”。`
+      : "浏览器未能写入本地存储，本次恢复可能无法在重启后保留。",
+    detail: "shortcut",
+    detailLabel: "",
+  });
+}
+
+function syncQuickFeatureConfig() {
+  const modules = APP_STATE.secondaryScreenConfig["Agent 快捷操作"];
+  if (!modules) return;
+  APP_STATE.quickActions.actions.forEach((action, index) => {
+    const module = modules[index];
+    if (!module) return;
+    const resolvedAction = action || DEFAULT_QUICK_ACTIONS[index];
+    module.title = `快捷宫格 ${index + 1}`;
+    module.desc = `${resolvedAction.type}：${resolvedAction.name}`;
+    module.value = resolvedAction.name;
+    module.display = "persistent";
+  });
+}
+
+const QUICK_BRAND_ICONS = {
+  "Codex": { id: "codex", src: "https://cdn.simpleicons.org/openai/FFFFFF" },
+  "Claude Code": { id: "claude", src: "https://cdn.simpleicons.org/anthropic/E5A17A" },
+  "Cursor": { id: "cursor", src: "https://cdn.simpleicons.org/cursor/FFFFFF" },
+  "GitHub Copilot": { id: "copilot", src: "https://cdn.simpleicons.org/githubcopilot/A78BFA" },
+  "Windsurf": { id: "windsurf", src: "https://cdn.simpleicons.org/windsurf/3EBBF7" },
+  "Gemini CLI": { id: "gemini", src: "https://cdn.simpleicons.org/googlegemini/9A83FF" },
+  "Cline": { id: "cline", src: "https://cdn.simpleicons.org/cline/FF9B6A" },
+  "终端": { id: "terminal", src: "https://cdn.simpleicons.org/windowsterminal/54C7EC" },
+};
+
+let INSTALLED_APP_CATALOG = [];
+
+function getQuickSystemReason(value, fallback = "Windows 未返回具体原因。") {
+  if (value instanceof Error && value.message) return value.message;
+  if (typeof value === "string" && value.trim()) return value.trim();
+  if (value && typeof value === "object") {
+    const reason = value.error || value.reason || value.systemError || value.message;
+    if (reason) return getQuickSystemReason(reason, fallback);
+    try { return JSON.stringify(value); } catch (error) { return fallback; }
+  }
+  return fallback;
+}
+
+function isTerminalCatalogApp(app) {
+  const declaredType = String(app?.type || app?.kind || app?.category || "").toLowerCase();
+  const searchableName = `${app?.name || ""} ${app?.id || ""}`.toLowerCase();
+  return declaredType === "terminal" || /windows terminal|powershell|command prompt|终端/.test(searchableName);
+}
+
+function reconcileQuickActionsWithWindows() {
+  APP_STATE.quickActions.actions = APP_STATE.quickActions.actions.map((action, index) => {
+    if (action.type === "链接") return action;
+    if (action.isDefault) return buildDefaultQuickAction(index);
+    const installed = INSTALLED_APP_CATALOG.find((app) => action.appId && app.id === action.appId)
+      || INSTALLED_APP_CATALOG.find((app) => app.type === action.type && app.target === (action.launchId || action.target))
+      || INSTALLED_APP_CATALOG.find((app) => app.type === action.type && app.name.toLowerCase() === (action.brandName || action.name).toLowerCase());
+    if (!installed) {
+      return {
+        ...action,
+        available: false,
+        systemError: `Windows 未检测到可启动的“${action.name}”。`,
+      };
+    }
+    return {
+      ...action,
+      type: installed.type,
+      target: installed.target,
+      launchId: installed.launchId,
+      appId: installed.id,
+      icon: installed.icon || action.icon,
+      iconUrl: installed.iconUrl || "",
+      source: installed.source,
+      brandName: installed.type === "终端" ? "终端" : installed.name,
+      available: true,
+      systemError: "",
+    };
+  });
+  persistQuickActions();
+  syncQuickFeatureConfig();
+}
+
+async function loadWindowsInstalledApps() {
+  const bridge = window.agentPC || window.electronAPI || window.windowsBridge;
+  const reader = bridge?.getInstalledApps || bridge?.listInstalledApps;
+  if (typeof reader !== "function") {
+    APP_STATE.quickActions.installedAppsStatus = "error";
+    APP_STATE.quickActions.installedAppsMessage = "当前环境未连接 Windows 已安装应用读取接口。";
+    renderQuickTargetPicker();
+    return;
+  }
+  try {
+    const apps = await reader.call(bridge);
+    if (!Array.isArray(apps)) {
+      throw new Error("Windows 已安装应用接口返回了无效数据。");
+    }
+    INSTALLED_APP_CATALOG = apps
+      .filter((app) => app?.name && (app?.launchId || app?.target || app?.path || app?.appUserModelId))
+      .map((app, index) => {
+        const terminal = isTerminalCatalogApp(app);
+        const rawIcon = String(app.icon || "");
+        const rawIconData = String(app.iconData || "");
+        const iconUrl = app.iconUrl
+          || (/^(https?:\/\/|data:image\/)/i.test(rawIcon) ? rawIcon : "")
+          || (rawIconData ? (rawIconData.startsWith("data:image/") ? rawIconData : `data:image/png;base64,${rawIconData}`) : "");
+        const launchId = String(app.launchId || app.appUserModelId || app.target || app.path);
+        return {
+          id: String(app.id || app.appUserModelId || `windows-app-${index}`),
+          name: String(app.name).slice(0, 80),
+          icon: app.iconText || (rawIcon.length > 0 && rawIcon.length <= 4 ? rawIcon : terminal ? ">_" : "▣"),
+          iconUrl: sanitizeQuickIconUrl(iconUrl),
+          target: launchId,
+          launchId,
+          source: "Windows 已安装应用",
+          type: terminal ? "终端" : "应用",
+        };
+      });
+    APP_STATE.quickActions.installedAppsStatus = "ready";
+    APP_STATE.quickActions.installedAppsMessage = INSTALLED_APP_CATALOG.length
+      ? `已读取 ${INSTALLED_APP_CATALOG.length} 个 Windows 已安装应用。`
+      : "Windows 未返回可启动的已安装应用。";
+    reconcileQuickActionsWithWindows();
+    renderQuickActionsPage();
+    renderQuickTargetPicker();
+  } catch (error) {
+    INSTALLED_APP_CATALOG = [];
+    APP_STATE.quickActions.installedAppsStatus = "error";
+    APP_STATE.quickActions.installedAppsMessage = getQuickSystemReason(error, "读取 Windows 已安装应用失败。");
+    renderQuickTargetPicker();
+  }
+}
+
+function getQuickBrand(action) {
+  if (action?.type === "链接") return null;
+  return QUICK_BRAND_ICONS[action?.brandName || action?.name];
+}
+
+function renderQuickBrandIcon(action) {
+  const brand = getQuickBrand(action);
+  if (action?.iconUrl) return `<span class="quick-key-icon quick-brand-icon"><img src="${escapeHtml(action.iconUrl)}" alt="" onerror="if(this.nextElementSibling)this.nextElementSibling.hidden=false;this.remove()"><b class="quick-brand-fallback" hidden>${escapeHtml(action.icon || "↗")}</b></span>`;
+  if (!brand) return `<span class="quick-key-icon">${escapeHtml(action?.icon || "＋")}</span>`;
+  return `<span class="quick-key-icon quick-brand-icon"><img src="${brand.src}" alt="" onerror="if(this.nextElementSibling)this.nextElementSibling.hidden=false;this.remove()"><b class="quick-brand-fallback" hidden>${escapeHtml(action.icon)}</b></span>`;
+}
+
+function getWebsiteIconUrl(link) {
+  try {
+    return `${new URL(link).origin}/favicon.ico`;
+  } catch (error) {
+    return "";
+  }
+}
+
+function getQuickSourceDisplay(source) {
+  if (!source) return "";
+  if (source.type === "链接") return "";
+  return `${source.target}${source.source ? ` · ${source.source}` : ""}`;
+}
+
+function syncQuickPendingSource(action = getQuickAction()) {
+  const quick = APP_STATE.quickActions;
+  quick.pendingSource = action ? {
+    type: action.type || "应用",
+    target: action.target,
+    launchId: action.launchId || action.target,
+    appId: action.appId || "",
+    icon: action.icon,
+    iconUrl: action.iconUrl || "",
+    source: action.source || (action.type === "链接" ? "网页链接" : "Windows 已安装应用"),
+    brandName: action.brandName || action.name,
+    available: action.available !== false,
+    systemError: action.systemError || "",
+    isDefault: Boolean(action.isDefault),
+  } : null;
+}
+
+function openQuickTargetPicker() {
+  const modal = $("#quick-app-picker-modal");
+  if (!modal) return;
+  APP_STATE.quickActions.targetSearch = "";
+  modal.classList.add("show");
+  modal.setAttribute("aria-hidden", "false");
+  renderQuickTargetPicker();
+}
+
+function closeQuickTargetPicker() {
+  const modal = $("#quick-app-picker-modal");
+  if (!modal) return;
+  modal.classList.remove("show");
+  modal.setAttribute("aria-hidden", "true");
+}
+
+function renderQuickTargetPicker() {
+  const quick = APP_STATE.quickActions;
+  const search = $("#quick-app-search");
+  if (search) search.value = quick.targetSearch;
+  const status = $("#quick-app-picker-status");
+  if (status) status.textContent = quick.installedAppsMessage;
+  const list = $("#quick-app-picker-list");
+  if (!list) return;
+  const keyword = quick.targetSearch.trim().toLowerCase();
+  const results = INSTALLED_APP_CATALOG.filter((app) => !keyword || `${app.name} ${app.target}`.toLowerCase().includes(keyword));
+  list.innerHTML = results.length ? results.map((app) => {
+    const active = quick.pendingSource?.target === app.target ? "selected" : "";
+    const iconAction = { ...app, brandName: app.type === "终端" ? "终端" : app.name };
+    return `<button class="quick-app-picker-item ${active}" type="button" data-quick-installed-app="${escapeHtml(app.id)}">${renderQuickBrandIcon(iconAction)}<span><strong>${escapeHtml(app.name)}</strong><small>${escapeHtml(app.type)} · ${escapeHtml(app.source)}</small></span></button>`;
+  }).join("") : renderEmptyState(keyword ? "没有匹配的 Windows 已安装应用" : "暂无可选择的 Windows 已安装应用");
+}
+
+function chooseQuickInstalledApp(appId) {
+  const app = INSTALLED_APP_CATALOG.find((item) => item.id === appId);
+  if (!app) return;
+  APP_STATE.quickActions.pendingSource = {
+    type: app.type,
+    target: app.target,
+    launchId: app.launchId,
+    appId: app.id,
+    icon: app.icon,
+    iconUrl: app.iconUrl || "",
+    source: app.source,
+    brandName: app.type === "终端" ? "终端" : app.name,
+    available: true,
+    systemError: "",
+    isDefault: false,
+  };
+  const nameInput = $("#quick-action-name");
+  if (nameInput) nameInput.value = (app.type === "终端" ? "终端" : app.name).slice(0, 12);
+  const linkInput = $("#quick-action-link");
+  if (linkInput) linkInput.value = "";
+  closeQuickTargetPicker();
+  renderQuickActionsPage();
+}
+
+function renderQuickActionsPage() {
+  const previewGrid = $("#quick-subscreen-grid");
+  const configGrid = $("#quick-slot-config-grid");
+  if (!previewGrid || !configGrid) return;
+  const selectedSlot = APP_STATE.quickActions.selectedSlot;
+  const actions = DEFAULT_QUICK_ACTIONS.map((fallback, index) => APP_STATE.quickActions.actions[index] || fallback);
+  const previewMarkup = actions.map((action, index) => {
+    const opening = Boolean(APP_STATE.quickActions.executingSlots[index]);
+    return `<button class="quick-subscreen-key ${opening ? "is-opening" : ""}" data-quick-brand="${escapeHtml(getQuickBrand(action)?.id || "custom")}" type="button" data-quick-exec="${index}" aria-label="${opening ? "正在打开" : "执行"} ${escapeHtml(action.name)}" ${opening ? "disabled" : ""}>${opening ? '<span class="quick-key-icon">◌</span>' : renderQuickBrandIcon(action)}<strong>${opening ? "打开中" : escapeHtml(action.name)}</strong><small>${escapeHtml(action.type)}</small></button>`;
+  }).join("");
+  previewGrid.innerHTML = previewMarkup;
+  configGrid.innerHTML = actions.map((action, index) => {
+    const selected = index === selectedSlot ? "active" : "";
+    return `<button class="quick-slot-card ${selected}" type="button" data-quick-slot="${index}">
+      <span>宫格 ${index + 1}</span>
+      <i class="quick-key-icon">${renderQuickBrandIcon(action).replace(/^<span[^>]*>|<\/span>$/g, "")}</i>
+      <strong>${escapeHtml(action.name)}</strong>
+      <span>${action.isDefault ? "默认配置应用" : action.type === "链接" ? "网页链接" : escapeHtml(action.type)}</span>
+    </button>`;
+  }).join("");
+  const action = getQuickAction(selectedSlot);
+  if (APP_STATE.quickActions.pendingSource === null && action) syncQuickPendingSource(action);
+  const pending = APP_STATE.quickActions.pendingSource;
+  const pendingChanged = pending && (!action || pending.target !== action.target || pending.type !== action.type);
+  $("#quick-editor-title").textContent = `配置宫格 ${selectedSlot + 1}`;
+  $("#quick-editor-status").textContent = action?.isDefault ? "默认配置应用" : "已配置";
+  $("#quick-editor-status").className = action?.isDefault ? "tag green" : "tag cyan";
+  $("#quick-action-name").value = String(pendingChanged ? (pending.brandName || pending.target || "") : (action?.name || "")).slice(0, 12);
+  $("#quick-source-display").value = getQuickSourceDisplay(pending);
+  $("#quick-action-link").value = action?.type === "链接" ? action.target : action?.link || "";
+}
+
+function setQuickActionSlot(slotIndex) {
+  if (!Number.isInteger(slotIndex) || slotIndex < 0 || slotIndex >= QUICK_ACTION_SLOT_COUNT) return;
+  APP_STATE.quickActions.selectedSlot = slotIndex;
+  syncQuickPendingSource(getQuickAction(slotIndex));
+  renderQuickActionsPage();
+}
+
+function saveQuickAction() {
+  const name = $("#quick-action-name").value.trim();
+  const link = $("#quick-action-link").value.trim();
+  let source = APP_STATE.quickActions.pendingSource;
+  if (link) {
+    if (!isAllowedQuickLink(link)) {
+      showSheet({ type: "Toast", title: "链接格式不正确", copy: "请填写以 http:// 或 https:// 开头的链接。", detail: "shortcut", detailLabel: "" });
+      return;
+    }
+    source = { type: "链接", target: link, icon: "↗", iconUrl: getWebsiteIconUrl(link), source: "网页链接", brandName: "", available: true, isDefault: false };
+  }
+  if (!name || !source?.target || !QUICK_ACTION_ALLOWED_TYPES.has(source.type)) {
+    showSheet({ type: "Toast", title: "请设置启动目标", copy: "请选择 Windows 已安装应用、终端，或填写网页链接后再保存。", detail: "shortcut", detailLabel: "" });
+    return;
+  }
+  const index = APP_STATE.quickActions.selectedSlot;
+  APP_STATE.quickActions.actions[index] = {
+    type: source.type,
+    name: name.slice(0, 12),
+    icon: source.icon,
+    iconUrl: sanitizeQuickIconUrl(source.iconUrl),
+    target: source.target,
+    launchId: source.launchId || source.target,
+    appId: source.appId || "",
+    source: source.source,
+    brandName: source.brandName,
+    link: source.type === "链接" ? source.target : "",
+    available: source.available !== false,
+    systemError: source.systemError || "",
+    isDefault: false,
+  };
+  APP_STATE.quickActions.pendingSource = { ...APP_STATE.quickActions.actions[index] };
+  const persisted = persistQuickActions();
+  syncQuickFeatureConfig();
+  renderQuickActionsPage();
+  showSheet({
+    type: "Toast",
+    title: persisted ? "快捷宫格已保存" : "快捷宫格保存失败",
+    copy: persisted
+      ? `宫格 ${index + 1} 已同步到副屏预览并保存在本机。`
+      : "浏览器未能写入本地存储，刷新或重启后本次配置可能丢失。",
+    detail: "shortcut",
+    detailLabel: "",
+  });
+}
+
+function clearQuickAction() {
+  const index = APP_STATE.quickActions.selectedSlot;
+  const current = getQuickAction(index);
+  showSheet({
+    type: "Confirm",
+    title: "确认清空当前快捷配置？",
+    copy: `清空“${current.name}”后，宫格 ${index + 1} 将恢复默认配置应用“${DEFAULT_QUICK_ACTIONS[index].name}”，不会留下空宫格。`,
+    readLabel: "取消",
+    retryLabel: "确认清空",
+    retryContext: { type: "quick-reset", index },
+    detail: "shortcut",
+    detailLabel: "",
+  });
+}
+
+async function requestQuickAction(action) {
+  if (!action || !QUICK_ACTION_ALLOWED_TYPES.has(action.type)) {
+    return { ok: false, error: "安全限制：快捷操作仅允许打开应用、终端或 http(s) 网页链接。" };
+  }
+  if (action.type === "链接" && !isAllowedQuickLink(action.target)) {
+    return { ok: false, error: "安全限制：网页链接必须使用 http:// 或 https://。" };
+  }
+  if (action.available === false) {
+    return { ok: false, error: action.systemError || "Windows 未检测到该启动目标。" };
+  }
+
+  let launchAction = { ...action };
+  if (action.type !== "链接") {
+    if (APP_STATE.quickActions.installedAppsStatus !== "ready") {
+      return { ok: false, error: APP_STATE.quickActions.installedAppsMessage };
+    }
+    const installed = INSTALLED_APP_CATALOG.find((app) => action.appId && app.id === action.appId)
+      || INSTALLED_APP_CATALOG.find((app) => app.type === action.type && app.target === (action.launchId || action.target));
+    if (!installed) {
+      return { ok: false, error: `Windows 已安装应用列表中不存在“${action.name}”。` };
+    }
+    launchAction = { ...action, target: installed.target, launchId: installed.launchId, appId: installed.id, type: installed.type };
+  }
+
+  const bridge = window.agentPC || window.electronAPI || window.windowsBridge;
+  const launcher = bridge?.launchQuickAction || bridge?.openTarget;
+  if (typeof launcher === "function") {
+    const result = await launcher.call(bridge, {
+      intent: launchAction.type === "终端" ? "open-terminal" : launchAction.type === "链接" ? "open-url" : "open-app",
+      type: launchAction.type,
+      target: launchAction.target,
+      launchId: launchAction.launchId || launchAction.target,
+      appId: launchAction.appId || "",
+      name: launchAction.name,
+    });
+    if (result === true) return { ok: true, message: "Windows 已确认打开目标。" };
+    if (result === false) return { ok: false, error: "Windows 返回：打开目标失败。" };
+    if (result && typeof result === "object") {
+      const explicitSuccess = result.ok === true || result.success === true || result.status === "success";
+      const explicitFailure = result.ok === false
+        || result.success === false
+        || ["failed", "failure", "error"].includes(result.status)
+        || Boolean(result.error || result.reason || result.systemError);
+      if (explicitSuccess) return { ok: true, message: getQuickSystemReason(result.message || result.systemMessage, "Windows 已确认打开目标。") };
+      if (explicitFailure) return { ok: false, error: getQuickSystemReason(result, "Windows 未返回失败原因。") };
+      return { ok: false, error: `Windows 启动接口未返回明确结果：${getQuickSystemReason(result)}` };
+    }
+    return { ok: false, error: "Windows 启动接口未返回执行结果。" };
+  }
+  if (launchAction.type === "链接") {
+    const opened = window.open(launchAction.target, "_blank");
+    if (opened) {
+      try { opened.opener = null; } catch (error) { /* Cross-origin pages can reject opener access. */ }
+    }
+    return opened
+      ? { ok: true, message: "浏览器已确认接收网页打开请求。" }
+      : { ok: false, error: "浏览器返回：弹出窗口被拦截。" };
+  }
+  return { ok: false, error: "当前环境未连接 Windows 快捷操作启动接口。" };
+}
+
+async function executeQuickAction(slotIndex) {
+  const index = Number(slotIndex);
+  const action = getQuickAction(index);
+  if (!action || APP_STATE.quickActions.executingSlots[index]) return;
+  const openingStartedAt = Date.now();
+  let feedback = null;
+  APP_STATE.quickActions.executingSlots[index] = true;
+  renderQuickActionsPage();
+  try {
+    await new Promise((resolve) => requestAnimationFrame(resolve));
+    const result = await requestQuickAction(action);
+    if (!result.ok) throw new Error(result.error || "Windows 未返回成功结果。");
+    feedback = { type: "Toast", title: `${action.name} 打开成功`, copy: result.message || "Windows 已成功打开目标。", detail: "shortcut", detailLabel: "" };
+  } catch (error) {
+    feedback = { type: "Toast", title: `${action.name} 打开失败`, copy: getQuickSystemReason(error, "Windows 返回未知错误。"), detail: "shortcut", detailLabel: "" };
+  } finally {
+    const remainingOpeningTime = Math.max(0, 360 - (Date.now() - openingStartedAt));
+    if (remainingOpeningTime) await new Promise((resolve) => setTimeout(resolve, remainingOpeningTime));
+    delete APP_STATE.quickActions.executingSlots[index];
+    renderQuickActionsPage();
+    if (feedback) showSheet(feedback);
+  }
 }
 
 function showScheduleBoard() {
@@ -9799,6 +11092,8 @@ function showSchedulePreviewDetail(taskId) {
   $("#schedule-detail-name").textContent = detail.title;
   $("#schedule-detail-time").textContent = detail.time;
   $("#schedule-detail-desc").textContent = detail.desc;
+  const audience = $("#schedule-detail-audience");
+  if (audience) audience.textContent = detail.audience || "开发者自定义";
   $("#schedule-detail-copy").textContent = detail.copy;
   const command = $("#schedule-detail-command");
   if (command) command.textContent = detail.desc;
@@ -9859,7 +11154,9 @@ function showScheduleDetail(taskId) {
       title: detail.title,
       time: timeMeta.time,
       repeat: timeMeta.repeat,
+      audience: detail.audience || "开发者自定义",
       desc: detail.desc,
+      value: detail.value || "按设定时间自动完成重复工作。",
       status: detail.status,
       result: detail.result,
       recentTime,
@@ -9950,6 +11247,8 @@ function createScheduleTask() {
   if (editingTask) {
     editingTask.title = title;
     editingTask.desc = desc;
+    editingTask.audience ||= "开发者自定义";
+    editingTask.value ||= "按设定时间自动完成重复工作。";
     editingTask.time = formatScheduleTime(repeat, time);
     editingTask.status = "待执行";
     editingTask.result = "已更新";
@@ -9966,7 +11265,9 @@ function createScheduleTask() {
   const newTask = {
     id: `task-${Date.now()}`,
     title,
+    audience: "开发者自定义",
     desc,
+    value: "按设定时间自动完成重复工作。",
     time: formatScheduleTime(repeat, time),
     status: "待执行",
     result: "等待触发",
@@ -10000,7 +11301,36 @@ function deleteScheduleTask(taskId) {
 let voiceProcessingTimer = null;
 let meetingSummaryTimer = null;
 let agentRecognizeTimer = null;
+let agentAlertDemoTimer = null;
+let agentAlertAutoCloseTimer = null;
+let agentAlertDemoIndex = 0;
 const scheduleRunTimers = new Map();
+
+function stopAgentAlertDemo() {
+  if (agentAlertDemoTimer) window.clearTimeout(agentAlertDemoTimer);
+  if (agentAlertAutoCloseTimer) window.clearTimeout(agentAlertAutoCloseTimer);
+  agentAlertDemoTimer = null;
+  agentAlertAutoCloseTimer = null;
+}
+
+function syncAgentAlertDemo() {
+  if (APP_STATE.currentPage !== "monitor") {
+    stopAgentAlertDemo();
+    if (APP_STATE.agentSecondaryAlert.open) {
+      APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+      resetAgentAlertDemoState();
+    }
+    return;
+  }
+  if (APP_STATE.agentSecondaryAlert.open || agentAlertDemoTimer || agentAlertAutoCloseTimer) return;
+  agentAlertDemoTimer = window.setTimeout(() => {
+    agentAlertDemoTimer = null;
+    if (APP_STATE.currentPage !== "monitor" || APP_STATE.agentSecondaryAlert.open) return;
+    const types = ["confirm", "stuck", "failed"];
+    openAgentSecondaryAlert(types[agentAlertDemoIndex % types.length], { autoClose: true });
+    agentAlertDemoIndex += 1;
+  }, 5000);
+}
 
 function renderVoicePage() {
   const voice = APP_STATE.voice;
@@ -10065,7 +11395,7 @@ function runVoiceAction(action = "查询任务") {
     查询任务: { text: "现在 Agent 跑到哪一步了？", result: "Agent 当前第 5 / 8 步，运行检查中，暂无失败。" },
     搜索: { text: "搜索今天的安全告警", result: "已找到 4 条告警，最高风险为批量文件修改。" },
     打开应用: { text: "打开应用", result: "请继续说出或选择要打开的应用。" },
-    设置提醒: { text: "提醒我 18 点看项目日报", result: "已创建 18 点项目日报提醒。" },
+    设置提醒: { text: "提醒我周五 18 点查看研发周报", result: "已创建周五 18 点研发周报提醒。" },
     截图: { text: "截取当前副屏画面", result: "已完成当前副屏截图，已写入语音记录。" },
     亮度调节: { text: "把副屏亮度调低一点", result: "副屏亮度已调整为 60%。" },
     音量调节: { text: "把系统音量调到 40%", result: "音量已调整到 40%。" },
@@ -10094,13 +11424,15 @@ function runVoiceAction(action = "查询任务") {
     if (action === "设置提醒") {
       APP_STATE.scheduleTasks.unshift({
         id: `voice-${Date.now()}`,
-        title: "18 点查看项目日报",
-        desc: "由语音指令创建的提醒",
-        time: "今天 18:00",
+        title: "查看研发周报",
+        audience: "开发者 / 技术负责人",
+        desc: "周五 18 点提醒查看自动汇总的代码提交、任务进展、Bug 与待办。",
+        value: "避免错过研发周报确认和同步。",
+        time: "每周五 18:00",
         status: "待执行",
         result: "等待触发",
         action: "详情",
-        copy: "语音已创建 18:00 项目日报提醒，副屏会在执行前展示提醒。",
+        copy: "语音已创建周五 18:00 研发周报提醒，副屏会在执行前展示提醒。",
       });
     }
     if (action === "亮度调节") {
@@ -11020,6 +12352,7 @@ function renderApp() {
   renderNavigation();
   renderPreviewToggles();
   renderAgentPage();
+  renderQuickActionsPage();
   renderTokenPage();
   renderSchedulePage();
   renderVoicePage();
@@ -11032,6 +12365,7 @@ function renderApp() {
   renderAgentWindowModal();
   renderSheet();
   renderOverlay();
+  syncAgentAlertDemo();
 }
 
 function renderNavigation() {
@@ -11157,6 +12491,74 @@ function renderSubscreenDevicePanel(page) {
   `;
 }
 
+const PHYSICAL_SCREEN_OBSERVERS = new WeakMap();
+
+function sanitizePhysicalScreenClone(clone) {
+  clone.removeAttribute("data-subscreen-preview");
+  clone.removeAttribute("data-subscreen-title");
+  clone.classList.add("physical-screen-mirror-source");
+  clone.querySelectorAll("[id]").forEach((node) => node.removeAttribute("id"));
+  clone.querySelectorAll("[for], [aria-controls], [aria-labelledby], [aria-describedby]").forEach((node) => {
+    node.removeAttribute("for");
+    node.removeAttribute("aria-controls");
+    node.removeAttribute("aria-labelledby");
+    node.removeAttribute("aria-describedby");
+  });
+  clone.querySelectorAll("button, input, select, textarea, a").forEach((node) => {
+    node.setAttribute("tabindex", "-1");
+    node.setAttribute("aria-hidden", "true");
+  });
+  return clone;
+}
+
+function syncPhysicalScreenPreview(preview) {
+  const page = preview?.dataset?.subscreenPreview;
+  if (!page) return;
+  const panel = preview.closest(".panel");
+  const physical = panel?.querySelector(`.physical-screen-preview[data-physical-for="${page}"]`);
+  const canvas = physical?.querySelector(".physical-screen-canvas");
+  if (!canvas) return;
+  const clone = sanitizePhysicalScreenClone(preview.cloneNode(true));
+  canvas.replaceChildren(clone);
+}
+
+function ensurePhysicalScreenPreviews() {
+  $$('[data-subscreen-preview]').forEach((preview) => {
+    const page = preview.dataset.subscreenPreview;
+    const title = preview.dataset.subscreenTitle || PAGE_TITLES[page] || "功能页";
+    const panel = preview.closest(".panel");
+    if (!panel) return;
+    let physical = panel.querySelector(`.physical-screen-preview[data-physical-for="${page}"]`);
+    if (!physical) {
+      physical = document.createElement("div");
+      physical.className = "physical-screen-preview";
+      physical.dataset.physicalFor = page;
+      physical.setAttribute("aria-label", `${title}物理副屏效果预览`);
+      physical.innerHTML = `
+        <div class="physical-screen-preview-head">
+          <strong>物理副屏效果</strong>
+          <span>实时同步当前副屏展示内容</span>
+        </div>
+        <div class="physical-screen-device">
+          <div class="physical-screen-glass"><div class="physical-screen-canvas"></div></div>
+          <span class="physical-screen-foot" aria-hidden="true"></span>
+        </div>
+      `;
+      panel.insertBefore(physical, preview);
+    }
+    const featureHeader = panel.querySelector(":scope > .section-title");
+    if (featureHeader && physical.nextElementSibling !== featureHeader) {
+      physical.after(featureHeader);
+    }
+    syncPhysicalScreenPreview(preview);
+    if (!PHYSICAL_SCREEN_OBSERVERS.has(preview)) {
+      const observer = new MutationObserver(() => syncPhysicalScreenPreview(preview));
+      observer.observe(preview, { subtree: true, childList: true, characterData: true, attributes: true });
+      PHYSICAL_SCREEN_OBSERVERS.set(preview, observer);
+    }
+  });
+}
+
 function renderSubscreenSettings() {
   $$("[data-subscreen-preview]").forEach((preview) => {
     const page = preview.dataset.subscreenPreview;
@@ -11167,40 +12569,30 @@ function renderSubscreenSettings() {
       chrome.className = "subscreen-preview-chrome";
       preview.prepend(chrome);
     }
-    const isSettings = APP_STATE.activeSubscreenSettings === page;
-    const scheduleCreateButton = page === "schedule" && !isSettings
+    const scheduleCreateButton = page === "schedule"
       ? `<button class="subscreen-create-button" id="new-schedule" data-schedule-create>创建定时任务</button>`
       : "";
-    const agentPetToggle = page === "monitor" && !isSettings
+    const agentPetToggle = page === "monitor"
       ? `<span class="agent-pet-toggle-control"><span>桌面宠物</span><button class="toggle ${APP_STATE.agentPetEnabled ? "" : "off"}" data-agent-pet-toggle aria-pressed="${APP_STATE.agentPetEnabled}" aria-label="桌面宠物已${APP_STATE.agentPetEnabled ? "开启" : "关闭"}"></button></span>`
       : "";
-    const agentAlertTriggers = page === "monitor" && !isSettings
-      ? `<span class="agent-alert-triggers" aria-label="Agent 状态演示">
-          <button class="soft-button" data-agent-alert="confirm">待确认</button>
-          <button class="soft-button" data-agent-alert="stuck">疑似卡住</button>
-          <button class="danger-button" data-agent-alert="failed">失败</button>
-        </span>`
-      : "";
-    const securityRuleButton = page === "security" && !isSettings
+    const securityRuleButton = page === "security"
       ? `<button class="subscreen-rule-button" type="button" data-security-rule-settings>安全规则设置</button>`
       : "";
     chrome.innerHTML = `
       <span class="subscreen-preview-heading">
-        <span class="subscreen-preview-title">${escapeHtml(isSettings ? "全局配置" : title)}</span>
+        <span class="subscreen-preview-title">${escapeHtml(title)}</span>
         ${securityRuleButton}
       </span>
       <span class="subscreen-preview-actions">
         ${scheduleCreateButton}
-        ${agentAlertTriggers}
         ${agentPetToggle}
-        ${isSettings ? `<button class="subscreen-back-button" data-subscreen-back="${escapeHtml(page)}">返回</button>` : `<button class="subscreen-settings-button" data-subscreen-settings="${escapeHtml(page)}">设置</button>`}
       </span>
     `;
     const oldPanel = preview.querySelector(":scope > .subscreen-device-panel");
     if (oldPanel) oldPanel.remove();
-    preview.classList.toggle("subscreen-preview-body-hidden", isSettings);
-    if (isSettings) preview.insertAdjacentHTML("beforeend", renderSubscreenDevicePanel(page));
+    preview.classList.remove("subscreen-preview-body-hidden");
   });
+  ensurePhysicalScreenPreviews();
 }
 
 function openSubscreenSettings(page) {
@@ -11647,6 +13039,38 @@ function bindEvents() {
     item.addEventListener("click", () => setConfigSubpage(item.dataset.configSubpage));
   });
 
+  $("#quick-slot-editor")?.addEventListener("submit", (event) => {
+    event.preventDefault();
+    saveQuickAction();
+  });
+  $("#quick-slot-clear")?.addEventListener("click", clearQuickAction);
+  $("#quick-open-target-picker")?.addEventListener("click", openQuickTargetPicker);
+  $("#quick-app-picker-close")?.addEventListener("click", closeQuickTargetPicker);
+  $("#quick-app-picker-modal")?.addEventListener("click", (event) => {
+    if (event.target === event.currentTarget) closeQuickTargetPicker();
+  });
+  $("#quick-app-search")?.addEventListener("input", (event) => {
+    APP_STATE.quickActions.targetSearch = event.target.value;
+    renderQuickTargetPicker();
+  });
+  $("#quick-action-link")?.addEventListener("input", (event) => {
+    const value = event.target.value.trim();
+    const sourceDisplay = $("#quick-source-display");
+    if (value) {
+      APP_STATE.quickActions.pendingSource = null;
+      if (sourceDisplay) sourceDisplay.value = "";
+      return;
+    }
+    const current = getQuickAction();
+    if (current?.type === "链接") {
+      APP_STATE.quickActions.pendingSource = null;
+      if (sourceDisplay) sourceDisplay.value = "";
+      return;
+    }
+    syncQuickPendingSource(current);
+    if (sourceDisplay) sourceDisplay.value = getQuickSourceDisplay(APP_STATE.quickActions.pendingSource);
+  });
+
   $$("[data-jump]").forEach((el) => {
     el.addEventListener("click", () => {
       const target = el.dataset.jump;
@@ -11700,6 +13124,10 @@ function bindEvents() {
     }
     if (context?.type === "schedule-delete") {
       deleteScheduleTask(context.id);
+      return;
+    }
+    if (context?.type === "quick-reset") {
+      restoreDefaultQuickAction(context.index);
       return;
     }
     if (context?.type === "agent") {
@@ -11935,6 +13363,21 @@ function bindEvents() {
     if (!event.target.closest("#agent-pet-context-menu")) {
       agentPetContextMenu.hidden = true;
     }
+    const quickExecute = event.target.closest("[data-quick-exec]");
+    if (quickExecute) {
+      executeQuickAction(quickExecute.dataset.quickExec);
+      return;
+    }
+    const quickSlot = event.target.closest("[data-quick-slot]");
+    if (quickSlot) {
+      setQuickActionSlot(Number(quickSlot.dataset.quickSlot));
+      return;
+    }
+    const quickInstalledApp = event.target.closest("[data-quick-installed-app]");
+    if (quickInstalledApp) {
+      chooseQuickInstalledApp(quickInstalledApp.dataset.quickInstalledApp);
+      return;
+    }
     const detailAction = event.target.closest("[data-detail-action]");
     if (detailAction) {
       handleDetailAction(detailAction.dataset.detailAction, detailAction.dataset.detailId, detailAction.dataset.detailJump);
@@ -11944,12 +13387,6 @@ function bindEvents() {
     const agentAlertAction = event.target.closest("[data-agent-alert-action]");
     if (agentAlertAction) {
       handleAgentSecondaryAlertAction(agentAlertAction.dataset.agentAlertAction);
-      return;
-    }
-
-    const agentAlertTrigger = event.target.closest("[data-agent-alert]");
-    if (agentAlertTrigger) {
-      openAgentSecondaryAlert(agentAlertTrigger.dataset.agentAlert);
       return;
     }
 
@@ -12005,18 +13442,6 @@ function bindEvents() {
     const tokenModelRange = event.target.closest("[data-token-model-range]");
     if (tokenModelRange) {
       handleTokenModelRange(tokenModelRange.dataset.tokenModelRange);
-      return;
-    }
-
-    const subscreenSettings = event.target.closest("[data-subscreen-settings]");
-    if (subscreenSettings) {
-      openSubscreenSettings(subscreenSettings.dataset.subscreenSettings);
-      return;
-    }
-
-    const subscreenBack = event.target.closest("[data-subscreen-back]");
-    if (subscreenBack) {
-      closeSubscreenSettings();
       return;
     }
 
@@ -12120,8 +13545,11 @@ function bindEvents() {
 
 bindEvents();
 $("#pet")?.remove();
+restoreQuickActions();
+syncQuickFeatureConfig();
 renderApp();
 renderAuthState();
+loadWindowsInstalledApps();
     </script>
   </body>
 </html>
