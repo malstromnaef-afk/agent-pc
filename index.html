@@ -3933,12 +3933,18 @@ pre {
 
 .voice-console-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.08fr) minmax(390px, 0.92fr);
+  grid-template-columns: minmax(0, 1fr) minmax(245px, 270px);
   gap: 10px;
   height: 100%;
 }
 
+.voice-console-grid.agent-collapsed {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .voice-assistant-panel {
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
   overflow: hidden;
   border-radius: 0;
   background: transparent;
@@ -3967,30 +3973,27 @@ pre {
 }
 
 .voice-assistant-body {
+  position: relative;
   display: grid;
-  grid-template-columns: 120px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr);
   min-height: 0;
-  height: 100%;
+  height: auto;
 }
 
-.voice-orb-rail {
-  display: grid;
-  align-items: start;
-  justify-items: center;
-  border-right: 1px solid rgba(255, 255, 255, 0.16);
-  padding-top: clamp(118px, 22%, 168px);
-}
+.voice-orb-rail { display: none; }
 
 .voice-orb {
-  width: 74px;
-  height: 74px;
+  display: inline-block;
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
   border-radius: 50%;
   background:
     radial-gradient(circle at 34% 28%, rgba(255, 255, 255, 0.9), transparent 22%),
     radial-gradient(circle at 76% 24%, rgba(155, 92, 255, 0.72), transparent 30%),
     radial-gradient(circle at 68% 72%, rgba(46, 242, 138, 0.42), transparent 34%),
     linear-gradient(135deg, #2ef28a, #20e6e6 62%, #9b5cff);
-  box-shadow: 0 0 38px rgba(32, 230, 230, 0.72);
+  box-shadow: 0 0 18px rgba(32, 230, 230, 0.68);
 }
 
 .voice-orb.listening {
@@ -4026,7 +4029,7 @@ pre {
   display: grid;
   align-items: start;
   justify-items: center;
-  padding: clamp(102px, 19%, 148px) 20px 20px;
+  padding: 82px 8px 20px;
 }
 
 .voice-glow-field::before {
@@ -4046,24 +4049,33 @@ pre {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-rows: auto auto auto 1fr auto;
+  grid-template-rows: minmax(0, 1fr) auto;
   align-self: stretch;
   gap: 8px;
   height: 100%;
-  width: min(82%, 460px);
+  width: 100%;
   text-align: left;
 }
 
-.voice-live-copy span {
+.voice-chat-status {
   color: var(--cyan);
-  font-size: 12px;
+  font-size: 10px;
   font-weight: 950;
 }
 
+.voice-chat-window { display: grid; align-content: start; gap: 16px; min-height: 0; padding: 0; }
+.voice-chat-message { display: grid; gap: 6px; width: fit-content; padding: 12px 14px; border-radius: 13px; box-shadow: 0 10px 24px rgba(0,0,0,.18); }
+.voice-chat-message > span { font-size: 9px; font-weight: 900; }
+.voice-chat-message strong,
+.voice-chat-message p { margin: 0; font-size: 13px; line-height: 1.5; }
+.voice-chat-message.user { justify-self: end; max-width: 52%; background: linear-gradient(135deg, rgba(46,242,138,.2), rgba(32,230,230,.13)); border: 1px solid rgba(129,242,234,.3); }
+.voice-chat-message.user > span { color: #7ef5c0; }
+.voice-chat-message.assistant { justify-self: start; max-width: 78%; background: rgba(255,255,255,.055); border: 1px solid rgba(255,255,255,.09); }
+.voice-chat-message.assistant > span { color: #8ff7ef; }
+.voice-chat-message.assistant p { color: rgba(229,238,240,.78); }
+
 .voice-live-copy strong {
   color: var(--text);
-  font-size: clamp(20px, 2.4vw, 34px);
-  line-height: 1.2;
 }
 
 .voice-live-copy.typing strong::after {
@@ -4082,20 +4094,8 @@ pre {
   49%, 100% { opacity: 0; }
 }
 
-.voice-live-copy small {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.45;
-}
-
 .voice-live-action {
-  justify-self: start;
-  align-self: end;
-  min-width: 132px;
-  min-height: 38px;
-  margin-top: 0;
-  padding: 0 22px;
-  transform: translateY(-20px);
+  display: none;
 }
 
 .voice-result-stack {
@@ -4124,6 +4124,194 @@ pre {
   font-size: 15px;
   line-height: 1.35;
 }
+
+.voice-composer-shell {
+  position: relative;
+  z-index: 8;
+  display: grid;
+  gap: 8px;
+  margin: 0 10px 8px;
+  border: 1px solid rgba(129, 242, 234, .25);
+  border-radius: 13px;
+  background: rgba(7, 12, 16, .9);
+  box-shadow: 0 12px 24px rgba(0,0,0,.28), inset 0 0 22px rgba(32,230,230,.035);
+  padding: 9px 10px 10px;
+  transform: translateY(-26px);
+}
+
+.voice-composer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-left: auto;
+}
+
+.voice-composer-toolbar select,
+.voice-composer-toolbar button {
+  min-height: 25px;
+  border: 1px solid rgba(255,255,255,.09);
+  border-radius: 7px;
+  background: rgba(255,255,255,.045);
+  color: rgba(229,238,240,.76);
+  padding: 0 8px;
+  font-size: 9px;
+  font-weight: 850;
+}
+
+.voice-composer-toolbar select { min-width: 142px; max-width: 180px; }
+.voice-composer-toolbar button { color: #8ff7ef; cursor: pointer; }
+
+.voice-history-tabs {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: 999px;
+  background: rgba(0,0,0,.24);
+  padding: 3px;
+}
+
+.voice-history-tabs .agent-team-tab { min-width: 96px; min-height: 30px; font-size: 11px; }
+
+.window-app-page { display: grid; gap: 16px; }
+.window-app-layout { display: grid; grid-template-columns: minmax(360px,.9fr) minmax(300px,1.1fr); gap: 16px; }
+.window-connect-panel { display: grid; align-content: start; gap: 14px; }
+.window-status-line { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.window-status-badge { display: inline-flex; align-items: center; gap: 7px; color: #aeb8bd; font-size: 12px; font-weight: 900; }
+.window-status-badge::before { width: 8px; height: 8px; border-radius: 50%; background: #778087; content:""; }
+.window-status-badge.connected { color: #79f5b6; }
+.window-status-badge.connected::before { background:#2ef28a; box-shadow:0 0 10px rgba(46,242,138,.7); }
+.window-drop-zone { display:grid; place-items:center; gap:9px; min-height:210px; border:1px dashed rgba(129,242,234,.38); border-radius:12px; background:radial-gradient(circle,rgba(32,230,230,.08),transparent 58%),rgba(255,255,255,.02); padding:20px; text-align:center; }
+.window-drop-zone.dragover { border-color:#2ef28a; background:rgba(46,242,138,.07); }
+.window-drop-zone strong { font-size:18px; }
+.window-drop-zone p { max-width:320px; margin:0; color:var(--muted); font-size:12px; line-height:1.55; }
+.window-source-list { display:flex; flex-wrap:wrap; justify-content:center; gap:8px; }
+.window-source-chip { border:1px solid rgba(255,255,255,.1); border-radius:8px; background:#262b30; color:#e9f0f2; padding:8px 10px; font-size:11px; font-weight:850; cursor:grab; }
+.window-current-card { display:grid; gap:9px; border:1px solid rgba(46,242,138,.24); border-radius:10px; background:rgba(46,242,138,.045); padding:13px; }
+.window-current-card[hidden] { display:none; }
+.window-current-head { display:flex; justify-content:space-between; align-items:center; gap:10px; }
+.window-current-meta { display:grid; grid-template-columns:1fr 1fr; gap:8px; }
+.window-current-meta div { border-radius:8px; background:rgba(255,255,255,.035); padding:9px; }
+.window-current-meta span { display:block; color:var(--muted); font-size:9px; }
+.window-current-meta strong { display:block; margin-top:4px; font-size:11px; }
+.window-remove-button { border:1px solid rgba(255,111,145,.32); border-radius:7px; background:rgba(255,111,145,.08); color:#ff9eb4; padding:7px 10px; font-weight:850; cursor:pointer; }
+.window-condition-note { color:var(--muted); font-size:11px; line-height:1.55; }
+.window-preview-panel { display:grid; gap:10px; min-width:0; }
+.window-preview-head { display:flex; justify-content:space-between; align-items:center; }
+.window-preview-head span { color:var(--muted); font-size:11px; }
+.window-secondary-screen { position:relative; display:grid; width:100%; aspect-ratio:2/1; min-height:0; overflow:hidden; border:2px solid #20e6e6; border-radius:14px; background:radial-gradient(circle at 70% 20%,rgba(46,242,138,.12),transparent 35%),#171c20; box-shadow:0 0 24px rgba(32,230,230,.14); padding:54px 10px 10px; }
+.window-empty-state { display:grid; place-items:center; align-content:center; gap:10px; padding:30px; text-align:center; }
+.window-empty-state strong { font-size:20px; }
+.window-empty-state p { max-width:360px; margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
+.mirrored-window { display:none; grid-template-rows:auto minmax(0,1fr); min-height:0; margin:0; border:1px solid rgba(255,255,255,.12); border-radius:10px; overflow:hidden; background:#f5f6f8; color:#172027; }
+.window-secondary-screen.connected .window-empty-state { display:none; }
+.window-secondary-screen.connected .mirrored-window { display:grid; }
+.mirrored-window-bar { display:flex; align-items:center; gap:8px; min-height:36px; background:#e4e8eb; padding:0 10px; font-size:10px; }
+.mirrored-window-bar i { width:8px; height:8px; border-radius:50%; background:#ff6f6f; box-shadow:14px 0 #ffc95c,28px 0 #54d88b; margin-right:28px; }
+.mirrored-window-content { overflow:auto; padding:18px; }
+.window-demo-image { display:block; width:100%; height:auto; border:0; }
+.mirrored-window-demo-controls { display:grid; gap:10px; padding:14px 18px 18px; background:#f5f6f8; }
+.mirrored-window-content h4 { margin:0 0 10px; font-size:18px; }
+.mirrored-window-content p { color:#52616a; font-size:12px; line-height:1.7; }
+.mirrored-window-content input { width:100%; border:1px solid #cfd8dd; border-radius:7px; padding:9px; }
+.mirrored-window-actions { display:flex; gap:8px; margin-top:12px; }
+.mirrored-window-actions button { border:0; border-radius:7px; background:#172027; color:white; padding:8px 12px; cursor:pointer; }
+@media (max-width:1100px){.window-app-layout{grid-template-columns:1fr}}
+
+.album-page { display:grid; gap:16px; }
+.album-preview { position:relative; width:100%; aspect-ratio:2/1; overflow:hidden; border:2px solid #20e6e6; border-radius:14px; background:radial-gradient(circle at 76% 18%,rgba(155,92,255,.14),transparent 35%),#171b20; padding:54px 12px 12px; }
+.album-empty { display:grid; place-items:center; align-content:center; gap:10px; height:100%; text-align:center; }
+.album-empty strong { font-size:20px; }
+.album-empty p { max-width:380px; margin:0; color:var(--muted); font-size:12px; line-height:1.6; }
+.album-stage { position:relative; display:none; height:100%; overflow:hidden; border-radius:10px; background:#080b0e; }
+.album-preview.has-photos .album-empty { display:none; }
+.album-preview.has-photos .album-stage { display:block; }
+.album-stage img { width:100%; height:100%; object-fit:cover; }
+.album-stage::after { position:absolute; inset:auto 0 0; height:42%; background:linear-gradient(transparent,rgba(0,0,0,.72)); content:""; pointer-events:none; }
+.album-caption { position:absolute; z-index:2; left:18px; right:18px; bottom:14px; display:flex; align-items:end; justify-content:space-between; gap:12px; color:white; }
+.album-caption div { display:grid; gap:3px; }
+.album-caption strong { font-size:15px; }
+.album-caption span { color:rgba(255,255,255,.72); font-size:9px; }
+.album-preview-controls { display:flex; gap:6px; }
+.album-preview-controls button { width:30px; height:30px; border:1px solid rgba(255,255,255,.24); border-radius:8px; background:rgba(0,0,0,.42); color:white; cursor:pointer; }
+.album-manage-grid { display:grid; grid-template-columns:minmax(360px,.85fr) minmax(460px,1.15fr); gap:16px; }
+.album-source-panel,.album-content-panel { display:grid; align-content:start; gap:14px; }
+.album-source-actions { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:9px; }
+.album-source-button { display:grid; gap:6px; min-height:88px; border:1px solid rgba(129,242,234,.18); border-radius:10px; background:rgba(255,255,255,.035); color:var(--text); padding:12px; text-align:left; cursor:pointer; }
+.album-source-button strong { font-size:12px; }.album-source-button span{color:var(--muted);font-size:10px;line-height:1.4}
+.album-settings-row { display:flex; align-items:center; justify-content:space-between; gap:12px; border-top:1px solid var(--line-soft); padding-top:12px; }
+.album-settings-row select { border:1px solid var(--line); border-radius:7px; background:#20242a; color:var(--text); padding:7px 9px; }
+.album-thumbnails { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; }
+.album-thumb { position:relative; aspect-ratio:4/3; overflow:hidden; border:2px solid transparent; border-radius:8px; background:#15191d; padding:0; cursor:pointer; }
+.album-thumb.active { border-color:#2ef28a; }.album-thumb img{width:100%;height:100%;object-fit:cover}.album-thumb span{position:absolute;left:5px;right:5px;bottom:4px;overflow:hidden;color:white;font-size:8px;text-overflow:ellipsis;white-space:nowrap;text-shadow:0 1px 4px #000}
+.album-empty-list { display:grid; place-items:center; min-height:160px; border:1px dashed var(--line); border-radius:10px; color:var(--muted); font-size:12px; }
+@media(max-width:1100px){.album-manage-grid{grid-template-columns:1fr}.album-source-actions{grid-template-columns:1fr}}
+
+.agent-keyboard-page { display:grid; gap:16px; }
+.agent-keyboard-preview { position:relative; width:100%; aspect-ratio:2/1; overflow:hidden; border:2px solid #20e6e6; border-radius:14px; background:radial-gradient(circle at 72% 14%,rgba(46,242,138,.1),transparent 32%),#171b20; padding:54px 16px 14px; }
+.keyboard-console { display:grid; grid-template-rows:auto minmax(0,1fr) auto; gap:10px; height:100%; }
+.keyboard-connection { display:flex; align-items:center; justify-content:space-between; gap:14px; min-height:42px; border-bottom:1px solid rgba(255,255,255,.08); padding:0 6px 9px; }
+.keyboard-platform-tabs { display:grid; grid-template-columns:1fr 1fr; gap:4px; min-width:230px; padding:3px; border-radius:10px; background:rgba(0,0,0,.3); }
+.keyboard-platform-tab { min-height:34px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--muted); font-weight:900; cursor:pointer; }
+.keyboard-platform-tab.active { border-color:rgba(129,242,234,.3); background:rgba(32,230,230,.12); color:white; }
+.keyboard-client-status { display:flex; align-items:center; gap:10px; padding:0; border:0; background:transparent; }
+.keyboard-client-status span { color:#6ef4ae; font-size:10px; font-weight:900; }.keyboard-client-status strong{font-size:12px}.keyboard-client-status small{display:none}
+.keyboard-feedback { justify-self:center; min-width:340px; border-radius:999px; background:rgba(255,255,255,.035); color:var(--muted); padding:7px 14px; font-size:9px; line-height:1.4; text-align:center; }
+.virtual-key-grid { justify-self:center; display:grid; grid-template-columns:repeat(4,68px); grid-template-rows:repeat(3,68px); gap:8px; align-self:center; width:max-content; min-height:0; border:1px solid rgba(255,255,255,.08); border-radius:16px; background:linear-gradient(160deg,#242a30,#11161b); box-shadow:0 18px 34px rgba(0,0,0,.34),inset 0 0 0 4px rgba(255,255,255,.025); padding:12px; }
+.virtual-agent-key { position:relative; display:grid; place-items:center; align-content:center; gap:5px; min-height:0; border:1px solid rgba(129,242,234,.18); border-radius:12px; background:linear-gradient(145deg,#3a424a,#20262c); color:#effafa; padding:6px; cursor:pointer; box-shadow:inset 0 1px 1px rgba(255,255,255,.12),0 5px 10px rgba(0,0,0,.28); }
+.virtual-agent-key:hover { border-color:rgba(46,242,138,.48); background:rgba(46,242,138,.09); }.virtual-agent-key:active{transform:scale(.97)}
+.virtual-agent-key strong { font-size:10px; }.virtual-agent-key span{color:rgba(190,204,209,.6);font-size:7px;text-align:center}.virtual-agent-key.sent{border-color:#2ef28a;box-shadow:0 0 18px rgba(46,242,138,.28),inset 0 0 14px rgba(46,242,138,.12)}
+.keyboard-manage-grid { display:grid; grid-template-columns:minmax(360px,.8fr) minmax(520px,1.2fr); gap:16px; }
+.keyboard-client-list { display:grid; gap:9px; }.keyboard-client-card{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid var(--line);border-radius:10px;background:rgba(255,255,255,.025);padding:13px}.keyboard-client-card div{display:grid;gap:3px}.keyboard-client-card small{color:var(--muted)}
+.keyboard-connect-button{border:1px solid rgba(32,230,230,.3);border-radius:7px;background:rgba(32,230,230,.08);color:#8ff7ef;padding:8px 12px;font-weight:900;cursor:pointer}.keyboard-connect-button.connected{border-color:rgba(46,242,138,.36);color:#65f4aa}
+.keyboard-mapping-table{display:grid;gap:6px}.keyboard-map-row{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;border-bottom:1px solid var(--line-soft);padding:8px;font-size:10px}.keyboard-map-row.header{color:var(--muted);font-weight:900}
+@media(max-width:1100px){.keyboard-manage-grid{grid-template-columns:1fr}.agent-keyboard-preview{aspect-ratio:auto;min-height:520px}}
+
+.voice-composer-input {
+  display: grid;
+  grid-template-columns: minmax(0,1fr);
+  gap: 7px;
+}
+
+.voice-composer-input textarea {
+  width: 100%;
+  min-height: 54px;
+  max-height: 92px;
+  resize: none;
+  border: 1px solid rgba(255,255,255,.075);
+  border-radius: 9px;
+  outline: 0;
+  background: rgba(255,255,255,.025);
+  color: var(--text);
+  padding: 9px 10px;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.voice-composer-input textarea::placeholder { color: rgba(177,193,198,.48); }
+.voice-composer-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+.voice-input-hint { color: rgba(177,193,198,.46); font-size: 8px; font-weight: 750; }
+.voice-composer-actions { display: flex; gap: 6px; }
+.voice-mic-button,
+.voice-send-button {
+  display: grid;
+  width: 31px;
+  height: 31px;
+  place-items: center;
+  border: 1px solid rgba(129,242,234,.3);
+  border-radius: 9px;
+  background: rgba(32,230,230,.08);
+  color: #8ff7ef;
+  font-size: 15px;
+  font-weight: 950;
+  cursor: pointer;
+}
+
+.voice-send-button { border-color: transparent; background: linear-gradient(135deg,#2ef28a,#20e6e6); color: #061017; }
+.voice-mic-button.recording { animation: voice-listening 1s ease-in-out infinite; background: rgba(255,96,126,.16); border-color: rgba(255,96,126,.66); color: #ff7893; }
+.voice-mic-button svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
 .voice-action-grid {
   display: grid;
@@ -4192,6 +4380,298 @@ pre {
   stroke-linejoin: round;
   fill: none;
   filter: drop-shadow(0 0 12px rgba(32, 230, 230, 0.82));
+}
+
+.agent-team-panel {
+  position: relative;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  min-width: 0;
+  overflow: hidden;
+  border: 1px solid rgba(129, 242, 234, 0.28);
+  border-radius: 10px;
+  background:
+    radial-gradient(circle at 50% 42%, rgba(32, 230, 230, 0.12), transparent 36%),
+    linear-gradient(180deg, rgba(12, 23, 28, 0.88), rgba(20, 28, 32, 0.72));
+  margin: -34px -10px 4px 0;
+  padding: 8px 9px 7px;
+}
+
+.agent-team-tabs {
+  justify-self: center;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  background: rgba(0, 0, 0, 0.28);
+  padding: 3px;
+}
+
+.agent-team-tab {
+  min-width: 108px;
+  min-height: 31px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: rgba(229, 238, 240, 0.54);
+  font-size: 12px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.agent-team-tab.active {
+  background: linear-gradient(135deg, rgba(46, 242, 138, 0.2), rgba(32, 230, 230, 0.17));
+  box-shadow: inset 0 0 0 1px rgba(129, 242, 234, 0.28), 0 0 18px rgba(32, 230, 230, 0.12);
+  color: #f5ffff;
+}
+
+.agent-team-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 5px 2px 3px;
+}
+
+.agent-team-side-toggle {
+  position: absolute;
+  z-index: 8;
+  top: 64px;
+  right: -1px;
+  min-width: 30px;
+  min-height: 74px;
+  transform: none;
+  border: 1px solid rgba(32,230,230,.3);
+  border-radius: 8px;
+  background: rgba(15,19,24,.76);
+  color: #dffbfa;
+  padding: 8px 5px;
+  font-size: 9px;
+  font-weight: 900;
+  line-height: 1.1;
+  writing-mode: vertical-rl;
+  text-orientation: upright;
+  cursor: pointer;
+}
+
+.agent-team-heading div { display: grid; gap: 2px; }
+.agent-team-heading span { color: var(--cyan); font-size: 8px; font-weight: 950; letter-spacing: 0.12em; }
+.agent-team-heading strong { color: var(--text); font-size: 13px; }
+.agent-team-heading small { color: var(--muted); font-size: 9px; font-weight: 800; }
+
+.agent-office-stage {
+  position: relative;
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 8px;
+  background:
+    linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px),
+    radial-gradient(ellipse at 50% 52%, rgba(32, 230, 230, 0.12), transparent 46%),
+    rgba(255,255,255,.018);
+  background-size: 24px 24px, 24px 24px, auto, auto;
+}
+
+.agent-workstation {
+  position: absolute;
+  z-index: 2;
+  display: grid;
+  justify-items: center;
+  width: 64px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--text);
+  cursor: pointer;
+  animation: none;
+}
+
+.agent-child { transform: scale(.78); transform-origin: center top; }
+
+.agent-pos-1 { top: 7%; left: 5%; --visit-x: 72px; --visit-y: 105px; animation: agent-visit-main 12s ease-in-out infinite; }
+.agent-pos-2 { top: 7%; right: 5%; --visit-x: -72px; --visit-y: 105px; animation: agent-visit-main 12s -3s ease-in-out infinite; }
+.agent-pos-main { top: 33%; left: 50%; transform: translateX(-50%) scale(.8); transform-origin: center top; }
+.agent-pos-3 { bottom: 4%; left: 5%; --visit-x: 72px; --visit-y: -145px; animation: agent-visit-main 12s -6s ease-in-out infinite; }
+.agent-pos-4 { right: 5%; bottom: 4%; --visit-x: -72px; --visit-y: -145px; animation: agent-visit-main 12s -9s ease-in-out infinite; }
+
+.agent-desk {
+  position: absolute;
+  top: 31px;
+  width: 66px;
+  height: 23px;
+  border: 1px solid rgba(129, 242, 234, 0.24);
+  border-radius: 5px 5px 8px 8px;
+  background: linear-gradient(180deg, rgba(129, 242, 234, 0.12), rgba(8, 14, 18, 0.72));
+  box-shadow: 0 9px 16px rgba(0, 0, 0, 0.24);
+}
+
+.agent-desk::before,
+.agent-desk::after {
+  position: absolute;
+  top: 21px;
+  width: 3px;
+  height: 10px;
+  border-radius: 2px;
+  background: rgba(129, 242, 234, 0.28);
+  content: "";
+}
+
+.agent-desk::before { left: 10px; }
+.agent-desk::after { right: 10px; }
+.agent-desk i { position: absolute; top: -13px; left: 24px; width: 18px; height: 13px; border: 1px solid rgba(129, 242, 234, .42); border-radius: 3px; background: #08181c; box-shadow: 0 0 10px rgba(32,230,230,.18); }
+
+.agent-avatar {
+  position: relative;
+  z-index: 2;
+  width: 38px;
+  height: 29px;
+  border: 4px solid #dbe7e9;
+  border-radius: 11px;
+  background: linear-gradient(160deg, #17242a, #05090b 78%);
+  box-shadow: 0 0 0 1px rgba(129, 242, 234, 0.28), 0 8px 12px rgba(0,0,0,.34);
+  animation: none;
+}
+
+.agent-avatar::before,
+.agent-avatar::after {
+  position: absolute;
+  top: 8px;
+  width: 5px;
+  height: 7px;
+  border-radius: 50%;
+  background: #eaffff;
+  box-shadow: 0 0 6px rgba(129, 242, 234, .9);
+  content: "";
+}
+
+.agent-avatar::before { left: 7px; }
+.agent-avatar::after { right: 7px; }
+.agent-avatar i { position: absolute; top: -10px; left: 14px; width: 3px; height: 7px; border-radius: 3px; background: var(--agent-accent, #20e6e6); box-shadow: 0 -3px 0 1px var(--agent-accent, #20e6e6); }
+.agent-avatar b { position: absolute; left: 5px; top: 28px; width: 28px; height: 17px; border: 2px solid #c7d4d7; border-radius: 5px 5px 9px 9px; background: linear-gradient(180deg, #eef5f6, #8fa2a7); box-shadow: inset 0 4px 0 var(--agent-accent, #20e6e6), 0 5px 9px rgba(0,0,0,.3); }
+.agent-avatar b::before,
+.agent-avatar b::after { position: absolute; top: 3px; width: 4px; height: 12px; border-radius: 3px; background: #263a40; content: ""; }
+.agent-avatar b::before { left: -6px; transform: rotate(14deg); }
+.agent-avatar b::after { right: -6px; transform: rotate(-14deg); }
+
+@keyframes robot-idle { 0%, 100% { translate: 0 0; rotate: 0deg; } 50% { translate: 0 -2px; rotate: .8deg; } }
+@keyframes agent-visit-main {
+  0%, 12%, 54%, 100% { translate: 0 0; }
+  29%, 42% { translate: var(--visit-x) var(--visit-y); }
+}
+@keyframes agent-run { 0% { translate: -7px 0; } 25% { translate: 0 -4px; } 50% { translate: 7px 0; } 75% { translate: 0 -3px; } 100% { translate: -7px 0; } }
+
+.agent-workstation strong { margin-top: 24px; font-size: 9px; line-height: 1.2; }
+.agent-workstation small { margin-top: 2px; color: rgba(177, 193, 198, .62); font-size: 8px; }
+.agent-main { --agent-accent: #2ef28a; width: 78px; }
+.agent-main .agent-avatar { width: 46px; height: 34px; border-width: 4px; box-shadow: 0 0 0 2px rgba(46,242,138,.22), 0 0 22px rgba(46,242,138,.18); }
+.agent-main .agent-avatar::before { left: 11px; }
+.agent-main .agent-avatar::after { right: 11px; }
+.agent-main .agent-avatar i { left: 19px; }
+.agent-main .agent-avatar b { left: 6px; top: 33px; width: 34px; height: 19px; }
+.agent-main .agent-desk { top: 38px; width: 78px; }
+.agent-main strong { margin-top: 26px; font-size: 10px; }
+.agent-pos-1 { --agent-accent: #8b7cff; }
+.agent-pos-2 { --agent-accent: #ffb84d; }
+.agent-pos-3 { --agent-accent: #ff6f91; }
+.agent-pos-4 { --agent-accent: #44d6a6; }
+
+.agent-route {
+  position: absolute;
+  z-index: 1;
+  left: 50%;
+  top: 51%;
+  width: 35%;
+  height: 1px;
+  transform-origin: left center;
+  background: linear-gradient(90deg, rgba(32,230,230,.55), rgba(32,230,230,.03));
+  opacity: .2;
+}
+
+.route-a { transform: rotate(-143deg); }
+.route-b { transform: rotate(-37deg); }
+.route-c { transform: rotate(143deg); }
+.route-d { transform: rotate(37deg); }
+
+.agent-task-token {
+  position: absolute;
+  z-index: 5;
+  top: -5px;
+  right: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+  background: #8ff7ef;
+  box-shadow: 0 0 14px rgba(32,230,230,.88);
+  opacity: 0;
+}
+
+.agent-team-panel[data-phase="processing"] .agent-route { opacity: .78; animation: agent-route-pulse 1.1s ease-in-out infinite; }
+.agent-team-panel[data-phase="processing"] .agent-main .agent-avatar,
+.agent-team-panel[data-phase="processing"] .agent-child .agent-avatar { animation: none; }
+.agent-team-panel[data-phase="processing"] .agent-child { animation-duration: 6s; }
+.agent-team-panel[data-phase="processing"] .agent-child:nth-of-type(even) .agent-avatar { animation-delay: .18s; }
+.agent-team-panel[data-phase="processing"] .agent-child small { color: #8ff7ef; }
+.agent-team-panel[data-phase="processing"] .agent-task-token { animation: agent-token-handoff 1.35s ease-in-out infinite; }
+.agent-team-panel[data-phase="result"] .agent-main .agent-avatar { animation: agent-complete .7s ease-out; }
+.agent-team-panel[data-phase="result"] .agent-main small { color: #63f6a9; }
+
+@keyframes agent-child-work { from { transform: translateY(0) rotate(-1deg); } to { transform: translateY(-4px) rotate(2deg); } }
+@keyframes agent-main-coordinate { 0%,100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes agent-route-pulse { 0%,100% { filter: brightness(.75); } 50% { filter: brightness(1.8); } }
+@keyframes agent-token-handoff { 0% { opacity: 0; transform: translate(0,0) scale(.7); } 25% { opacity: 1; } 70% { opacity: 1; transform: translate(54px,-42px) scale(1); } 100% { opacity: 0; transform: translate(70px,-50px) scale(.65); } }
+@keyframes agent-complete { 0% { transform: translateY(0); } 40% { transform: translateY(-8px); } 70% { transform: translateY(0); } 88% { transform: translateY(-3px); } 100% { transform: translateY(0); } }
+@keyframes robot-arm-work { from { rotate: -16deg; } to { rotate: 22deg; } }
+@keyframes robot-arm-wave { from { rotate: -18deg; } to { rotate: -65deg; } }
+
+.agent-team-note {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding-top: 7px;
+  color: var(--muted);
+  font-size: 9px;
+}
+
+.agent-team-dot { width: 6px; height: 6px; border-radius: 50%; background: #2ef28a; box-shadow: 0 0 8px rgba(46,242,138,.72); }
+.agent-team-panel[data-team="code"] { background: radial-gradient(circle at 50% 42%, rgba(139,124,255,.15), transparent 36%), linear-gradient(180deg, rgba(16,18,32,.92), rgba(20,24,34,.78)); }
+.agent-team-panel[data-team="code"] .agent-team-dot { background: #a895ff; box-shadow: 0 0 8px rgba(168,149,255,.8); }
+
+.agent-team-panel.collapsed {
+  display: none;
+}
+
+.agent-team-panel.collapsed .agent-team-heading,
+.agent-team-panel.collapsed .agent-office-stage,
+.agent-team-panel.collapsed .agent-team-note { display: none; }
+
+.voice-team-header-tabs {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  transform: translateX(-50%);
+  pointer-events: auto;
+}
+
+.voice-agent-panel-toggle {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 76px;
+  min-height: 30px;
+  border: 1px solid rgba(32,230,230,.3);
+  border-radius: 8px;
+  background: rgba(15,19,24,.72);
+  color: var(--text);
+  padding: 0 11px;
+  font-size: 11px;
+  font-weight: 900;
+  line-height: 1;
+  white-space: nowrap;
+  writing-mode: horizontal-tb;
+  cursor: pointer;
 }
 
 .voice-action-icon::before,
@@ -7366,6 +7846,8 @@ pre {
   min-width: 0;
 }
 
+[data-subscreen-preview="voice"] .subscreen-preview-heading { gap: 8px; }
+
 .subscreen-rule-button {
   min-height: 32px;
   border: 1px solid rgba(32, 230, 230, 0.34);
@@ -7451,6 +7933,15 @@ pre {
 [data-subscreen-preview="pet"] > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
 [data-subscreen-preview="security"] > :not(.subscreen-preview-chrome):not(.subscreen-device-panel) {
   margin-top: 32px;
+}
+
+[data-subscreen-preview="window-app"] > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+.physical-screen-mirror-source.window-secondary-screen > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+[data-subscreen-preview="album"] > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+.physical-screen-mirror-source.album-preview > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+[data-subscreen-preview="keyboard"] > :not(.subscreen-preview-chrome):not(.subscreen-device-panel),
+.physical-screen-mirror-source.agent-keyboard-preview > :not(.subscreen-preview-chrome):not(.subscreen-device-panel) {
+  margin-top: 0;
 }
 
 .subscreen-device-grid {
@@ -7667,16 +8158,31 @@ pre {
             <span class="nav-ico">04</span><span>定时任务</span>
           </button>
           <button class="nav-item" data-view="voice">
-            <span class="nav-ico">05</span><span>AI 智能语音</span>
+            <span class="nav-ico">05</span><span>AI 智能语音问答</span>
           </button>
           <button class="nav-item" data-view="meeting">
             <span class="nav-ico">06</span><span>AI 会议助手</span>
           </button>
-          <button class="nav-item" data-view="security">
-            <span class="nav-ico">07</span><span>安全告警</span>
+          <button class="nav-item" data-view="window-app">
+            <span class="nav-ico">07</span><span>窗口应用</span>
           </button>
-          <button class="nav-item" data-view="screen-config">
-            <span class="nav-ico">08</span><span>API 接入</span>
+          <button class="nav-item" data-view="album">
+            <span class="nav-ico">08</span><span>AI 相册</span>
+          </button>
+          <button class="nav-item" data-view="keyboard">
+            <span class="nav-ico">09</span><span>Agent 虚拟键盘</span>
+          </button>
+          <button class="nav-item" data-view="security">
+            <span class="nav-ico">10</span><span>安全告警</span>
+          </button>
+          <button class="nav-item" data-view="screen-config" data-config-subpage="api">
+            <span class="nav-ico">11</span><span>API 接入</span>
+          </button>
+          <button class="nav-item" data-view="time">
+            <span class="nav-ico">12</span><span>时间</span>
+          </button>
+          <button class="nav-item" data-view="screen-config" data-config-subpage="device">
+            <span class="nav-ico">13</span><span>系统全局设置</span>
           </button>
         </nav>
 
@@ -8157,7 +8663,7 @@ pre {
             <section class="panel main-panel">
               <div class="section-title">
                 <div class="preview-title-main">
-                  <h3>AI 智能语音</h3>
+                  <h3>AI 智能语音问答</h3>
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
@@ -8167,19 +8673,19 @@ pre {
                   </div>
                 </div>
               </div>
-              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="AI 智能语音" aria-label="2:1 横屏副屏语音控制台预览">
+              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="AI 智能语音问答" aria-label="2:1 横屏副屏语音问答控制台预览">
                 <div class="voice-console-grid">
                   <article class="voice-assistant-panel">
                     <div class="voice-assistant-title">
-                      <span>AI 智能语音</span>
+                      <span>AI 智能语音问答</span>
                     </div>
                     <div class="voice-assistant-body">
-                      <div class="voice-orb-rail"><div class="voice-orb" id="voice-orb"></div></div>
                       <div class="voice-glow-field">
                         <div class="voice-live-copy" id="voice-live-copy">
-                          <span id="voice-live-status">实时状态</span>
-                          <strong id="voice-live-text">语音唤醒</strong>
-                          <small id="voice-live-result">唤醒后展示识别文本和回答结果</small>
+                          <div class="voice-chat-window">
+                            <div class="voice-chat-message user"><span>你</span><strong id="voice-live-text">帮我写一个主题活动文案</strong></div>
+                            <div class="voice-chat-message assistant"><span>AI助手</span><p id="voice-live-result">当然可以。请告诉我活动主题、目标人群和活动时间，我会为你生成完整的活动文案。</p></div>
+                          </div>
                           <button class="voice-button voice-live-action" id="voice-talk-button">唤醒</button>
                         </div>
                       </div>
@@ -8188,27 +8694,74 @@ pre {
                       <div><span>识别文本</span><strong id="voice-recognized-text">等待唤醒</strong></div>
                       <div><span>回答结果</span><strong id="voice-answer-text">唤醒后展示摘要结果</strong></div>
                     </div>
+                    <div class="voice-composer-shell">
+                      <div class="voice-composer-input">
+                        <textarea id="voice-text-input" rows="2" placeholder="输入问题或任务，或按住麦克风说话…"></textarea>
+                        <div class="voice-composer-footer">
+                          <span class="voice-input-hint">Enter 发送 · Shift+Enter 换行</span>
+                          <div class="voice-composer-toolbar">
+                            <select id="voice-api-model" aria-label="选择API与模型">
+                              <option value="OpenAI|gpt-4.1">OpenAI · GPT-4.1</option>
+                              <option value="Anthropic|claude-sonnet-4">Anthropic · Claude Sonnet</option>
+                              <option value="自定义兼容 API|custom-model">自定义兼容 API</option>
+                            </select>
+                            <button type="button" id="voice-api-entry">API接入</button>
+                          </div>
+                          <div class="voice-composer-actions">
+                            <button type="button" class="voice-mic-button" id="voice-mic-button" aria-label="按住说话" title="按住说话"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"></path></svg></button>
+                            <button type="button" class="voice-send-button" id="voice-send-button" aria-label="发送问题">↑</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </article>
-                  <div class="voice-action-grid">
-                    <button class="voice-action-card" data-voice-action="搜索"><strong>搜索</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="27" cy="27" r="15"></circle><path d="M38.5 38.5 51 51"></path><path d="M19 21c2.2-3 5.1-4.5 8.8-4.5"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="打开应用"><strong>打开应用</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="14" y="16" width="36" height="32" rx="5"></rect><path d="M14 26h36"></path><path d="M22 21h1"></path><path d="M29 21h1"></path><path d="M22 34h20"></path><path d="M22 40h13"></path><path d="M42 38l8 6-8 6"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="设置提醒"><strong>设置提醒</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M18 29c0-8 5.8-14 14-14s14 6 14 14v10l5 7H13l5-7V29Z"></path><path d="M28 52c1.2 2 2.5 3 4 3s2.8-1 4-3"></path><path d="M32 9v3"></path><path d="M46 14l-3 3"></path><path d="M18 14l3 3"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="截图"><strong>截图</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M14 24v-6a4 4 0 0 1 4-4h6"></path><path d="M40 14h6a4 4 0 0 1 4 4v6"></path><path d="M50 40v6a4 4 0 0 1-4 4h-6"></path><path d="M24 50h-6a4 4 0 0 1-4-4v-6"></path><circle cx="32" cy="32" r="9"></circle><path d="M27 25l3-5h4l3 5"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="亮度调节"><strong>亮度调节</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><circle cx="32" cy="32" r="11"></circle><path d="M32 6v8"></path><path d="M32 50v8"></path><path d="M6 32h8"></path><path d="M50 32h8"></path><path d="m13.5 13.5 5.5 5.5"></path><path d="m45 45 5.5 5.5"></path><path d="m50.5 13.5-5.5 5.5"></path><path d="m19 45-5.5 5.5"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="音量调节"><strong>音量调节</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M12 25h10l15-12v38L22 39H12V25Z"></path><path d="M44 24c3 4 3 12 0 16"></path><path d="M50 18c7 8 7 20 0 28"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="静音"><strong>静音</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M16 25h9l14-11v36L25 39h-9V25Z"></path><path d="M44 24c4 5 4 11 0 16"></path><path d="M18 50 50 18"></path></svg></span></button>
-                    <button class="voice-action-card" data-voice-action="锁屏"><strong>锁屏</strong><span class="voice-action-icon icon-svg" aria-hidden="true"><svg viewBox="0 0 64 64"><rect x="18" y="29" width="28" height="22" rx="4"></rect><path d="M24 29v-8a8 8 0 0 1 16 0v8"></path><path d="M32 38v5"></path><circle cx="32" cy="36" r="1.5"></circle></svg></span></button>
-                  </div>
+                  <section class="agent-team-panel" id="voice-agent-team" data-team="office" data-phase="idle">
+                    <div class="agent-team-heading">
+                      <div><span id="agent-team-kicker">OFFICE AGENT TEAM</span><strong id="agent-team-title">日常办公团队</strong></div>
+                      <small id="agent-team-status">5个Agent空闲中</small>
+                    </div>
+                    <div class="agent-office-stage">
+                      <div class="agent-route route-a"></div><div class="agent-route route-b"></div>
+                      <div class="agent-route route-c"></div><div class="agent-route route-d"></div>
+                      <button class="agent-workstation agent-child agent-pos-1" data-agent-index="0" aria-label="文档Agent">
+                        <span class="agent-desk"><i></i></span><span class="agent-avatar"><i></i><b></b></span>
+                        <strong data-agent-name>文档Agent</strong><small data-agent-state>空闲</small>
+                      </button>
+                      <button class="agent-workstation agent-child agent-pos-2" data-agent-index="1" aria-label="表格Agent">
+                        <span class="agent-desk"><i></i></span><span class="agent-avatar"><i></i><b></b></span>
+                        <strong data-agent-name>表格Agent</strong><small data-agent-state>空闲</small>
+                      </button>
+                      <button class="agent-workstation agent-main agent-pos-main" data-agent-index="main" aria-label="办公主Agent">
+                        <span class="agent-task-token" aria-hidden="true"></span>
+                        <span class="agent-desk"><i></i></span><span class="agent-avatar"><i></i><b></b></span>
+                        <strong data-agent-name>办公主Agent</strong><small data-agent-state>等待任务</small>
+                      </button>
+                      <button class="agent-workstation agent-child agent-pos-3" data-agent-index="2" aria-label="内容Agent">
+                        <span class="agent-desk"><i></i></span><span class="agent-avatar"><i></i><b></b></span>
+                        <strong data-agent-name>内容Agent</strong><small data-agent-state>空闲</small>
+                      </button>
+                      <button class="agent-workstation agent-child agent-pos-4" data-agent-index="3" aria-label="资料Agent">
+                        <span class="agent-desk"><i></i></span><span class="agent-avatar"><i></i><b></b></span>
+                        <strong data-agent-name>资料Agent</strong><small data-agent-state>空闲</small>
+                      </button>
+                    </div>
+                    <div class="agent-team-note"><span class="agent-team-dot"></span><span id="agent-team-note">点击“唤醒”体验主Agent分配任务与子Agent协作</span></div>
+                  </section>
                 </div>
+                <button class="agent-team-side-toggle" id="voice-agent-collapse" type="button">收起动画</button>
               </div>
             </section>
 
             <section class="panel main-panel voice-history-panel">
               <div class="section-title">
-                <h3>语音问答记录</h3>
+                <h3>AI问答记录</h3>
+                <div class="voice-history-tabs" role="tablist" aria-label="问答记录分类">
+                  <button class="agent-team-tab active" data-agent-team="office" role="tab" aria-selected="true">☕ 日常办公</button>
+                  <button class="agent-team-tab" data-agent-team="code" role="tab" aria-selected="false">⌁ 代码开发</button>
+                </div>
               </div>
               <div class="table" id="voice-history-table">
-                <div class="table-head"><span>指令类型</span><span>识别文本</span><span>回答结果</span><span>时间</span><span>操作</span></div>
+                <div class="table-head"><span>输入方式</span><span>问题或指令</span><span>回答结果</span><span>时间</span><span>操作</span></div>
                 <div class="table-row voice-row"><span>查询任务</span><span>现在任务跑到哪了</span><span>已返回进度 68%</span><span>10:50</span><span><button class="table-action hot">查看详情</button></span></div>
                 <div class="table-row voice-row"><span>打开页面</span><span>打开定时任务</span><span>已跳转</span><span>10:42</span><span><button class="table-action hot">查看详情</button></span></div>
               </div>
@@ -8277,6 +8830,136 @@ pre {
               </div>
             </section>
           </div>
+        </section>
+
+        <section class="view" id="window-app">
+          <div class="window-app-page">
+            <section class="panel main-panel">
+              <div class="section-title"><div class="preview-title-main"><h3>窗口应用</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="window-secondary-screen" id="window-secondary-screen" data-subscreen-preview="window-app" data-subscreen-title="窗口应用" aria-label="2:1 横屏副屏窗口应用预览">
+                <div class="window-empty-state"><strong>暂无应用窗口</strong><p>请在主屏窗口接入区域中拖入已打开的浏览器、PDF、聊天或终端窗口。</p></div>
+                <div class="mirrored-window">
+                  <div class="mirrored-window-bar"><i></i><strong id="mirror-window-title">来源窗口</strong></div>
+                  <div class="mirrored-window-content">
+                    <img class="window-demo-image" src="assets/window-app-demo.png" alt="夏日新品发布会活动方案示例窗口" />
+                    <div class="mirrored-window-demo-controls">
+                      <h4 id="mirror-content-title">产品资料与活动方案</h4>
+                      <input id="mirror-window-input" placeholder="在来源窗口中输入或搜索…" />
+                      <div class="mirrored-window-actions"><button type="button">上一页</button><button type="button">下一页</button><button type="button">提交</button></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <section class="panel main-panel">
+              <div class="section-title"><div><h3>主屏窗口接入管理</h3><p class="muted">将外接主屏中已打开的第三方应用窗口拖入接入区。</p></div><span class="window-status-badge" id="window-app-status">未接入</span></div>
+              <div class="window-app-layout">
+                <div class="window-connect-panel">
+                  <div class="window-status-line"><strong>窗口接入</strong><span class="tag ok">双屏模式可用</span></div>
+                  <div class="window-drop-zone" id="window-drop-zone">
+                    <strong>拖入已打开的应用窗口</strong>
+                    <p>只接入用户主动拖入的单个窗口，不读取其他应用；也可点击下方示例窗口体验接入流程。</p>
+                    <div class="window-source-list">
+                      <button class="window-source-chip" draggable="true" data-window-source="浏览器" data-window-title="产品资料与活动方案.pdf">浏览器 · 产品资料</button>
+                      <button class="window-source-chip" draggable="true" data-window-source="企业微信" data-window-title="项目协作群">企业微信 · 项目群</button>
+                      <button class="window-source-chip" draggable="true" data-window-source="Terminal" data-window-title="Frontend Build Logs">Terminal · 构建日志</button>
+                    </div>
+                  </div>
+                  <div class="window-current-card" id="window-current-card" hidden>
+                    <div class="window-current-head"><strong>当前接入窗口</strong><button class="window-remove-button" id="window-remove-current">移除当前窗口</button></div>
+                    <div class="window-current-meta"><div><span>应用名称</span><strong id="window-current-app">暂不可用</strong></div><div><span>窗口标题</span><strong id="window-current-title">暂不可用</strong></div></div>
+                    <span class="window-status-badge connected">已接入 · 正在同步</span>
+                  </div>
+                </div>
+                <div class="window-preview-panel">
+                  <div class="window-preview-head"><strong>接入规则</strong><span id="window-preview-update">等待接入窗口</span></div>
+                  <div class="window-current-card" style="display:grid"><strong>主副屏同步</strong><p class="window-condition-note">主屏负责接入管理；副屏负责展示和操作同一个来源窗口，双方共享同一连接和最新状态。</p></div>
+                  <div class="window-current-card" style="display:grid"><strong>单窗口限制</strong><p class="window-condition-note">再次拖入其他窗口时不会自动覆盖，需先移除当前窗口；移除操作不会关闭来源应用。</p></div>
+                  <div class="window-current-card" style="display:grid"><strong>交互范围</strong><p class="window-condition-note">支持点击、滚动、拖动、文字输入、表单提交和页面跳转，操作结果同步回来源窗口。</p></div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="album">
+          <div class="album-page">
+            <section class="panel main-panel">
+              <div class="section-title"><div class="preview-title-main"><h3>AI 相册</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="album-preview" id="album-preview" data-subscreen-preview="album" data-subscreen-title="AI 相册" aria-label="2:1 横屏副屏电子相册预览">
+                <div class="album-empty"><strong>暂无照片</strong><p>请在主屏选择本机图片库、指定照片文件夹或手动导入照片。</p></div>
+                <div class="album-stage">
+                  <img id="album-current-image" alt="当前相册照片" />
+                  <div class="album-caption"><div><strong id="album-current-name">当前照片</strong><span id="album-play-status">自动轮播 · 5秒</span></div><div class="album-preview-controls"><button type="button" id="album-prev" aria-label="上一张">‹</button><button type="button" id="album-play-toggle" aria-label="暂停轮播">Ⅱ</button><button type="button" id="album-next" aria-label="下一张">›</button></div></div>
+                </div>
+              </div>
+            </section>
+            <section class="panel main-panel">
+              <div class="section-title"><div><h3>主屏相册管理</h3><p class="muted">只展示用户主动授权或导入的本机照片。</p></div><span class="tag ok" id="album-count">0 张照片</span></div>
+              <div class="album-manage-grid">
+                <div class="album-source-panel">
+                  <strong>照片来源</strong>
+                  <div class="album-source-actions">
+                    <button class="album-source-button" type="button" data-album-picker="library"><strong>本机图片库</strong><span>选择并授权读取本机照片</span></button>
+                    <button class="album-source-button" type="button" data-album-picker="folder"><strong>指定照片文件夹</strong><span>读取用户选择的文件夹</span></button>
+                    <button class="album-source-button" type="button" data-album-picker="files"><strong>手动导入照片</strong><span>只添加本次选中的照片</span></button>
+                  </div>
+                  <input id="album-library-input" type="file" accept="image/*" multiple hidden />
+                  <input id="album-folder-input" type="file" accept="image/*" multiple webkitdirectory hidden />
+                  <input id="album-files-input" type="file" accept="image/*" multiple hidden />
+                  <div class="album-settings-row"><div><strong>自动轮播</strong><p class="muted">停留在相册页时自动切换</p></div><select id="album-interval"><option value="3">每3秒</option><option value="5" selected>每5秒</option><option value="10">每10秒</option></select></div>
+                </div>
+                <div class="album-content-panel"><strong>相册内容</strong><div class="album-thumbnails" id="album-thumbnails"><div class="album-empty-list">尚未添加照片</div></div></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="keyboard">
+          <div class="agent-keyboard-page">
+            <section class="panel main-panel">
+              <div class="section-title"><div class="preview-title-main"><h3>Agent 虚拟键盘</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="agent-keyboard-preview" data-subscreen-preview="keyboard" data-subscreen-title="Agent 虚拟键盘" aria-label="2:1 横屏副屏Agent虚拟键盘预览">
+                <div class="keyboard-console">
+                  <div class="keyboard-connection">
+                    <div class="keyboard-client-status"><strong>连接</strong><span>● 已连接</span><small id="keyboard-connected-note">所有操作只发送到当前选中的客户端窗口。</small></div>
+                    <div class="keyboard-platform-tabs"><button class="keyboard-platform-tab active" data-keyboard-platform="codex">Codex</button><button class="keyboard-platform-tab" data-keyboard-platform="claude">Claude</button></div>
+                    <strong id="keyboard-connected-name">Codex 桌面客户端</strong>
+                  </div>
+                  <div class="virtual-key-grid" id="virtual-key-grid">
+                    <button class="virtual-agent-key" data-virtual-action="快速模式"><strong>快速模式</strong><span>切换执行速度</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="允许本次"><strong>允许本次</strong><span>处理当前授权</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="拒绝本次"><strong>拒绝本次</strong><span>拒绝当前授权</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="分支会话"><strong>分支会话</strong><span>创建会话分支</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="语音输入"><strong>语音输入</strong><span>按住说话</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="发送指令"><strong>发送指令</strong><span>发送当前内容</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="中断执行"><strong>中断执行</strong><span>停止当前任务</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="计划模式"><strong>计划模式</strong><span>先规划后执行</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="新建会话"><strong>新建会话</strong><span>创建新任务</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="恢复会话"><strong>恢复会话</strong><span>选择历史会话</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="压缩上下文"><strong>压缩上下文</strong><span>压缩当前会话</span></button>
+                    <button class="virtual-agent-key" data-virtual-action="代码审查"><strong>代码审查</strong><span>启动代码审查</span></button>
+                  </div>
+                  <div class="keyboard-feedback" id="keyboard-feedback">等待操作 · 点击虚拟按键</div>
+                </div>
+              </div>
+            </section>
+            <section class="panel main-panel">
+              <div class="section-title"><div><h3>主屏客户端连接</h3><p class="muted">只支持本机已打开的Codex和Claude客户端，同一时间连接一个窗口。</p></div><span class="tag ok">已检测2个客户端</span></div>
+              <div class="keyboard-manage-grid">
+                <div class="keyboard-client-list">
+                  <article class="keyboard-client-card"><div><strong>Codex 桌面客户端</strong><small>已打开 · 可连接</small></div><button class="keyboard-connect-button connected" data-keyboard-connect="codex">当前连接</button></article>
+                  <article class="keyboard-client-card"><div><strong>Claude 桌面客户端</strong><small>已打开 · 可连接</small></div><button class="keyboard-connect-button" data-keyboard-connect="claude">连接</button></article>
+                  <p class="window-condition-note">不存在授权请求时，“允许本次”和“拒绝本次”不会生成虚假的成功结果；已发送只表示操作已发送到客户端。</p>
+                </div>
+                <div class="keyboard-mapping-table" id="keyboard-mapping-table"></div>
+              </div>
+            </section>
+          </div>
+        </section>
+
+        <section class="view" id="time">
+          <section class="panel main-panel"><div class="section-title"><h3>时间</h3></div><div class="hero-content"><div><span class="eyebrow">当前时间</span><h1>10:28</h1><p>2026年8月7日 · 星期五</p></div><div class="state-card"><strong>深圳 · 28°C</strong><span>多云，今日 26—32°C</span></div></div></section>
         </section>
 
         <section class="view" id="security">
@@ -8698,9 +9381,13 @@ const PAGE_TITLES = {
   shortcut: "Agent 快捷操作",
   usage: "Token 算力消耗",
   schedule: "定时任务",
-  voice: "AI 智能语音",
+  voice: "AI 智能语音问答",
   meeting: "AI 会议助手",
+  "window-app": "窗口应用",
+  album: "AI 相册",
+  keyboard: "Agent 虚拟键盘",
   security: "安全告警",
+  time: "时间",
   pet: "虚拟桌面宠物",
   "screen-config": "API 接入",
   "detail-view": "详情页",
@@ -8711,7 +9398,7 @@ const FEATURE_PAGES = {
   "Agent 快捷操作": "shortcut",
   "Token 算力消耗": "usage",
   "定时任务": "schedule",
-  "AI 智能语音": "voice",
+  "AI 智能语音问答": "voice",
   "AI 会议助手": "meeting",
   "安全告警": "security",
   // "虚拟桌面宠物": "pet", // 暂停启用，后期可恢复
@@ -8734,9 +9421,9 @@ const RULE_BUTTONS = [
 const SECONDARY_MODES = {
   工作模式: ["Agent 任务进度", "Agent 快捷操作", "Token 算力消耗", "安全告警"],
   自动化模式: ["定时任务", "Agent 任务进度", "安全告警"],
-  会议模式: ["AI 会议助手", "AI 智能语音", "安全告警"],
+  会议模式: ["AI 会议助手", "AI 智能语音问答", "安全告警"],
   安全模式: ["安全告警", "Agent 任务进度", "Token 算力消耗"],
-  陪伴模式: ["Agent 任务进度", "AI 智能语音"], // 桌面宠物暂不启用
+  陪伴模式: ["Agent 任务进度", "AI 智能语音问答"], // 桌面宠物暂不启用
 };
 
 const FEATURE_CONFIG = {
@@ -8826,18 +9513,19 @@ const FEATURE_CONFIG = {
       { id: "empty", label: "空状态", title: "", copy: "" },
     ],
   },
-  "AI 智能语音": {
+  "AI 智能语音问答": {
     kicker: "VOICE QA",
     defaultTrigger: "normal",
     modules: [
-      { id: "entry", title: "语音入口", desc: "语音按钮、录音状态、识别状态。", display: "persistent", value: "唤醒", triggers: [] },
+      { id: "entry", title: "问答输入", desc: "支持按住说话或直接输入文字。", display: "persistent", value: "语音 / 文字", triggers: [] },
+      { id: "model", title: "API与模型选择", desc: "选择已接入的API服务与当前问答模型。", display: "persistent", value: "OpenAI · GPT-4.1", triggers: [] },
       { id: "asr", title: "语音转文字", desc: "简短识别文本、识别状态。", display: "triggered", value: "识别中", triggers: ["recognizing", "failed"] },
       { id: "answer", title: "AI 问答", desc: "简短回答、回答状态、更新时间。", display: "triggered", value: "回答摘要", triggers: ["answer"] },
       { id: "status", title: "当前状态查询", desc: "Agent、Token、定时任务、会议状态摘要。", display: "persistent", value: "Agent 68%", triggers: ["answer"] },
       { id: "control", title: "轻量电脑控制", desc: "打开页面、音量亮度、文件查找结果。", display: "triggered", value: "打开会议助手", triggers: ["command"] },
       { id: "command", title: "轻量指令执行", desc: "启动已有任务、开始会议录音、打开页面结果。", display: "triggered", value: "待确认执行", triggers: ["command"] },
       { id: "feedback", title: "回答反馈", desc: "简短结论、执行状态、失败提示。", display: "triggered", value: "已回答", triggers: ["answer", "failed"] },
-      { id: "history", title: "语音历史记录", desc: "完整历史记录只在主屏。", display: "hidden", value: "主屏查看", triggers: [] },
+      { id: "history", title: "问答历史记录", desc: "完整问答记录只在主屏。", display: "hidden", value: "主屏查看", triggers: [] },
     ],
     triggers: [
       { id: "normal", label: "待唤醒", title: "", copy: "" },
@@ -8967,7 +9655,7 @@ const APP_STATE = {
       "Agent 快捷操作",
       "Token 算力消耗",
       "定时任务",
-      "AI 智能语音",
+      "AI 智能语音问答",
       "AI 会议助手",
       "安全告警",
     ],
@@ -8979,6 +9667,9 @@ const APP_STATE = {
     schedule: true,
     voice: true,
     meeting: true,
+    "window-app": true,
+    album: true,
+    keyboard: true,
     security: true,
     pet: true,
   },
@@ -9434,8 +10125,22 @@ const APP_STATE = {
   ],
   selectedScheduleTask: "tech-news-digest",
   scheduleEditingTask: null,
+  windowApp: { status: "已接入", app: "浏览器", title: "产品资料与活动方案.pdf", updatedAt: "刚刚" },
+  album: {
+    photos: [
+      { name: "家庭陪伴", url: "assets/album-family.png" },
+      { name: "旅行回忆", url: "assets/album-travel.png" },
+      { name: "宠物成长", url: "assets/album-pet.png" },
+    ],
+    current: 0,
+    playing: true,
+    interval: 5,
+  },
+  keyboard: { platform: "codex", connected: true, feedback: "等待操作 · 点击右侧虚拟按键", approvalPending: false },
   voice: {
     phase: "idle",
+    agentTeam: "office",
+    agentPanelOpen: true,
     recognized: "等待唤醒",
     answer: "唤醒后展示摘要结果",
     activeAction: "唤醒",
@@ -10762,7 +11467,7 @@ function renderPreviewByFeature(modules, triggerId) {
     "Agent 任务进度": renderAgentPreview,
     "Token 算力消耗": renderTokenPreview,
     "定时任务": renderSchedulePreview,
-    "AI 智能语音": renderVoicePreview,
+    "AI 智能语音问答": renderVoicePreview,
     "AI 会议助手": renderMeetingPreview,
     "安全告警": renderSecurityPreview,
     "虚拟桌面宠物": renderPetPreview,
@@ -12354,6 +13059,7 @@ let meetingSummaryTimer = null;
 let agentRecognizeTimer = null;
 let agentAlertDemoTimer = null;
 let agentAlertAutoCloseTimer = null;
+let albumSlideshowTimer = null;
 let agentAlertDemoIndex = 0;
 const scheduleRunTimers = new Map();
 
@@ -12383,13 +13089,164 @@ function syncAgentAlertDemo() {
   }, 5000);
 }
 
+const KEYBOARD_MAPPINGS = {
+  codex: {
+    name: "Codex 桌面客户端",
+    actions: { "快速模式":"速度菜单 → 快速", "允许本次":"授权卡片 Enter", "拒绝本次":"授权卡片 Esc", "分支会话":"/fork", "语音输入":"Ctrl+Shift+D", "发送指令":"Enter", "中断执行":"Esc", "计划模式":"/plan", "新建会话":"Cmd/Ctrl+N", "恢复会话":"搜索历史任务", "压缩上下文":"/compact", "代码审查":"/review" },
+  },
+  claude: {
+    name: "Claude 桌面客户端",
+    actions: { "快速模式":"速度设置 → 快速", "允许本次":"Allow for this session", "拒绝本次":"Deny", "分支会话":"/branch", "语音输入":"麦克风按钮", "发送指令":"Enter", "中断执行":"Esc", "计划模式":"模式菜单 → Plan", "新建会话":"Cmd/Ctrl+N", "恢复会话":"侧边栏历史Session", "压缩上下文":"/compact", "代码审查":"Diff → Review code" },
+  },
+};
+
+function renderKeyboardPage() {
+  const state = APP_STATE.keyboard;
+  const config = KEYBOARD_MAPPINGS[state.platform];
+  const connectedName = $("#keyboard-connected-name");
+  if (!connectedName) return;
+  connectedName.textContent = config.name;
+  $("#keyboard-feedback").textContent = state.feedback;
+  $$("[data-keyboard-platform]").forEach((button) => button.classList.toggle("active", button.dataset.keyboardPlatform === state.platform));
+  $$("[data-keyboard-connect]").forEach((button) => {
+    const active = button.dataset.keyboardConnect === state.platform && state.connected;
+    button.classList.toggle("connected", active);
+    button.textContent = active ? "当前连接" : "连接";
+  });
+  const actions = Object.keys(KEYBOARD_MAPPINGS.codex.actions);
+  $("#keyboard-mapping-table").innerHTML = `<div class="keyboard-map-row header"><span>虚拟按键</span><span>Codex</span><span>Claude</span></div>${actions.map((action) => `<div class="keyboard-map-row"><strong>${action}</strong><span>${KEYBOARD_MAPPINGS.codex.actions[action]}</span><span>${KEYBOARD_MAPPINGS.claude.actions[action]}</span></div>`).join("")}`;
+}
+
+function handleVirtualKey(action, button) {
+  const state = APP_STATE.keyboard;
+  if (!state.connected) { state.feedback = "发送失败 · 请先连接客户端"; renderKeyboardPage(); return; }
+  if (["允许本次","拒绝本次"].includes(action) && !state.approvalPending) {
+    state.feedback = `${action}未发送 · 当前客户端没有授权请求`;
+  } else {
+    state.feedback = `已发送“${action}”至${KEYBOARD_MAPPINGS[state.platform].name} · 不代表客户端已执行成功`;
+  }
+  button.classList.add("sent");
+  setTimeout(() => button.classList.remove("sent"), 500);
+  renderKeyboardPage();
+  renderSubscreenSettings();
+}
+
+function renderAlbumPage() {
+  const album = APP_STATE.album;
+  const preview = $("#album-preview");
+  if (!preview) return;
+  const hasPhotos = album.photos.length > 0;
+  if (hasPhotos && album.current >= album.photos.length) album.current = 0;
+  preview.classList.toggle("has-photos", hasPhotos);
+  $("#album-count").textContent = `${album.photos.length} 张照片`;
+  $("#album-interval").value = String(album.interval);
+  $("#album-play-toggle").textContent = album.playing ? "Ⅱ" : "▶";
+  $("#album-play-toggle").setAttribute("aria-label", album.playing ? "暂停轮播" : "继续轮播");
+  $("#album-play-status").textContent = `${album.playing ? "自动轮播" : "已暂停"} · ${album.interval}秒`;
+  if (hasPhotos) {
+    const photo = album.photos[album.current];
+    $("#album-current-image").src = photo.url;
+    $("#album-current-name").textContent = photo.name;
+    $("#album-thumbnails").innerHTML = album.photos.map((item, index) => `<button class="album-thumb ${index === album.current ? "active" : ""}" type="button" data-album-index="${index}"><img src="${item.url}" alt="${escapeHtml(item.name)}" /><span>${escapeHtml(item.name)}</span></button>`).join("");
+  } else {
+    $("#album-current-image").removeAttribute("src");
+    $("#album-thumbnails").innerHTML = `<div class="album-empty-list">尚未添加照片</div>`;
+  }
+  if (albumSlideshowTimer) { clearInterval(albumSlideshowTimer); albumSlideshowTimer = null; }
+  if (APP_STATE.currentPage === "album" && album.playing && album.photos.length > 1) {
+    albumSlideshowTimer = setInterval(() => { APP_STATE.album.current = (APP_STATE.album.current + 1) % APP_STATE.album.photos.length; renderAlbumPage(); renderSubscreenSettings(); }, album.interval * 1000);
+  }
+}
+
+function addAlbumFiles(files) {
+  const images = [...files].filter((file) => file.type.startsWith("image/"));
+  if (!images.length) return;
+  APP_STATE.album.photos.push(...images.map((file) => ({ name: file.name, url: URL.createObjectURL(file) })));
+  APP_STATE.album.current = Math.max(0, APP_STATE.album.photos.length - images.length);
+  APP_STATE.album.playing = true;
+  renderAlbumPage();
+  renderSubscreenSettings();
+}
+
+function stepAlbum(direction) {
+  const count = APP_STATE.album.photos.length;
+  if (!count) return;
+  APP_STATE.album.current = (APP_STATE.album.current + direction + count) % count;
+  renderAlbumPage();
+  renderSubscreenSettings();
+}
+
+function renderWindowAppPage() {
+  const state = APP_STATE.windowApp;
+  const connected = state.status === "已接入";
+  const status = $("#window-app-status");
+  if (!status) return;
+  status.textContent = state.status;
+  status.classList.toggle("connected", connected);
+  $("#window-current-card").hidden = !connected;
+  $("#window-secondary-screen").classList.toggle("connected", connected);
+  if (connected) {
+    $("#window-current-app").textContent = state.app || "暂不可用";
+    $("#window-current-title").textContent = state.title || "暂不可用";
+    $("#mirror-window-title").textContent = `${state.app} · ${state.title}`;
+    $("#mirror-content-title").textContent = state.title;
+    $("#window-preview-update").textContent = `已同步 · ${state.updatedAt}`;
+  } else {
+    $("#window-preview-update").textContent = "等待接入窗口";
+  }
+}
+
+function connectWindowApp(app, title) {
+  if (APP_STATE.windowApp.status === "已接入") {
+    showSheet({ type: "提醒", title: "当前仅支持一个窗口", copy: "请先移除当前窗口，再接入其他应用窗口。", detail: "window-app", detailLabel: "返回窗口应用" });
+    return;
+  }
+  APP_STATE.windowApp = { status: "接入中", app, title, updatedAt: nowText() };
+  renderWindowAppPage();
+  setTimeout(() => {
+    APP_STATE.windowApp.status = "已接入";
+    APP_STATE.windowApp.updatedAt = nowText();
+    renderWindowAppPage();
+  }, 420);
+}
+
+function removeWindowApp() {
+  APP_STATE.windowApp = { status: "未接入", app: "", title: "", updatedAt: "" };
+  renderWindowAppPage();
+}
+
 function renderVoicePage() {
   const voice = APP_STATE.voice;
+  const agentTeams = {
+    office: {
+      kicker: "OFFICE AGENT TEAM",
+      title: "日常办公团队",
+      main: "办公主Agent",
+      agents: ["文档Agent", "表格Agent", "内容Agent", "资料Agent"],
+      task: "帮我整理资料并生成一份数据报告",
+      answer: "办公团队已完成资料提取、表格处理和报告整理。",
+    },
+    code: {
+      kicker: "CODE AGENT TEAM",
+      title: "代码开发团队",
+      main: "开发主Agent",
+      agents: ["分析Agent", "编码Agent", "调试Agent", "测试Agent"],
+      task: "帮我分析这个问题并完成代码修改和测试",
+      answer: "开发团队已完成问题分析、代码修改和测试验证。",
+    },
+  };
+  const currentTeam = agentTeams[voice.agentTeam] || agentTeams.office;
+  const voiceApiModel = $("#voice-api-model");
+  if (voiceApiModel) {
+    const configuredValue = `${APP_STATE.apiSettings.provider}|${APP_STATE.apiSettings.model}`;
+    const matchingOption = [...voiceApiModel.options].some((option) => option.value === configuredValue);
+    voiceApiModel.value = matchingOption ? configuredValue : (APP_STATE.apiSettings.provider === "Anthropic" ? "Anthropic|claude-sonnet-4" : APP_STATE.apiSettings.provider === "OpenAI" ? "OpenAI|gpt-4.1" : "自定义兼容 API|custom-model");
+  }
   const phaseMeta = {
     idle: {
-      status: "等待唤醒",
-      title: "语音唤醒",
-      result: "点击唤醒后，右侧能力卡片可模拟语音指令。",
+      status: `${currentTeam.title} · AI问答`,
+      title: voice.agentTeam === "code" ? "请帮我分析当前代码问题并给出修改建议" : "帮我写一个主题活动文案",
+      result: voice.agentTeam === "code" ? "可以，请提供相关代码或错误信息，我会协助分析并给出修改建议。" : "当然可以。请告诉我活动主题、目标人群和活动时间，我会为你生成完整的活动文案。",
       recognized: "等待唤醒",
       answer: "唤醒后展示回答结果",
       button: "唤醒",
@@ -12397,10 +13254,10 @@ function renderVoicePage() {
     ready: {
       status: "已唤醒",
       title: "等待指令",
-      result: "可以说出搜索、打开应用、设置提醒、截图、亮度、音量、静音或锁屏指令。",
+      result: `当前由${currentTeam.title}处理任务，再次点击开始演示。`,
       recognized: "等待指令",
-      answer: "请说出你要执行的操作",
-      button: "已唤醒",
+      answer: "请说出你希望Agent完成的任务",
+      button: "开始提问",
     },
     processing: {
       status: "正在识别",
@@ -12420,29 +13277,53 @@ function renderVoicePage() {
     },
   };
   const meta = phaseMeta[voice.phase] || phaseMeta.idle;
-  $("#voice-live-status").textContent = meta.status;
+  const voiceLiveStatus = $("#voice-live-status");
+  if (voiceLiveStatus) voiceLiveStatus.textContent = meta.status;
   $("#voice-live-text").textContent = meta.title;
   $("#voice-live-result").textContent = meta.result;
   $("#voice-talk-button").textContent = meta.button;
   $("#voice-recognized-text").textContent = meta.recognized;
   $("#voice-answer-text").textContent = meta.answer;
-  $("#voice-orb").className = `voice-orb ${voice.phase === "ready" ? "listening" : voice.phase === "processing" ? "processing" : voice.phase === "result" ? "answered" : ""}`;
+  const voiceOrb = $("#voice-orb");
+  if (voiceOrb) voiceOrb.className = `voice-orb ${voice.phase === "ready" ? "listening" : voice.phase === "processing" ? "processing" : voice.phase === "result" ? "answered" : ""}`;
   $("#voice-live-copy").classList.toggle("typing", voice.phase === "processing");
-  $$("[data-voice-action]").forEach((button) => {
-    const isCurrent = button.dataset.voiceAction === voice.activeAction;
-    button.classList.toggle("active", isCurrent);
-    button.classList.toggle("processing", isCurrent && voice.phase === "processing");
+  const teamPanel = $("#voice-agent-team");
+  teamPanel.dataset.team = voice.agentTeam;
+  teamPanel.dataset.phase = voice.phase;
+  teamPanel.classList.toggle("collapsed", !voice.agentPanelOpen);
+  teamPanel.closest(".voice-console-grid")?.classList.toggle("agent-collapsed", !voice.agentPanelOpen);
+  $("#voice-agent-collapse").textContent = voice.agentPanelOpen ? "收起动画" : "展开动画";
+  $("#agent-team-kicker").textContent = currentTeam.kicker;
+  $("#agent-team-title").textContent = currentTeam.title;
+  $("#agent-team-status").textContent = voice.phase === "processing" ? "正在协作处理" : voice.phase === "result" ? "任务已完成" : "5个Agent空闲中";
+  $("#agent-team-note").textContent = voice.phase === "processing" ? "主Agent正在分配任务，多个子Agent协同执行" : voice.phase === "result" ? "子Agent已返回结果，主Agent完成汇总" : "点击“唤醒”体验主Agent分配任务与子Agent协作";
+  $$("[data-agent-team]").forEach((button) => {
+    const selected = button.dataset.agentTeam === voice.agentTeam;
+    button.classList.toggle("active", selected);
+    button.setAttribute("aria-selected", String(selected));
+  });
+  const workstations = $$("#voice-agent-team [data-agent-index]");
+  workstations.forEach((station) => {
+    const index = station.dataset.agentIndex;
+    const name = index === "main" ? currentTeam.main : currentTeam.agents[Number(index)];
+    station.querySelector("[data-agent-name]").textContent = name;
+    station.setAttribute("aria-label", name);
+    const state = station.querySelector("[data-agent-state]");
+    if (index === "main") state.textContent = voice.phase === "processing" ? "协调中" : voice.phase === "result" ? "已汇总" : "等待任务";
+    else state.textContent = voice.phase === "processing" ? "执行中" : voice.phase === "result" ? "已完成" : "空闲";
   });
   $("#voice-history-table").innerHTML = `
-    <div class="table-head"><span>指令类型</span><span>识别文本</span><span>回答结果</span><span>时间</span><span>操作</span></div>
+    <div class="table-head"><span>输入方式</span><span>问题或指令</span><span>回答结果</span><span>时间</span><span>操作</span></div>
     ${voice.records.length ? voice.records.map((record, index) => `
       <div class="table-row voice-row" data-voice-record="${index}"><span>${escapeHtml(record.type)}</span><span>${escapeHtml(record.text)}</span><span>${escapeHtml(record.result)}</span><span>${escapeHtml(record.time)}</span><span><button class="table-action hot" data-voice-record="${index}">查看详情</button></span></div>
-    `).join("") : renderEmptyState("暂无语音问答记录")}
+    `).join("") : renderEmptyState("暂无AI问答记录")}
   `;
 }
 
-function runVoiceAction(action = "查询任务") {
+function runVoiceAction(action = "查询任务", customText = "") {
   const samples = {
+    办公协作: { text: "帮我整理资料并生成一份数据报告", result: "办公团队已完成资料提取、表格处理和报告整理。" },
+    代码协作: { text: "帮我分析这个问题并完成代码修改和测试", result: "开发团队已完成问题分析、代码修改和测试验证。" },
     查询任务: { text: "现在 Agent 跑到哪一步了？", result: "Agent 当前第 5 / 8 步，运行检查中，暂无失败。" },
     搜索: { text: "搜索今天的安全告警", result: "已找到 4 条告警，最高风险为批量文件修改。" },
     打开应用: { text: "打开应用", result: "请继续说出或选择要打开的应用。" },
@@ -12466,7 +13347,13 @@ function runVoiceAction(action = "查询任务") {
     renderApp();
     return;
   }
-  const next = samples[action] || samples.查询任务;
+  const next = { ...(samples[action] || samples.查询任务) };
+  if (customText.trim()) {
+    next.text = customText.trim();
+    next.result = /活动|文案|宣传/.test(next.text)
+      ? "可以。活动主题建议为“灵感启程，共赴新境”，我将继续为你生成预热文案、活动亮点和报名引导内容。"
+      : `已收到你的问题，正在通过${APP_STATE.apiSettings.provider} · ${APP_STATE.apiSettings.model}整理回答。`;
+  }
   APP_STATE.voice.phase = "processing";
   APP_STATE.voice.pendingText = `正在识别：${next.text}`;
   APP_STATE.voice.activeAction = action;
@@ -12516,13 +13403,13 @@ function showVoiceRecord(index) {
     打开页面: { result: "已打开目标页面", target: "定时任务", advice: "页面已经跳转，可返回语音记录继续查看。", jump: "schedule", label: "查看定时任务" },
     打开应用: { result: "等待选择目标应用", target: "应用选择", advice: "选择目标应用后，会更新本条语音执行记录。", jump: "voice", label: "选择应用" },
     设置提醒: { result: "已同步创建定时任务", target: "定时任务", advice: "可进入定时任务查看提醒规则和执行状态。", jump: "schedule", label: "查看定时任务" },
-    截图: { result: "已完成截图", target: "AI 智能语音", advice: "截图只作为本次语音能力执行结果记录，不弹确认。", jump: "voice", label: "返回语音记录" },
+    截图: { result: "已完成截图", target: "AI 智能语音问答", advice: "截图只作为本次语音能力执行结果记录，不弹确认。", jump: "voice", label: "返回语音记录" },
     亮度调节: { result: "已同步设备亮度", target: "全局设置", advice: "亮度已更新，后续可在全局设置里调整设备显示。", jump: "voice", label: "返回语音记录" },
     音量调节: { result: "已同步设备音量", target: "全局设置", advice: "音量已更新，后续可在全局设置里调整声音状态。", jump: "voice", label: "返回语音记录" },
     静音: { result: "已同步会议声音状态", target: "AI 会议助手", advice: "录音与转写继续，会议声音状态可在会议助手查看。", jump: "meeting", label: "查看会议助手" },
     锁屏: { result: "设备控制已执行", target: "设备控制", advice: "锁屏属于普通设备控制，不进入安全拦截流程。", jump: "voice", label: "返回语音记录" },
   };
-  let meta = actionMeta[record.type] || { result: "已写入语音问答记录", target: "AI 智能语音", advice: "可回到语音记录继续查看。", jump: "voice", label: "返回语音记录" };
+  let meta = actionMeta[record.type] || { result: "已写入语音问答记录", target: "AI 智能语音问答", advice: "可回到语音记录继续查看。", jump: "voice", label: "返回语音记录" };
   if (record.type === "打开应用" && /^已打开/.test(record.result)) {
     const appName = record.result.replace(/^已打开\s*/, "");
     meta = { result: record.result, target: appName, advice: "目标应用已经打开，本次语音操作已完成。", jump: "voice", label: "返回语音记录" };
@@ -13479,6 +14366,9 @@ function renderApp() {
   renderQuickActionsPage();
   renderTokenPage();
   renderSchedulePage();
+  renderWindowAppPage();
+  renderAlbumPage();
+  renderKeyboardPage();
   renderVoicePage();
   renderMeetingPage();
   renderSecurityPage();
@@ -13494,7 +14384,11 @@ function renderApp() {
 
 function renderNavigation() {
   $$(".view").forEach((view) => view.classList.toggle("active", view.id === APP_STATE.currentPage));
-  $$(".nav-item").forEach((item) => item.classList.toggle("active", item.dataset.view === APP_STATE.currentPage));
+  $$(".nav-item").forEach((item) => {
+    const samePage = item.dataset.view === APP_STATE.currentPage;
+    const sameConfig = item.dataset.view !== "screen-config" || item.dataset.configSubpage === APP_STATE.configSubpage;
+    item.classList.toggle("active", samePage && sameConfig);
+  });
   $$(".nav-subitem").forEach((item) => {
     item.classList.toggle("active", APP_STATE.currentPage === "screen-config" && item.dataset.configSubpage === APP_STATE.configSubpage);
   });
@@ -13699,15 +14593,42 @@ function renderSubscreenSettings() {
     const securityRuleButton = page === "security"
       ? `<button class="subscreen-rule-button" type="button" data-security-rule-settings>安全规则设置</button>`
       : "";
+    const voiceTeamTabs = page === "voice"
+      ? `<span class="agent-team-tabs voice-team-header-tabs" role="tablist" aria-label="Agent团队">
+          <button class="agent-team-tab ${APP_STATE.voice.agentTeam === "office" ? "active" : ""}" data-agent-team="office" role="tab" aria-selected="${APP_STATE.voice.agentTeam === "office"}">☕ 日常办公</button>
+          <button class="agent-team-tab ${APP_STATE.voice.agentTeam === "code" ? "active" : ""}" data-agent-team="code" role="tab" aria-selected="${APP_STATE.voice.agentTeam === "code"}">⌁ 代码开发</button>
+        </span>`
+      : "";
+    const voicePanelToggle = "";
     chrome.innerHTML = `
       <span class="subscreen-preview-heading">
+        ${page === "voice" ? `<span class="voice-orb ${APP_STATE.voice.phase === "ready" ? "listening" : APP_STATE.voice.phase === "processing" ? "processing" : APP_STATE.voice.phase === "result" ? "answered" : ""}" id="voice-orb" aria-hidden="true"></span>` : ""}
         <span class="subscreen-preview-title">${escapeHtml(title)}</span>
         ${securityRuleButton}
       </span>
+      ${voiceTeamTabs}
       <span class="subscreen-preview-actions">
         ${scheduleCreateButton}
+        ${voicePanelToggle}
       </span>
     `;
+    if (page === "voice") {
+      chrome.querySelectorAll("[data-agent-team]").forEach((button) => {
+        button.addEventListener("click", () => {
+          if (APP_STATE.voice.phase === "processing") return;
+          APP_STATE.voice.agentTeam = button.dataset.agentTeam;
+          APP_STATE.voice.phase = "idle";
+          APP_STATE.voice.recognized = "等待唤醒";
+          APP_STATE.voice.answer = "唤醒后展示摘要结果";
+          APP_STATE.voice.activeAction = "唤醒";
+          renderApp();
+        });
+      });
+      chrome.querySelector("[data-agent-panel-toggle]")?.addEventListener("click", () => {
+        APP_STATE.voice.agentPanelOpen = !APP_STATE.voice.agentPanelOpen;
+        renderApp();
+      });
+    }
     const oldPanel = preview.querySelector(":scope > .subscreen-device-panel");
     if (oldPanel) oldPanel.remove();
     preview.classList.remove("subscreen-preview-body-hidden");
@@ -13918,11 +14839,65 @@ function handlePetTouch() {
 
 function bindEvents() {
   $$(".nav-item").forEach((item) => {
-    item.addEventListener("click", () => setActiveTab(item.dataset.view));
+    item.addEventListener("click", () => item.dataset.configSubpage ? setConfigSubpage(item.dataset.configSubpage) : setActiveTab(item.dataset.view));
   });
   $$(".nav-subitem").forEach((item) => {
     item.addEventListener("click", () => setConfigSubpage(item.dataset.configSubpage));
   });
+
+  const windowDropZone = $("#window-drop-zone");
+  $$("[data-window-source]").forEach((source) => {
+    source.addEventListener("dragstart", (event) => {
+      event.dataTransfer.setData("text/plain", JSON.stringify({ app: source.dataset.windowSource, title: source.dataset.windowTitle }));
+    });
+    source.addEventListener("click", () => connectWindowApp(source.dataset.windowSource, source.dataset.windowTitle));
+  });
+  windowDropZone?.addEventListener("dragover", (event) => { event.preventDefault(); windowDropZone.classList.add("dragover"); });
+  windowDropZone?.addEventListener("dragleave", () => windowDropZone.classList.remove("dragover"));
+  windowDropZone?.addEventListener("drop", (event) => {
+    event.preventDefault();
+    windowDropZone.classList.remove("dragover");
+    try {
+      const source = JSON.parse(event.dataTransfer.getData("text/plain"));
+      connectWindowApp(source.app, source.title);
+    } catch {
+      showSheet({ type: "提醒", title: "窗口接入未完成", copy: "没有识别到可接入的应用窗口。", detail: "window-app", detailLabel: "返回窗口应用" });
+    }
+  });
+  $("#window-remove-current")?.addEventListener("click", removeWindowApp);
+
+  const albumInputs = {
+    library: $("#album-library-input"),
+    folder: $("#album-folder-input"),
+    files: $("#album-files-input"),
+  };
+  $$('[data-album-picker]').forEach((button) => button.addEventListener("click", () => albumInputs[button.dataset.albumPicker]?.click()));
+  Object.values(albumInputs).forEach((input) => input?.addEventListener("change", () => { addAlbumFiles(input.files); input.value = ""; }));
+  $("#album-prev")?.addEventListener("click", () => stepAlbum(-1));
+  $("#album-next")?.addEventListener("click", () => stepAlbum(1));
+  $("#album-play-toggle")?.addEventListener("click", () => { APP_STATE.album.playing = !APP_STATE.album.playing; renderAlbumPage(); renderSubscreenSettings(); });
+  $("#album-interval")?.addEventListener("change", (event) => { APP_STATE.album.interval = Number(event.target.value); renderAlbumPage(); renderSubscreenSettings(); });
+  $("#album-thumbnails")?.addEventListener("click", (event) => {
+    const thumb = event.target.closest("[data-album-index]");
+    if (!thumb) return;
+    APP_STATE.album.current = Number(thumb.dataset.albumIndex);
+    renderAlbumPage();
+    renderSubscreenSettings();
+  });
+
+  $$("[data-keyboard-platform]").forEach((button) => button.addEventListener("click", () => {
+    APP_STATE.keyboard.platform = button.dataset.keyboardPlatform;
+    APP_STATE.keyboard.connected = true;
+    APP_STATE.keyboard.feedback = `已连接${KEYBOARD_MAPPINGS[APP_STATE.keyboard.platform].name}`;
+    renderApp();
+  }));
+  $$("[data-keyboard-connect]").forEach((button) => button.addEventListener("click", () => {
+    APP_STATE.keyboard.platform = button.dataset.keyboardConnect;
+    APP_STATE.keyboard.connected = true;
+    APP_STATE.keyboard.feedback = `已连接${KEYBOARD_MAPPINGS[APP_STATE.keyboard.platform].name}`;
+    renderApp();
+  }));
+  $$("[data-virtual-action]").forEach((button) => button.addEventListener("click", () => handleVirtualKey(button.dataset.virtualAction, button)));
 
   $("#quick-slot-editor")?.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -14140,9 +15115,80 @@ function bindEvents() {
 
   $("#schedule-back").addEventListener("click", showScheduleBoard);
 
-  $("#voice-talk-button").addEventListener("click", () => runVoiceAction("唤醒"));
-  $$("[data-voice-action]").forEach((button) => {
-    button.addEventListener("click", () => runVoiceAction(button.dataset.voiceAction));
+  $("#voice-talk-button").addEventListener("click", () => {
+    if (APP_STATE.voice.phase === "processing") return;
+    if (APP_STATE.voice.phase === "idle" || APP_STATE.voice.phase === "result") {
+      runVoiceAction("唤醒");
+      return;
+    }
+    runVoiceAction(APP_STATE.voice.agentTeam === "code" ? "代码协作" : "办公协作");
+  });
+  const voiceTextInput = $("#voice-text-input");
+  const voiceSendButton = $("#voice-send-button");
+  const voiceMicButton = $("#voice-mic-button");
+  const voiceApiModel = $("#voice-api-model");
+  const submitVoiceText = () => {
+    const text = voiceTextInput.value.trim();
+    if (!text || APP_STATE.voice.phase === "processing") return;
+    voiceTextInput.value = "";
+    runVoiceAction("文字输入", text);
+  };
+  voiceSendButton.addEventListener("click", submitVoiceText);
+  voiceTextInput.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" && !event.shiftKey) {
+      event.preventDefault();
+      submitVoiceText();
+    }
+  });
+  let voicePressing = false;
+  const finishVoiceRecording = () => {
+    if (!voicePressing) return;
+    voicePressing = false;
+    voiceMicButton.classList.remove("recording");
+    const spokenText = APP_STATE.voice.agentTeam === "code"
+      ? "请帮我分析当前代码问题并给出修改建议"
+      : "请帮我整理这份资料并总结重点";
+    runVoiceAction("语音输入", spokenText);
+  };
+  voiceMicButton.addEventListener("pointerdown", (event) => {
+    if (APP_STATE.voice.phase === "processing") return;
+    event.preventDefault();
+    voicePressing = true;
+    voiceMicButton.setPointerCapture?.(event.pointerId);
+    voiceMicButton.classList.add("recording");
+    voiceMicButton.textContent = "■";
+    voiceTextInput.placeholder = "正在聆听，松开发送…";
+  });
+  voiceMicButton.addEventListener("pointerup", finishVoiceRecording);
+  voiceMicButton.addEventListener("pointercancel", finishVoiceRecording);
+  voiceApiModel.addEventListener("change", () => {
+    const [provider, model] = voiceApiModel.value.split("|");
+    APP_STATE.apiSettings.provider = provider;
+    APP_STATE.apiSettings.model = model;
+    APP_STATE.apiSettings.updatedAt = nowText();
+    renderApiSettings();
+  });
+  $("#voice-api-entry").addEventListener("click", () => setConfigSubpage("api"));
+  $$("[data-agent-team]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (APP_STATE.voice.phase === "processing") return;
+      APP_STATE.voice.agentTeam = button.dataset.agentTeam;
+      APP_STATE.voice.phase = "idle";
+      APP_STATE.voice.recognized = "等待唤醒";
+      APP_STATE.voice.answer = "唤醒后展示摘要结果";
+      APP_STATE.voice.activeAction = "唤醒";
+      renderApp();
+    });
+  });
+  $$("#voice-agent-team [data-agent-index]").forEach((button) => {
+    button.addEventListener("click", () => {
+      if (APP_STATE.voice.phase === "processing") return;
+      runVoiceAction(APP_STATE.voice.agentTeam === "code" ? "代码协作" : "办公协作");
+    });
+  });
+  $("#voice-agent-collapse").addEventListener("click", () => {
+    APP_STATE.voice.agentPanelOpen = !APP_STATE.voice.agentPanelOpen;
+    renderApp();
   });
 
   $("#meeting-record-toggle").addEventListener("click", toggleMeetingRecording);
