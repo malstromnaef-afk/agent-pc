@@ -8838,6 +8838,15 @@ pre {
         background: #ffffff;
       }
 
+      /* 大屏：恢复 index_副本.html 的任务信息 + 执行步骤页面 */
+      body.prototype-large #monitor .agent-conversation-preview {
+        display: none !important;
+      }
+
+      body.prototype-large #monitor .agent-subscreen-console {
+        display: grid !important;
+      }
+
       body.prototype-wide .voice-console-grid {
         grid-template-columns: minmax(0, 1fr) minmax(245px, 270px) !important;
         gap: 10px;
