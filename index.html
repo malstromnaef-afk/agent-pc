@@ -6409,7 +6409,7 @@ pre {
   overflow: hidden;
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
-  background: #384352;
+  background: transparent;
 }
 
 .api-setting-row {
@@ -6493,7 +6493,21 @@ pre {
   display: flex;
   align-items: center;
   gap: 10px;
+  flex-wrap: wrap;
 }
+
+.api-status-line small { color: var(--muted-2); font-size: 12px; font-weight: 650; }
+.api-secret-field { position: relative; width: 100%; max-width: 520px; }
+.api-secret-field input { max-width: none; padding-right: 62px; }
+.api-icon-button { position: absolute; right: 6px; top: 5px; min-width: 48px; min-height: 32px; border: 0; border-radius: 6px; background: rgba(15,21,27,.48); color: #b9d9d8; cursor: pointer; }
+.api-help-link { flex: 0 0 auto; color: #83eee5; font-size: 13px; text-decoration: none; white-space: nowrap; }
+.api-help-link:hover { text-decoration: underline; }
+.api-form-feedback { min-height: 22px; margin: 12px 4px 0; color: var(--muted); font-size: 13px; }
+.api-form-feedback.success { color: var(--green); }
+.api-form-feedback.error { color: #ff9a9a; }
+.api-form-actions { display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px; align-items: center; margin-top: 12px; }
+.api-form-actions button { min-height: 42px; }
+.api-setting-control select:disabled,.api-setting-control input:disabled { opacity: .72; cursor: not-allowed; }
 
 .api-status-dot {
   width: 10px;
@@ -8913,6 +8927,47 @@ pre {
         text-orientation: upright;
         box-shadow: none;
       }
+/* 全局AI智能问答 P0：副屏完整交互 */
+.agent-team-panel, .voice-agent-team-toggle, .voice-history-panel, .voice-result-stack, #voice-talk-button { display:none !important; }
+.voice-assistant-panel.text-mode #voice-mic-button{display:grid!important}.voice-assistant-panel:not(.text-mode) #voice-mic-button{display:none!important}
+#voice .voice-console-grid { grid-template-columns:minmax(0,1fr) !important; }
+#voice .voice-assistant-title { right:18px; align-items:center; gap:10px; }
+.qa-session-actions button,.qa-session-actions select,.qa-voice-actions button { border:1px solid rgba(70,235,222,.28); border-radius:999px; background:rgba(7,12,16,.7); color:#dffbfa; min-height:30px; padding:0 11px; cursor:pointer; }
+.qa-session-actions { display:flex; gap:6px; margin-left:auto; }
+.qa-session-icon{width:34px!important;padding:0!important;display:grid;place-items:center;font-size:16px}
+.qa-session-drawer{position:absolute;z-index:55;inset:0 0 0 auto;width:min(300px,46%);display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;padding:18px;border-left:1px solid rgba(70,235,222,.24);background:rgba(8,15,18,.98);box-shadow:-20px 0 46px rgba(0,0,0,.38);transform:translateX(104%);transition:transform .2s ease}
+.qa-session-drawer.open{transform:translateX(0)}.qa-session-drawer-head{display:flex;align-items:center;justify-content:space-between}.qa-session-drawer-head strong{font-size:15px}.qa-session-drawer-head button{width:32px;height:32px;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:transparent;color:#dffbfa;cursor:pointer}
+.qa-session-new,.qa-session-all{min-height:40px;border:1px solid rgba(70,235,222,.28);border-radius:12px;background:rgba(25,182,171,.14);color:#a6fff6;font-weight:900;cursor:pointer}.qa-session-all{justify-self:end;width:42px;padding:0;display:grid;place-items:center;background:transparent;font-size:18px}
+.qa-recent-list{display:grid;align-content:start;gap:7px;min-height:0;overflow:auto}.qa-recent-item{display:grid;gap:3px;padding:10px 11px;border:0;border-radius:11px;background:rgba(255,255,255,.045);color:#e8ffff;text-align:left;cursor:pointer}.qa-recent-item:hover{background:rgba(25,182,171,.13)}.qa-recent-item small{color:rgba(205,220,224,.52)}
+.qa-main-history-page{display:grid;gap:14px;margin-top:16px;padding:20px;border:1px solid rgba(70,235,222,.2);border-radius:16px;background:rgba(7,15,19,.72)}.qa-main-history-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.qa-main-history-head h3{margin:0}.qa-main-history-head input{width:min(360px,42%);min-height:38px;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:0 12px;background:#0b1215;color:#e8ffff}.qa-main-history-list{display:grid;gap:8px}.qa-main-history-row{display:grid;grid-template-columns:minmax(0,1fr) 130px auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.035)}.qa-main-history-row p{margin:3px 0 0;color:var(--muted);font-size:11px}.qa-main-history-row button{border:1px solid rgba(70,235,222,.24);border-radius:999px;padding:8px 12px;background:transparent;color:#a6fff6;cursor:pointer}
+.voice-assistant-title>span { white-space:nowrap; }
+.voice-dialogue-stage { padding-top:72px; }
+.qa-voice-actions { display:none !important; }
+#qa-stop-speaking { border-color:rgba(255,184,92,.5); color:#ffd29b; }
+#qa-interrupt-ai { border-color:rgba(93,255,184,.52); color:#9dffd0; }
+.qa-call-footer{position:absolute;z-index:18;left:50%;bottom:15px;transform:translateX(-50%);display:none;grid-template-columns:58px 58px;grid-template-rows:58px auto;gap:7px 72px;align-items:center;justify-items:center}.qa-call-footer.active{display:grid}.qa-call-control{width:58px;height:58px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.14);border-radius:50%;background:rgba(237,235,248,.1);color:#f0f5f6;cursor:pointer}.qa-call-control svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.qa-call-control.muted{color:#ff7a8f;border-color:rgba(255,90,116,.45)}#qa-call-mic{grid-column:1;grid-row:1}.qa-call-control.end{grid-column:2;grid-row:1;color:#ff4f64;border-color:rgba(255,79,100,.38);font-size:31px}.qa-ai-disclaimer{grid-column:1/-1;grid-row:2;color:rgba(205,214,220,.52);font-size:10px;white-space:nowrap}
+.qa-call-control{position:relative}.qa-call-control.muted{background:rgba(255,90,116,.1)}.qa-call-control.muted::after{content:"";position:absolute;left:15px;top:27px;width:28px;height:2.5px;border-radius:2px;background:currentColor;box-shadow:0 0 6px rgba(255,90,116,.35);transform:rotate(-48deg);transform-origin:center;pointer-events:none}
+.voice-dialogue-orb-button{width:164px!important;height:164px!important}.voice-dialogue-orb{width:132px!important;height:132px!important}.voice-dialogue-stage{padding-bottom:112px!important}
+.voice-assistant-panel.text-mode .voice-glow-field { display:grid; height:100%; min-height:0; padding:64px 18px 76px; }
+.voice-assistant-panel.text-mode .voice-live-copy { min-height:0; height:100%; overflow:auto; align-content:start; }
+.voice-assistant-panel.text-mode .voice-chat-window { min-height:100%; }
+.qa-conversation-empty { min-height:220px; display:grid; place-content:center; gap:8px; color:rgba(211,224,228,.62); text-align:center; }
+.qa-conversation-empty strong { color:#e8ffff; font-size:17px; }
+.qa-conversation-empty p { margin:0; font-size:11px; }
+.qa-message { display:grid; gap:5px; width:fit-content; max-width:78%; padding:11px 14px; border-radius:14px; text-align:left; }
+.qa-message.user { justify-self:end; background:rgba(46,242,138,.16); border:1px solid rgba(129,242,234,.25); }
+.qa-message.ai { justify-self:start; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.09); }
+.qa-message small { color:#8ff7ef; font-weight:800; }.qa-message p{margin:0;line-height:1.55}.qa-message.loading p::after{content:'｜';animation:voice-caret .68s steps(1) infinite}
+.qa-banner { position:absolute; z-index:30; left:50%; top:58px; transform:translateX(-50%); max-width:72%; padding:9px 14px; border:1px solid rgba(255,184,92,.38); border-radius:12px; background:rgba(35,25,12,.94); color:#ffe0ad; font-size:11px; }
+.qa-modal-layer { position:absolute; z-index:80; inset:0; display:none; place-items:center; background:rgba(0,0,0,.62); }
+.qa-modal-layer.open { display:grid; }.qa-modal{width:min(410px,82%);padding:22px;border:1px solid rgba(70,235,222,.28);border-radius:18px;background:#10171b;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.qa-modal h4{margin:0 0 8px;font-size:18px}.qa-modal p{margin:0;color:rgba(211,224,228,.68);font-size:12px;line-height:1.6}.qa-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.qa-modal-actions button{min-height:34px;padding:0 15px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;color:#dffbfa;cursor:pointer}.qa-modal-actions .primary{border:0;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017;font-weight:900}
+.qa-error-card{position:relative;z-index:2;max-width:430px;padding:18px;border:1px solid rgba(255,110,130,.34);border-radius:16px;background:rgba(42,15,22,.65)}.qa-error-card button{margin-top:12px}
+#voice .preview-config-switch span:first-child{font-weight:850}
+.qa-permission-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 20px;border:1px solid rgba(70,235,222,.2);border-radius:16px;background:rgba(7,15,19,.66)}
+.qa-permission-copy{display:grid;gap:6px}.qa-permission-copy span{color:var(--muted);font-size:11px;font-weight:800}.qa-permission-copy strong{font-size:16px}.qa-permission-copy p{margin:0;color:rgba(205,220,224,.62);font-size:11px;line-height:1.55}
+.qa-permission-actions{display:flex;align-items:center;gap:8px}.qa-permission-actions select,.qa-permission-actions button{min-height:36px;border:1px solid rgba(70,235,222,.3);border-radius:999px;padding:0 14px;background:rgba(10,21,25,.9);color:#dffbfa;font-weight:850;cursor:pointer}.qa-permission-actions button{border:0;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017}.qa-permission-actions button.secondary{border:1px solid rgba(70,235,222,.3);background:transparent;color:#a6fff6}.qa-permission-actions button[hidden]{display:none}.qa-permission-actions button:disabled{opacity:.5;cursor:not-allowed}
+.qa-permission-panel[data-permission="authorized"] .qa-permission-copy strong{color:#65f2ab}.qa-permission-panel[data-permission="unauthorized"] .qa-permission-copy strong,.qa-permission-panel[data-permission="expired"] .qa-permission-copy strong{color:#ffd080}
     </style>
   </head>
   <body class="prototype-landing">
@@ -8958,10 +9013,10 @@ pre {
         </div>
 
         <nav class="nav" aria-label="主导航">
-          <button class="nav-item active" data-view="monitor">
+          <button class="nav-item" data-view="monitor" hidden aria-hidden="true">
             <span>Agent 任务进度</span>
           </button>
-          <button class="nav-item" data-view="shortcut">
+          <button class="nav-item active" data-view="shortcut">
             <span>Agent 快捷操作</span>
           </button>
           <button class="nav-item" data-view="usage">
@@ -8992,14 +9047,14 @@ pre {
             <span>时间</span>
           </button>
           <button class="nav-item" data-view="screen-config" data-config-subpage="api">
-            <span>API 接入</span>
+            <span>API 设置</span>
           </button>
         </nav>
 
       </aside>
 
       <main class="main">
-        <section class="view active" id="monitor">
+        <section class="view" id="monitor" hidden aria-hidden="true">
           <div class="monitor-page">
             <section class="panel main-panel">
               <div class="section-title">
@@ -9481,39 +9536,59 @@ pre {
             <section class="panel main-panel">
               <div class="section-title">
                 <div class="preview-title-main">
-                  <h3>AI 智能语音问答</h3>
+                  <h3>全局AI智能问答</h3>
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
+                    <span>功能开关</span>
                     <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
               </div>
-              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="AI 智能语音问答" aria-label="2:1 横屏副屏语音问答控制台预览">
+              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="全局AI智能问答" aria-label="2:1 横屏副屏智能问答控制台预览">
                 <div class="voice-console-grid agent-collapsed">
                   <article class="voice-assistant-panel">
                     <div class="voice-assistant-title">
-                      <span>AI 智能语音问答</span>
+                      <span>全局AI智能问答</span>
                       <div class="voice-dialog-mode-switch" role="group" aria-label="对话模式切换">
-                        <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true">语音对话</button>
-                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">文字对话</button>
+                        <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true">语音</button>
+                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">文字</button>
+                      </div>
+                      <div class="qa-session-actions">
+                        <button type="button" class="qa-session-icon" id="qa-session-toggle" aria-expanded="false" aria-label="打开会话列表" title="会话">☰</button>
                       </div>
                     </div>
+                    <aside class="qa-session-drawer" id="qa-session-drawer" aria-hidden="true">
+                      <div class="qa-session-drawer-head"><strong>会话</strong><button type="button" id="qa-session-close" aria-label="关闭会话列表">×</button></div>
+                      <button type="button" class="qa-session-new" id="qa-new-session">＋ 新建会话</button>
+                      <div class="qa-recent-list" id="qa-recent-list"></div>
+                      <button type="button" class="qa-session-all" id="qa-view-all-sessions" aria-label="查看全部会话" title="查看全部会话">☰</button>
+                    </aside>
                     <div class="voice-assistant-body">
                       <div class="voice-dialogue-stage" id="voice-dialogue-stage">
                         <button type="button" class="voice-dialogue-orb-button" id="voice-dialogue-orb-button" aria-label="点击开始语音对话">
                           <span class="voice-dialogue-orb" aria-hidden="true"></span>
                         </button>
                         <strong id="voice-dialogue-title">点击语音球开始说话</strong>
-                        <p id="voice-dialogue-result">点击语音球或按住下方麦克风，说完后将自动识别并回答。</p>
+                        <p id="voice-dialogue-result">点击语音球开始说话，说完后可手动结束或等待自动结束。</p>
+                        <div class="qa-voice-actions" id="qa-voice-actions">
+                          <button type="button" id="qa-finish-listening">结束并提交</button>
+                          <button type="button" id="qa-cancel-listening">取消</button>
+                          <button type="button" id="qa-stop-speaking">停止播报</button>
+                          <button type="button" id="qa-interrupt-ai">直接说话打断</button>
+                        </div>
+                        <div class="qa-call-footer" aria-label="语音对话控制">
+                          <button type="button" class="qa-call-control" id="qa-call-mic" aria-pressed="false" aria-label="关闭麦克风" title="关闭麦克风"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"></path></svg></button>
+                          <span class="qa-ai-disclaimer">内容由 AI 生成</span>
+                          <button type="button" class="qa-call-control end" id="qa-end-voice" aria-label="结束语音对话" title="结束语音对话">×</button>
+                        </div>
                       </div>
                       <div class="voice-glow-field">
                         <div class="voice-live-copy" id="voice-live-copy">
                           <div class="voice-chat-window">
-                            <div class="voice-chat-message user"><span>你</span><strong id="voice-live-text">帮我写一个主题活动文案</strong></div>
-                            <div class="voice-chat-message assistant"><span>AI助手</span><p id="voice-live-result">当然可以。请告诉我活动主题、目标人群和活动时间，我会为你生成完整的活动文案。</p></div>
+                            <div id="qa-conversation" class="qa-conversation-empty"><strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p></div>
+                            <strong id="voice-live-text" hidden></strong><p id="voice-live-result" hidden></p>
                           </div>
                           <button class="voice-button voice-live-action" id="voice-talk-button">唤醒</button>
                         </div>
@@ -9525,9 +9600,9 @@ pre {
                     </div>
                     <div class="voice-composer-shell">
                       <div class="voice-composer-input">
-                        <textarea id="voice-text-input" rows="2" placeholder="输入问题或任务，或按住麦克风说话…"></textarea>
+                        <textarea id="voice-text-input" rows="2" placeholder="输入你的问题…"></textarea>
                         <div class="voice-composer-footer">
-                          <span class="voice-input-hint" id="voice-input-hint">按住麦克风说话 · 松开发送</span>
+                          <span class="voice-input-hint" id="voice-input-hint">Enter 发送 · Shift+Enter 换行</span>
                           <div class="voice-composer-toolbar">
                             <select id="voice-api-model" aria-label="选择API与模型">
                               <option value="OpenAI|gpt-4.1">OpenAI · GPT-4.1</option>
@@ -9537,7 +9612,7 @@ pre {
                             <button type="button" id="voice-api-entry">API接入</button>
                           </div>
                           <div class="voice-composer-actions">
-                            <button type="button" class="voice-mic-button" id="voice-mic-button" aria-label="按住说话" title="按住说话"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"></path></svg></button>
+                            <button type="button" class="voice-mic-button" id="voice-mic-button" aria-label="进入语音对话" title="进入语音对话"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"></rect><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"></path></svg></button>
                             <button type="button" class="voice-send-button" id="voice-send-button" aria-label="发送问题">↑</button>
                           </div>
                         </div>
@@ -9577,8 +9652,32 @@ pre {
                     <div class="agent-team-note"><span class="agent-team-dot"></span><span id="agent-team-note">点击“唤醒”体验主Agent分配任务与子Agent协作</span></div>
                   </section>
                 </div>
-                <button class="voice-agent-team-toggle" id="voice-agent-collapse" type="button" aria-expanded="false">展开团队</button>
+                <button class="voice-agent-team-toggle" id="voice-agent-collapse" type="button" hidden aria-hidden="true"></button>
               </div>
+            </section>
+            <section class="panel main-panel qa-permission-panel" id="qa-permission-panel" data-permission="authorized">
+                <div class="qa-permission-copy">
+                  <span>主屏权限状态 · 麦克风</span>
+                  <strong id="qa-permission-title">已授权</strong>
+                  <p id="qa-permission-description">全局AI智能问答可在副屏语音模式中使用麦克风。</p>
+                </div>
+                <div class="qa-permission-actions">
+                  <select id="qa-permission-demo" aria-label="切换麦克风权限状态">
+                    <option value="first-use">首次使用</option>
+                    <option value="authorized">已授权</option>
+                    <option value="unauthorized">未授权</option>
+                    <option value="expired">权限失效</option>
+                    <option value="waiting">等待系统设置返回</option>
+                    <option value="checking">重新检查中</option>
+                    <option value="error">状态检测失败</option>
+                  </select>
+                  <button type="button" id="qa-permission-primary" hidden>允许使用麦克风</button>
+                  <button type="button" class="secondary" id="qa-permission-recheck" hidden>重新检查</button>
+                </div>
+            </section>
+            <section class="qa-main-history-page" id="qa-main-history-page" aria-hidden="false">
+              <div class="qa-main-history-head"><div><h3>AI问答会话记录</h3><p class="muted">完整历史、搜索、删除和会话详情均在主屏完成。</p></div><input id="qa-history-search" placeholder="搜索会话" aria-label="搜索会话" /></div>
+              <div class="qa-main-history-list" id="qa-main-history-list"></div>
             </section>
 
             <section class="panel main-panel voice-history-panel">
@@ -10004,10 +10103,7 @@ pre {
                 <div>
                   <h2 id="config-page-title">全局配置</h2>
                 </div>
-                <div class="action-row" id="config-page-actions">
-                  <button class="soft-button" id="reset-config">恢复默认</button>
-                  <button class="primary-button" id="save-config">保存设置</button>
-                </div>
+                <div class="action-row" id="config-page-actions"></div>
               </div>
 
               <section class="inner-card device-preview-panel config-section-panel active" data-config-panel="device">
@@ -10079,15 +10175,15 @@ pre {
                       <div class="api-status-line">
                         <i class="api-status-dot" id="api-status-dot" aria-hidden="true"></i>
                         <strong id="api-status-text">未配置</strong>
+                        <small id="api-last-tested">尚未验证</small>
                       </div>
-                      <button class="soft-button" id="api-test-connection">测试连接</button>
                     </div>
                   </article>
 
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <label for="api-provider">服务商</label>
-                      <small>统一选择 AI 功能点调用的模型服务</small>
+                      <small>选择全局AI智能问答调用的模型服务</small>
                     </div>
                     <div class="api-setting-control">
                       <select id="api-provider">
@@ -10101,7 +10197,7 @@ pre {
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <label for="api-base-url">API Base URL</label>
-                      <small>兼容 OpenAI 格式的服务地址</small>
+                      <small>内置服务商使用默认地址；自定义兼容 API 可编辑</small>
                     </div>
                     <div class="api-setting-control">
                       <input id="api-base-url" type="text" placeholder="https://api.openai.com/v1" />
@@ -10111,32 +10207,46 @@ pre {
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <label for="api-key">API Key</label>
-                      <small>保存后用于 AI 语音、会议、任务分析等能力</small>
+                      <small>密钥仅用于连接所选模型服务，不会明文回显</small>
                     </div>
                     <div class="api-setting-control">
-                      <input id="api-key" type="password" placeholder="输入 API Key" autocomplete="off" />
+                      <div class="api-secret-field">
+                        <input id="api-key" type="password" placeholder="输入 API Key" autocomplete="new-password" />
+                        <button type="button" class="api-icon-button" id="api-key-toggle" aria-label="显示 API Key" title="显示 API Key">显示</button>
+                      </div>
+                      <a class="api-help-link" id="api-key-help" href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer">获取 API Key</a>
                     </div>
                   </article>
 
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <label for="api-model">默认模型</label>
-                      <small>功能点未单独指定时使用该模型</small>
+                      <small>连接验证成功后刷新可用模型</small>
                     </div>
                     <div class="api-setting-control">
-                      <input id="api-model" type="text" placeholder="gpt-4.1" />
+                      <select id="api-model" aria-label="选择默认模型">
+                        <option value="gpt-4.1">gpt-4.1</option>
+                      </select>
+                      <button type="button" class="soft-button" id="api-refresh-models">刷新模型</button>
                     </div>
                   </article>
 
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <span>功能点使用范围</span>
-                      <small>第一版统一接入，不做单功能独立配置</small>
+                      <small>当前配置仅供本功能使用</small>
                     </div>
                     <div class="api-setting-control">
                       <div class="api-scope-list" id="api-scope-list"></div>
                     </div>
                   </article>
+                </div>
+                <div class="api-form-feedback" id="api-form-feedback" role="status" aria-live="polite"></div>
+                <div class="api-form-actions">
+                  <button class="soft-button" id="reset-config">恢复默认</button>
+                  <span></span>
+                  <button class="soft-button" id="api-test-connection">测试连接</button>
+                  <button class="primary-button" id="save-config">保存设置</button>
                 </div>
               </section>
             </section>
@@ -10310,12 +10420,12 @@ const PAGE_TITLES = {
   security: "安全告警",
   time: "时间",
   pet: "虚拟桌面宠物",
-  "screen-config": "API 接入",
+  "screen-config": "API 设置",
   "detail-view": "详情页",
 };
 
 const FEATURE_PAGES = {
-  "Agent 任务进度": "monitor",
+  // "Agent 任务进度": "monitor", // 当前版本隐藏，保留页面代码便于后续恢复
   "Agent 快捷操作": "shortcut",
   "Token 算力消耗": "usage",
   "定时任务": "schedule",
@@ -10340,11 +10450,11 @@ const RULE_BUTTONS = [
 ];
 
 const SECONDARY_MODES = {
-  工作模式: ["Agent 任务进度", "Agent 快捷操作", "Token 算力消耗", "安全告警"],
-  自动化模式: ["定时任务", "Agent 任务进度", "安全告警"],
+  工作模式: ["Agent 快捷操作", "Token 算力消耗", "安全告警"],
+  自动化模式: ["定时任务", "安全告警"],
   会议模式: ["AI 会议助手", "AI 智能语音问答", "安全告警"],
-  安全模式: ["安全告警", "Agent 任务进度", "Token 算力消耗"],
-  陪伴模式: ["Agent 任务进度", "AI 智能语音问答"], // 桌面宠物暂不启用
+  安全模式: ["安全告警", "Token 算力消耗"],
+  陪伴模式: ["AI 智能语音问答"], // 桌面宠物暂不启用
 };
 
 const FEATURE_CONFIG = {
@@ -10548,11 +10658,11 @@ function cloneDefaultQuickActions() {
 }
 
 const APP_STATE = {
-  currentPage: "monitor",
+  currentPage: "shortcut",
   configSubpage: "api",
   activeSubscreenSettings: null,
   currentMode: "工作模式",
-  selectedFeature: "Agent 任务进度",
+  selectedFeature: "Agent 快捷操作",
   selectedTrigger: "normal",
   deviceSettings: {
     brightness: 80,
@@ -10581,15 +10691,7 @@ const APP_STATE = {
     apiKey: "",
     model: "gpt-4.1",
     lastTest: "",
-    scopes: [
-      "Agent 任务进度",
-      "Agent 快捷操作",
-      "Token 算力消耗",
-      "定时任务",
-      "AI 智能语音问答",
-      "AI 会议助手",
-      "安全告警",
-    ],
+    scopes: ["全局AI智能问答"],
   },
   previewEnabled: {
     monitor: true,
@@ -11367,6 +11469,7 @@ function getTrigger() {
 }
 
 function setActiveTab(viewId) {
+  if (viewId === "monitor") viewId = "shortcut";
   APP_STATE.currentPage = viewId;
   APP_STATE.activeSubscreenSettings = null;
   if (viewId === "screen-config") APP_STATE.configSubpage = "api";
@@ -11384,6 +11487,7 @@ function setConfigSubpage(subpage) {
 }
 
 function setConfigFeature(featureName) {
+  if (featureName === "Agent 任务进度") return;
   if (!FEATURE_CONFIG[featureName]) return;
   APP_STATE.selectedFeature = featureName;
   APP_STATE.selectedTrigger = FEATURE_CONFIG[featureName].defaultTrigger;
@@ -15819,11 +15923,11 @@ function renderSubscreenSettings() {
         </span>`
       : "";
     const voicePanelToggle = "";
-    const globalVoiceEntry = IS_WIDE_PROTOTYPE
+    const globalVoiceEntry = IS_WIDE_PROTOTYPE || APP_STATE.previewEnabled.voice === false
       ? ""
-      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="wake" aria-label="打开AI智能语音问答" title="打开AI智能语音问答">
+      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="打开全局AI智能问答" title="打开全局AI智能问答">
           <span class="subscreen-global-ai-ball" aria-hidden="true"></span>
-          <span>AI 智能语音问答</span>
+          <span>全局AI智能问答</span>
         </button>`;
     chrome.innerHTML = `
       <span class="subscreen-preview-heading">
@@ -15901,26 +16005,52 @@ function renderApiSettings() {
   const provider = $("#api-provider");
   if (!provider) return;
   provider.value = settings.provider;
-  $("#api-base-url").value = settings.baseUrl;
+  const baseUrl = $("#api-base-url");
+  baseUrl.value = settings.baseUrl;
+  baseUrl.disabled = settings.provider !== "自定义兼容 API";
   $("#api-key").value = settings.apiKey;
-  $("#api-model").value = settings.model;
+  const model = $("#api-model");
+  const availableModels = settings.provider === "Anthropic" ? ["claude-sonnet-4-5", "claude-opus-4-1"] : settings.provider === "自定义兼容 API" ? [settings.model || "自定义模型"] : ["gpt-4.1", "gpt-4o", "gpt-4o-mini"];
+  model.innerHTML = availableModels.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
+  if (!availableModels.includes(settings.model)) settings.model = availableModels[0];
+  model.value = settings.model;
   $("#api-status-text").textContent = settings.status;
   $("#api-status-dot").classList.toggle("connected", settings.status === "已连接");
+  $("#api-status-dot").classList.toggle("error", ["连接失败", "配置已失效"].includes(settings.status));
+  $("#api-last-tested").textContent = settings.lastTest ? `最近验证 ${settings.lastTest}` : "尚未验证";
   $("#api-scope-list").innerHTML = settings.scopes.map((scope) => `<span>${escapeHtml(scope)}</span>`).join("");
+  const feedback = $("#api-form-feedback");
+  if (feedback && !feedback.textContent) feedback.textContent = "填写密钥并测试连接，验证成功后保存设置。";
+  const help = $("#api-key-help");
+  if (help) {
+    help.href = settings.provider === "Anthropic" ? "https://console.anthropic.com/settings/keys" : settings.provider === "OpenAI" ? "https://platform.openai.com/api-keys" : "#";
+    help.hidden = settings.provider === "自定义兼容 API";
+  }
 }
 
 function updateApiSetting(key, value) {
   APP_STATE.apiSettings[key] = value;
-  APP_STATE.apiSettings.status = APP_STATE.apiSettings.apiKey ? "待测试" : "未配置";
+  if (key === "provider") {
+    const defaults = { OpenAI: ["https://api.openai.com/v1", "gpt-4.1"], Anthropic: ["https://api.anthropic.com", "claude-sonnet-4-5"], "自定义兼容 API": ["", "自定义模型"] };
+    [APP_STATE.apiSettings.baseUrl, APP_STATE.apiSettings.model] = defaults[value];
+  }
+  APP_STATE.apiSettings.status = APP_STATE.apiSettings.apiKey ? "待验证" : "未配置";
+  APP_STATE.apiSettings.lastTest = "";
+  const feedback = $("#api-form-feedback");
+  if (feedback) { feedback.className = "api-form-feedback"; feedback.textContent = "配置已修改，请重新测试连接。"; }
   renderApiSettings();
 }
 
 function resetApiSettings() {
   APP_STATE.apiSettings = JSON.parse(JSON.stringify(DEFAULT_API_SETTINGS));
+  $("#api-key").type = "password";
+  $("#api-key-toggle").textContent = "显示";
+  const feedback = $("#api-form-feedback");
+  if (feedback) { feedback.className = "api-form-feedback"; feedback.textContent = "已恢复默认服务商和地址，请重新填写 API Key。"; }
   renderApiSettings();
   showSheet({
     type: "Toast",
-    title: "API 接入已恢复默认",
+    title: "API 设置已恢复默认",
     copy: "服务商、Base URL、默认模型和连接状态已恢复默认。",
     detail: "screen-config",
   });
@@ -15928,38 +16058,57 @@ function resetApiSettings() {
 
 function saveApiSettings() {
   const settings = APP_STATE.apiSettings;
-  settings.status = settings.apiKey ? settings.status : "未配置";
+  const feedback = $("#api-form-feedback");
+  if (!settings.apiKey.trim()) {
+    settings.status = "未配置";
+    if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入 API Key 后再保存。"; }
+    renderApiSettings();
+    return;
+  }
+  if (settings.status !== "已连接") {
+    if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请先测试连接，验证成功后再保存。"; }
+    renderApiSettings();
+    return;
+  }
+  $("#api-key").type = "password";
+  $("#api-key-toggle").textContent = "显示";
+  $("#api-key-toggle").setAttribute("aria-label", "显示 API Key");
+  $("#api-key-toggle").title = "显示 API Key";
   renderApiSettings();
+  if (feedback) { feedback.className = "api-form-feedback success"; feedback.textContent = "设置已保存，问答页的可用模型列表已刷新。"; }
   showSheet({
     type: "Toast",
-    title: "API 接入已保存",
-    copy: settings.apiKey ? `${settings.provider} 已保存，默认模型：${settings.model}。` : "API 接入信息已保存，填写 API Key 后可测试连接。",
+    title: "API 设置已保存",
+    copy: `${settings.provider} 已保存，默认模型：${settings.model}。`,
     detail: "screen-config",
   });
 }
 
 function testApiConnection() {
   const settings = APP_STATE.apiSettings;
+  const feedback = $("#api-form-feedback");
   if (!settings.apiKey.trim()) {
     settings.status = "未配置";
     renderApiSettings();
-    showSheet({
-      type: "Toast",
-      title: "请先填写 API Key",
-      copy: "填写 API Key 后再测试连接。",
-      detail: "screen-config",
-    });
+    if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入 API Key 后再测试连接。"; }
     return;
   }
-  settings.status = "已连接";
-  settings.lastTest = nowText();
+  if (!settings.baseUrl.trim()) {
+    settings.status = "连接失败";
+    renderApiSettings();
+    if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入有效的 API Base URL。"; }
+    return;
+  }
+  settings.status = "验证中";
   renderApiSettings();
-  showSheet({
-    type: "Toast",
-    title: "API 连接正常",
-    copy: `${settings.provider} 连接成功，默认模型 ${settings.model} 可用于全部 AI 功能点。`,
-    detail: "screen-config",
-  });
+  if (feedback) { feedback.className = "api-form-feedback"; feedback.textContent = "正在验证密钥、服务地址和模型列表…"; }
+  setTimeout(() => {
+    settings.status = "已连接";
+    settings.lastTest = nowText();
+    renderApiSettings();
+    if (feedback) { feedback.className = "api-form-feedback success"; feedback.textContent = `连接成功，已获取 ${$("#api-model").options.length} 个可用模型。`;
+    }
+  }, 700);
 }
 
 function resetConfigPage() {
@@ -15974,7 +16123,7 @@ function renderConfigPage() {
   APP_STATE.configSubpage = "api";
   const isApi = true;
   const title = $("#config-page-title");
-  if (title) title.textContent = "API 接入";
+  if (title) title.textContent = "API 设置";
   const actions = $("#config-page-actions");
   if (actions) actions.style.display = isApi ? "none" : "flex";
   $$("[data-config-panel]").forEach((panel) => {
@@ -16274,6 +16423,24 @@ function bindEvents() {
   $("#api-key").addEventListener("input", (event) => updateApiSetting("apiKey", event.target.value));
   $("#api-model").addEventListener("input", (event) => updateApiSetting("model", event.target.value));
   $("#api-test-connection").addEventListener("click", testApiConnection);
+  $("#api-key-toggle").addEventListener("click", () => {
+    const input = $("#api-key");
+    const visible = input.type === "text";
+    input.type = visible ? "password" : "text";
+    $("#api-key-toggle").textContent = visible ? "显示" : "隐藏";
+    $("#api-key-toggle").setAttribute("aria-label", visible ? "显示 API Key" : "隐藏 API Key");
+    $("#api-key-toggle").title = visible ? "显示 API Key" : "隐藏 API Key";
+  });
+  $("#api-refresh-models").addEventListener("click", () => {
+    const feedback = $("#api-form-feedback");
+    if (APP_STATE.apiSettings.status !== "已连接") {
+      feedback.className = "api-form-feedback error";
+      feedback.textContent = "请先测试连接，再刷新模型列表。";
+      return;
+    }
+    feedback.className = "api-form-feedback success";
+    feedback.textContent = `模型列表已刷新，共 ${$("#api-model").options.length} 个可用模型。`;
+  });
   const tokenQuotaModal = $("#token-quota-modal");
   const hideTokenQuotaModal = () => {
     tokenQuotaModal.classList.remove("show");
@@ -16753,6 +16920,113 @@ syncQuickFeatureConfig();
 renderApp();
 loadWindowsInstalledApps();
 setInterval(updateTimeDisplay, 1000);
+    </script>
+    <script>
+// 全局AI智能问答 P0 原型状态机；复用现有页面和 API 配置页。
+const QA_STATE = {
+  sourcePage: "monitor", mode: "voice", phase: "idle", draft: "", cloudAccepted: true,
+  messages: [], callActive: false, speaking: false, interrupted: false, micMuted: false, modelProvider: APP_STATE.apiSettings.provider, issue: "", permission: "authorized",
+  sessionDrawerOpen: false,
+  recentSessions: [
+    {id:"qa-s1",title:"量子计算的基本原理",time:"今天 15:42",preview:"量子计算利用量子比特处理信息。"},
+    {id:"qa-s2",title:"活动主题文案建议",time:"今天 11:18",preview:"为产品发布活动整理主题和开场文案。"},
+    {id:"qa-s3",title:"人工智能发展阶段",time:"昨天 20:06",preview:"梳理人工智能发展的主要阶段。"},
+    {id:"qa-s4",title:"如何理解大语言模型",time:"昨天 16:30",preview:"解释大语言模型的训练与生成机制。"},
+  ],
+};
+let qaTimer = null;
+let qaAutoListenTimer = null;
+function qaModels(){
+  const configured = [`${APP_STATE.apiSettings.provider}|${APP_STATE.apiSettings.model}`];
+  return configured.filter(Boolean);
+}
+function qaRoot(){return document.querySelector('.voice-console-preview[data-subscreen-preview="voice"]:not(.physical-screen-mirror-source)');}
+function qaShowModal(title, copy, confirmLabel, onConfirm){
+  let layer=document.querySelector("#qa-modal-layer");
+  if(!layer){layer=document.createElement("div");layer.id="qa-modal-layer";layer.className="qa-modal-layer";qaRoot()?.append(layer);}
+  layer.innerHTML=`<div class="qa-modal" role="dialog" aria-modal="true"><h4>${escapeHtml(title)}</h4><p>${escapeHtml(copy)}</p><div class="qa-modal-actions"><button data-qa-modal-cancel>取消</button><button class="primary" data-qa-modal-confirm>${escapeHtml(confirmLabel)}</button></div></div>`;
+  layer.classList.add("open");
+  layer.querySelector("[data-qa-modal-cancel]").onclick=()=>layer.classList.remove("open");
+  layer.querySelector("[data-qa-modal-confirm]").onclick=()=>{layer.classList.remove("open");onConfirm?.();};
+}
+function qaAnswer(text){
+  QA_STATE.messages.push({role:"user",text},{role:"ai",text:"正在整理回答…",loading:true});
+  QA_STATE.phase="thinking";qaRender();
+  clearTimeout(qaTimer);qaTimer=setTimeout(()=>{
+    const last=QA_STATE.messages[QA_STATE.messages.length-1];last.loading=false;
+    last.text=/量子|计算/.test(text)?"量子计算利用量子比特的叠加与纠缠处理信息，适合部分搜索、模拟与优化问题；它不会在所有任务上替代经典计算机。":"这是一个通用知识与内容问答示例。P0 会基于当前会话持续回答，并保留上下文供你继续追问。";
+    QA_STATE.phase=QA_STATE.mode==="voice"?"speaking":"success";QA_STATE.speaking=QA_STATE.mode==="voice";QA_STATE.interrupted=false;qaRender();
+  },900);
+}
+function qaSubmit(text){
+  if(!text.trim()||QA_STATE.phase==="thinking")return;
+  qaAnswer(text.trim());
+}
+function qaRender(){
+  const root=qaRoot(),panel=root?.querySelector(".voice-assistant-panel");if(!panel)return;
+  panel.classList.toggle("text-mode",QA_STATE.mode==="text");
+  root.querySelectorAll("[data-voice-input-mode]").forEach(b=>{const a=b.dataset.voiceInputMode===QA_STATE.mode;b.classList.toggle("active",a);b.setAttribute("aria-pressed",String(a));});
+  const input=root.querySelector("#voice-text-input");if(input&&document.activeElement!==input)input.value=QA_STATE.draft;
+  if(input)input.placeholder=QA_STATE.mode==="text"?"输入你的问题…":"语音模式下请点击语音球开始说话";
+  const model=root.querySelector("#voice-api-model");if(model){model.innerHTML=qaModels().map(v=>{const [p,m]=v.split("|");return `<option value="${escapeHtml(v)}">${escapeHtml(p)} · ${escapeHtml(m)}</option>`}).join("")||'<option value="">无可用模型</option>';}
+  const conversation=root.querySelector("#qa-conversation");
+  if(conversation){conversation.className=QA_STATE.messages.length?"voice-chat-window":"qa-conversation-empty";conversation.innerHTML=QA_STATE.messages.length?QA_STATE.messages.map(m=>`<div class="qa-message ${m.role==='user'?'user':'ai'} ${m.loading?'loading':''}"><small>${m.role==='user'?'你':'AI'}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):'<strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p>';conversation.scrollTop=conversation.scrollHeight;}
+  const title=root.querySelector("#voice-dialogue-title"),result=root.querySelector("#voice-dialogue-result"),orb=root.querySelector("#voice-dialogue-orb-button"),actions=root.querySelector("#qa-voice-actions");
+  const meta={idle:["你可以开始说话","点击语音球开始，或切换到文字模式。"],muted:["麦克风已关闭","点击底部麦克风按钮恢复收听。"],listening:QA_STATE.interrupted?["已打断AI，正在听你说…","AI播报已停止，请直接说出新的问题。"]:["正在收听…","检测到说话结束后将自动提交。"],recognizing:["正在识别…","原始语音仅用于本次临时处理。"],thinking:["正在思考…","切换模式不会取消当前请求。"],speaking:["正在回答…","你可以直接说话打断，原回答文字会继续保留。"],stopped:["回答已停止","文字回答已保留，可继续追问。"],failed:["未能识别语音","请重新说，或切换到文字模式。"]}[QA_STATE.phase]||["你可以开始说话",""];
+  if(title)title.textContent=meta[0];if(result)result.textContent=meta[1];if(orb){orb.classList.toggle("listening",QA_STATE.phase==="listening");orb.classList.toggle("processing",["recognizing","thinking"].includes(QA_STATE.phase));}
+  if(actions){actions.classList.toggle("active",["listening","speaking"].includes(QA_STATE.phase));actions.querySelector("#qa-finish-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-cancel-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-stop-speaking").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";actions.querySelector("#qa-interrupt-ai").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";}
+  root.querySelector(".qa-banner")?.remove();
+  const issues={"mic-permission":"麦克风未授权 · 前往系统设置开启权限，或改用文字模式","mic-busy":"麦克风正被其他应用占用 · 释放后重试，或改用文字模式","mic-missing":"未检测到麦克风设备 · 请检查设备连接或系统设置","offline":"当前无网络 · 会话和草稿已保留，请恢复网络后重试","no-model":"暂无可用模型 · 请前往 API 设置完成配置","model-invalid":"当前模型已失效 · 请选择其他可用模型或前往 API 设置","recognition-failed":"未能识别语音 · 请重新说，或切换到文字模式"};
+  if(QA_STATE.issue&&issues[QA_STATE.issue]){const banner=document.createElement("div");banner.className="qa-banner";banner.textContent=issues[QA_STATE.issue];root.append(banner);}
+  const callFooter=root.querySelector(".qa-call-footer");if(callFooter)callFooter.classList.toggle("active",QA_STATE.callActive);
+  const callMic=root.querySelector("#qa-call-mic");if(callMic){callMic.classList.toggle("muted",QA_STATE.micMuted);callMic.setAttribute("aria-pressed",String(QA_STATE.micMuted));callMic.setAttribute("aria-label",QA_STATE.micMuted?"打开麦克风":"关闭麦克风");callMic.title=QA_STATE.micMuted?"打开麦克风":"关闭麦克风";}
+  const permissionPanel=document.querySelector("#qa-permission-panel"),permissionTitle=document.querySelector("#qa-permission-title"),permissionDescription=document.querySelector("#qa-permission-description"),permissionPrimary=document.querySelector("#qa-permission-primary"),permissionRecheck=document.querySelector("#qa-permission-recheck"),permissionDemo=document.querySelector("#qa-permission-demo");
+  const permissionMeta={"first-use":["首次使用","使用语音问答前需要允许 Agent PC 访问麦克风；文字问答不受影响。","允许使用麦克风"],authorized:["已授权","全局AI智能问答可在副屏语音模式中使用麦克风。",""],unauthorized:["未授权","尚未获得麦克风权限，语音模式不可用；文字问答不受影响。","前往系统设置"],expired:["权限失效","麦克风授权已被系统撤销或失效，请重新前往系统设置授权。","前往系统设置"],waiting:["等待重新授权","请在 Windows 麦克风设置中完成授权，返回后重新检查。",""],checking:["正在检查权限","正在读取 Windows 麦克风权限状态，请稍候。","检查中"],error:["状态检测失败","暂时无法读取麦克风权限状态，已保留上一次成功状态。","重新检查"]}[QA_STATE.permission]||["状态未知","暂时无法读取麦克风权限状态。","重新检查"];
+  if(permissionPanel)permissionPanel.dataset.permission=QA_STATE.permission;if(permissionTitle)permissionTitle.textContent=permissionMeta[0];if(permissionDescription)permissionDescription.textContent=permissionMeta[1];if(permissionDemo)permissionDemo.value=QA_STATE.permission;
+  if(permissionPrimary){permissionPrimary.hidden=!permissionMeta[2];permissionPrimary.textContent=permissionMeta[2];permissionPrimary.disabled=QA_STATE.permission==="checking";}if(permissionRecheck)permissionRecheck.hidden=!['waiting','unauthorized','expired'].includes(QA_STATE.permission);
+  const drawer=root.querySelector("#qa-session-drawer"),toggle=root.querySelector("#qa-session-toggle"),recentList=root.querySelector("#qa-recent-list");if(drawer){drawer.classList.toggle("open",QA_STATE.sessionDrawerOpen);drawer.setAttribute("aria-hidden",String(!QA_STATE.sessionDrawerOpen));}if(toggle)toggle.setAttribute("aria-expanded",String(QA_STATE.sessionDrawerOpen));
+  if(recentList)recentList.innerHTML=QA_STATE.recentSessions.slice(0,3).map(s=>`<button type="button" class="qa-recent-item" data-qa-session-id="${s.id}"><strong>${escapeHtml(s.title)}</strong><small>${escapeHtml(s.time)}</small></button>`).join("");
+  qaRenderMainHistory();
+}
+function qaRenderMainHistory(filter=""){
+  const list=document.querySelector("#qa-main-history-list");if(!list)return;const keyword=filter.trim().toLowerCase();const sessions=QA_STATE.recentSessions.filter(s=>!keyword||`${s.title} ${s.preview}`.toLowerCase().includes(keyword));
+  list.innerHTML=sessions.length?sessions.map(s=>`<div class="qa-main-history-row" data-qa-main-session="${s.id}"><div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.preview)}</p></div><span>${escapeHtml(s.time)}</span><div><button type="button" data-qa-session-detail="${s.id}">查看详情</button> <button type="button" data-qa-session-delete="${s.id}">删除</button></div></div>`).join(""):'<div class="empty-state">没有匹配的会话</div>';
+}
+function qaOpenSession(id){const session=QA_STATE.recentSessions.find(s=>s.id===id);if(!session)return;QA_STATE.messages=[{role:"user",text:session.title},{role:"ai",text:session.preview}];QA_STATE.phase="success";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaCreateSession(){if(QA_STATE.messages.length){const first=QA_STATE.messages.find(m=>m.role==="user");QA_STATE.recentSessions.unshift({id:`qa-${Date.now()}`,title:first?.text?.slice(0,22)||"新会话",time:"刚刚",preview:QA_STATE.messages.find(m=>m.role==="ai")?.text||""});}QA_STATE.messages=[];QA_STATE.draft="";QA_STATE.phase="idle";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaRequestPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
+function qaOpenPermissionSettings(){QA_STATE.permission="waiting";qaRender();showSheet({type:"系统设置",title:"请完成麦克风授权",copy:"已定位到 Windows 隐私和安全性中的麦克风设置。完成授权并返回 Agent PC 后，请点击“重新检查”。",detail:"voice",detailLabel:""});}
+function qaRecheckPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
+function qaScheduleAutoSubmit(followup=false){clearTimeout(qaAutoListenTimer);qaAutoListenTimer=setTimeout(()=>{if(QA_STATE.phase!=="listening"||QA_STATE.micMuted)return;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理"),450);},1400);}
+document.addEventListener("input",e=>{if(e.target.id==="voice-text-input")QA_STATE.draft=e.target.value;},true);
+document.addEventListener("pointerdown",e=>{if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();}},true);
+document.addEventListener("keydown",e=>{if(e.target.id==="voice-text-input"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.stopImmediatePropagation();QA_STATE.draft=e.target.value;qaSubmit(QA_STATE.draft);QA_STATE.draft="";e.target.value="";}},true);
+document.addEventListener("click",e=>{
+  const entry=e.target.closest("[data-subscreen-ai-ball]");if(entry){e.preventDefault();e.stopImmediatePropagation();QA_STATE.sourcePage=APP_STATE.currentPage==="voice"?QA_STATE.sourcePage:APP_STATE.currentPage;QA_STATE.mode=QA_STATE.mode||"voice";setActiveTab("voice");qaRender();return;}
+  const mode=e.target.closest("[data-voice-input-mode]");if(mode){e.preventDefault();e.stopImmediatePropagation();const next=mode.dataset.voiceInputMode;if(next==="text"){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;if(["listening","muted"].includes(QA_STATE.phase))QA_STATE.phase="idle";if(QA_STATE.phase==="speaking"){QA_STATE.phase="stopped";QA_STATE.speaking=false;}}QA_STATE.mode=next;qaRender();if(next==="text")qaRoot()?.querySelector("#voice-text-input")?.focus();return;}
+  if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.permission!=="authorized"){QA_STATE.mode="voice";if(QA_STATE.permission==="first-use")qaRequestPermission();else{QA_STATE.issue="mic-permission";qaRender();}return;}QA_STATE.mode="voice";QA_STATE.callActive=true;QA_STATE.micMuted=false;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(false);return;}
+  if(e.target.closest("#voice-dialogue-orb-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.permission!=="authorized"){if(QA_STATE.permission==="first-use")qaRequestPermission();else{QA_STATE.issue="mic-permission";qaRender();}return;}QA_STATE.callActive=true;if(QA_STATE.micMuted)QA_STATE.micMuted=false;if(!["recognizing","thinking"].includes(QA_STATE.phase)){const followup=QA_STATE.phase==="speaking";QA_STATE.mode="voice";QA_STATE.interrupted=followup;QA_STATE.speaking=false;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(followup);}return;}
+  if(e.target.closest("#qa-finish-listening")){const followup=QA_STATE.interrupted;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理"),500);return;}
+  if(e.target.closest("#qa-cancel-listening")){QA_STATE.phase=QA_STATE.interrupted?"stopped":"idle";QA_STATE.interrupted=false;qaRender();return;}
+  if(e.target.closest("#qa-stop-speaking")){QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
+  if(e.target.closest("#qa-interrupt-ai")){QA_STATE.speaking=false;QA_STATE.interrupted=true;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(true);return;}
+  if(e.target.closest("#qa-call-mic")){if(!QA_STATE.callActive)return;QA_STATE.micMuted=!QA_STATE.micMuted;if(QA_STATE.micMuted){clearTimeout(qaAutoListenTimer);if(QA_STATE.phase==="listening")QA_STATE.phase="muted";}else if(QA_STATE.phase==="muted"){QA_STATE.phase="listening";qaScheduleAutoSubmit(false);}qaRender();return;}
+  if(e.target.closest("#qa-end-voice")){clearTimeout(qaAutoListenTimer);clearTimeout(qaTimer);QA_STATE.callActive=false;QA_STATE.speaking=false;QA_STATE.interrupted=false;QA_STATE.phase="idle";QA_STATE.micMuted=false;const pending=QA_STATE.messages[QA_STATE.messages.length-1];if(pending?.loading)QA_STATE.messages.pop();qaRender();return;}
+  if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";qaSubmit(QA_STATE.draft);QA_STATE.draft="";if(i)i.value="";return;}
+  if(e.target.closest("#qa-session-toggle")){QA_STATE.sessionDrawerOpen=!QA_STATE.sessionDrawerOpen;qaRender();return;}
+  if(e.target.closest("#qa-session-close")){QA_STATE.sessionDrawerOpen=false;qaRender();return;}
+  if(e.target.closest("#qa-new-session")){qaCreateSession();return;}
+  const recent=e.target.closest("[data-qa-session-id]");if(recent){qaOpenSession(recent.dataset.qaSessionId);return;}
+  if(e.target.closest("#qa-view-all-sessions")){QA_STATE.sessionDrawerOpen=false;qaRender();const page=document.querySelector("#qa-main-history-page");page?.classList.add("open");page?.setAttribute("aria-hidden","false");page?.scrollIntoView({behavior:"smooth",block:"start"});return;}
+  const detail=e.target.closest("[data-qa-session-detail]");if(detail){const session=QA_STATE.recentSessions.find(s=>s.id===detail.dataset.qaSessionDetail);if(session)showSheet({type:"主屏会话详情",title:session.title,copy:session.preview,detail:"voice",detailLabel:""});return;}
+  const remove=e.target.closest("[data-qa-session-delete]");if(remove){QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.id!==remove.dataset.qaSessionDelete);qaRenderMainHistory(document.querySelector("#qa-history-search")?.value||"");showSheet({type:"主屏会话记录",title:"会话已删除",copy:"该会话已从主屏会话记录中删除。",detail:"voice",detailLabel:""});return;}
+  if(e.target.closest("#voice-api-entry")){QA_STATE.draft=qaRoot()?.querySelector("#voice-text-input")?.value||QA_STATE.draft;return;}
+  if(e.target.closest("#qa-permission-primary")){if(QA_STATE.permission==="first-use"||QA_STATE.permission==="error")qaRequestPermission();else if(QA_STATE.permission==="unauthorized"||QA_STATE.permission==="expired")qaOpenPermissionSettings();return;}
+  if(e.target.closest("#qa-permission-recheck")){qaRecheckPermission();return;}
+},true);
+document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){QA_STATE.permission=e.target.value;QA_STATE.issue=["unauthorized","expired"].includes(e.target.value)?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();const [p,m]=e.target.value.split("|");if(QA_STATE.messages.length&&p!==QA_STATE.modelProvider)qaShowModal("切换模型服务商","当前会话内容将发送给新的模型服务商。是否继续？","确认切换",()=>{QA_STATE.modelProvider=p;APP_STATE.apiSettings.provider=p;APP_STATE.apiSettings.model=m;qaRender();});},true);
+document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRenderMainHistory(e.target.value);},true);
+qaRender();
     </script>
   </body>
 </html>
