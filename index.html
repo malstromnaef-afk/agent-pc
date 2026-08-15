@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Agent PC 深色双屏原型</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%230b1518'/%3E%3Ctext x='16' y='21' text-anchor='middle' font-size='14' font-family='Arial' font-weight='700' fill='%232ef28a'%3EAP%3C/text%3E%3C/svg%3E" />
     <style>
 :root {
   --bg: #121416;
@@ -8927,19 +8928,28 @@ pre {
         text-orientation: upright;
         box-shadow: none;
       }
-/* 全局AI智能问答 P0：副屏完整交互 */
+/* AI 智能问答 P0：副屏完整交互 */
 .agent-team-panel, .voice-agent-team-toggle, .voice-history-panel, .voice-result-stack, #voice-talk-button { display:none !important; }
 .voice-assistant-panel.text-mode #voice-mic-button{display:grid!important}.voice-assistant-panel:not(.text-mode) #voice-mic-button{display:none!important}
 #voice .voice-console-grid { grid-template-columns:minmax(0,1fr) !important; }
 #voice .voice-assistant-title { right:18px; align-items:center; gap:10px; }
 .qa-session-actions button,.qa-session-actions select,.qa-voice-actions button { border:1px solid rgba(70,235,222,.28); border-radius:999px; background:rgba(7,12,16,.7); color:#dffbfa; min-height:30px; padding:0 11px; cursor:pointer; }
-.qa-session-actions { display:flex; gap:6px; margin-left:auto; }
-.qa-session-icon{width:34px!important;padding:0!important;display:grid;place-items:center;font-size:16px}
-.qa-session-drawer{position:absolute;z-index:55;inset:0 0 0 auto;width:min(300px,46%);display:grid;grid-template-rows:auto auto 1fr auto;gap:12px;padding:18px;border-left:1px solid rgba(70,235,222,.24);background:rgba(8,15,18,.98);box-shadow:-20px 0 46px rgba(0,0,0,.38);transform:translateX(104%);transition:transform .2s ease}
-.qa-session-drawer.open{transform:translateX(0)}.qa-session-drawer-head{display:flex;align-items:center;justify-content:space-between}.qa-session-drawer-head strong{font-size:15px}.qa-session-drawer-head button{width:32px;height:32px;border:1px solid rgba(255,255,255,.12);border-radius:50%;background:transparent;color:#dffbfa;cursor:pointer}
-.qa-session-new,.qa-session-all{min-height:40px;border:1px solid rgba(70,235,222,.28);border-radius:12px;background:rgba(25,182,171,.14);color:#a6fff6;font-weight:900;cursor:pointer}.qa-session-all{justify-self:end;width:42px;padding:0;display:grid;place-items:center;background:transparent;font-size:18px}
-.qa-recent-list{display:grid;align-content:start;gap:7px;min-height:0;overflow:auto}.qa-recent-item{display:grid;gap:3px;padding:10px 11px;border:0;border-radius:11px;background:rgba(255,255,255,.045);color:#e8ffff;text-align:left;cursor:pointer}.qa-recent-item:hover{background:rgba(25,182,171,.13)}.qa-recent-item small{color:rgba(205,220,224,.52)}
+.qa-session-actions { display:flex; gap:6px; margin-left:0; }
+.voice-dialog-mode-switch{margin-left:auto}
+.qa-session-icon{width:44px!important;height:44px!important;padding:0!important;display:grid;place-items:center;font-size:16px}
+.qa-session-drawer{position:absolute;z-index:55;inset:0 auto 0 0;width:min(300px,46%);display:grid;grid-template-rows:auto auto auto auto 1fr;gap:10px;padding:18px;border-right:1px solid rgba(70,235,222,.24);background:rgba(8,15,18,.98);box-shadow:20px 0 46px rgba(0,0,0,.38);transform:translateX(-104%);transition:transform .2s ease}
+.qa-session-drawer.open{transform:translateX(0)}.qa-session-drawer-head{display:flex;align-items:center;justify-content:space-between;min-height:40px}.qa-session-drawer-head strong{font-size:16px}.qa-session-head-actions{display:flex;align-items:center;gap:5px}.qa-session-drawer-head button{width:36px;height:36px;display:grid;place-items:center;border:1px solid transparent;border-radius:10px;background:transparent;color:#dffbfa;cursor:pointer}.qa-session-drawer-head button:hover{border-color:rgba(70,235,222,.24);background:rgba(255,255,255,.04)}.qa-session-drawer-head svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.qa-session-new{min-height:44px;display:flex;align-items:center;gap:11px;padding:0 8px;border:0;border-radius:10px;background:transparent;color:#e8ffff;font-weight:900;text-align:left;cursor:pointer}.qa-session-new:hover{background:rgba(255,255,255,.05)}.qa-session-new svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}.qa-session-section-label{padding:8px 8px 2px;color:rgba(205,220,224,.48);font-size:11px;font-weight:850}
+.qa-drawer-search{width:100%;min-height:44px;border:1px solid rgba(255,255,255,.12);border-radius:11px;padding:0 11px;background:#0b1215;color:#e8ffff}.qa-drawer-search[hidden]{display:none}.qa-recent-list{display:grid;align-content:start;gap:7px;min-height:0;overflow:auto}.qa-recent-row{display:grid;grid-template-columns:minmax(0,1fr) 36px;gap:5px;align-items:stretch}.qa-recent-item{display:grid;gap:3px;padding:10px 11px;border:0;border-radius:11px;background:rgba(255,255,255,.045);color:#e8ffff;text-align:left;cursor:pointer}.qa-recent-item:hover{background:rgba(25,182,171,.13)}.qa-recent-item small{color:rgba(205,220,224,.52)}.qa-recent-delete{min-width:36px;border:1px solid rgba(255,90,116,.25);border-radius:10px;background:transparent;color:#ff9bab;cursor:pointer}
+#qa-main-history-page,#qa-session-detail-page{display:none!important}
 .qa-main-history-page{display:grid;gap:14px;margin-top:16px;padding:20px;border:1px solid rgba(70,235,222,.2);border-radius:16px;background:rgba(7,15,19,.72)}.qa-main-history-head{display:flex;align-items:center;justify-content:space-between;gap:16px}.qa-main-history-head h3{margin:0}.qa-main-history-head input{width:min(360px,42%);min-height:38px;border:1px solid rgba(255,255,255,.12);border-radius:10px;padding:0 12px;background:#0b1215;color:#e8ffff}.qa-main-history-list{display:grid;gap:8px}.qa-main-history-row{display:grid;grid-template-columns:minmax(0,1fr) 130px auto;gap:12px;align-items:center;padding:12px 14px;border:1px solid rgba(255,255,255,.08);border-radius:12px;background:rgba(255,255,255,.035)}.qa-main-history-row p{margin:3px 0 0;color:var(--muted);font-size:11px}.qa-main-history-row button{border:1px solid rgba(70,235,222,.24);border-radius:999px;padding:8px 12px;background:transparent;color:#a6fff6;cursor:pointer}
+.qa-main-history-row button,.qa-main-history-head input,.qa-session-icon,.qa-session-drawer-head button,.qa-session-new,.qa-session-all,.voice-mic-button,.voice-send-button{min-height:44px;min-width:44px}
+.voice-mode-toggle{min-height:44px;min-width:64px}
+.qa-demo-badge{display:inline-flex;align-items:center;min-height:24px;padding:0 9px;border:1px solid rgba(255,184,92,.35);border-radius:999px;color:#ffd49d;background:rgba(255,184,92,.08);font-size:10px;font-weight:850}
+.qa-session-detail-page{display:none;gap:16px;margin-top:16px;padding:20px;border:1px solid rgba(70,235,222,.22);border-radius:16px;background:rgba(7,15,19,.88)}.qa-session-detail-page.open{display:grid}.qa-session-detail-head{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}.qa-session-detail-head h3{margin:5px 0 4px}.qa-session-detail-head p{margin:0;color:var(--muted);font-size:11px}.qa-session-detail-back{min-width:88px;min-height:44px;border:1px solid rgba(70,235,222,.3);border-radius:999px;background:transparent;color:#a6fff6;font-weight:850;cursor:pointer}.qa-session-detail-meta{display:flex;flex-wrap:wrap;gap:8px}.qa-session-detail-meta span{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.05);color:rgba(222,238,241,.72);font-size:10px}.qa-session-detail-messages{display:grid;gap:10px;max-height:460px;overflow:auto;padding-right:4px}.qa-session-detail-message{display:grid;gap:5px;max-width:78%;padding:12px 14px;border:1px solid rgba(255,255,255,.09);border-radius:14px;background:rgba(255,255,255,.045)}.qa-session-detail-message.user{justify-self:end;background:rgba(46,242,138,.12);border-color:rgba(70,235,222,.22)}.qa-session-detail-message small{color:#8ff7ef;font-weight:850}.qa-session-detail-message p{margin:0;line-height:1.6}.qa-session-detail-message time{color:var(--muted);font-size:9px}.qa-delete-danger{border-color:rgba(255,90,116,.42)!important;color:#ff9bab!important}
+@media(max-width:800px){.qa-main-history-row{grid-template-columns:minmax(0,1fr);}.qa-main-history-head{align-items:stretch;flex-direction:column}.qa-main-history-head input{width:100%}.qa-session-detail-message{max-width:92%}}
+.dev-field-notes{margin-top:14px;border:1px dashed rgba(122,162,170,.34);border-radius:14px;background:rgba(4,10,13,.55);overflow:hidden}.dev-field-notes summary{min-height:44px;display:flex;align-items:center;padding:0 14px;color:#9deee8;font-size:11px;font-weight:900;cursor:pointer}.dev-field-notes[open] summary{border-bottom:1px solid rgba(255,255,255,.08)}.dev-field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;padding:12px}.dev-field-grid code{color:#8ff7ef}.dev-field-item{padding:10px;border-radius:10px;background:rgba(255,255,255,.035);font-size:10px;line-height:1.55;color:rgba(220,235,238,.7)}.dev-field-item strong{display:block;margin-bottom:3px;color:#eefefe;font-size:11px}.dev-field-rule{grid-column:1/-1;background:rgba(255,184,92,.06)}
+@media(max-width:800px){.dev-field-grid{grid-template-columns:1fr}.dev-field-rule{grid-column:auto}}
 .voice-assistant-title>span { white-space:nowrap; }
 .voice-dialogue-stage { padding-top:72px; }
 .qa-voice-actions { display:none !important; }
@@ -9020,13 +9030,13 @@ pre {
             <span>Agent 快捷操作</span>
           </button>
           <button class="nav-item" data-view="usage">
-            <span>Token 算力消耗</span>
+            <span>Token用量</span>
           </button>
           <button class="nav-item" data-view="schedule" hidden>
             <span>定时任务</span>
           </button>
           <button class="nav-item" data-view="voice">
-            <span>AI 智能语音问答</span>
+            <span>AI 智能问答</span>
           </button>
           <button class="nav-item" data-view="meeting" hidden>
             <span>AI 会议助手</span>
@@ -9286,7 +9296,7 @@ pre {
 	            <section class="panel main-panel token-dashboard">
               <div class="section-title">
                 <div class="preview-title-main">
-                  <h3>Token 算力消耗</h3>
+                  <h3>Token用量</h3>
                 </div>
                 <div class="preview-config-switch">
                   <span>副屏展示效果</span>
@@ -9294,7 +9304,7 @@ pre {
                   <small data-toggle-label>打开</small>
                 </div>
               </div>
-              <div class="token-preview-canvas" data-subscreen-preview="usage" data-subscreen-title="Token 算力消耗">
+              <div class="token-preview-canvas" data-subscreen-preview="usage" data-subscreen-title="Token用量">
 	              <div class="token-top-grid">
 	                <aside class="panel threshold-panel">
 	                  <article class="inner-card quota-display-card">
@@ -9390,6 +9400,7 @@ pre {
             <section class="panel main-panel token-history-panel">
               <div class="section-title">
                 <h3>任务消耗记录</h3>
+                <span class="qa-demo-badge">原型演示数据</span>
               </div>
 	              <div class="table" id="token-record-table">
 	                <div class="table-head"><span>任务</span><span>来源</span><span>执行时间</span><span>消耗 Token</span><span>结果</span><span>操作</span></div>
@@ -9397,6 +9408,16 @@ pre {
 	                <div class="table-row token-row"><span>长文档逻辑梳理</span><span>Claude Code</span><span>09:18</span><span>188K</span><span class="tag green">完成</span><span><button class="table-action hot">查看详情</button></span></div>
 	                <div class="table-row token-row"><span>批量生成页面规范</span><span>Cursor</span><span>昨天</span><span>512K</span><span class="tag red">异常偏高</span><span><button class="table-action hot">查看详情</button></span></div>
 	              </div>
+              <details class="dev-field-notes">
+                <summary>研发字段标注 · Token原始数据</summary>
+                <div class="dev-field-grid">
+                  <div class="dev-field-item"><strong>唯一标识</strong><code>taskId / callId: string</code><br><code>callId</code>用于API调用去重，详情不使用列表序号。</div>
+                  <div class="dev-field-item"><strong>Token数值</strong><code>inputTokens / outputTokens / totalTokens: integer|null</code><br>存储原始整数；141K仅为界面格式化结果。</div>
+                  <div class="dev-field-item"><strong>时间和状态</strong><code>startedAt / updatedAt: ISO 8601</code><br><code>status: running / completed / failed</code>。</div>
+                  <div class="dev-field-item"><strong>数据可用性</strong><code>dataStatus: available / partial / unavailable</code><br>API未返回时Token字段为<code>null</code>，不写0、不估算。</div>
+                  <div class="dev-field-item dev-field-rule"><strong>校验规则</strong><code>totalTokens = inputTokens + outputTokens</code>；模型明细之和必须等于任务总Token；缺失任一原始值时标注数据不完整。</div>
+                </div>
+              </details>
             </section>
 
             <div class="schedule-create-modal" id="token-quota-modal" aria-hidden="true">
@@ -9536,7 +9557,7 @@ pre {
             <section class="panel main-panel">
               <div class="section-title">
                 <div class="preview-title-main">
-                  <h3>全局AI智能问答</h3>
+                  <h3>AI 智能问答</h3>
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
@@ -9546,24 +9567,25 @@ pre {
                   </div>
                 </div>
               </div>
-              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="全局AI智能问答" aria-label="2:1 横屏副屏智能问答控制台预览">
+              <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="AI 智能问答" aria-label="2:1 横屏副屏智能问答控制台预览">
                 <div class="voice-console-grid agent-collapsed">
                   <article class="voice-assistant-panel">
                     <div class="voice-assistant-title">
-                      <span>全局AI智能问答</span>
+                      <span>AI 智能问答</span>
+                      <div class="qa-session-actions">
+                        <button type="button" class="qa-session-icon" id="qa-session-toggle" aria-expanded="false" aria-label="打开会话列表" title="会话">☰</button>
+                      </div>
                       <div class="voice-dialog-mode-switch" role="group" aria-label="对话模式切换">
                         <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true">语音</button>
                         <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">文字</button>
                       </div>
-                      <div class="qa-session-actions">
-                        <button type="button" class="qa-session-icon" id="qa-session-toggle" aria-expanded="false" aria-label="打开会话列表" title="会话">☰</button>
-                      </div>
                     </div>
                     <aside class="qa-session-drawer" id="qa-session-drawer" aria-hidden="true">
-                      <div class="qa-session-drawer-head"><strong>会话</strong><button type="button" id="qa-session-close" aria-label="关闭会话列表">×</button></div>
-                      <button type="button" class="qa-session-new" id="qa-new-session">＋ 新建会话</button>
+                      <div class="qa-session-drawer-head"><strong>AI 智能问答</strong><div class="qa-session-head-actions"><button type="button" id="qa-session-close" aria-label="收起会话侧栏" title="收起侧栏"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path></svg></button><button type="button" id="qa-session-search-toggle" aria-expanded="false" aria-label="搜索会话" title="搜索会话"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg></button></div></div>
+                      <button type="button" class="qa-session-new" id="qa-new-session"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>新建对话</span></button>
+                      <input class="qa-drawer-search" id="qa-drawer-search" placeholder="搜索会话" aria-label="搜索会话" hidden />
+                      <div class="qa-session-section-label">最近</div>
                       <div class="qa-recent-list" id="qa-recent-list"></div>
-                      <button type="button" class="qa-session-all" id="qa-view-all-sessions" aria-label="查看全部会话" title="查看全部会话">☰</button>
                     </aside>
                     <div class="voice-assistant-body">
                       <div class="voice-dialogue-stage" id="voice-dialogue-stage">
@@ -9659,7 +9681,7 @@ pre {
                 <div class="qa-permission-copy">
                   <span>主屏权限状态 · 麦克风</span>
                   <strong id="qa-permission-title">已授权</strong>
-                  <p id="qa-permission-description">全局AI智能问答可在副屏语音模式中使用麦克风。</p>
+                  <p id="qa-permission-description">AI 智能问答可在副屏语音模式中使用麦克风。</p>
                 </div>
                 <div class="qa-permission-actions">
                   <select id="qa-permission-demo" aria-label="切换麦克风权限状态">
@@ -9675,9 +9697,37 @@ pre {
                   <button type="button" class="secondary" id="qa-permission-recheck" hidden>重新检查</button>
                 </div>
             </section>
+            <details class="dev-field-notes">
+              <summary>研发字段标注 · 麦克风权限</summary>
+              <div class="dev-field-grid">
+                <div class="dev-field-item"><strong>权限状态</strong><code>not_requested / granted / denied / revoked</code><br>“未授权”与“权限失效”必须分开上报。</div>
+                <div class="dev-field-item"><strong>检查状态</strong><code>checking / waiting_settings / check_failed</code><br>从系统设置返回后必须重新读取真实权限。</div>
+                <div class="dev-field-item"><strong>设备异常</strong><code>device_busy / device_missing</code><br>属于设备状态，不得写成用户拒绝权限。</div>
+                <div class="dev-field-item dev-field-rule"><strong>联动规则</strong>非<code>granted</code>状态下禁止进入真实收听；文字问答始终可用。</div>
+              </div>
+            </details>
             <section class="qa-main-history-page" id="qa-main-history-page" aria-hidden="false">
-              <div class="qa-main-history-head"><div><h3>AI问答会话记录</h3><p class="muted">完整历史、搜索、删除和会话详情均在主屏完成。</p></div><input id="qa-history-search" placeholder="搜索会话" aria-label="搜索会话" /></div>
+              <div class="qa-main-history-head"><div><span class="qa-demo-badge">原型演示数据</span><h3>AI问答会话记录</h3><p class="muted">完整历史、搜索、删除和会话详情均在主屏完成。</p></div><input id="qa-history-search" placeholder="搜索会话" aria-label="搜索会话" /></div>
               <div class="qa-main-history-list" id="qa-main-history-list"></div>
+            </section>
+
+            <section class="qa-session-detail-page" id="qa-session-detail-page" aria-hidden="true">
+              <div class="qa-session-detail-head">
+                <div><span class="qa-demo-badge">原型演示数据</span><h3 id="qa-session-detail-title">会话详情</h3><p id="qa-session-detail-subtitle"></p></div>
+                <button type="button" class="qa-session-detail-back" id="qa-session-detail-back">返回记录</button>
+              </div>
+              <div class="qa-session-detail-meta" id="qa-session-detail-meta"></div>
+              <div class="qa-session-detail-messages" id="qa-session-detail-messages"></div>
+              <details class="dev-field-notes">
+                <summary>研发字段标注 · 会话与消息</summary>
+                <div class="dev-field-grid">
+                  <div class="dev-field-item"><strong>会话主键</strong><code>sessionId: string</code><br>全局唯一；只用于详情、删除、恢复和同步，正式UI不展示。</div>
+                  <div class="dev-field-item"><strong>会话时间</strong><code>createdAt / updatedAt: ISO 8601</code><br>存储UTC时间，展示时转换系统时区。</div>
+                  <div class="dev-field-item"><strong>消息主键与类型</strong><code>messageId</code>、<code>role</code>、<code>inputType</code><br><code>inputType</code>仅用于用户消息：text / voice。</div>
+                  <div class="dev-field-item"><strong>AI回答归属</strong><code>providerId / modelId</code><br>必须记在每条assistant消息上，不只记在会话上。</div>
+                  <div class="dev-field-item dev-field-rule"><strong>状态枚举</strong><code>thinking / streaming / speaking / success / stopped / failed / cancelled</code>。停止播报不等于停止生成，已生成文字必须保留。</div>
+                </div>
+              </details>
             </section>
 
             <section class="panel main-panel voice-history-panel">
@@ -10169,7 +10219,7 @@ pre {
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <span>接入状态</span>
-                      <small>检查当前 API Key 和服务地址是否可用</small>
+                      <small>HTML 原型仅模拟检查 API Key 格式和服务地址，不发起真实请求</small>
                     </div>
                     <div class="api-setting-control">
                       <div class="api-status-line">
@@ -10183,7 +10233,7 @@ pre {
                   <article class="api-setting-row">
                     <div class="api-setting-name">
                       <label for="api-provider">服务商</label>
-                      <small>选择全局AI智能问答调用的模型服务</small>
+                      <small>选择AI 智能问答调用的模型服务</small>
                     </div>
                     <div class="api-setting-control">
                       <select id="api-provider">
@@ -10248,6 +10298,16 @@ pre {
                   <button class="soft-button" id="api-test-connection">测试连接</button>
                   <button class="primary-button" id="save-config">保存设置</button>
                 </div>
+                <details class="dev-field-notes">
+                  <summary>研发字段标注 · API配置</summary>
+                  <div class="dev-field-grid">
+                    <div class="dev-field-item"><strong>配置标识</strong><code>configId / providerId / defaultModelId: string</code><br>主键使用稳定ID，不使用中文名称。</div>
+                    <div class="dev-field-item"><strong>密钥存储</strong><code>credentialRef: string|null</code><br>前端、日志和业务数据不保存或回显完整API Key。</div>
+                    <div class="dev-field-item"><strong>连接状态</strong><code>unconfigured / pending / testing / connected / failed / expired</code><br>页面中文文案由状态枚举映射。</div>
+                    <div class="dev-field-item"><strong>验证结果</strong><code>lastValidatedAt: ISO 8601|null</code><br><code>validationErrorCode</code>用于区分URL、密钥、模型和网络错误。</div>
+                    <div class="dev-field-item dev-field-rule"><strong>原型边界</strong>HTML只模拟格式验证；正式产品由安全凭证模块保存密钥，并由主进程发起连接验证。</div>
+                  </div>
+                </details>
               </section>
             </section>
           </div>
@@ -10410,9 +10470,9 @@ if (prototypeWorkbenchTitle) {
 const PAGE_TITLES = {
   monitor: "Agent 任务进度",
   shortcut: "Agent 快捷操作",
-  usage: "Token 算力消耗",
+  usage: "Token用量",
   schedule: "定时任务",
-  voice: "AI 智能语音问答",
+  voice: "AI 智能问答",
   meeting: "AI 会议助手",
   "window-app": "窗口应用",
   album: "AI 相册",
@@ -10427,9 +10487,9 @@ const PAGE_TITLES = {
 const FEATURE_PAGES = {
   // "Agent 任务进度": "monitor", // 当前版本隐藏，保留页面代码便于后续恢复
   "Agent 快捷操作": "shortcut",
-  "Token 算力消耗": "usage",
+  "Token用量": "usage",
   "定时任务": "schedule",
-  "AI 智能语音问答": "voice",
+  "AI 智能问答": "voice",
   "AI 会议助手": "meeting",
   "安全告警": "security",
   // "虚拟桌面宠物": "pet", // 暂停启用，后期可恢复
@@ -10450,11 +10510,11 @@ const RULE_BUTTONS = [
 ];
 
 const SECONDARY_MODES = {
-  工作模式: ["Agent 快捷操作", "Token 算力消耗", "安全告警"],
+  工作模式: ["Agent 快捷操作", "Token用量", "安全告警"],
   自动化模式: ["定时任务", "安全告警"],
-  会议模式: ["AI 会议助手", "AI 智能语音问答", "安全告警"],
-  安全模式: ["安全告警", "Token 算力消耗"],
-  陪伴模式: ["AI 智能语音问答"], // 桌面宠物暂不启用
+  会议模式: ["AI 会议助手", "AI 智能问答", "安全告警"],
+  安全模式: ["安全告警", "Token用量"],
+  陪伴模式: ["AI 智能问答"], // 桌面宠物暂不启用
 };
 
 const FEATURE_CONFIG = {
@@ -10501,7 +10561,7 @@ const FEATURE_CONFIG = {
       { id: "normal", label: "快捷操作", title: "", copy: "" },
     ],
   },
-  "Token 算力消耗": {
+  "Token用量": {
     kicker: "TOKEN USAGE",
     defaultTrigger: "normal",
     modules: [
@@ -10544,7 +10604,7 @@ const FEATURE_CONFIG = {
       { id: "empty", label: "空状态", title: "", copy: "" },
     ],
   },
-  "AI 智能语音问答": {
+  "AI 智能问答": {
     kicker: "VOICE QA",
     defaultTrigger: "normal",
     modules: [
@@ -10685,13 +10745,20 @@ const APP_STATE = {
     temperatureUnit: "C",
   },
   apiSettings: {
+    configId: "api-config-primary",
     status: "未配置",
+    connectionStatus: "unconfigured",
     provider: "OpenAI",
+    providerId: "openai",
     baseUrl: "https://api.openai.com/v1",
     apiKey: "",
     model: "gpt-4.1",
+    defaultModelId: "gpt-4.1",
     lastTest: "",
-    scopes: ["全局AI智能问答"],
+    lastValidatedAt: null,
+    validationErrorCode: null,
+    credentialRef: null,
+    scopes: ["AI 智能问答"],
   },
   previewEnabled: {
     monitor: true,
@@ -11144,41 +11211,68 @@ const APP_STATE = {
     },
     records: [
       {
+        id: "token-task-agent-pc-prototype",
+        taskId: "task-agent-pc-prototype",
+        callId: "call-agent-pc-20260815-001",
         task: "Agent PC 原型重构",
         source: "Codex",
+        startedAt: "2026-08-15T02:54:00.000Z",
+        updatedAt: "2026-08-15T02:54:00.000Z",
+        inputTokens: 103000,
+        outputTokens: 38000,
+        totalTokens: 141000,
+        dataStatus: "available",
         time: "10:54",
         cost: "141K",
         result: "运行中",
         models: [
-          { name: "GPT-4.1", tokens: "82K", percent: 58 },
-          { name: "Claude Sonnet 4", tokens: "41K", percent: 29 },
-          { name: "Embedding", tokens: "18K", percent: 13 },
+          { providerId: "openai", modelId: "gpt-4.1", name: "GPT-4.1", tokenCount: 82000, tokens: "82K", percent: 58 },
+          { providerId: "anthropic", modelId: "claude-sonnet-4", name: "Claude Sonnet 4", tokenCount: 41000, tokens: "41K", percent: 29 },
+          { providerId: "embedding-service", modelId: "embedding", name: "Embedding", tokenCount: 18000, tokens: "18K", percent: 13 },
         ],
         analysis: { status: "持续消耗中", reason: "任务仍在执行，消耗会随窗口识别和页面调整继续变化。", advice: "完成后再判断是否异常；可刷新消耗查看最新模型分布。" },
       },
       {
+        id: "token-task-document-logic",
+        taskId: "task-document-logic",
+        callId: "call-document-20260815-001",
         task: "长文档逻辑梳理",
         source: "Claude Code",
+        startedAt: "2026-08-15T01:18:00.000Z",
+        updatedAt: "2026-08-15T01:18:00.000Z",
+        inputTokens: 154000,
+        outputTokens: 34000,
+        totalTokens: 188000,
+        dataStatus: "available",
         time: "09:18",
         cost: "188K",
         result: "完成",
         models: [
-          { name: "Claude Sonnet 4", tokens: "126K", percent: 67 },
-          { name: "GPT-4.1", tokens: "44K", percent: 23 },
-          { name: "Embedding", tokens: "18K", percent: 10 },
+          { providerId: "anthropic", modelId: "claude-sonnet-4", name: "Claude Sonnet 4", tokenCount: 126000, tokens: "126K", percent: 67 },
+          { providerId: "openai", modelId: "gpt-4.1", name: "GPT-4.1", tokenCount: 44000, tokens: "44K", percent: 23 },
+          { providerId: "embedding-service", modelId: "embedding", name: "Embedding", tokenCount: 18000, tokens: "18K", percent: 10 },
         ],
         analysis: { status: "消耗正常", reason: "长文档需要较多上下文读取，但未出现多轮重试或异常调用。", advice: "同类任务可继续使用当前模型；超长文档建议先拆分章节。" },
       },
       {
+        id: "token-task-page-guidelines",
+        taskId: "task-page-guidelines",
+        callId: "call-guidelines-20260814-001",
         task: "批量生成页面规范",
         source: "Cursor",
+        startedAt: "2026-08-14T09:30:00.000Z",
+        updatedAt: "2026-08-14T09:30:00.000Z",
+        inputTokens: 423000,
+        outputTokens: 89000,
+        totalTokens: 512000,
+        dataStatus: "available",
         time: "昨天",
         cost: "512K",
         result: "异常偏高",
         models: [
-          { name: "GPT-4.1", tokens: "302K", percent: 59 },
-          { name: "Claude Sonnet 4", tokens: "148K", percent: 29 },
-          { name: "Embedding", tokens: "62K", percent: 12 },
+          { providerId: "openai", modelId: "gpt-4.1", name: "GPT-4.1", tokenCount: 302000, tokens: "302K", percent: 59 },
+          { providerId: "anthropic", modelId: "claude-sonnet-4", name: "Claude Sonnet 4", tokenCount: 148000, tokens: "148K", percent: 29 },
+          { providerId: "embedding-service", modelId: "embedding", name: "Embedding", tokenCount: 62000, tokens: "62K", percent: 12 },
         ],
         analysis: { status: "异常偏高", reason: "长文档上下文过大，并出现多轮重试和频繁工具调用。", advice: "缩短上下文、拆分任务，或把部分生成切到轻量模型。" },
       },
@@ -11800,6 +11894,8 @@ function renderAgentTaskDetail(detail, main) {
 
 function renderTokenTaskDetail(detail, main) {
   const data = detail.tokenDetail;
+  const models = Array.isArray(data.models) ? data.models : [];
+  const analysis = data.analysis || null;
   const actionButtons = detail.actions.length ? `
     <div class="token-detail-actions">
       ${detail.actions.map((action) => `
@@ -11823,27 +11919,30 @@ function renderTokenTaskDetail(detail, main) {
           <div><span>执行时间</span><strong>${escapeHtml(data.time)}</strong></div>
           <div><span>总消耗 Token</span><strong>${escapeHtml(data.cost)}</strong></div>
           <div><span>状态</span><strong>${escapeHtml(data.status)}</strong></div>
+          <div><span>输入 Token</span><strong>${data.inputTokens == null ? "暂不可用" : escapeHtml(data.inputTokens.toLocaleString())}</strong></div>
+          <div><span>输出 Token</span><strong>${data.outputTokens == null ? "暂不可用" : escapeHtml(data.outputTokens.toLocaleString())}</strong></div>
+          <div><span>数据状态</span><strong>${data.dataStatus === "available" ? "可用" : data.dataStatus === "partial" ? "部分可用" : "暂不可用"}</strong></div>
         </div>
       </section>
       <section class="token-detail-card">
         <div class="token-detail-head"><h4>API 模型消耗</h4></div>
         <div class="token-model-list">
-          ${data.models.map((model) => `
+          ${models.length ? models.map((model) => `
             <div class="token-model-row">
               <div><strong>${escapeHtml(model.name)}</strong><span>${escapeHtml(String(model.percent))}%</span></div>
               <b>${escapeHtml(model.tokens)}</b>
               <div class="token-model-bar"><i style="width:${Math.max(0, Math.min(100, Number(model.percent) || 0))}%"></i></div>
             </div>
-          `).join("")}
+          `).join("") : `<div class="empty-state">API 未返回模型 Token 分布，暂不可用。</div>`}
         </div>
       </section>
       <section class="token-detail-card">
         <div class="token-detail-head"><h4>消耗分析</h4></div>
-        <div class="token-analysis-grid">
+        ${analysis ? `<div class="token-analysis-grid">
           <div><span>判断</span><strong>${escapeHtml(data.analysis.status)}</strong></div>
           <div><span>原因</span><strong>${escapeHtml(data.analysis.reason)}</strong></div>
           <div><span>建议</span><strong>${escapeHtml(data.analysis.advice)}</strong></div>
-        </div>
+        </div>` : `<div class="empty-state">暂无可核验的消耗分析，不自动生成原因或建议。</div>`}
       </section>
       ${actionButtons}
     </div>
@@ -12245,8 +12344,8 @@ function openCurrentFeatureDetail(page = APP_STATE.currentPage) {
     return;
   }
   if (page === "usage") {
-    const index = APP_STATE.token.records.findIndex((item) => item.result === "运行中");
-    showTokenRecord(index >= 0 ? index : 0);
+    const record = APP_STATE.token.records.find((item) => item.result === "运行中") || APP_STATE.token.records[0];
+    if (record) showTokenRecord(record.taskId);
     return;
   }
   if (page === "schedule") {
@@ -12291,26 +12390,11 @@ function handleDetailAction(action, id, jump) {
     return;
   }
   if (action === "refresh-token") {
-    const record = APP_STATE.token.records[Number(id)];
+    const record = APP_STATE.token.records.find((item) => item.taskId === id);
     if (!record) return;
-    const addedTokens = 7000;
-    const currentCostK = Number.parseFloat(String(record.cost).replace(/[^\d.]/g, "")) || 0;
-    record.cost = `${Math.round(currentCostK + addedTokens / 1000)}K`;
-    record.models = (record.models || []).map((model) => {
-      const currentModelK = Number.parseFloat(String(model.tokens).replace(/[^\d.]/g, "")) || 0;
-      const modelAddedK = Math.max(1, Math.round((addedTokens / 1000) * (Number(model.percent) || 0) / 100));
-      return { ...model, tokens: `${Math.round(currentModelK + modelAddedK)}K` };
-    });
-    APP_STATE.token.used += addedTokens;
-    APP_STATE.token.currentTask.cost += addedTokens;
-    record.time = nowText();
-    record.analysis = {
-      ...(record.analysis || {}),
-      status: record.result === "运行中" ? "持续消耗中" : (record.analysis?.status || "消耗正常"),
-      reason: record.result === "运行中" ? "已刷新最新消耗，任务仍在执行中。" : (record.analysis?.reason || "本次消耗在合理范围内。"),
-      advice: record.result === "运行中" ? "任务完成后再判断是否异常；必要时拆分任务或切换轻量模型。" : (record.analysis?.advice || "无需处理。"),
-    };
+    record.lastRefreshed = nowText();
     showTokenRecord(id);
+    showSheet({ type: "Toast", title: "刷新完成", copy: "未获取到新的 API 用量数据，已保留原始 Token 值，未进行估算。", detail: "usage", detailLabel: "" });
     return;
   }
   if (action === "stop-agent") {
@@ -12579,9 +12663,9 @@ function renderEmptyPreview(title, copy) {
 function renderPreviewByFeature(modules, triggerId) {
   const renderers = {
     "Agent 任务进度": renderAgentPreview,
-    "Token 算力消耗": renderTokenPreview,
+    "Token用量": renderTokenPreview,
     "定时任务": renderSchedulePreview,
-    "AI 智能语音问答": renderVoicePreview,
+    "AI 智能问答": renderVoicePreview,
     "AI 会议助手": renderMeetingPreview,
     "安全告警": renderSecurityPreview,
     "虚拟桌面宠物": renderPetPreview,
@@ -13286,14 +13370,14 @@ function renderTokenPage() {
   `).join("");
   $("#token-record-table").innerHTML = `
     <div class="table-head"><span>任务</span><span>来源</span><span>执行时间</span><span>消耗 Token</span><span>结果</span><span>操作</span></div>
-    ${token.records.length ? token.records.map((record, index) => `
-      <div class="table-row token-row" data-token-record="${index}"><span>${escapeHtml(record.task)}</span><span>${escapeHtml(record.source)}</span><span>${escapeHtml(record.time)}</span><span>${escapeHtml(record.cost)}</span><span class="tag ${tagClassForStatus(record.result)}">${escapeHtml(record.result)}</span><span><button class="table-action hot" data-token-record="${index}">查看详情</button></span></div>
+    ${token.records.length ? token.records.map((record) => `
+      <div class="table-row token-row" data-token-record="${escapeHtml(record.taskId)}"><span>${escapeHtml(record.task)}</span><span>${escapeHtml(record.source)}</span><span>${escapeHtml(record.time)}</span><span>${escapeHtml(record.cost || "Token暂不可用")}</span><span class="tag ${tagClassForStatus(record.result)}">${escapeHtml(record.result)}</span><span><button class="table-action hot" data-token-record="${escapeHtml(record.taskId)}">查看详情</button></span></div>
     `).join("") : renderEmptyState("暂无任务消耗记录")}
   `;
 }
 
-function showTokenRecord(index) {
-  const record = APP_STATE.token.records[Number(index)];
+function showTokenRecord(recordId) {
+  const record = APP_STATE.token.records.find((item) => item.taskId === recordId);
   if (!record) return;
   const isRunning = record.result === "运行中";
   openDetailView({
@@ -13307,19 +13391,15 @@ function showTokenRecord(index) {
       time: record.time,
       cost: record.cost,
       status: record.result,
-      models: record.models || [
-        { name: "GPT-4.1", tokens: record.cost, percent: 100 },
-        { name: "Claude Sonnet 4", tokens: "0", percent: 0 },
-        { name: "Embedding", tokens: "0", percent: 0 },
-      ],
-      analysis: record.analysis || {
-        status: /异常|偏高/.test(record.result) ? "异常偏高" : "消耗正常",
-        reason: /异常|偏高/.test(record.result) ? "长文档上下文过大，可能伴随多轮重试或频繁工具调用。" : "本次消耗在合理范围内。",
-        advice: /异常|偏高/.test(record.result) ? "缩短上下文、拆分任务，或切换轻量模型。" : "无需处理，可继续观察后续任务消耗。",
-      },
+      inputTokens: record.inputTokens,
+      outputTokens: record.outputTokens,
+      totalTokens: record.totalTokens,
+      dataStatus: record.dataStatus || "unavailable",
+      models: record.models || null,
+      analysis: record.analysis || null,
     },
     actions: isRunning
-      ? [{ label: "刷新消耗", action: "refresh-token", id: index, primary: true }, { label: "返回记录", action: "jump", jump: "usage" }]
+      ? [{ label: "刷新消耗", action: "refresh-token", id: record.taskId, primary: true }, { label: "返回记录", action: "jump", jump: "usage" }]
       : [{ label: "返回记录", action: "jump", jump: "usage", primary: true }],
   });
 }
@@ -13541,14 +13621,14 @@ function syncQuickFeatureConfig() {
 }
 
 const QUICK_BRAND_ICONS = {
-  "Codex": { id: "codex", src: "https://cdn.simpleicons.org/openai/FFFFFF" },
+  "Codex": { id: "codex", src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='%23fff' stroke-width='2'/%3E%3Cpath d='M8 12h8M12 8v8' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3C/svg%3E" },
   "Claude Code": { id: "claude", src: "https://cdn.simpleicons.org/anthropic/E5A17A" },
   "Cursor": { id: "cursor", src: "https://cdn.simpleicons.org/cursor/FFFFFF" },
   "GitHub Copilot": { id: "copilot", src: "https://cdn.simpleicons.org/githubcopilot/A78BFA" },
   "Windsurf": { id: "windsurf", src: "https://cdn.simpleicons.org/windsurf/3EBBF7" },
   "Gemini CLI": { id: "gemini", src: "https://cdn.simpleicons.org/googlegemini/9A83FF" },
   "Cline": { id: "cline", src: "https://cdn.simpleicons.org/cline/FF9B6A" },
-  "终端": { id: "terminal", src: "https://cdn.simpleicons.org/windowsterminal/54C7EC" },
+  "终端": { id: "terminal", src: "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3' y='4' width='18' height='16' rx='2' fill='none' stroke='%2354C7EC' stroke-width='2'/%3E%3Cpath d='m7 9 3 3-3 3M12 15h5' fill='none' stroke='%2354C7EC' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" },
 };
 
 let INSTALLED_APP_CATALOG = [];
@@ -14600,13 +14680,13 @@ function showVoiceRecord(index) {
     打开页面: { result: "已打开目标页面", target: "定时任务", advice: "页面已经跳转，可返回语音记录继续查看。", jump: "schedule", label: "查看定时任务" },
     打开应用: { result: "等待选择目标应用", target: "应用选择", advice: "选择目标应用后，会更新本条语音执行记录。", jump: "voice", label: "选择应用" },
     设置提醒: { result: "已同步创建定时任务", target: "定时任务", advice: "可进入定时任务查看提醒规则和执行状态。", jump: "schedule", label: "查看定时任务" },
-    截图: { result: "已完成截图", target: "AI 智能语音问答", advice: "截图只作为本次语音能力执行结果记录，不弹确认。", jump: "voice", label: "返回语音记录" },
+    截图: { result: "已完成截图", target: "AI 智能问答", advice: "截图只作为本次语音能力执行结果记录，不弹确认。", jump: "voice", label: "返回语音记录" },
     亮度调节: { result: "已同步设备亮度", target: "全局设置", advice: "亮度已更新，后续可在全局设置里调整设备显示。", jump: "voice", label: "返回语音记录" },
     音量调节: { result: "已同步设备音量", target: "全局设置", advice: "音量已更新，后续可在全局设置里调整声音状态。", jump: "voice", label: "返回语音记录" },
     静音: { result: "已同步会议声音状态", target: "AI 会议助手", advice: "录音与转写继续，会议声音状态可在会议助手查看。", jump: "meeting", label: "查看会议助手" },
     锁屏: { result: "设备控制已执行", target: "设备控制", advice: "锁屏属于普通设备控制，不进入安全拦截流程。", jump: "voice", label: "返回语音记录" },
   };
-  let meta = actionMeta[record.type] || { result: "已写入语音问答记录", target: "AI 智能语音问答", advice: "可回到语音记录继续查看。", jump: "voice", label: "返回语音记录" };
+  let meta = actionMeta[record.type] || { result: "已写入语音问答记录", target: "AI 智能问答", advice: "可回到语音记录继续查看。", jump: "voice", label: "返回语音记录" };
   if (record.type === "打开应用" && /^已打开/.test(record.result)) {
     const appName = record.result.replace(/^已打开\s*/, "");
     meta = { result: record.result, target: appName, advice: "目标应用已经打开，本次语音操作已完成。", jump: "voice", label: "返回语音记录" };
@@ -15925,9 +16005,9 @@ function renderSubscreenSettings() {
     const voicePanelToggle = "";
     const globalVoiceEntry = IS_WIDE_PROTOTYPE || APP_STATE.previewEnabled.voice === false
       ? ""
-      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="打开全局AI智能问答" title="打开全局AI智能问答">
+      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="打开AI 智能问答" title="打开AI 智能问答">
           <span class="subscreen-global-ai-ball" aria-hidden="true"></span>
-          <span>全局AI智能问答</span>
+          <span>AI 智能问答</span>
         </button>`;
     chrome.innerHTML = `
       <span class="subscreen-preview-heading">
@@ -16008,7 +16088,8 @@ function renderApiSettings() {
   const baseUrl = $("#api-base-url");
   baseUrl.value = settings.baseUrl;
   baseUrl.disabled = settings.provider !== "自定义兼容 API";
-  $("#api-key").value = settings.apiKey;
+  $("#api-key").value = settings.hasSavedKey ? "" : settings.apiKey;
+  $("#api-key").placeholder = settings.hasSavedKey ? "已安全保存（不会明文回显）" : "输入 API Key";
   const model = $("#api-model");
   const availableModels = settings.provider === "Anthropic" ? ["claude-sonnet-4-5", "claude-opus-4-1"] : settings.provider === "自定义兼容 API" ? [settings.model || "自定义模型"] : ["gpt-4.1", "gpt-4o", "gpt-4o-mini"];
   model.innerHTML = availableModels.map((name) => `<option value="${escapeHtml(name)}">${escapeHtml(name)}</option>`).join("");
@@ -16030,11 +16111,17 @@ function renderApiSettings() {
 
 function updateApiSetting(key, value) {
   APP_STATE.apiSettings[key] = value;
+  if (key === "model") APP_STATE.apiSettings.defaultModelId = value;
+  if (key === "apiKey") APP_STATE.apiSettings.hasSavedKey = false;
   if (key === "provider") {
     const defaults = { OpenAI: ["https://api.openai.com/v1", "gpt-4.1"], Anthropic: ["https://api.anthropic.com", "claude-sonnet-4-5"], "自定义兼容 API": ["", "自定义模型"] };
     [APP_STATE.apiSettings.baseUrl, APP_STATE.apiSettings.model] = defaults[value];
+    APP_STATE.apiSettings.defaultModelId = APP_STATE.apiSettings.model;
+    APP_STATE.apiSettings.providerId = value === "OpenAI" ? "openai" : value === "Anthropic" ? "anthropic" : "openai-compatible";
   }
   APP_STATE.apiSettings.status = APP_STATE.apiSettings.apiKey ? "待验证" : "未配置";
+  APP_STATE.apiSettings.connectionStatus = APP_STATE.apiSettings.apiKey ? "pending" : "unconfigured";
+  APP_STATE.apiSettings.validationErrorCode = null;
   APP_STATE.apiSettings.lastTest = "";
   const feedback = $("#api-form-feedback");
   if (feedback) { feedback.className = "api-form-feedback"; feedback.textContent = "配置已修改，请重新测试连接。"; }
@@ -16043,6 +16130,7 @@ function updateApiSetting(key, value) {
 
 function resetApiSettings() {
   APP_STATE.apiSettings = JSON.parse(JSON.stringify(DEFAULT_API_SETTINGS));
+  localStorage.removeItem("agentPcApiSettings");
   $("#api-key").type = "password";
   $("#api-key-toggle").textContent = "显示";
   const feedback = $("#api-form-feedback");
@@ -16059,7 +16147,7 @@ function resetApiSettings() {
 function saveApiSettings() {
   const settings = APP_STATE.apiSettings;
   const feedback = $("#api-form-feedback");
-  if (!settings.apiKey.trim()) {
+  if (!settings.apiKey.trim() && !settings.hasSavedKey) {
     settings.status = "未配置";
     if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入 API Key 后再保存。"; }
     renderApiSettings();
@@ -16074,6 +16162,9 @@ function saveApiSettings() {
   $("#api-key-toggle").textContent = "显示";
   $("#api-key-toggle").setAttribute("aria-label", "显示 API Key");
   $("#api-key-toggle").title = "显示 API Key";
+  settings.hasSavedKey = true;
+  settings.credentialRef = settings.credentialRef || `credential://${settings.configId}`;
+  localStorage.setItem("agentPcApiSettings", JSON.stringify({ ...settings, apiKey: "" }));
   renderApiSettings();
   if (feedback) { feedback.className = "api-form-feedback success"; feedback.textContent = "设置已保存，问答页的可用模型列表已刷新。"; }
   showSheet({
@@ -16089,26 +16180,61 @@ function testApiConnection() {
   const feedback = $("#api-form-feedback");
   if (!settings.apiKey.trim()) {
     settings.status = "未配置";
+    settings.connectionStatus = "unconfigured";
     renderApiSettings();
     if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入 API Key 后再测试连接。"; }
     return;
   }
   if (!settings.baseUrl.trim()) {
     settings.status = "连接失败";
+    settings.connectionStatus = "failed";
+    settings.validationErrorCode = "INVALID_BASE_URL";
     renderApiSettings();
     if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "请输入有效的 API Base URL。"; }
     return;
   }
+  let validUrl = false;
+  try { validUrl = ["http:", "https:"].includes(new URL(settings.baseUrl).protocol); } catch (_) { validUrl = false; }
+  const key = settings.apiKey.trim();
+  const keyValid = settings.provider === "OpenAI"
+    ? /^sk-[A-Za-z0-9_-]{12,}$/.test(key)
+    : settings.provider === "Anthropic"
+      ? /^sk-ant-[A-Za-z0-9_-]{10,}$/.test(key)
+      : key.length >= 12 && !/^(bad|test|demo|123)/i.test(key);
+  if (!validUrl || !keyValid) {
+    settings.status = "连接失败";
+    settings.lastTest = nowText();
+    settings.connectionStatus = "failed";
+    settings.lastValidatedAt = new Date().toISOString();
+    settings.validationErrorCode = !validUrl ? "INVALID_BASE_URL" : "INVALID_CREDENTIAL_FORMAT";
+    renderApiSettings();
+    if (feedback) { feedback.className = "api-form-feedback error"; feedback.textContent = "模拟验证失败：请检查 API Base URL 和密钥格式。"; }
+    return;
+  }
   settings.status = "验证中";
+  settings.connectionStatus = "testing";
   renderApiSettings();
   if (feedback) { feedback.className = "api-form-feedback"; feedback.textContent = "正在验证密钥、服务地址和模型列表…"; }
   setTimeout(() => {
     settings.status = "已连接";
     settings.lastTest = nowText();
+    settings.connectionStatus = "connected";
+    settings.lastValidatedAt = new Date().toISOString();
+    settings.validationErrorCode = null;
     renderApiSettings();
-    if (feedback) { feedback.className = "api-form-feedback success"; feedback.textContent = `连接成功，已获取 ${$("#api-model").options.length} 个可用模型。`;
+    if (feedback) { feedback.className = "api-form-feedback success"; feedback.textContent = `原型模拟验证成功，已刷新 ${$("#api-model").options.length} 个可用模型。`;
     }
   }, 700);
+}
+
+function restoreApiSettings() {
+  try {
+    const saved = JSON.parse(localStorage.getItem("agentPcApiSettings") || "null");
+    if (!saved || typeof saved !== "object") return;
+    APP_STATE.apiSettings = { ...APP_STATE.apiSettings, ...saved, apiKey: "", hasSavedKey: Boolean(saved.hasSavedKey) };
+  } catch (_) {
+    localStorage.removeItem("agentPcApiSettings");
+  }
 }
 
 function resetConfigPage() {
@@ -16914,6 +17040,7 @@ function bindEvents() {
 }
 
 bindEvents();
+restoreApiSettings();
 restoreQuickActions();
 restoreTimeSettings();
 syncQuickFeatureConfig();
@@ -16922,25 +17049,28 @@ loadWindowsInstalledApps();
 setInterval(updateTimeDisplay, 1000);
     </script>
     <script>
-// 全局AI智能问答 P0 原型状态机；复用现有页面和 API 配置页。
+// AI 智能问答 P0 原型状态机；复用现有页面和 API 配置页。
 const QA_STATE = {
   sourcePage: "monitor", mode: "voice", phase: "idle", draft: "", cloudAccepted: true,
   messages: [], callActive: false, speaking: false, interrupted: false, micMuted: false, modelProvider: APP_STATE.apiSettings.provider, issue: "", permission: "authorized",
   sessionDrawerOpen: false,
   recentSessions: [
-    {id:"qa-s1",title:"量子计算的基本原理",time:"今天 15:42",preview:"量子计算利用量子比特处理信息。"},
-    {id:"qa-s2",title:"活动主题文案建议",time:"今天 11:18",preview:"为产品发布活动整理主题和开场文案。"},
-    {id:"qa-s3",title:"人工智能发展阶段",time:"昨天 20:06",preview:"梳理人工智能发展的主要阶段。"},
-    {id:"qa-s4",title:"如何理解大语言模型",time:"昨天 16:30",preview:"解释大语言模型的训练与生成机制。"},
+    {sessionId:"qa-s1",title:"量子计算的基本原理",time:"今天 15:42",createdAt:"2026-08-15T07:40:00.000Z",updatedAt:"2026-08-15T07:42:00.000Z",currentProviderId:"openai",currentModelId:"gpt-4.1",preview:"量子计算利用量子比特处理信息。",messages:[{messageId:"msg-s1-u1",role:"user",text:"请解释一下量子计算的基本原理",createdAt:"2026-08-15T07:40:00.000Z",time:"15:40",inputType:"voice"},{messageId:"msg-s1-a1",role:"ai",text:"量子计算利用量子比特的叠加与纠缠处理信息，适合部分搜索、模拟与优化问题。",createdAt:"2026-08-15T07:42:00.000Z",time:"15:42",status:"success",providerId:"openai",modelId:"gpt-4.1"}]},
+    {sessionId:"qa-s2",title:"活动主题文案建议",time:"今天 11:18",createdAt:"2026-08-15T03:16:00.000Z",updatedAt:"2026-08-15T03:18:00.000Z",currentProviderId:"openai",currentModelId:"gpt-4.1",preview:"为产品发布活动整理主题和开场文案。",messages:[{messageId:"msg-s2-u1",role:"user",text:"帮我想三个产品发布活动主题",createdAt:"2026-08-15T03:16:00.000Z",time:"11:16",inputType:"text"},{messageId:"msg-s2-a1",role:"ai",text:"可以从智能协作、日常陪伴和效率进化三个方向展开。",createdAt:"2026-08-15T03:18:00.000Z",time:"11:18",status:"success",providerId:"openai",modelId:"gpt-4.1"}]},
+    {sessionId:"qa-s3",title:"人工智能发展阶段",time:"昨天 20:06",createdAt:"2026-08-14T12:03:00.000Z",updatedAt:"2026-08-14T12:06:00.000Z",currentProviderId:"anthropic",currentModelId:"claude-sonnet-4",preview:"梳理人工智能发展的主要阶段。",messages:[{messageId:"msg-s3-u1",role:"user",text:"人工智能发展经历了哪些阶段？",createdAt:"2026-08-14T12:03:00.000Z",time:"20:03",inputType:"text"},{messageId:"msg-s3-a1",role:"ai",text:"可以概括为符号主义、统计学习、深度学习与生成式 AI 几个主要阶段。",createdAt:"2026-08-14T12:06:00.000Z",time:"20:06",status:"success",providerId:"anthropic",modelId:"claude-sonnet-4"}]},
+    {sessionId:"qa-s4",title:"如何理解大语言模型",time:"昨天 16:30",createdAt:"2026-08-14T08:27:00.000Z",updatedAt:"2026-08-14T08:30:00.000Z",currentProviderId:"openai",currentModelId:"gpt-4.1",preview:"解释大语言模型的训练与生成机制。",messages:[{messageId:"msg-s4-u1",role:"user",text:"用简单的话解释大语言模型",createdAt:"2026-08-14T08:27:00.000Z",time:"16:27",inputType:"voice"},{messageId:"msg-s4-a1",role:"ai",text:"大语言模型通过学习大量文本中的模式，根据上下文预测并生成后续内容。",createdAt:"2026-08-14T08:30:00.000Z",time:"16:30",status:"success",providerId:"openai",modelId:"gpt-4.1"}]},
   ],
+  activeSessionId: null,
 };
 let qaTimer = null;
 let qaAutoListenTimer = null;
+const QA_PERMISSION_API_CODES={"first-use":"not_requested",authorized:"granted",unauthorized:"denied",expired:"revoked",waiting:"waiting_settings",checking:"checking",error:"check_failed"};
 function qaModels(){
   const configured = [`${APP_STATE.apiSettings.provider}|${APP_STATE.apiSettings.model}`];
   return configured.filter(Boolean);
 }
 function qaRoot(){return document.querySelector('.voice-console-preview[data-subscreen-preview="voice"]:not(.physical-screen-mirror-source)');}
+function qaFormatDateTime(value){const date=new Date(value);if(Number.isNaN(date.getTime()))return"时间暂不可用";return new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).format(date);}
 function qaShowModal(title, copy, confirmLabel, onConfirm){
   let layer=document.querySelector("#qa-modal-layer");
   if(!layer){layer=document.createElement("div");layer.id="qa-modal-layer";layer.className="qa-modal-layer";qaRoot()?.append(layer);}
@@ -16950,10 +17080,11 @@ function qaShowModal(title, copy, confirmLabel, onConfirm){
   layer.querySelector("[data-qa-modal-confirm]").onclick=()=>{layer.classList.remove("open");onConfirm?.();};
 }
 function qaAnswer(text){
-  QA_STATE.messages.push({role:"user",text},{role:"ai",text:"正在整理回答…",loading:true});
+  const stamp=new Date().toISOString(),requestId=`req-${Date.now()}`;
+  QA_STATE.messages.push({messageId:`msg-${Date.now()}-user`,role:"user",text,createdAt:stamp,time:nowText(),inputType:QA_STATE.mode},{messageId:`msg-${Date.now()}-ai`,requestId,role:"ai",text:"正在整理回答…",createdAt:stamp,time:nowText(),status:"thinking",providerId:String(QA_STATE.modelProvider||"").toLowerCase(),modelId:APP_STATE.apiSettings.model,loading:true});
   QA_STATE.phase="thinking";qaRender();
   clearTimeout(qaTimer);qaTimer=setTimeout(()=>{
-    const last=QA_STATE.messages[QA_STATE.messages.length-1];last.loading=false;
+    const last=QA_STATE.messages[QA_STATE.messages.length-1];last.loading=false;last.status="success";last.createdAt=new Date().toISOString();last.time=nowText();
     last.text=/量子|计算/.test(text)?"量子计算利用量子比特的叠加与纠缠处理信息，适合部分搜索、模拟与优化问题；它不会在所有任务上替代经典计算机。":"这是一个通用知识与内容问答示例。P0 会基于当前会话持续回答，并保留上下文供你继续追问。";
     QA_STATE.phase=QA_STATE.mode==="voice"?"speaking":"success";QA_STATE.speaking=QA_STATE.mode==="voice";QA_STATE.interrupted=false;qaRender();
   },900);
@@ -16981,19 +17112,32 @@ function qaRender(){
   const callFooter=root.querySelector(".qa-call-footer");if(callFooter)callFooter.classList.toggle("active",QA_STATE.callActive);
   const callMic=root.querySelector("#qa-call-mic");if(callMic){callMic.classList.toggle("muted",QA_STATE.micMuted);callMic.setAttribute("aria-pressed",String(QA_STATE.micMuted));callMic.setAttribute("aria-label",QA_STATE.micMuted?"打开麦克风":"关闭麦克风");callMic.title=QA_STATE.micMuted?"打开麦克风":"关闭麦克风";}
   const permissionPanel=document.querySelector("#qa-permission-panel"),permissionTitle=document.querySelector("#qa-permission-title"),permissionDescription=document.querySelector("#qa-permission-description"),permissionPrimary=document.querySelector("#qa-permission-primary"),permissionRecheck=document.querySelector("#qa-permission-recheck"),permissionDemo=document.querySelector("#qa-permission-demo");
-  const permissionMeta={"first-use":["首次使用","使用语音问答前需要允许 Agent PC 访问麦克风；文字问答不受影响。","允许使用麦克风"],authorized:["已授权","全局AI智能问答可在副屏语音模式中使用麦克风。",""],unauthorized:["未授权","尚未获得麦克风权限，语音模式不可用；文字问答不受影响。","前往系统设置"],expired:["权限失效","麦克风授权已被系统撤销或失效，请重新前往系统设置授权。","前往系统设置"],waiting:["等待重新授权","请在 Windows 麦克风设置中完成授权，返回后重新检查。",""],checking:["正在检查权限","正在读取 Windows 麦克风权限状态，请稍候。","检查中"],error:["状态检测失败","暂时无法读取麦克风权限状态，已保留上一次成功状态。","重新检查"]}[QA_STATE.permission]||["状态未知","暂时无法读取麦克风权限状态。","重新检查"];
-  if(permissionPanel)permissionPanel.dataset.permission=QA_STATE.permission;if(permissionTitle)permissionTitle.textContent=permissionMeta[0];if(permissionDescription)permissionDescription.textContent=permissionMeta[1];if(permissionDemo)permissionDemo.value=QA_STATE.permission;
+  const permissionMeta={"first-use":["首次使用","使用语音问答前需要允许 Agent PC 访问麦克风；文字问答不受影响。","允许使用麦克风"],authorized:["已授权","AI 智能问答可在副屏语音模式中使用麦克风。",""],unauthorized:["未授权","尚未获得麦克风权限，语音模式不可用；文字问答不受影响。","前往系统设置"],expired:["权限失效","麦克风授权已被系统撤销或失效，请重新前往系统设置授权。","前往系统设置"],waiting:["等待重新授权","请在 Windows 麦克风设置中完成授权，返回后重新检查。",""],checking:["正在检查权限","正在读取 Windows 麦克风权限状态，请稍候。","检查中"],error:["状态检测失败","暂时无法读取麦克风权限状态，已保留上一次成功状态。","重新检查"]}[QA_STATE.permission]||["状态未知","暂时无法读取麦克风权限状态。","重新检查"];
+  if(permissionPanel){permissionPanel.dataset.permission=QA_STATE.permission;permissionPanel.dataset.permissionCode=QA_PERMISSION_API_CODES[QA_STATE.permission]||"unknown";}if(permissionTitle)permissionTitle.textContent=permissionMeta[0];if(permissionDescription)permissionDescription.textContent=permissionMeta[1];if(permissionDemo)permissionDemo.value=QA_STATE.permission;
   if(permissionPrimary){permissionPrimary.hidden=!permissionMeta[2];permissionPrimary.textContent=permissionMeta[2];permissionPrimary.disabled=QA_STATE.permission==="checking";}if(permissionRecheck)permissionRecheck.hidden=!['waiting','unauthorized','expired'].includes(QA_STATE.permission);
   const drawer=root.querySelector("#qa-session-drawer"),toggle=root.querySelector("#qa-session-toggle"),recentList=root.querySelector("#qa-recent-list");if(drawer){drawer.classList.toggle("open",QA_STATE.sessionDrawerOpen);drawer.setAttribute("aria-hidden",String(!QA_STATE.sessionDrawerOpen));}if(toggle)toggle.setAttribute("aria-expanded",String(QA_STATE.sessionDrawerOpen));
-  if(recentList)recentList.innerHTML=QA_STATE.recentSessions.slice(0,3).map(s=>`<button type="button" class="qa-recent-item" data-qa-session-id="${s.id}"><strong>${escapeHtml(s.title)}</strong><small>${escapeHtml(s.time)}</small></button>`).join("");
+  if(recentList)qaRenderDrawer(root.querySelector("#qa-drawer-search")?.value||"");
   qaRenderMainHistory();
+}
+function qaRenderDrawer(filter=""){
+  const root=qaRoot(),list=root?.querySelector("#qa-recent-list");if(!list)return;const keyword=filter.trim().toLowerCase();const sessions=QA_STATE.recentSessions.filter(s=>!keyword||`${s.title} ${s.preview} ${(s.messages||[]).map(m=>m.text).join(" ")}`.toLowerCase().includes(keyword));
+  list.innerHTML=sessions.length?sessions.map(s=>`<div class="qa-recent-row"><button type="button" class="qa-recent-item" data-qa-session-id="${s.sessionId}"><strong>${escapeHtml(s.title)}</strong><small>${escapeHtml(s.time)}</small></button><button type="button" class="qa-recent-delete" data-qa-session-delete="${s.sessionId}" aria-label="删除${escapeHtml(s.title)}" title="删除">×</button></div>`).join(""):'<div class="empty-state">没有匹配的会话</div>';
 }
 function qaRenderMainHistory(filter=""){
   const list=document.querySelector("#qa-main-history-list");if(!list)return;const keyword=filter.trim().toLowerCase();const sessions=QA_STATE.recentSessions.filter(s=>!keyword||`${s.title} ${s.preview}`.toLowerCase().includes(keyword));
-  list.innerHTML=sessions.length?sessions.map(s=>`<div class="qa-main-history-row" data-qa-main-session="${s.id}"><div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.preview)}</p></div><span>${escapeHtml(s.time)}</span><div><button type="button" data-qa-session-detail="${s.id}">查看详情</button> <button type="button" data-qa-session-delete="${s.id}">删除</button></div></div>`).join(""):'<div class="empty-state">没有匹配的会话</div>';
+  list.innerHTML=sessions.length?sessions.map(s=>`<div class="qa-main-history-row" data-qa-main-session="${s.sessionId}"><div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.preview)}</p></div><span>${escapeHtml(s.time)}</span><div><button type="button" data-qa-session-detail="${s.sessionId}">查看详情</button> <button type="button" data-qa-session-delete="${s.sessionId}">删除</button></div></div>`).join(""):'<div class="empty-state">没有匹配的会话</div>';
 }
-function qaOpenSession(id){const session=QA_STATE.recentSessions.find(s=>s.id===id);if(!session)return;QA_STATE.messages=[{role:"user",text:session.title},{role:"ai",text:session.preview}];QA_STATE.phase="success";QA_STATE.sessionDrawerOpen=false;qaRender();}
-function qaCreateSession(){if(QA_STATE.messages.length){const first=QA_STATE.messages.find(m=>m.role==="user");QA_STATE.recentSessions.unshift({id:`qa-${Date.now()}`,title:first?.text?.slice(0,22)||"新会话",time:"刚刚",preview:QA_STATE.messages.find(m=>m.role==="ai")?.text||""});}QA_STATE.messages=[];QA_STATE.draft="";QA_STATE.phase="idle";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaOpenSession(id){const session=QA_STATE.recentSessions.find(s=>s.sessionId===id);if(!session)return;QA_STATE.activeSessionId=id;QA_STATE.messages=(session.messages||[]).map(m=>({...m}));QA_STATE.mode="text";QA_STATE.phase="success";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaCreateSession(){if(QA_STATE.messages.length){const first=QA_STATE.messages.find(m=>m.role==="user"),lastAi=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"),now=new Date().toISOString();const sessionId=QA_STATE.activeSessionId||`qa-${Date.now()}`;const previous=QA_STATE.recentSessions.find(s=>s.sessionId===sessionId);const saved={sessionId,title:first?.text?.slice(0,22)||"新会话",time:"刚刚",createdAt:previous?.createdAt||now,updatedAt:now,currentProviderId:String(QA_STATE.modelProvider||"").toLowerCase(),currentModelId:APP_STATE.apiSettings.model,preview:lastAi?.text||"",messages:QA_STATE.messages.map(m=>({...m,messageId:m.messageId||`msg-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,createdAt:m.createdAt||now,time:m.time||nowText(),inputType:m.role==="user"?(m.inputType||QA_STATE.mode):undefined,status:m.role==="ai"?(m.status||(m.loading?"thinking":"success")):undefined,providerId:m.role==="ai"?(m.providerId||String(QA_STATE.modelProvider||"").toLowerCase()):undefined,modelId:m.role==="ai"?(m.modelId||APP_STATE.apiSettings.model):undefined}))};QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.sessionId!==sessionId);QA_STATE.recentSessions.unshift(saved);}QA_STATE.activeSessionId=null;QA_STATE.messages=[];QA_STATE.draft="";QA_STATE.phase="idle";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaOpenSessionDetail(id){
+  const session=QA_STATE.recentSessions.find(s=>s.sessionId===id),list=document.querySelector("#qa-main-history-page"),page=document.querySelector("#qa-session-detail-page");if(!session||!page)return;
+  document.querySelector("#qa-session-detail-title").textContent=session.title;
+  document.querySelector("#qa-session-detail-subtitle").textContent=`创建于 ${qaFormatDateTime(session.createdAt)} · 共 ${(session.messages||[]).length} 条消息`;
+  document.querySelector("#qa-session-detail-meta").innerHTML=`<span>当前服务商：${escapeHtml(session.currentProviderId||"暂不可用")}</span><span>当前模型：${escapeHtml(session.currentModelId||"暂不可用")}</span><span>最后更新：${escapeHtml(qaFormatDateTime(session.updatedAt))}</span>`;
+  document.querySelector("#qa-session-detail-messages").innerHTML=(session.messages||[]).length?(session.messages||[]).map(m=>`<article class="qa-session-detail-message ${m.role==='user'?'user':'ai'}"><small>${m.role==='user'?`你 · ${m.inputType==='voice'?'语音':'文字'}`:`AI · ${m.providerId||'服务商暂不可用'} · ${m.modelId||'模型暂不可用'} · ${m.status==='stopped'?'已停止':'已回答'}`}</small><p>${escapeHtml(m.text)}</p><time>${escapeHtml(m.time||"时间暂不可用")}</time></article>`).join(""):'<div class="empty-state">该会话暂无可用消息。</div>';
+  list?.setAttribute("aria-hidden","true");if(list)list.style.display="none";page.classList.add("open");page.setAttribute("aria-hidden","false");page.scrollIntoView({block:"start"});
+}
+function qaCloseSessionDetail(){const list=document.querySelector("#qa-main-history-page"),page=document.querySelector("#qa-session-detail-page");page?.classList.remove("open");page?.setAttribute("aria-hidden","true");if(list){list.style.display="grid";list.setAttribute("aria-hidden","false");list.scrollIntoView({block:"start"});}}
 function qaRequestPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
 function qaOpenPermissionSettings(){QA_STATE.permission="waiting";qaRender();showSheet({type:"系统设置",title:"请完成麦克风授权",copy:"已定位到 Windows 隐私和安全性中的麦克风设置。完成授权并返回 Agent PC 后，请点击“重新检查”。",detail:"voice",detailLabel:""});}
 function qaRecheckPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
@@ -17015,17 +17159,19 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";qaSubmit(QA_STATE.draft);QA_STATE.draft="";if(i)i.value="";return;}
   if(e.target.closest("#qa-session-toggle")){QA_STATE.sessionDrawerOpen=!QA_STATE.sessionDrawerOpen;qaRender();return;}
   if(e.target.closest("#qa-session-close")){QA_STATE.sessionDrawerOpen=false;qaRender();return;}
+  if(e.target.closest("#qa-session-search-toggle")){const root=qaRoot(),input=root?.querySelector("#qa-drawer-search"),button=root?.querySelector("#qa-session-search-toggle");if(!input)return;input.hidden=!input.hidden;button?.setAttribute("aria-expanded",String(!input.hidden));if(!input.hidden)requestAnimationFrame(()=>input.focus());else{input.value="";qaRenderDrawer("");}return;}
   if(e.target.closest("#qa-new-session")){qaCreateSession();return;}
   const recent=e.target.closest("[data-qa-session-id]");if(recent){qaOpenSession(recent.dataset.qaSessionId);return;}
   if(e.target.closest("#qa-view-all-sessions")){QA_STATE.sessionDrawerOpen=false;qaRender();const page=document.querySelector("#qa-main-history-page");page?.classList.add("open");page?.setAttribute("aria-hidden","false");page?.scrollIntoView({behavior:"smooth",block:"start"});return;}
-  const detail=e.target.closest("[data-qa-session-detail]");if(detail){const session=QA_STATE.recentSessions.find(s=>s.id===detail.dataset.qaSessionDetail);if(session)showSheet({type:"主屏会话详情",title:session.title,copy:session.preview,detail:"voice",detailLabel:""});return;}
-  const remove=e.target.closest("[data-qa-session-delete]");if(remove){QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.id!==remove.dataset.qaSessionDelete);qaRenderMainHistory(document.querySelector("#qa-history-search")?.value||"");showSheet({type:"主屏会话记录",title:"会话已删除",copy:"该会话已从主屏会话记录中删除。",detail:"voice",detailLabel:""});return;}
+  const detail=e.target.closest("[data-qa-session-detail]");if(detail){qaOpenSessionDetail(detail.dataset.qaSessionDetail);return;}
+  if(e.target.closest("#qa-session-detail-back")){qaCloseSessionDetail();return;}
+  const remove=e.target.closest("[data-qa-session-delete]");if(remove){const id=remove.dataset.qaSessionDelete,session=QA_STATE.recentSessions.find(s=>s.sessionId===id);if(!session)return;qaShowModal("删除会话",`确定删除“${session.title}”？删除后无法恢复。`,"确认删除",()=>{QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.sessionId!==id);if(QA_STATE.activeSessionId===id){QA_STATE.activeSessionId=null;QA_STATE.messages=[];QA_STATE.phase="idle";}qaRenderMainHistory(document.querySelector("#qa-history-search")?.value||"");qaRender();});return;}
   if(e.target.closest("#voice-api-entry")){QA_STATE.draft=qaRoot()?.querySelector("#voice-text-input")?.value||QA_STATE.draft;return;}
   if(e.target.closest("#qa-permission-primary")){if(QA_STATE.permission==="first-use"||QA_STATE.permission==="error")qaRequestPermission();else if(QA_STATE.permission==="unauthorized"||QA_STATE.permission==="expired")qaOpenPermissionSettings();return;}
   if(e.target.closest("#qa-permission-recheck")){qaRecheckPermission();return;}
 },true);
-document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){QA_STATE.permission=e.target.value;QA_STATE.issue=["unauthorized","expired"].includes(e.target.value)?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();const [p,m]=e.target.value.split("|");if(QA_STATE.messages.length&&p!==QA_STATE.modelProvider)qaShowModal("切换模型服务商","当前会话内容将发送给新的模型服务商。是否继续？","确认切换",()=>{QA_STATE.modelProvider=p;APP_STATE.apiSettings.provider=p;APP_STATE.apiSettings.model=m;qaRender();});},true);
-document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRenderMainHistory(e.target.value);},true);
+document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){QA_STATE.permission=e.target.value;QA_STATE.issue=["unauthorized","expired"].includes(e.target.value)?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();const [p,m]=e.target.value.split("|"),apply=()=>{QA_STATE.modelProvider=p;APP_STATE.apiSettings.provider=p;APP_STATE.apiSettings.providerId=p==="OpenAI"?"openai":p==="Anthropic"?"anthropic":"openai-compatible";APP_STATE.apiSettings.model=m;APP_STATE.apiSettings.defaultModelId=m;qaRender();};if(QA_STATE.messages.length&&p!==QA_STATE.modelProvider)qaShowModal("切换模型服务商","当前会话内容将发送给新的模型服务商。是否继续？","确认切换",apply);else apply();},true);
+document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRenderMainHistory(e.target.value);if(e.target.id==="qa-drawer-search")qaRenderDrawer(e.target.value);},true);
 qaRender();
     </script>
   </body>
