@@ -6902,21 +6902,6 @@ pre {
   outline: none;
 }
 
-.quick-subscreen-key.is-opening {
-  border-color: rgba(46, 242, 138, 0.78);
-  background: rgba(46, 242, 138, 0.1);
-  cursor: wait;
-  opacity: 0.82;
-}
-
-.quick-subscreen-key.is-opening .quick-key-icon {
-  animation: quick-opening-spin 0.9s linear infinite;
-}
-
-@keyframes quick-opening-spin {
-  to { transform: rotate(360deg); }
-}
-
 .quick-key-icon {
   display: grid;
   width: 58px;
@@ -6976,6 +6961,12 @@ pre {
   display: grid;
   gap: 16px;
 }
+
+.quick-subscreen-key.is-unavailable {
+  border-color: rgba(255, 91, 110, 0.5);
+}
+
+.quick-subscreen-key.is-unavailable { opacity: 0.52; }
 
 .quick-slot-card span,
 .quick-editor-panel label > span {
@@ -7196,6 +7187,7 @@ pre {
   border-color: rgba(32, 230, 230, 0.7);
   background: rgba(32, 230, 230, 0.08);
 }
+.quick-app-picker-actions{display:flex;justify-content:flex-end;gap:10px;padding-top:4px}.quick-app-picker-actions button{min-width:88px;min-height:40px;border:1px solid var(--line);border-radius:9px;background:transparent;color:var(--text);font-weight:850;cursor:pointer}.quick-app-picker-actions .primary{border-color:transparent;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017}.quick-app-picker-actions button:disabled{opacity:.42;cursor:not-allowed}
 
 .quick-app-picker-item .quick-key-icon {
   width: 38px;
@@ -8952,7 +8944,7 @@ pre {
 @media(max-width:800px){.dev-field-grid{grid-template-columns:1fr}.dev-field-rule{grid-column:auto}}
 .voice-assistant-title>span { white-space:nowrap; }
 .voice-dialogue-stage { padding-top:72px; }
-.qa-voice-actions { display:none !important; }
+.qa-voice-actions{position:absolute;z-index:19;left:50%;bottom:92px;transform:translateX(-50%);display:none;align-items:center;justify-content:center;gap:8px;white-space:nowrap}.qa-voice-actions.active{display:flex}
 #qa-stop-speaking { border-color:rgba(255,184,92,.5); color:#ffd29b; }
 #qa-interrupt-ai { border-color:rgba(93,255,184,.52); color:#9dffd0; }
 .qa-call-footer{position:absolute;z-index:18;left:50%;bottom:15px;transform:translateX(-50%);display:none;grid-template-columns:58px 58px;grid-template-rows:58px auto;gap:7px 72px;align-items:center;justify-items:center}.qa-call-footer.active{display:grid}.qa-call-control{width:58px;height:58px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.14);border-radius:50%;background:rgba(237,235,248,.1);color:#f0f5f6;cursor:pointer}.qa-call-control svg{width:26px;height:26px;fill:none;stroke:currentColor;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}.qa-call-control.muted{color:#ff7a8f;border-color:rgba(255,90,116,.45)}#qa-call-mic{grid-column:1;grid-row:1}.qa-call-control.end{grid-column:2;grid-row:1;color:#ff4f64;border-color:rgba(255,79,100,.38);font-size:31px}.qa-ai-disclaimer{grid-column:1/-1;grid-row:2;color:rgba(205,214,220,.52);font-size:10px;white-space:nowrap}
@@ -8969,6 +8961,8 @@ pre {
 .qa-message.ai { justify-self:start; background:rgba(255,255,255,.055); border:1px solid rgba(255,255,255,.09); }
 .qa-message small { color:#8ff7ef; font-weight:800; }.qa-message p{margin:0;line-height:1.55}.qa-message.loading p::after{content:'｜';animation:voice-caret .68s steps(1) infinite}
 .qa-banner { position:absolute; z-index:30; left:50%; top:58px; transform:translateX(-50%); max-width:72%; padding:9px 14px; border:1px solid rgba(255,184,92,.38); border-radius:12px; background:rgba(35,25,12,.94); color:#ffe0ad; font-size:11px; }
+.qa-banner button{min-height:32px;margin-left:10px;padding:0 12px;border:1px solid rgba(255,224,173,.36);border-radius:999px;background:transparent;color:#ffe0ad;font-weight:800;cursor:pointer}
+.voice-send-button:disabled{opacity:.38;cursor:not-allowed;filter:none}
 .qa-modal-layer { position:absolute; z-index:80; inset:0; display:none; place-items:center; background:rgba(0,0,0,.62); }
 .qa-modal-layer.open { display:grid; }.qa-modal{width:min(410px,82%);padding:22px;border:1px solid rgba(70,235,222,.28);border-radius:18px;background:#10171b;box-shadow:0 24px 70px rgba(0,0,0,.5)}
 .qa-modal h4{margin:0 0 8px;font-size:18px}.qa-modal p{margin:0;color:rgba(211,224,228,.68);font-size:12px;line-height:1.6}.qa-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.qa-modal-actions button{min-height:34px;padding:0 15px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;color:#dffbfa;cursor:pointer}.qa-modal-actions .primary{border:0;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017;font-weight:900}
@@ -8978,6 +8972,7 @@ pre {
 .qa-permission-copy{display:grid;gap:6px}.qa-permission-copy span{color:var(--muted);font-size:11px;font-weight:800}.qa-permission-copy strong{font-size:16px}.qa-permission-copy p{margin:0;color:rgba(205,220,224,.62);font-size:11px;line-height:1.55}
 .qa-permission-actions{display:flex;align-items:center;gap:8px}.qa-permission-actions select,.qa-permission-actions button{min-height:36px;border:1px solid rgba(70,235,222,.3);border-radius:999px;padding:0 14px;background:rgba(10,21,25,.9);color:#dffbfa;font-weight:850;cursor:pointer}.qa-permission-actions button{border:0;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017}.qa-permission-actions button.secondary{border:1px solid rgba(70,235,222,.3);background:transparent;color:#a6fff6}.qa-permission-actions button[hidden]{display:none}.qa-permission-actions button:disabled{opacity:.5;cursor:not-allowed}
 .qa-permission-panel[data-permission="authorized"] .qa-permission-copy strong{color:#65f2ab}.qa-permission-panel[data-permission="unauthorized"] .qa-permission-copy strong,.qa-permission-panel[data-permission="expired"] .qa-permission-copy strong{color:#ffd080}
+.qa-voice-permission-action{position:relative;z-index:2;display:none;min-width:96px;min-height:44px;padding:0 18px;border:1px solid rgba(70,235,222,.34);border-radius:999px;background:rgba(8,18,22,.88);color:#9ffff5;font-weight:900;cursor:pointer}.qa-voice-permission-action.visible{display:inline-flex;align-items:center;justify-content:center}
     </style>
   </head>
   <body class="prototype-landing">
@@ -9286,6 +9281,7 @@ pre {
                 <div class="quick-app-picker-list" id="quick-app-picker-list"></div>
                 <p>应用名称、图标和启动标识均由 Windows 实际安装列表返回。</p>
               </section>
+              <footer class="quick-app-picker-actions"><button type="button" id="quick-app-picker-cancel">取消</button><button type="button" class="primary" id="quick-app-picker-confirm" disabled>确认</button></footer>
             </section>
           </div>
 
@@ -9584,7 +9580,7 @@ pre {
                       <div class="qa-session-drawer-head"><strong>AI 智能问答</strong><div class="qa-session-head-actions"><button type="button" id="qa-session-close" aria-label="收起会话侧栏" title="收起侧栏"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path></svg></button><button type="button" id="qa-session-search-toggle" aria-expanded="false" aria-label="搜索会话" title="搜索会话"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg></button></div></div>
                       <button type="button" class="qa-session-new" id="qa-new-session"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 5v14M5 12h14"></path></svg><span>新建对话</span></button>
                       <input class="qa-drawer-search" id="qa-drawer-search" placeholder="搜索会话" aria-label="搜索会话" hidden />
-                      <div class="qa-session-section-label">最近</div>
+                      <div class="qa-session-section-label">会话记录</div>
                       <div class="qa-recent-list" id="qa-recent-list"></div>
                     </aside>
                     <div class="voice-assistant-body">
@@ -9594,10 +9590,12 @@ pre {
                         </button>
                         <strong id="voice-dialogue-title">点击语音球开始说话</strong>
                         <p id="voice-dialogue-result">点击语音球开始说话，说完后可手动结束或等待自动结束。</p>
+                        <button type="button" class="qa-voice-permission-action" id="qa-voice-permission-action">去授权</button>
                         <div class="qa-voice-actions" id="qa-voice-actions">
                           <button type="button" id="qa-finish-listening">结束并提交</button>
                           <button type="button" id="qa-cancel-listening">取消</button>
                           <button type="button" id="qa-stop-speaking">停止播报</button>
+                          <button type="button" id="qa-stop-generating">停止生成</button>
                           <button type="button" id="qa-interrupt-ai">直接说话打断</button>
                         </div>
                         <div class="qa-call-footer" aria-label="语音对话控制">
@@ -9684,13 +9682,17 @@ pre {
                   <p id="qa-permission-description">AI 智能问答可在副屏语音模式中使用麦克风。</p>
                 </div>
                 <div class="qa-permission-actions">
+                  <small>原型状态演示（正式产品不展示）</small>
                   <select id="qa-permission-demo" aria-label="切换麦克风权限状态">
                     <option value="first-use">首次使用</option>
+                    <option value="requesting">等待系统授权结果</option>
                     <option value="authorized">已授权</option>
                     <option value="unauthorized">未授权</option>
-                    <option value="expired">权限失效</option>
+                    <option value="expired">权限已关闭</option>
                     <option value="waiting">等待系统设置返回</option>
+                    <option value="recheck-denied">重新检查仍未授权</option>
                     <option value="checking">重新检查中</option>
+                    <option value="settings-error">系统设置打开失败</option>
                     <option value="error">状态检测失败</option>
                   </select>
                   <button type="button" id="qa-permission-primary" hidden>允许使用麦克风</button>
@@ -10778,7 +10780,9 @@ const APP_STATE = {
     selectedSlot: 0,
     targetSearch: "",
     pendingSource: null,
-    executingSlots: {},
+    pickerSelectionId: null,
+    unavailableSlots: {},
+    feedback: "",
     installedAppsStatus: "loading",
     installedAppsMessage: "正在读取 Windows 已安装应用…",
     actions: cloneDefaultQuickActions(),
@@ -13633,6 +13637,13 @@ const QUICK_BRAND_ICONS = {
 
 let INSTALLED_APP_CATALOG = [];
 
+const QUICK_DEMO_APP_CATALOG = [
+  { id: "demo-codex", name: "Codex", icon: "＋", iconUrl: "", target: "demo://codex", launchId: "demo://codex", source: "Windows 已安装应用", type: "应用" },
+  { id: "demo-browser", name: "Microsoft Edge", icon: "E", iconUrl: "", target: "demo://edge", launchId: "demo://edge", source: "Windows 已安装应用", type: "应用" },
+  { id: "demo-notepad", name: "记事本", icon: "N", iconUrl: "", target: "demo://notepad", launchId: "demo://notepad", source: "Windows 已安装应用", type: "应用" },
+  { id: "demo-terminal", name: "Windows Terminal", icon: ">_", iconUrl: "", target: "demo://terminal", launchId: "demo://terminal", source: "Windows 已安装应用", type: "终端" },
+];
+
 function getQuickSystemReason(value, fallback = "Windows 未返回具体原因。") {
   if (value instanceof Error && value.message) return value.message;
   if (typeof value === "string" && value.trim()) return value.trim();
@@ -13779,8 +13790,24 @@ function openQuickTargetPicker() {
   const modal = $("#quick-app-picker-modal");
   if (!modal) return;
   APP_STATE.quickActions.targetSearch = "";
+  APP_STATE.quickActions.pickerSelectionId = null;
   modal.classList.add("show");
   modal.setAttribute("aria-hidden", "false");
+  const bridge = window.agentPC || window.electronAPI || window.windowsBridge;
+  if (typeof (bridge?.getInstalledApps || bridge?.listInstalledApps) !== "function") {
+    INSTALLED_APP_CATALOG = [];
+    APP_STATE.quickActions.installedAppsStatus = "loading";
+    APP_STATE.quickActions.installedAppsMessage = "正在读取 Windows 已安装应用…";
+    renderQuickTargetPicker();
+    window.setTimeout(() => {
+      if (!modal.classList.contains("show")) return;
+      INSTALLED_APP_CATALOG = QUICK_DEMO_APP_CATALOG.map((app) => ({ ...app }));
+      APP_STATE.quickActions.installedAppsStatus = "ready";
+      APP_STATE.quickActions.installedAppsMessage = `已读取 ${INSTALLED_APP_CATALOG.length} 个 Windows 已安装应用。`;
+      renderQuickTargetPicker();
+    }, 2200);
+    return;
+  }
   renderQuickTargetPicker();
 }
 
@@ -13789,6 +13816,7 @@ function closeQuickTargetPicker() {
   if (!modal) return;
   modal.classList.remove("show");
   modal.setAttribute("aria-hidden", "true");
+  APP_STATE.quickActions.pickerSelectionId = null;
 }
 
 function renderQuickTargetPicker() {
@@ -13802,14 +13830,22 @@ function renderQuickTargetPicker() {
   const keyword = quick.targetSearch.trim().toLowerCase();
   const results = INSTALLED_APP_CATALOG.filter((app) => !keyword || `${app.name} ${app.target}`.toLowerCase().includes(keyword));
   list.innerHTML = results.length ? results.map((app) => {
-    const active = quick.pendingSource?.target === app.target ? "selected" : "";
+    const active = quick.pickerSelectionId === app.id ? "selected" : "";
     const iconAction = { ...app, brandName: app.type === "终端" ? "终端" : app.name };
     return `<button class="quick-app-picker-item ${active}" type="button" data-quick-installed-app="${escapeHtml(app.id)}">${renderQuickBrandIcon(iconAction)}<span><strong>${escapeHtml(app.name)}</strong><small>${escapeHtml(app.type)} · ${escapeHtml(app.source)}</small></span></button>`;
   }).join("") : renderEmptyState(keyword ? "没有匹配的 Windows 已安装应用" : "暂无可选择的 Windows 已安装应用");
+  const confirm = $("#quick-app-picker-confirm");
+  if (confirm) confirm.disabled = !quick.pickerSelectionId;
 }
 
-function chooseQuickInstalledApp(appId) {
-  const app = INSTALLED_APP_CATALOG.find((item) => item.id === appId);
+function selectQuickInstalledApp(appId) {
+  if (!INSTALLED_APP_CATALOG.some((item) => item.id === appId)) return;
+  APP_STATE.quickActions.pickerSelectionId = appId;
+  renderQuickTargetPicker();
+}
+
+function confirmQuickInstalledApp() {
+  const app = INSTALLED_APP_CATALOG.find((item) => item.id === APP_STATE.quickActions.pickerSelectionId);
   if (!app) return;
   APP_STATE.quickActions.pendingSource = {
     type: app.type,
@@ -13839,8 +13875,11 @@ function renderQuickActionsPage() {
   const selectedSlot = APP_STATE.quickActions.selectedSlot;
   const actions = DEFAULT_QUICK_ACTIONS.map((fallback, index) => APP_STATE.quickActions.actions[index] || fallback);
   const previewMarkup = actions.map((action, index) => {
-    const opening = Boolean(APP_STATE.quickActions.executingSlots[index]);
-    return `<button class="quick-subscreen-key ${opening ? "is-opening" : ""}" data-quick-brand="${escapeHtml(getQuickBrand(action)?.id || "custom")}" type="button" data-quick-exec="${index}" aria-label="${opening ? "正在打开" : "执行"} ${escapeHtml(action.name)}" ${opening ? "disabled" : ""}>${opening ? '<span class="quick-key-icon">◌</span>' : renderQuickBrandIcon(action)}<strong>${opening ? "打开中" : escapeHtml(action.name)}</strong><small>${escapeHtml(action.type)}</small></button>`;
+    const unavailable = Boolean(APP_STATE.quickActions.unavailableSlots[index]);
+    const stateClass = unavailable ? "is-unavailable" : "";
+    const stateLabel = unavailable ? "应用已不可用" : action.name;
+    const stateIcon = unavailable ? '<span class="quick-key-icon">×</span>' : renderQuickBrandIcon(action);
+    return `<button class="quick-subscreen-key ${stateClass}" data-quick-brand="${escapeHtml(getQuickBrand(action)?.id || "custom")}" type="button" data-quick-exec="${index}" aria-label="${escapeHtml(stateLabel)} ${escapeHtml(action.name)}">${stateIcon}<strong>${escapeHtml(stateLabel)}</strong><small>${escapeHtml(action.type)}</small></button>`;
   }).join("");
   previewGrid.innerHTML = previewMarkup;
   configGrid.innerHTML = actions.map((action, index) => {
@@ -13875,15 +13914,22 @@ function saveQuickAction() {
   const name = $("#quick-action-name").value.trim();
   const link = $("#quick-action-link").value.trim();
   let source = APP_STATE.quickActions.pendingSource;
+  if (!name) {
+    showSheet({ type: "Toast", title: "请输入显示名称", copy: "显示名称不能为空，请输入后再保存。", detail: "shortcut", detailLabel: "" });
+    window.setTimeout(() => $("#quick-action-name")?.focus(), 0);
+    return;
+  }
   if (link) {
     if (!isAllowedQuickLink(link)) {
-      showSheet({ type: "Toast", title: "链接格式不正确", copy: "请填写以 http:// 或 https:// 开头的链接。", detail: "shortcut", detailLabel: "" });
+      showSheet({ type: "Toast", title: "网页链接格式不正确", copy: "请输入以 http:// 或 https:// 开头的完整网页地址。", detail: "shortcut", detailLabel: "" });
+      window.setTimeout(() => $("#quick-action-link")?.focus(), 0);
       return;
     }
     source = { type: "链接", target: link, icon: "↗", iconUrl: getWebsiteIconUrl(link), source: "网页链接", brandName: "", available: true, isDefault: false };
   }
-  if (!name || !source?.target || !QUICK_ACTION_ALLOWED_TYPES.has(source.type)) {
-    showSheet({ type: "Toast", title: "请设置启动目标", copy: "请选择 Windows 已安装应用、终端，或填写网页链接后再保存。", detail: "shortcut", detailLabel: "" });
+  if (!source?.target || !QUICK_ACTION_ALLOWED_TYPES.has(source.type)) {
+    showSheet({ type: "Toast", title: "请选择启动目标", copy: "请选择已安装的应用、终端，或填写网页链接后再保存。", detail: "shortcut", detailLabel: "" });
+    window.setTimeout(() => $("#quick-open-target-picker")?.focus(), 0);
     return;
   }
   const index = APP_STATE.quickActions.selectedSlot;
@@ -13996,24 +14042,18 @@ async function requestQuickAction(action) {
 async function executeQuickAction(slotIndex) {
   const index = Number(slotIndex);
   const action = getQuickAction(index);
-  if (!action || APP_STATE.quickActions.executingSlots[index]) return;
-  const openingStartedAt = Date.now();
-  let feedback = null;
-  APP_STATE.quickActions.executingSlots[index] = true;
-  renderQuickActionsPage();
+  if (!action || APP_STATE.quickActions.unavailableSlots[index]) return;
+  const bridge = window.agentPC || window.electronAPI || window.windowsBridge;
+  const prototypeSimulation = typeof (bridge?.launchQuickAction || bridge?.openTarget) !== "function" && action.type !== "链接";
   try {
-    await new Promise((resolve) => requestAnimationFrame(resolve));
+    if (prototypeSimulation) return;
     const result = await requestQuickAction(action);
-    if (!result.ok) throw new Error(result.error || "Windows 未返回成功结果。");
-    feedback = { type: "Toast", title: `${action.name} 打开成功`, copy: result.message || "Windows 已成功打开目标。", detail: "shortcut", detailLabel: "" };
+    if (!result.ok && action.type !== "链接" && /不存在|未检测到/.test(result.error || "")) {
+      APP_STATE.quickActions.unavailableSlots[index] = true;
+      renderQuickActionsPage();
+    }
   } catch (error) {
-    feedback = { type: "Toast", title: `${action.name} 打开失败`, copy: getQuickSystemReason(error, "Windows 返回未知错误。"), detail: "shortcut", detailLabel: "" };
-  } finally {
-    const remainingOpeningTime = Math.max(0, 360 - (Date.now() - openingStartedAt));
-    if (remainingOpeningTime) await new Promise((resolve) => setTimeout(resolve, remainingOpeningTime));
-    delete APP_STATE.quickActions.executingSlots[index];
-    renderQuickActionsPage();
-    if (feedback) showSheet(feedback);
+    // 启动过程与结果由 Windows、默认浏览器或目标应用自行反馈。
   }
 }
 
@@ -16407,6 +16447,8 @@ function bindEvents() {
   $("#quick-slot-clear")?.addEventListener("click", clearQuickAction);
   $("#quick-open-target-picker")?.addEventListener("click", openQuickTargetPicker);
   $("#quick-app-picker-close")?.addEventListener("click", closeQuickTargetPicker);
+  $("#quick-app-picker-cancel")?.addEventListener("click", closeQuickTargetPicker);
+  $("#quick-app-picker-confirm")?.addEventListener("click", confirmQuickInstalledApp);
   $("#quick-app-picker-modal")?.addEventListener("click", (event) => {
     if (event.target === event.currentTarget) closeQuickTargetPicker();
   });
@@ -16422,14 +16464,8 @@ function bindEvents() {
       if (sourceDisplay) sourceDisplay.value = "";
       return;
     }
-    const current = getQuickAction();
-    if (current?.type === "链接") {
-      APP_STATE.quickActions.pendingSource = null;
-      if (sourceDisplay) sourceDisplay.value = "";
-      return;
-    }
-    syncQuickPendingSource(current);
-    if (sourceDisplay) sourceDisplay.value = getQuickSourceDisplay(APP_STATE.quickActions.pendingSource);
+    APP_STATE.quickActions.pendingSource = null;
+    if (sourceDisplay) sourceDisplay.value = "";
   });
 
   $$("[data-jump]").forEach((el) => {
@@ -16878,7 +16914,7 @@ function bindEvents() {
     }
     const quickInstalledApp = event.target.closest("[data-quick-installed-app]");
     if (quickInstalledApp) {
-      chooseQuickInstalledApp(quickInstalledApp.dataset.quickInstalledApp);
+      selectQuickInstalledApp(quickInstalledApp.dataset.quickInstalledApp);
       return;
     }
     const detailAction = event.target.closest("[data-detail-action]");
@@ -17052,7 +17088,7 @@ setInterval(updateTimeDisplay, 1000);
 // AI 智能问答 P0 原型状态机；复用现有页面和 API 配置页。
 const QA_STATE = {
   sourcePage: "monitor", mode: "voice", phase: "idle", draft: "", cloudAccepted: true,
-  messages: [], callActive: false, speaking: false, interrupted: false, micMuted: false, modelProvider: APP_STATE.apiSettings.provider, issue: "", permission: "authorized",
+  messages: [], callActive: false, speaking: false, interrupted: false, micMuted: false, cancelRecognition: false, modelProvider: APP_STATE.apiSettings.provider, issue: "", permission: "first-use", hadMicrophoneGrant: false, pendingVoiceStart: false,
   sessionDrawerOpen: false,
   recentSessions: [
     {sessionId:"qa-s1",title:"量子计算的基本原理",time:"今天 15:42",createdAt:"2026-08-15T07:40:00.000Z",updatedAt:"2026-08-15T07:42:00.000Z",currentProviderId:"openai",currentModelId:"gpt-4.1",preview:"量子计算利用量子比特处理信息。",messages:[{messageId:"msg-s1-u1",role:"user",text:"请解释一下量子计算的基本原理",createdAt:"2026-08-15T07:40:00.000Z",time:"15:40",inputType:"voice"},{messageId:"msg-s1-a1",role:"ai",text:"量子计算利用量子比特的叠加与纠缠处理信息，适合部分搜索、模拟与优化问题。",createdAt:"2026-08-15T07:42:00.000Z",time:"15:42",status:"success",providerId:"openai",modelId:"gpt-4.1"}]},
@@ -17064,19 +17100,19 @@ const QA_STATE = {
 };
 let qaTimer = null;
 let qaAutoListenTimer = null;
-const QA_PERMISSION_API_CODES={"first-use":"not_requested",authorized:"granted",unauthorized:"denied",expired:"revoked",waiting:"waiting_settings",checking:"checking",error:"check_failed"};
+const QA_PERMISSION_API_CODES={"first-use":"not_requested",requesting:"requesting_system",authorized:"granted",unauthorized:"denied",expired:"revoked",waiting:"waiting_settings","recheck-denied":"waiting_settings_denied",checking:"checking","settings-error":"settings_open_failed",error:"check_failed"};
 function qaModels(){
   const configured = [`${APP_STATE.apiSettings.provider}|${APP_STATE.apiSettings.model}`];
   return configured.filter(Boolean);
 }
 function qaRoot(){return document.querySelector('.voice-console-preview[data-subscreen-preview="voice"]:not(.physical-screen-mirror-source)');}
 function qaFormatDateTime(value){const date=new Date(value);if(Number.isNaN(date.getTime()))return"时间暂不可用";return new Intl.DateTimeFormat("zh-CN",{timeZone:"Asia/Shanghai",year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit",hour12:false}).format(date);}
-function qaShowModal(title, copy, confirmLabel, onConfirm){
+function qaShowModal(title, copy, confirmLabel, onConfirm, cancelLabel="取消", onCancel){
   let layer=document.querySelector("#qa-modal-layer");
   if(!layer){layer=document.createElement("div");layer.id="qa-modal-layer";layer.className="qa-modal-layer";qaRoot()?.append(layer);}
-  layer.innerHTML=`<div class="qa-modal" role="dialog" aria-modal="true"><h4>${escapeHtml(title)}</h4><p>${escapeHtml(copy)}</p><div class="qa-modal-actions"><button data-qa-modal-cancel>取消</button><button class="primary" data-qa-modal-confirm>${escapeHtml(confirmLabel)}</button></div></div>`;
+  layer.innerHTML=`<div class="qa-modal" role="dialog" aria-modal="true"><h4>${escapeHtml(title)}</h4><p>${escapeHtml(copy)}</p><div class="qa-modal-actions"><button data-qa-modal-cancel>${escapeHtml(cancelLabel)}</button><button class="primary" data-qa-modal-confirm>${escapeHtml(confirmLabel)}</button></div></div>`;
   layer.classList.add("open");
-  layer.querySelector("[data-qa-modal-cancel]").onclick=()=>layer.classList.remove("open");
+  layer.querySelector("[data-qa-modal-cancel]").onclick=()=>{layer.classList.remove("open");onCancel?.();};
   layer.querySelector("[data-qa-modal-confirm]").onclick=()=>{layer.classList.remove("open");onConfirm?.();};
 }
 function qaAnswer(text){
@@ -17091,6 +17127,8 @@ function qaAnswer(text){
 }
 function qaSubmit(text){
   if(!text.trim()||QA_STATE.phase==="thinking")return;
+  if(!navigator.onLine||QA_STATE.issue==="offline"){QA_STATE.issue="offline";QA_STATE.phase="idle";qaRender();return;}
+  if(QA_STATE.issue==="no-model"||QA_STATE.issue==="model-invalid"||!qaModels().length){QA_STATE.issue=QA_STATE.issue==="model-invalid"?"model-invalid":"no-model";QA_STATE.phase="idle";qaRender();return;}
   qaAnswer(text.trim());
 }
 function qaRender(){
@@ -17099,22 +17137,30 @@ function qaRender(){
   root.querySelectorAll("[data-voice-input-mode]").forEach(b=>{const a=b.dataset.voiceInputMode===QA_STATE.mode;b.classList.toggle("active",a);b.setAttribute("aria-pressed",String(a));});
   const input=root.querySelector("#voice-text-input");if(input&&document.activeElement!==input)input.value=QA_STATE.draft;
   if(input)input.placeholder=QA_STATE.mode==="text"?"输入你的问题…":"语音模式下请点击语音球开始说话";
+  const sendButton=root.querySelector("#voice-send-button"),requestBlocked=!navigator.onLine||["offline","no-model","model-invalid"].includes(QA_STATE.issue)||!qaModels().length;if(sendButton){sendButton.disabled=requestBlocked||QA_STATE.phase==="thinking";sendButton.title=requestBlocked?"当前暂不可发送":"发送问题";}
   const model=root.querySelector("#voice-api-model");if(model){model.innerHTML=qaModels().map(v=>{const [p,m]=v.split("|");return `<option value="${escapeHtml(v)}">${escapeHtml(p)} · ${escapeHtml(m)}</option>`}).join("")||'<option value="">无可用模型</option>';}
   const conversation=root.querySelector("#qa-conversation");
   if(conversation){conversation.className=QA_STATE.messages.length?"voice-chat-window":"qa-conversation-empty";conversation.innerHTML=QA_STATE.messages.length?QA_STATE.messages.map(m=>`<div class="qa-message ${m.role==='user'?'user':'ai'} ${m.loading?'loading':''}"><small>${m.role==='user'?'你':'AI'}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):'<strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p>';conversation.scrollTop=conversation.scrollHeight;}
-  const title=root.querySelector("#voice-dialogue-title"),result=root.querySelector("#voice-dialogue-result"),orb=root.querySelector("#voice-dialogue-orb-button"),actions=root.querySelector("#qa-voice-actions");
-  const meta={idle:["你可以开始说话","点击语音球开始，或切换到文字模式。"],muted:["麦克风已关闭","点击底部麦克风按钮恢复收听。"],listening:QA_STATE.interrupted?["已打断AI，正在听你说…","AI播报已停止，请直接说出新的问题。"]:["正在收听…","检测到说话结束后将自动提交。"],recognizing:["正在识别…","原始语音仅用于本次临时处理。"],thinking:["正在思考…","切换模式不会取消当前请求。"],speaking:["正在回答…","你可以直接说话打断，原回答文字会继续保留。"],stopped:["回答已停止","文字回答已保留，可继续追问。"],failed:["未能识别语音","请重新说，或切换到文字模式。"]}[QA_STATE.phase]||["你可以开始说话",""];
+  const title=root.querySelector("#voice-dialogue-title"),result=root.querySelector("#voice-dialogue-result"),orb=root.querySelector("#voice-dialogue-orb-button"),actions=root.querySelector("#qa-voice-actions"),permissionAction=root.querySelector("#qa-voice-permission-action");
+  let meta={idle:["你可以开始说话","点击语音球开始，或切换到文字模式。"],muted:["麦克风已关闭","点击底部麦克风按钮恢复收听。"],listening:QA_STATE.interrupted?["已打断AI，正在听你说…","AI播报已停止，请直接说出新的问题。"]:["正在收听…","检测到说话结束后将自动提交。"],recognizing:["正在识别…","原始语音仅用于本次临时处理。"],thinking:["正在思考…","切换模式不会取消当前请求。"],speaking:["正在回答…","你可以直接说话打断，原回答文字会继续保留。"],stopped:["回答已停止","文字回答已保留，可继续追问。"],failed:["未能识别语音","请重新说，或切换到文字模式。"]}[QA_STATE.phase]||["你可以开始说话",""];
+  if(QA_STATE.permission==="unauthorized")meta=["麦克风未授权","请前往 Windows 系统设置开启麦克风权限；文字问答仍可使用。"];
+  if(QA_STATE.permission==="expired")meta=["麦克风权限已关闭","用户、系统隐私开关或组织策略已关闭权限，请重新开启。"];
+  if(QA_STATE.permission==="requesting")meta=["等待系统授权","请在 Windows 系统权限窗口中选择允许或拒绝。"];
+  if(["waiting","recheck-denied"].includes(QA_STATE.permission))meta=["等待系统授权","在 Windows 设置中开启权限后，返回并重新检查。"];
+  if(QA_STATE.permission==="checking")meta=["正在检查权限…","正在读取 Windows 麦克风权限状态，请稍候。"];
+  if(QA_STATE.permission==="settings-error")meta=["无法打开系统设置","请重试，或手动打开 Windows 麦克风隐私设置。"];
   if(title)title.textContent=meta[0];if(result)result.textContent=meta[1];if(orb){orb.classList.toggle("listening",QA_STATE.phase==="listening");orb.classList.toggle("processing",["recognizing","thinking"].includes(QA_STATE.phase));}
-  if(actions){actions.classList.toggle("active",["listening","speaking"].includes(QA_STATE.phase));actions.querySelector("#qa-finish-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-cancel-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-stop-speaking").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";actions.querySelector("#qa-interrupt-ai").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";}
+  if(permissionAction){const needsSettings=["unauthorized","expired"].includes(QA_STATE.permission),needsRecheck=["waiting","recheck-denied"].includes(QA_STATE.permission);permissionAction.classList.toggle("visible",needsSettings||needsRecheck);permissionAction.textContent=needsRecheck?"重新检查":"去授权";permissionAction.dataset.action=needsRecheck?"recheck":"settings";}
+  if(actions){actions.classList.toggle("active",["listening","thinking","speaking"].includes(QA_STATE.phase));actions.querySelector("#qa-finish-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-cancel-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-stop-speaking").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";actions.querySelector("#qa-stop-generating").style.display=QA_STATE.phase==="thinking"?"inline-flex":"none";actions.querySelector("#qa-interrupt-ai").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";}
   root.querySelector(".qa-banner")?.remove();
-  const issues={"mic-permission":"麦克风未授权 · 前往系统设置开启权限，或改用文字模式","mic-busy":"麦克风正被其他应用占用 · 释放后重试，或改用文字模式","mic-missing":"未检测到麦克风设备 · 请检查设备连接或系统设置","offline":"当前无网络 · 会话和草稿已保留，请恢复网络后重试","no-model":"暂无可用模型 · 请前往 API 设置完成配置","model-invalid":"当前模型已失效 · 请选择其他可用模型或前往 API 设置","recognition-failed":"未能识别语音 · 请重新说，或切换到文字模式"};
-  if(QA_STATE.issue&&issues[QA_STATE.issue]){const banner=document.createElement("div");banner.className="qa-banner";banner.textContent=issues[QA_STATE.issue];root.append(banner);}
+  const issues={"mic-permission":"麦克风未授权 · 前往系统设置开启权限，或改用文字模式","mic-settings-opened":"已打开 Windows 麦克风设置 · 完成授权后返回并重新检查","mic-busy":"麦克风正被其他应用占用 · 释放后重试，或改用文字模式","mic-missing":"未检测到麦克风设备 · 请检查设备连接或系统设置","offline":"当前无网络 · 会话和草稿已保留，请恢复网络后重试","no-model":"暂无可用模型 · 请前往 API 设置完成配置","model-invalid":"当前模型已失效 · 请选择其他可用模型或前往 API 设置","recognition-failed":"未能识别语音 · 请重新说，或切换到文字模式"};
+  if(QA_STATE.issue&&issues[QA_STATE.issue]){const banner=document.createElement("div");banner.className="qa-banner";banner.append(document.createTextNode(issues[QA_STATE.issue]));if(["no-model","model-invalid"].includes(QA_STATE.issue)){const action=document.createElement("button");action.type="button";action.id="qa-banner-api-settings";action.textContent="前往 API 设置";banner.append(action);}root.append(banner);}
   const callFooter=root.querySelector(".qa-call-footer");if(callFooter)callFooter.classList.toggle("active",QA_STATE.callActive);
   const callMic=root.querySelector("#qa-call-mic");if(callMic){callMic.classList.toggle("muted",QA_STATE.micMuted);callMic.setAttribute("aria-pressed",String(QA_STATE.micMuted));callMic.setAttribute("aria-label",QA_STATE.micMuted?"打开麦克风":"关闭麦克风");callMic.title=QA_STATE.micMuted?"打开麦克风":"关闭麦克风";}
   const permissionPanel=document.querySelector("#qa-permission-panel"),permissionTitle=document.querySelector("#qa-permission-title"),permissionDescription=document.querySelector("#qa-permission-description"),permissionPrimary=document.querySelector("#qa-permission-primary"),permissionRecheck=document.querySelector("#qa-permission-recheck"),permissionDemo=document.querySelector("#qa-permission-demo");
-  const permissionMeta={"first-use":["首次使用","使用语音问答前需要允许 Agent PC 访问麦克风；文字问答不受影响。","允许使用麦克风"],authorized:["已授权","AI 智能问答可在副屏语音模式中使用麦克风。",""],unauthorized:["未授权","尚未获得麦克风权限，语音模式不可用；文字问答不受影响。","前往系统设置"],expired:["权限失效","麦克风授权已被系统撤销或失效，请重新前往系统设置授权。","前往系统设置"],waiting:["等待重新授权","请在 Windows 麦克风设置中完成授权，返回后重新检查。",""],checking:["正在检查权限","正在读取 Windows 麦克风权限状态，请稍候。","检查中"],error:["状态检测失败","暂时无法读取麦克风权限状态，已保留上一次成功状态。","重新检查"]}[QA_STATE.permission]||["状态未知","暂时无法读取麦克风权限状态。","重新检查"];
+  const permissionMeta={"first-use":["首次使用待确认","首次点击语音入口时，副屏先说明麦克风用途，由用户选择是否继续授权。",""],requesting:["等待系统授权结果","产品已发起系统权限申请，结果由 Windows 或宿主系统返回。",""],authorized:["已授权","AI 智能问答可在副屏语音模式中使用麦克风。",""],unauthorized:["未授权","系统权限申请被拒绝或麦克风调用返回无权限，请前往 Windows 系统设置开启。","前往系统设置"],expired:["权限已关闭","此前已授权，但用户、系统隐私开关或组织策略已将权限关闭。","前往系统设置"],waiting:["等待重新授权","请在 Windows 麦克风设置中完成授权，返回后重新检查。",""],"recheck-denied":["等待重新授权","原型将演示返回后仍未开启权限的结果。",""],checking:["正在检查权限","正在读取 Windows 麦克风权限状态，请稍候。","检查中"],"settings-error":["系统设置打开失败","未能打开 Windows 麦克风设置，请重试或手动前往系统设置。","重试"],error:["状态检测失败","暂时无法读取麦克风权限状态，禁止语音采集；文字问答仍可使用。","重新检查"]}[QA_STATE.permission]||["状态未知","暂时无法读取麦克风权限状态。","重新检查"];
   if(permissionPanel){permissionPanel.dataset.permission=QA_STATE.permission;permissionPanel.dataset.permissionCode=QA_PERMISSION_API_CODES[QA_STATE.permission]||"unknown";}if(permissionTitle)permissionTitle.textContent=permissionMeta[0];if(permissionDescription)permissionDescription.textContent=permissionMeta[1];if(permissionDemo)permissionDemo.value=QA_STATE.permission;
-  if(permissionPrimary){permissionPrimary.hidden=!permissionMeta[2];permissionPrimary.textContent=permissionMeta[2];permissionPrimary.disabled=QA_STATE.permission==="checking";}if(permissionRecheck)permissionRecheck.hidden=!['waiting','unauthorized','expired'].includes(QA_STATE.permission);
+  if(permissionPrimary){permissionPrimary.hidden=!permissionMeta[2];permissionPrimary.textContent=permissionMeta[2];permissionPrimary.disabled=QA_STATE.permission==="checking";}if(permissionRecheck)permissionRecheck.hidden=!['waiting','recheck-denied','unauthorized','expired'].includes(QA_STATE.permission);
   const drawer=root.querySelector("#qa-session-drawer"),toggle=root.querySelector("#qa-session-toggle"),recentList=root.querySelector("#qa-recent-list");if(drawer){drawer.classList.toggle("open",QA_STATE.sessionDrawerOpen);drawer.setAttribute("aria-hidden",String(!QA_STATE.sessionDrawerOpen));}if(toggle)toggle.setAttribute("aria-expanded",String(QA_STATE.sessionDrawerOpen));
   if(recentList)qaRenderDrawer(root.querySelector("#qa-drawer-search")?.value||"");
   qaRenderMainHistory();
@@ -17127,8 +17173,12 @@ function qaRenderMainHistory(filter=""){
   const list=document.querySelector("#qa-main-history-list");if(!list)return;const keyword=filter.trim().toLowerCase();const sessions=QA_STATE.recentSessions.filter(s=>!keyword||`${s.title} ${s.preview}`.toLowerCase().includes(keyword));
   list.innerHTML=sessions.length?sessions.map(s=>`<div class="qa-main-history-row" data-qa-main-session="${s.sessionId}"><div><strong>${escapeHtml(s.title)}</strong><p>${escapeHtml(s.preview)}</p></div><span>${escapeHtml(s.time)}</span><div><button type="button" data-qa-session-detail="${s.sessionId}">查看详情</button> <button type="button" data-qa-session-delete="${s.sessionId}">删除</button></div></div>`).join(""):'<div class="empty-state">没有匹配的会话</div>';
 }
-function qaOpenSession(id){const session=QA_STATE.recentSessions.find(s=>s.sessionId===id);if(!session)return;QA_STATE.activeSessionId=id;QA_STATE.messages=(session.messages||[]).map(m=>({...m}));QA_STATE.mode="text";QA_STATE.phase="success";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaOpenSession(id){const session=QA_STATE.recentSessions.find(s=>s.sessionId===id);if(!session)return;QA_STATE.activeSessionId=id;QA_STATE.messages=(session.messages||[]).map(m=>({...m}));QA_STATE.phase="success";QA_STATE.sessionDrawerOpen=false;qaRender();}
 function qaCreateSession(){if(QA_STATE.messages.length){const first=QA_STATE.messages.find(m=>m.role==="user"),lastAi=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"),now=new Date().toISOString();const sessionId=QA_STATE.activeSessionId||`qa-${Date.now()}`;const previous=QA_STATE.recentSessions.find(s=>s.sessionId===sessionId);const saved={sessionId,title:first?.text?.slice(0,22)||"新会话",time:"刚刚",createdAt:previous?.createdAt||now,updatedAt:now,currentProviderId:String(QA_STATE.modelProvider||"").toLowerCase(),currentModelId:APP_STATE.apiSettings.model,preview:lastAi?.text||"",messages:QA_STATE.messages.map(m=>({...m,messageId:m.messageId||`msg-${Date.now()}-${Math.random().toString(36).slice(2,7)}`,createdAt:m.createdAt||now,time:m.time||nowText(),inputType:m.role==="user"?(m.inputType||QA_STATE.mode):undefined,status:m.role==="ai"?(m.status||(m.loading?"thinking":"success")):undefined,providerId:m.role==="ai"?(m.providerId||String(QA_STATE.modelProvider||"").toLowerCase()):undefined,modelId:m.role==="ai"?(m.modelId||APP_STATE.apiSettings.model):undefined}))};QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.sessionId!==sessionId);QA_STATE.recentSessions.unshift(saved);}QA_STATE.activeSessionId=null;QA_STATE.messages=[];QA_STATE.draft="";QA_STATE.phase="idle";QA_STATE.sessionDrawerOpen=false;qaRender();}
+function qaRequestNewSession(){
+  if(!["listening","muted","recognizing","thinking","speaking"].includes(QA_STATE.phase)){qaCreateSession();return;}
+  qaShowModal("结束当前操作并新建对话","未提交的语音将丢弃；正在生成或播报会停止，已经生成的文字会保留到当前会话。","结束并新建",()=>{clearTimeout(qaAutoListenTimer);QA_STATE.cancelRecognition=true;if(QA_STATE.phase==="thinking"){clearTimeout(qaTimer);const pending=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"&&m.loading);if(pending){pending.loading=false;pending.status="stopped";pending.text="回答生成已停止。";}}QA_STATE.callActive=false;QA_STATE.speaking=false;QA_STATE.micMuted=false;QA_STATE.phase="stopped";qaCreateSession();},"取消");
+}
 function qaOpenSessionDetail(id){
   const session=QA_STATE.recentSessions.find(s=>s.sessionId===id),list=document.querySelector("#qa-main-history-page"),page=document.querySelector("#qa-session-detail-page");if(!session||!page)return;
   document.querySelector("#qa-session-detail-title").textContent=session.title;
@@ -17138,40 +17188,68 @@ function qaOpenSessionDetail(id){
   list?.setAttribute("aria-hidden","true");if(list)list.style.display="none";page.classList.add("open");page.setAttribute("aria-hidden","false");page.scrollIntoView({block:"start"});
 }
 function qaCloseSessionDetail(){const list=document.querySelector("#qa-main-history-page"),page=document.querySelector("#qa-session-detail-page");page?.classList.remove("open");page?.setAttribute("aria-hidden","true");if(list){list.style.display="grid";list.setAttribute("aria-hidden","false");list.scrollIntoView({block:"start"});}}
-function qaRequestPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
-function qaOpenPermissionSettings(){QA_STATE.permission="waiting";qaRender();showSheet({type:"系统设置",title:"请完成麦克风授权",copy:"已定位到 Windows 隐私和安全性中的麦克风设置。完成授权并返回 Agent PC 后，请点击“重新检查”。",detail:"voice",detailLabel:""});}
-function qaRecheckPermission(){QA_STATE.permission="checking";qaRender();setTimeout(()=>{QA_STATE.permission="authorized";QA_STATE.issue="";qaRender();},700);}
-function qaScheduleAutoSubmit(followup=false){clearTimeout(qaAutoListenTimer);qaAutoListenTimer=setTimeout(()=>{if(QA_STATE.phase!=="listening"||QA_STATE.micMuted)return;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理"),450);},1400);}
+async function qaOpenPermissionSettings(){
+  QA_STATE.issue="";
+  try{
+    if(window.agentPcBridge?.openWindowsSettings){const opened=await window.agentPcBridge.openWindowsSettings("ms-settings:privacy-microphone");if(opened===false)throw new Error("settings_open_failed");}
+    QA_STATE.permission="waiting";QA_STATE.issue="mic-settings-opened";
+  }catch(error){QA_STATE.permission="settings-error";QA_STATE.issue="";}
+  qaRender();
+}
+function qaStartListening(){QA_STATE.mode="voice";QA_STATE.callActive=true;QA_STATE.micMuted=false;QA_STATE.cancelRecognition=false;QA_STATE.phase="listening";QA_STATE.issue="";qaRender();qaScheduleAutoSubmit(false);}
+function qaRequestFirstUsePermission(){
+  qaShowModal("允许使用麦克风","用于语音问答和语音识别。原始语音仅在本次识别过程中临时处理。","继续授权",()=>{QA_STATE.pendingVoiceStart=true;QA_STATE.permission="requesting";QA_STATE.issue="";qaRender();},"暂不使用",()=>{QA_STATE.permission="first-use";QA_STATE.pendingVoiceStart=false;QA_STATE.issue="";qaRender();});
+}
+function qaHandleVoiceEntry(){
+  if(QA_STATE.permission==="first-use"){qaRequestFirstUsePermission();return;}
+  if(["requesting","checking","waiting","recheck-denied"].includes(QA_STATE.permission)){qaRender();return;}
+  if(QA_STATE.permission!=="authorized"){QA_STATE.issue="mic-permission";qaRender();return;}
+  qaStartListening();
+}
+function qaApplyPermissionResult(next){
+  const previousGranted=QA_STATE.hadMicrophoneGrant;
+  QA_STATE.permission=next==="authorized"?"authorized":(previousGranted?"expired":"unauthorized");
+  if(QA_STATE.permission==="authorized"){QA_STATE.hadMicrophoneGrant=true;QA_STATE.issue="";if(QA_STATE.pendingVoiceStart){QA_STATE.pendingVoiceStart=false;qaStartListening();return;}}
+  else{clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;if(["listening","muted"].includes(QA_STATE.phase))QA_STATE.phase="idle";QA_STATE.pendingVoiceStart=false;QA_STATE.issue="mic-permission";}
+  qaRender();
+}
+function qaRecheckPermission(){const next=QA_STATE.permission==="recheck-denied"?"unauthorized":"authorized";QA_STATE.permission="checking";qaRender();setTimeout(()=>qaApplyPermissionResult(next),700);}
+function qaScheduleAutoSubmit(followup=false){clearTimeout(qaAutoListenTimer);QA_STATE.cancelRecognition=false;qaAutoListenTimer=setTimeout(()=>{if(QA_STATE.phase!=="listening"||QA_STATE.micMuted)return;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>{if(!QA_STATE.cancelRecognition)qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理");},450);},1400);}
 document.addEventListener("input",e=>{if(e.target.id==="voice-text-input")QA_STATE.draft=e.target.value;},true);
 document.addEventListener("pointerdown",e=>{if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();}},true);
 document.addEventListener("keydown",e=>{if(e.target.id==="voice-text-input"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.stopImmediatePropagation();QA_STATE.draft=e.target.value;qaSubmit(QA_STATE.draft);QA_STATE.draft="";e.target.value="";}},true);
 document.addEventListener("click",e=>{
   const entry=e.target.closest("[data-subscreen-ai-ball]");if(entry){e.preventDefault();e.stopImmediatePropagation();QA_STATE.sourcePage=APP_STATE.currentPage==="voice"?QA_STATE.sourcePage:APP_STATE.currentPage;QA_STATE.mode=QA_STATE.mode||"voice";setActiveTab("voice");qaRender();return;}
   const mode=e.target.closest("[data-voice-input-mode]");if(mode){e.preventDefault();e.stopImmediatePropagation();const next=mode.dataset.voiceInputMode;if(next==="text"){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;if(["listening","muted"].includes(QA_STATE.phase))QA_STATE.phase="idle";if(QA_STATE.phase==="speaking"){QA_STATE.phase="stopped";QA_STATE.speaking=false;}}QA_STATE.mode=next;qaRender();if(next==="text")qaRoot()?.querySelector("#voice-text-input")?.focus();return;}
-  if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.permission!=="authorized"){QA_STATE.mode="voice";if(QA_STATE.permission==="first-use")qaRequestPermission();else{QA_STATE.issue="mic-permission";qaRender();}return;}QA_STATE.mode="voice";QA_STATE.callActive=true;QA_STATE.micMuted=false;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(false);return;}
-  if(e.target.closest("#voice-dialogue-orb-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.permission!=="authorized"){if(QA_STATE.permission==="first-use")qaRequestPermission();else{QA_STATE.issue="mic-permission";qaRender();}return;}QA_STATE.callActive=true;if(QA_STATE.micMuted)QA_STATE.micMuted=false;if(!["recognizing","thinking"].includes(QA_STATE.phase)){const followup=QA_STATE.phase==="speaking";QA_STATE.mode="voice";QA_STATE.interrupted=followup;QA_STATE.speaking=false;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(followup);}return;}
-  if(e.target.closest("#qa-finish-listening")){const followup=QA_STATE.interrupted;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理"),500);return;}
+  if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();qaHandleVoiceEntry();return;}
+  if(e.target.closest("#voice-dialogue-orb-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.permission==="first-use"){qaRequestFirstUsePermission();return;}if(["requesting","checking","waiting","recheck-denied"].includes(QA_STATE.permission)){qaRender();return;}if(QA_STATE.permission!=="authorized"){QA_STATE.issue="mic-permission";qaRender();return;}QA_STATE.callActive=true;if(QA_STATE.micMuted)QA_STATE.micMuted=false;if(!["recognizing","thinking"].includes(QA_STATE.phase)){const followup=QA_STATE.phase==="speaking";QA_STATE.mode="voice";QA_STATE.interrupted=followup;QA_STATE.speaking=false;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(followup);}return;}
+  const permissionAction=e.target.closest("#qa-voice-permission-action");if(permissionAction){if(permissionAction.dataset.action==="recheck")qaRecheckPermission();else qaOpenPermissionSettings();return;}
+  if(e.target.closest("#qa-finish-listening")){const followup=QA_STATE.interrupted;QA_STATE.cancelRecognition=false;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>{if(!QA_STATE.cancelRecognition)qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理");},500);return;}
   if(e.target.closest("#qa-cancel-listening")){QA_STATE.phase=QA_STATE.interrupted?"stopped":"idle";QA_STATE.interrupted=false;qaRender();return;}
   if(e.target.closest("#qa-stop-speaking")){QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
+  if(e.target.closest("#qa-stop-generating")){clearTimeout(qaTimer);const pending=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"&&m.loading);if(pending){pending.loading=false;pending.status="stopped";pending.text="回答生成已停止。";}QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
   if(e.target.closest("#qa-interrupt-ai")){QA_STATE.speaking=false;QA_STATE.interrupted=true;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(true);return;}
   if(e.target.closest("#qa-call-mic")){if(!QA_STATE.callActive)return;QA_STATE.micMuted=!QA_STATE.micMuted;if(QA_STATE.micMuted){clearTimeout(qaAutoListenTimer);if(QA_STATE.phase==="listening")QA_STATE.phase="muted";}else if(QA_STATE.phase==="muted"){QA_STATE.phase="listening";qaScheduleAutoSubmit(false);}qaRender();return;}
-  if(e.target.closest("#qa-end-voice")){clearTimeout(qaAutoListenTimer);clearTimeout(qaTimer);QA_STATE.callActive=false;QA_STATE.speaking=false;QA_STATE.interrupted=false;QA_STATE.phase="idle";QA_STATE.micMuted=false;const pending=QA_STATE.messages[QA_STATE.messages.length-1];if(pending?.loading)QA_STATE.messages.pop();qaRender();return;}
+  if(e.target.closest("#qa-end-voice")){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;QA_STATE.interrupted=false;if(["listening","muted","recognizing"].includes(QA_STATE.phase)){QA_STATE.cancelRecognition=true;QA_STATE.phase="idle";}else if(QA_STATE.phase==="speaking"){QA_STATE.speaking=false;QA_STATE.phase="stopped";}else if(QA_STATE.phase!=="thinking")QA_STATE.phase="idle";qaRender();return;}
   if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";qaSubmit(QA_STATE.draft);QA_STATE.draft="";if(i)i.value="";return;}
   if(e.target.closest("#qa-session-toggle")){QA_STATE.sessionDrawerOpen=!QA_STATE.sessionDrawerOpen;qaRender();return;}
   if(e.target.closest("#qa-session-close")){QA_STATE.sessionDrawerOpen=false;qaRender();return;}
   if(e.target.closest("#qa-session-search-toggle")){const root=qaRoot(),input=root?.querySelector("#qa-drawer-search"),button=root?.querySelector("#qa-session-search-toggle");if(!input)return;input.hidden=!input.hidden;button?.setAttribute("aria-expanded",String(!input.hidden));if(!input.hidden)requestAnimationFrame(()=>input.focus());else{input.value="";qaRenderDrawer("");}return;}
-  if(e.target.closest("#qa-new-session")){qaCreateSession();return;}
+  if(e.target.closest("#qa-new-session")){qaRequestNewSession();return;}
   const recent=e.target.closest("[data-qa-session-id]");if(recent){qaOpenSession(recent.dataset.qaSessionId);return;}
   if(e.target.closest("#qa-view-all-sessions")){QA_STATE.sessionDrawerOpen=false;qaRender();const page=document.querySelector("#qa-main-history-page");page?.classList.add("open");page?.setAttribute("aria-hidden","false");page?.scrollIntoView({behavior:"smooth",block:"start"});return;}
   const detail=e.target.closest("[data-qa-session-detail]");if(detail){qaOpenSessionDetail(detail.dataset.qaSessionDetail);return;}
   if(e.target.closest("#qa-session-detail-back")){qaCloseSessionDetail();return;}
   const remove=e.target.closest("[data-qa-session-delete]");if(remove){const id=remove.dataset.qaSessionDelete,session=QA_STATE.recentSessions.find(s=>s.sessionId===id);if(!session)return;qaShowModal("删除会话",`确定删除“${session.title}”？删除后无法恢复。`,"确认删除",()=>{QA_STATE.recentSessions=QA_STATE.recentSessions.filter(s=>s.sessionId!==id);if(QA_STATE.activeSessionId===id){QA_STATE.activeSessionId=null;QA_STATE.messages=[];QA_STATE.phase="idle";}qaRenderMainHistory(document.querySelector("#qa-history-search")?.value||"");qaRender();});return;}
   if(e.target.closest("#voice-api-entry")){QA_STATE.draft=qaRoot()?.querySelector("#voice-text-input")?.value||QA_STATE.draft;return;}
-  if(e.target.closest("#qa-permission-primary")){if(QA_STATE.permission==="first-use"||QA_STATE.permission==="error")qaRequestPermission();else if(QA_STATE.permission==="unauthorized"||QA_STATE.permission==="expired")qaOpenPermissionSettings();return;}
+  if(e.target.closest("#qa-banner-api-settings")){QA_STATE.draft=qaRoot()?.querySelector("#voice-text-input")?.value||QA_STATE.draft;setConfigSubpage("api");return;}
+  if(e.target.closest("#qa-permission-primary")){if(QA_STATE.permission==="error")qaRecheckPermission();else if(["unauthorized","expired","settings-error"].includes(QA_STATE.permission))qaOpenPermissionSettings();return;}
   if(e.target.closest("#qa-permission-recheck")){qaRecheckPermission();return;}
 },true);
-document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){QA_STATE.permission=e.target.value;QA_STATE.issue=["unauthorized","expired"].includes(e.target.value)?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();const [p,m]=e.target.value.split("|"),apply=()=>{QA_STATE.modelProvider=p;APP_STATE.apiSettings.provider=p;APP_STATE.apiSettings.providerId=p==="OpenAI"?"openai":p==="Anthropic"?"anthropic":"openai-compatible";APP_STATE.apiSettings.model=m;APP_STATE.apiSettings.defaultModelId=m;qaRender();};if(QA_STATE.messages.length&&p!==QA_STATE.modelProvider)qaShowModal("切换模型服务商","当前会话内容将发送给新的模型服务商。是否继续？","确认切换",apply);else apply();},true);
+document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){const next=e.target.value;if(QA_STATE.permission==="requesting"&&["authorized","unauthorized"].includes(next)){qaApplyPermissionResult(next);return;}QA_STATE.permission=next;if(next==="authorized")QA_STATE.hadMicrophoneGrant=true;QA_STATE.issue=["unauthorized","expired"].includes(next)?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();const [p,m]=e.target.value.split("|");QA_STATE.modelProvider=p;APP_STATE.apiSettings.provider=p;APP_STATE.apiSettings.providerId=p==="OpenAI"?"openai":p==="Anthropic"?"anthropic":"openai-compatible";APP_STATE.apiSettings.model=m;APP_STATE.apiSettings.defaultModelId=m;qaRender();},true);
 document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRenderMainHistory(e.target.value);if(e.target.id==="qa-drawer-search")qaRenderDrawer(e.target.value);},true);
+window.addEventListener("offline",()=>{QA_STATE.issue="offline";qaRender();});
+window.addEventListener("online",()=>{if(QA_STATE.issue==="offline")QA_STATE.issue="";qaRender();});
 qaRender();
     </script>
   </body>
