@@ -3683,6 +3683,20 @@ pre {
   transform: translate(-50%, 0);
 }
 
+.light-toast.contextual {
+  position: absolute;
+  left: auto;
+  right: 218px;
+  top: 20px;
+  z-index: 12;
+  min-width: 230px;
+  transform: translateY(-10px);
+}
+
+.light-toast.contextual.show {
+  transform: translateY(0);
+}
+
 .threshold-panel {
   position: static;
   display: grid;
@@ -3877,7 +3891,7 @@ pre {
 }
 
 .token-preview-canvas .quota-status strong {
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .token-preview-canvas .quota-status small {
@@ -3908,7 +3922,7 @@ pre {
   color: var(--text);
   max-width: 100%;
   overflow-wrap: anywhere;
-  font-size: 18px;
+  font-size: 14px;
   line-height: 1.2;
 }
 
@@ -8642,6 +8656,7 @@ pre {
       }
 
       .time-settings-card {
+        position: relative;
         padding-top: 20px;
       }
 
@@ -9795,8 +9810,7 @@ pre {
 	                      <div class="quota-ring" id="token-quota-ring"><strong id="token-quota-percent">32%</strong></div>
 	                      <div class="quota-status">
 	                        <span class="tag green" id="token-quota-status">额度安全</span>
-	                        <strong id="token-quota-used">已用 473K Token</strong>
-                        <small id="token-quota-warning">低于 70%，额度安全</small>
+	                        <strong id="token-quota-used">语音模型：280token<br>文本模型：480token</strong>
 	                      </div>
 	                    </div>
 	                  </article>
@@ -9831,8 +9845,8 @@ pre {
 	                  </div>
 	                  <div class="monthly-consume-bar" aria-label="月度消耗感知"><i></i></div>
 	                  <div class="monthly-consume-meta">
-	                    <div><span>本月任务</span><strong>42 个</strong></div>
-	                    <div><span>高消耗任务</span><strong>3 个</strong></div>
+	                    <div><span>本月会话</span><strong>42 个</strong></div>
+	                    <div><span>高消耗会话</span><strong>3 个</strong></div>
 	                  </div>
 	                </article>
 
@@ -12184,9 +12198,17 @@ function showSheet(event) {
 }
 
 let lightToastTimer = null;
-function showLightToast(message) {
+function showLightToast(message, containerSelector = "") {
   const toast = $("#light-toast");
   if (!toast) return;
+  const container = containerSelector ? $(containerSelector) : null;
+  if (container) {
+    container.appendChild(toast);
+    toast.classList.add("contextual");
+  } else {
+    document.body.appendChild(toast);
+    toast.classList.remove("contextual");
+  }
   window.clearTimeout(lightToastTimer);
   $("#light-toast-message").textContent = message;
   toast.classList.add("show");
@@ -13895,8 +13917,7 @@ function renderTokenPage() {
   $("#token-quota-percent").textContent = `${percent}%`;
   $("#token-quota-status").textContent = quotaLabel;
   $("#token-quota-status").className = quotaClass;
-  $("#token-quota-used").textContent = `已用 ${shortToken(token.used)} Token`;
-  $("#token-quota-warning").textContent = overLimit ? `已超出 ${shortToken(token.used - token.limit)} Token` : quotaRisk ? "已达到 90%，接近今日上限" : quotaWarn ? "70%-90%，消耗偏高" : "低于 70%，额度安全";
+  $("#token-quota-used").innerHTML = "语音模型：280token<br>文本模型：480token";
   $("#token-heatmap-title").textContent = "Token 热力图";
 
   const heatmapCells = token.heatmap.flatMap((level) => {
@@ -16392,7 +16413,7 @@ function saveTimeSettings() {
   } catch {
     // 原型环境可能禁用本地存储，仍保留当前会话中的设置。
   }
-  showLightToast("时间配置已保存");
+  showLightToast("时间配置已保存", ".time-settings-card");
 }
 
 function renderApp() {
