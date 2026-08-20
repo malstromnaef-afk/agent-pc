@@ -2135,9 +2135,13 @@ p {
   display: block;
   width: 100%;
   height: auto;
-  aspect-ratio: 2646 / 1432;
   object-fit: contain;
-  background: #f7f8f9;
+  background: #181818;
+}
+
+.agent-live-window-image ~ .agent-live-titlebar,
+.agent-live-window-image ~ .agent-live-body {
+  display: none;
 }
 
 .agent-live-window.recognizing {
@@ -9657,7 +9661,8 @@ pre {
                     </div>
                     <span class="pill ok" id="agent-monitor-pill">在线</span>
                   </div>
-                  <div class="agent-live-window" aria-label="被监控的 Agent 应用窗口预览">
+                  <div class="agent-live-window" aria-label="被监控的 Claude Code CLI 窗口预览">
+                    <img class="agent-live-window-image" src="assets/claude-code-cli.png" alt="Claude Code CLI 窗口截图" />
                     <div class="agent-live-titlebar">
                       <div class="window-dots"><i></i><i></i><i></i></div>
                       <span id="agent-window-title">Agent PC 方案规划.md - Claude Code</span>
@@ -9695,7 +9700,7 @@ pre {
                     </div>
                   </div>
                   <div class="agent-monitor-meta">
-                    <div><span>监控对象</span><strong id="agent-monitor-object">Claude Code</strong></div>
+                    <div><span>监控对象</span><strong id="agent-monitor-object">Claude Code CLI</strong></div>
                     <div><span>识别状态</span><strong id="agent-sync-status">正常同步</strong></div>
                     <div><span>最后更新</span><strong id="agent-last-update">10:58:24</strong></div>
                   </div>
@@ -11450,8 +11455,8 @@ const APP_STATE = {
   ] : [
     {
       id: "mavis",
-      name: "Marvis",
-      windowTitle: "家庭智能助手 - Marvis",
+      name: "Claude Code CLI",
+      windowTitle: "Claude Code CLI",
       project: "家庭智能中心",
       activeTask: "整理今日家庭日程",
       taskTitle: "今日家庭安排正在整理中",
@@ -12127,7 +12132,6 @@ function getTrigger() {
 }
 
 function setActiveTab(viewId) {
-  if (viewId === "monitor") viewId = "shortcut";
   APP_STATE.currentPage = viewId;
   APP_STATE.activeSubscreenSettings = null;
   if (viewId === "screen-config") APP_STATE.configSubpage = "api";
