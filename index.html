@@ -2121,8 +2121,99 @@ p {
   height: auto;
 }
 
+.cli-integration-intro {
+  margin: 0 0 16px;
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.cli-integration-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.cli-integration-card {
+  display: grid;
+  gap: 14px;
+  min-height: 190px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: rgba(20, 23, 29, 0.72);
+  padding: 20px;
+}
+
+.cli-integration-card.active {
+  border-color: rgba(32, 230, 230, 0.6);
+  box-shadow: inset 0 0 0 1px rgba(32, 230, 230, 0.14);
+}
+
+.cli-integration-card-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+.cli-integration-card h4 { margin: 0; font-size: 23px; }
+.cli-integration-card p { margin: 0; color: var(--muted); line-height: 1.6; }
+.cli-integration-card .action-row { margin-top: auto; justify-content: flex-start; }
+.cli-monitor-note { margin:16px 0 0; padding:14px 16px; border-left:3px solid var(--cyan); border-radius:8px; background:rgba(32,230,230,.055); color:var(--muted); line-height:1.65; }
+.cli-monitor-dialog-layer { position:fixed; z-index:180; inset:0; display:none; place-items:center; padding:24px; background:rgba(3,7,10,.76); backdrop-filter:blur(5px); }
+.cli-monitor-dialog-layer.show { display:grid; }
+.cli-monitor-dialog { width:min(620px,94vw); max-height:88vh; overflow:auto; border:1px solid rgba(32,230,230,.34); border-radius:16px; background:#11191d; box-shadow:0 28px 90px rgba(0,0,0,.62); padding:24px; }
+.cli-monitor-dialog h3 { margin:0 0 10px; font-size:24px; }
+.cli-monitor-dialog p { margin:8px 0; color:var(--muted); line-height:1.65; }
+.cli-monitor-dialog .dialog-status { margin:16px 0; padding:14px 16px; border:1px solid var(--line); border-radius:10px; background:rgba(255,255,255,.025); }
+.cli-monitor-dialog .dialog-status strong { display:block; margin-bottom:6px; }
+.cli-monitor-dialog .dialog-actions { display:flex; flex-wrap:wrap; justify-content:flex-end; gap:10px; margin-top:22px; }
+.cli-monitor-dialog ul { margin:10px 0; padding-left:22px; color:var(--text); line-height:1.8; }
+
+.cli-step-list {
+  display: grid;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.cli-step-item {
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr);
+  gap: 10px;
+  align-items: start;
+  color: var(--text);
+}
+
+.cli-step-item i {
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 999px;
+  background: rgba(32, 230, 230, 0.16);
+  color: var(--cyan);
+  font-style: normal;
+  font-weight: 900;
+}
+
+.cli-permission-box {
+  margin-top: 16px;
+  border: 1px solid var(--line-soft);
+  border-radius: 10px;
+  background: rgba(10, 12, 17, 0.5);
+  padding: 14px 16px;
+}
+
+.cli-permission-box strong { display: block; margin-bottom: 8px; }
+.cli-permission-box ul { margin: 0; padding-left: 20px; color: var(--muted); line-height: 1.8; }
+.cli-path { word-break: break-all; color: var(--cyan); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+
+@media (max-width: 980px) {
+  .cli-integration-grid { grid-template-columns: 1fr; }
+}
+
 .agent-live-window {
   overflow: hidden;
+  height: clamp(360px, 31vw, 480px);
   margin-top: 12px;
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
@@ -2134,8 +2225,9 @@ p {
 .agent-live-window-image {
   display: block;
   width: 100%;
-  height: auto;
-  object-fit: contain;
+  height: 100%;
+  object-fit: cover;
+  object-position: left top;
   background: #181818;
 }
 
@@ -2327,6 +2419,75 @@ p {
     var(--shadow),
     0 0 28px rgba(32, 230, 230, 0.22);
   padding: 6px;
+}
+
+.agent-state-preview-tools {
+  position: relative;
+  z-index: 10000;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto repeat(6, minmax(92px, 1fr)) minmax(132px, auto);
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+  padding: 10px 12px;
+  border: 1px dashed rgba(32, 230, 230, 0.34);
+  border-radius: 8px;
+  background: rgba(32, 230, 230, 0.045);
+  pointer-events: auto;
+}
+
+.agent-state-preview-tools > span {
+  margin-right: 8px;
+  color: var(--cyan);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.agent-state-preview-tools button,
+.agent-state-preview-tools a {
+  position: relative;
+  z-index: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 7px;
+  background: var(--panel-2);
+  color: var(--muted);
+  padding: 0 16px;
+  font-size: 13px;
+  font-weight: 850;
+  text-decoration: none;
+  pointer-events: auto !important;
+  touch-action: manipulation;
+  cursor: pointer;
+}
+
+.agent-state-preview-tools button.active,
+.agent-state-preview-tools a.active {
+  border-color: rgba(32, 230, 230, 0.7);
+  background: rgba(32, 230, 230, 0.14);
+  color: var(--text);
+}
+
+.agent-state-preview-note {
+  grid-column: 1 / -1;
+  flex-basis: 100%;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+@media (max-width: 1480px) {
+  .agent-state-preview-tools {
+    grid-template-columns: repeat(4, minmax(120px, 1fr));
+  }
+
+  .agent-state-preview-tools > span {
+    grid-column: 1 / -1;
+    margin: 0;
+  }
 }
 
 .agent-state-overlay {
@@ -2559,10 +2720,50 @@ p {
 
 .agent-subscreen-body {
   display: grid;
-  grid-template-rows: minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 10px;
   min-height: 0;
   padding-top: 10px;
 }
+
+.agent-current-action {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  padding: 9px 14px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(21, 23, 30, 0.68);
+}
+
+.agent-current-action span { color: var(--muted); font-weight: 800; }
+.agent-current-action strong { color: var(--text); }
+
+.agent-monitor-empty-state {
+  display: grid;
+  grid-row: 1 / -1;
+  place-content: center;
+  justify-items: center;
+  gap: 8px;
+  min-height: 0;
+  height: 100%;
+  padding: 28px;
+  border: 1px solid var(--line-soft);
+  border-radius: 8px;
+  background: rgba(21, 23, 30, 0.68);
+  text-align: center;
+}
+
+.agent-monitor-empty-state i {
+  width: 34px;
+  height: 34px;
+  border: 4px solid rgba(154, 161, 174, 0.32);
+  border-radius: 50%;
+}
+
+.agent-monitor-empty-state strong { font-size: 20px; }
+.agent-monitor-empty-state p { margin: 0; color: var(--muted); }
 
 .agent-subscreen-steps-panel {
   display: grid;
@@ -6498,14 +6699,17 @@ pre {
   padding: 0;
 }
 
-.api-provider-layout { display:grid; grid-template-columns:minmax(250px,.34fr) minmax(520px,.66fr); gap:16px; align-items:start; }
+.api-model-tabs { display:flex; gap:8px; margin-bottom:14px; padding:5px; width:max-content; border:1px solid rgba(255,255,255,.09); border-radius:11px; background:rgba(255,255,255,.025); }
+.api-model-tab { min-width:150px; min-height:44px; border:1px solid transparent; border-radius:8px; background:transparent; color:var(--muted); font-weight:850; cursor:pointer; }
+.api-model-tab.active { border-color:rgba(32,230,230,.52); background:rgba(32,230,230,.12); color:#dfffff; box-shadow:inset 0 0 22px rgba(32,230,230,.05); }
+.api-provider-layout { display:grid; grid-template-columns:1fr; gap:14px; align-items:start; }
 .api-provider-sidebar,.api-provider-editor { border:1px solid rgba(255,255,255,.08); border-radius:10px; background:rgba(255,255,255,.018); overflow:hidden; }
 .api-provider-sidebar-head { display:flex; align-items:center; justify-content:space-between; gap:10px; padding:14px; border-bottom:1px solid rgba(255,255,255,.08); }
 .api-provider-sidebar-head div { display:grid; gap:3px; }
 .api-provider-sidebar-head strong { font-size:15px; }
 .api-provider-sidebar-head small { color:var(--muted); font-size:11px; }
 .api-provider-sidebar-head button { min-height:38px; }
-.api-provider-cards { display:grid; gap:8px; padding:12px; }
+.api-provider-cards { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:8px; padding:12px; }
 .api-provider-empty { padding:28px 18px; color:var(--muted); font-size:13px; line-height:1.65; text-align:center; }
 .api-provider-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:10px; width:100%; border:1px solid rgba(255,255,255,.08); border-radius:9px; background:rgba(255,255,255,.025); color:var(--text); padding:12px; text-align:left; cursor:pointer; }
 .api-provider-card.active { border-color:rgba(32,230,230,.5); background:rgba(32,230,230,.075); }
@@ -6532,6 +6736,7 @@ pre {
 .api-confirm-dialog p { margin:0; color:var(--muted); line-height:1.65; }
 .api-confirm-actions { display:flex; justify-content:flex-end; gap:10px; margin-top:20px; }
 @media(max-width:980px){.api-provider-layout{grid-template-columns:1fr}.api-setting-row{grid-template-columns:1fr;gap:10px}.api-setting-control{justify-content:flex-start}}
+.voice-api-panel[hidden],.llm-api-panel[hidden] { display:none!important; }
 
 .api-settings-list {
   display: grid;
@@ -9576,49 +9781,60 @@ pre {
                   </div>
                 </div>
               </div>
+              <div class="agent-state-preview-tools" aria-label="Agent任务状态原型预览">
+                <span>原型状态预览</span>
+                <a data-agent-preview-state="disconnected" href="?prototype=small&amp;agentState=disconnected">CLI未连接</a>
+                <a data-agent-preview-state="waiting" href="?prototype=small&amp;agentState=waiting">等待任务</a>
+                <a data-agent-preview-state="running" href="?prototype=small&amp;agentState=running">执行中</a>
+                <a data-agent-preview-state="approval" href="?prototype=small&amp;agentState=approval">等待审批</a>
+                <a data-agent-preview-state="failed" href="?prototype=small&amp;agentState=failed">失败</a>
+                <a data-agent-preview-state="completed" href="?prototype=small&amp;agentState=completed">完成</a>
+                <small class="agent-state-preview-note">仅用于原型评审，演示内容不写入真实任务数据。</small>
+              </div>
               <div class="agent-subscreen-preview" data-subscreen-preview="monitor" data-subscreen-title="Agent 任务进度" aria-label="2:1 横屏副屏 Agent 任务进度预览">
                 <div class="agent-subscreen-console">
                   <article class="agent-subscreen-main">
                     <div class="agent-subscreen-kpis">
                       <div class="agent-subscreen-kpi">
-                        <span>任务名称</span>
-                        <strong id="agent-progress-task">项目重构 &amp; 代码优化</strong>
-                        <em id="agent-sub-monitor-object">Claude Code</em>
+                        <span>本轮指令</span>
+                        <strong id="agent-progress-task">等待 CLI 上报任务</strong>
+                        <em id="agent-sub-monitor-object">Claude Code CLI</em>
                       </div>
                       <div class="agent-subscreen-kpi">
                         <span>任务状态</span>
                         <div class="agent-subscreen-status" id="agent-sub-status-wrap">
                           <i></i>
-                          <strong id="agent-progress-pill">运行中</strong>
+                          <strong id="agent-progress-pill">等待任务</strong>
                         </div>
-                        <span>进度 <b id="agent-progress-number">68%</b></span>
-                        <div class="bar"><i id="agent-progress-bar" style="width:68%"></i></div>
                       </div>
                       <div class="agent-subscreen-kpi">
-                        <span>耗时统计</span>
-                        <strong id="agent-elapsed-time">00:15:32</strong>
-                        <em id="agent-remaining-time">预计剩余 ~8 分钟</em>
+                        <span>最后更新</span>
+                        <strong id="agent-elapsed-time">10:58:24</strong>
+                        <em id="agent-update-source">最近连接时间</em>
                       </div>
                     </div>
                     <div class="agent-subscreen-body">
-                      <section class="agent-subscreen-steps-panel">
+                      <div class="agent-current-action" id="agent-current-action-wrap">
+                        <span>当前动作</span>
+                        <strong id="agent-current-action">暂不可用</strong>
+                      </div>
+                      <section class="agent-subscreen-steps-panel" id="agent-steps-panel">
                         <div class="agent-subscreen-steps-head">
                           <h4>执行步骤</h4>
                         </div>
                         <div class="agent-subscreen-steps" id="agent-step-strip">
-                          <div class="agent-step-row done">
-                            <span class="agent-step-icon">✓</span>
-                            <span class="agent-step-copy"><strong>分析项目结构</strong><span>扫描 128 个文件，识别需要调整的模块</span></span>
-                            <span class="agent-step-state">已完成 · 2分30秒</span>
-                          </div>
-                          <div class="agent-step-row active">
-                            <span class="agent-step-icon">●</span>
-                            <span class="agent-step-copy"><strong>生成监控页</strong><span>正在同步副屏任务进度与执行步骤</span></span>
-                            <span class="agent-step-state">进行中 · 4分50秒</span>
-                            <div class="bar"><i style="width:72%"></i></div>
+                          <div class="agent-step-row waiting">
+                            <span class="agent-step-icon">○</span>
+                            <span class="agent-step-copy"><strong>等待 CLI 事件</strong><span>未取得真实执行步骤时不生成模拟步骤</span></span>
+                            <span class="agent-step-state">暂不可用</span>
                           </div>
                         </div>
                       </section>
+                      <div class="agent-monitor-empty-state" id="agent-monitor-empty-state">
+                        <i aria-hidden="true"></i>
+                        <strong id="agent-monitor-empty-title">暂无执行中的任务</strong>
+                        <p id="agent-monitor-empty-copy">在 Claude Code CLI 或 Codex CLI 发起编程任务后，这里将展示当前动作和真实执行步骤。</p>
+                      </div>
                     </div>
                   </article>
                 </div>
@@ -9646,67 +9862,22 @@ pre {
 
             <section class="panel main-panel agent-monitor-panel">
               <div class="section-title">
-                <h3>监控窗口预览</h3>
+                <h3>CLI监测管理</h3>
               </div>
               <div class="monitor-workspace">
                 <article class="inner-card agent-window-card">
-                  <div class="panel-head compact">
-                    <div>
-                      <h3>完整窗口</h3>
-                    </div>
-                    <div class="action-row">
-                      <button class="soft-button" data-agent-control="select">选择监控窗口</button>
-                      <button class="soft-button" data-agent-control="refresh">重新识别</button>
-                      <button class="danger-button" data-agent-control="stop">停止监控</button>
-                    </div>
-                    <span class="pill ok" id="agent-monitor-pill">在线</span>
-                  </div>
-                  <div class="agent-live-window" aria-label="被监控的 Claude Code CLI 窗口预览">
-                    <img class="agent-live-window-image" src="assets/claude-code-cli.png" alt="Claude Code CLI 窗口截图" />
-                    <div class="agent-live-titlebar">
-                      <div class="window-dots"><i></i><i></i><i></i></div>
-                      <span id="agent-window-title">Agent PC 方案规划.md - Claude Code</span>
-                      <span id="agent-window-state">运行中</span>
-                    </div>
-                    <div class="agent-live-body">
-                      <div class="agent-app-nav">
-                        <strong id="agent-app-name">Claude Code</strong>
-                        <span>新建任务</span>
-                        <span>进行中</span>
-                        <span>历史</span>
-                        <span>设置</span>
-                        <strong id="agent-project-name">agent pc 原型</strong>
-                        <span class="active" id="agent-active-task">构建一个原型 文档</span>
-                        <span>规划流程</span>
-                        <span>页面调整记录</span>
-                      </div>
-                      <div class="agent-document">
-                        <h4 id="agent-task-title">产品原型页面正在生成中</h4>
-                        <p id="agent-task-copy">当前任务：按照文档要求重构 Agent PC 原型页面，先对齐 Agent 任务进度，再继续处理 Token 算力消耗。</p>
-                        <p id="agent-task-done">已完成：分析项目结构、重组页面内容。正在执行：生成监控窗口预览与当前任务进度。</p>
-                        <p id="agent-task-next">下一步：校验页面交互，确认历史任务展示是否符合产品逻辑。</p>
-                        <div class="agent-output-box">
-                          <span id="agent-output-line">正在编辑 index.html</span><br />
-                          <span id="agent-step-line">已识别当前任务 3 / 6</span><br />
-                          <span id="agent-eta-line">预计剩余约 8 分钟</span>
-                        </div>
-                      </div>
-                      <div class="agent-output-side">
-                        <div><strong>当前输出</strong><span id="agent-current-output">正在运行检查脚本，等待最后一轮页面校验。</span></div>
-                        <div><strong>最后日志</strong><span id="agent-last-log">index.html 已写入，准备执行 JS 语法检查。</span></div>
-                        <div><strong>待处理</strong><span id="agent-pending-line">无授权确认；无失败；无安全阻塞。</span></div>
-                        <div><strong>同步状态</strong><span id="agent-sync-line">10:58:24 已识别为运行中。</span></div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="agent-monitor-meta">
-                    <div><span>监控对象</span><strong id="agent-monitor-object">Claude Code CLI</strong></div>
-                    <div><span>识别状态</span><strong id="agent-sync-status">正常同步</strong></div>
-                    <div><span>最后更新</span><strong id="agent-last-update">10:58:24</strong></div>
-                  </div>
+                  <div class="cli-integration-grid" id="cli-integration-grid"></div>
+                  <p class="cli-monitor-note">使用前请自行安装并登录对应CLI。Agent PC仅支持Claude Code CLI和Codex CLI。</p>
                 </article>
               </div>
             </section>
+            <div class="cli-monitor-dialog-layer" id="cli-monitor-dialog-layer" aria-hidden="true">
+              <section class="cli-monitor-dialog" role="dialog" aria-modal="true" aria-labelledby="cli-monitor-dialog-title">
+                <h3 id="cli-monitor-dialog-title">启用CLI监测</h3>
+                <div id="cli-monitor-dialog-content"></div>
+                <div class="dialog-actions" id="cli-monitor-dialog-actions"></div>
+              </section>
+            </div>
 
             <section class="panel main-panel history-panel">
               <div class="section-title">
@@ -10711,10 +10882,15 @@ pre {
               </section>
 
               <section class="inner-card api-settings-panel config-section-panel" data-config-panel="api">
+                <div class="api-model-tabs" role="tablist" aria-label="API模型类型">
+                  <button class="api-model-tab active" id="api-tab-llm" type="button" role="tab" aria-selected="true">大语言模型</button>
+                  <button class="api-model-tab" id="api-tab-voice" type="button" role="tab" aria-selected="false">语音模型</button>
+                </div>
+                <div class="llm-api-panel" id="llm-api-panel">
                 <div class="api-provider-layout">
                   <aside class="api-provider-sidebar">
                     <div class="api-provider-sidebar-head">
-                      <div><strong>模型服务商</strong><small>仅已保存且可用的模型会进入模型选择列表</small></div>
+                      <div><strong>大语言模型服务商</strong><small>选择服务商后配置连接；仅已保存且可用的模型进入问答模型列表</small></div>
                       <button class="primary-button" id="api-add-provider">＋ 添加</button>
                     </div>
                     <div class="api-provider-cards" id="api-provider-cards"></div>
@@ -10844,11 +11020,37 @@ pre {
                 </div>
                 <div class="api-form-feedback" id="api-form-feedback" role="status" aria-live="polite"></div>
                 <div class="api-form-actions">
-                  <button class="soft-button" id="api-cancel-edit">取消</button>
+                  <button class="soft-button" id="api-cancel-edit" hidden>取消</button>
                   <span></span>
                   <button class="soft-button" id="api-test-connection">测试连接</button>
                   <button class="primary-button" id="save-config">保存设置</button>
                 </div>
+                  </div>
+                </div>
+                </div>
+                <div class="voice-api-panel" id="voice-api-panel" hidden>
+                  <div class="api-provider-sidebar">
+                    <div class="api-provider-sidebar-head"><div><strong>语音服务商</strong><small>一个语音服务同时用于语音输入识别和回答播报</small></div></div>
+                    <div class="api-provider-cards" id="voice-provider-cards">
+                      <button class="api-provider-card active" type="button" data-voice-provider="豆包语音（火山引擎）"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>豆包语音（火山引擎）</strong></span><small>语音识别与语音合成</small></span></button>
+                      <button class="api-provider-card" type="button" data-voice-provider="阿里云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>阿里云语音</strong></span><small>智能语音交互服务</small></span></button>
+                      <button class="api-provider-card" type="button" data-voice-provider="腾讯云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>腾讯云语音</strong></span><small>语音识别与合成</small></span></button>
+                      <button class="api-provider-card" type="button" data-voice-provider="百度智能云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>百度智能云语音</strong></span><small>语音技术服务</small></span></button>
+                      <button class="api-provider-card" type="button" data-voice-provider="讯飞开放平台"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>讯飞开放平台</strong></span><small>语音听写与语音合成</small></span></button>
+                      <button class="api-provider-card" type="button" data-voice-provider="自定义语音 API"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>自定义语音 API</strong></span><small>接入兼容的统一语音服务</small></span></button>
+                    </div>
+                  </div>
+                  <div class="api-provider-editor" style="margin-top:14px">
+                    <div class="api-editor-head"><div><strong id="voice-editor-title">配置豆包语音（火山引擎）</strong><small>只需配置一套语音服务，不分别配置ASR和TTS</small></div></div>
+                    <div class="api-settings-list">
+                      <article class="api-setting-row"><div class="api-setting-name"><span>接入状态</span><small>测试连接成功后才可保存使用</small></div><div class="api-setting-control"><div class="api-status-line"><i class="api-status-dot" id="voice-status-dot"></i><strong id="voice-status-text">未配置</strong><small id="voice-last-tested">尚未验证</small></div></div></article>
+                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-config-name">配置名称</label><small>用于区分不同语音服务配置</small></div><div class="api-setting-control"><input id="voice-config-name" type="text" placeholder="例如：默认语音服务"></div></article>
+                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-base-url">API Base URL</label><small>内置服务商自动带出；自定义语音API可编辑</small></div><div class="api-setting-control"><input id="voice-base-url" type="text"></div></article>
+                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-api-key">API Key</label><small>密钥仅用于连接语音服务，不会明文回显</small></div><div class="api-setting-control"><div class="api-secret-field"><input id="voice-api-key" type="password" placeholder="输入 API Key" autocomplete="new-password"><button type="button" class="api-icon-button" id="voice-key-toggle">显示</button></div></div></article>
+                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-model-id">语音模型</label><small>连接验证成功后选择服务商返回的语音模型</small></div><div class="api-setting-control"><select id="voice-model-id"><option value="">请先测试连接</option></select></div></article>
+                    </div>
+                    <div class="api-form-feedback" id="voice-form-feedback">填写配置并测试连接，验证成功后选择语音模型并保存。</div>
+                    <div class="api-form-actions"><span></span><span></span><button class="soft-button" id="voice-test-connection" type="button">测试连接</button><button class="primary-button" id="voice-save-config" type="button">保存设置</button></div>
                   </div>
                 </div>
                 <div class="api-confirm-layer" id="api-confirm-layer" aria-hidden="true">
@@ -10977,13 +11179,13 @@ pre {
 
     <div class="schedule-create-modal" id="agent-window-modal" aria-hidden="true">
       <div class="schedule-dialog agent-window-dialog" role="dialog" aria-modal="true" aria-labelledby="agent-window-title-modal">
-        <h3 id="agent-window-title-modal">选择Agent应用窗口</h3>
-        <p class="muted">选择一个已打开且完成适配的第三方Agent应用窗口，副屏将展示该窗口的当前对话。</p>
+        <h3 id="agent-window-title-modal">选择需要监测的 CLI</h3>
+        <div id="agent-window-intro"></div>
         <div class="agent-window-list" id="agent-window-list"></div>
         <p class="muted" id="agent-window-error"></p>
         <div class="form-actions">
           <button class="cancel" id="agent-window-cancel">取消</button>
-          <button class="confirm" id="agent-window-confirm">确认展示</button>
+          <button class="confirm" id="agent-window-confirm">下一步</button>
         </div>
       </div>
     </div>
@@ -11319,6 +11521,9 @@ const APP_STATE = {
     apiKey: "",
     model: "gpt-4.1",
     defaultModelId: "gpt-4.1",
+    voiceModel: "gpt-realtime",
+    availableModels: ["gpt-4.1"],
+    availableVoiceModels: ["gpt-realtime"],
     lastTest: "",
     lastValidatedAt: null,
     validationErrorCode: null,
@@ -11353,8 +11558,8 @@ const APP_STATE = {
     installedAppsMessage: "正在读取 Windows 已安装应用…",
     actions: cloneDefaultQuickActions(),
   },
-  selectedAgentWindow: IS_WIDE_PROTOTYPE ? "chatgpt" : "mavis",
-  pendingAgentWindow: IS_WIDE_PROTOTYPE ? "chatgpt" : "mavis",
+  selectedAgentWindow: "claude-code-cli",
+  pendingAgentWindow: "claude-code-cli",
   agentWindowModalOpen: false,
   detailView: {
     open: false,
@@ -11375,44 +11580,44 @@ const APP_STATE = {
     sections: [],
     actions: [],
   },
-  agentWindows: IS_WIDE_PROTOTYPE ? [
+  agentWindows: (IS_WIDE_PROTOTYPE ? [
     {
-      id: "chatgpt",
-      name: "ChatGPT",
-      windowTitle: "ChatGPT - 文案对话",
-      project: "ChatGPT 对话",
-      activeTask: "润色专业文案",
-      taskTitle: "文案正在润色中",
-      taskCopy: "当前任务：在不改变原意的基础上，精炼表达并提升专业度。",
-      done: "已完成：识别原稿目标与表达重点。",
-      next: "下一步：输出精炼、专业、清晰的改写结果。",
-      output: "正在生成文案改写结果",
-      currentOutput: "正在压缩冗余表达并优化措辞与句式。",
-      lastLog: "已读取当前 ChatGPT 对话，正在同步最新回复。",
-      pending: "等待用户粘贴需要改写的原稿内容。",
-      progress: 68,
-      step: "已识别当前任务 3 / 5",
-      eta: "预计剩余约 2 分钟",
-      currentStep: "生成改写",
+      id: "claude-code-cli",
+      name: "Claude Code CLI",
+      windowTitle: "Claude Code CLI",
+      project: "暂不可用",
+      activeTask: "",
+      taskTitle: "等待 Claude Code CLI 真实事件",
+      taskCopy: "连接结构化事件后展示当前任务；未上报的信息不生成。",
+      done: "暂未取得已完成步骤。",
+      next: "等待新的 CLI 事件。",
+      output: "等待 CLI 上报",
+      currentOutput: "",
+      lastLog: "",
+      pending: "",
+      progress: null,
+      step: "暂未取得执行步骤",
+      eta: "",
+      currentStep: "等待事件",
     },
     {
-      id: "claude",
-      name: "Claude",
-      windowTitle: "Claude - 需求文档分析",
-      project: "Claude 工作区",
-      activeTask: "整理需求文档",
-      taskTitle: "需求内容正在整理中",
-      taskCopy: "当前任务：分析需求背景、功能范围与约束，生成结构化摘要。",
-      done: "已完成：识别需求主题与核心功能。",
-      next: "下一步：整理边界、异常与验收项。",
-      output: "正在整理需求摘要",
-      currentOutput: "正在归纳功能范围、交互边界与待确认项。",
-      lastLog: "已连接 Claude 当前会话并同步上下文。",
-      pending: "暂无待确认事项。",
-      progress: 61,
-      step: "已识别当前任务 3 / 6",
-      eta: "预计剩余约 4 分钟",
-      currentStep: "整理边界",
+      id: "codex-cli",
+      name: "Codex CLI",
+      windowTitle: "Codex CLI",
+      project: "暂不可用",
+      activeTask: "",
+      taskTitle: "等待 Codex CLI 真实事件",
+      taskCopy: "连接结构化事件后展示当前任务；未上报的信息不生成。",
+      done: "暂未取得已完成步骤。",
+      next: "等待新的 CLI 事件。",
+      output: "等待 CLI 上报",
+      currentOutput: "",
+      lastLog: "",
+      pending: "",
+      progress: null,
+      step: "暂未取得执行步骤",
+      eta: "",
+      currentStep: "等待事件",
     },
     {
       id: "codex",
@@ -11454,42 +11659,42 @@ const APP_STATE = {
     },
   ] : [
     {
-      id: "mavis",
+      id: "claude-code-cli",
       name: "Claude Code CLI",
       windowTitle: "Claude Code CLI",
-      project: "家庭智能中心",
-      activeTask: "整理今日家庭日程",
-      taskTitle: "今日家庭安排正在整理中",
-      taskCopy: "当前任务：汇总今天的家庭日程、学习计划和待办事项，并生成清晰的提醒清单。",
-      done: "已完成：读取已授权的日程与待办。正在执行：合并重复事项并生成提醒摘要。",
-      next: "下一步：确认提醒时间，并同步到家庭日程。",
-      output: "正在生成今日提醒清单",
-      currentOutput: "正在同步家庭日程与学习计划，准备生成最终摘要。",
-      lastLog: "已完成日程读取，正在校验提醒时间。",
-      pending: "暂无待确认事项。",
-      progress: 68,
-      step: "已识别当前任务 3 / 6",
-      eta: "预计剩余约 8 分钟",
-      currentStep: "整理提醒",
+      project: "暂不可用",
+      activeTask: "",
+      taskTitle: "等待 Claude Code CLI 真实事件",
+      taskCopy: "连接结构化事件后展示当前任务；未上报的信息不生成。",
+      done: "暂未取得已完成步骤。",
+      next: "等待新的 CLI 事件。",
+      output: "等待 CLI 上报",
+      currentOutput: "",
+      lastLog: "",
+      pending: "",
+      progress: null,
+      step: "暂未取得执行步骤",
+      eta: "",
+      currentStep: "等待事件",
     },
     {
-      id: "workbuddy",
-      name: "WorkBuddy",
-      windowTitle: "工作助理 - WorkBuddy",
-      project: "轻办公工作台",
-      activeTask: "整理会议要点",
-      taskTitle: "会议内容正在整理中",
-      taskCopy: "当前任务：提取会议重点、待办事项与负责人，并生成可分享的会议摘要。",
-      done: "已完成：识别会议主题和关键结论。",
-      next: "下一步：整理待办事项并输出会议摘要。",
-      output: "正在整理会议摘要",
-      currentOutput: "正在归纳重点内容与待办事项。",
-      lastLog: "会议内容已读取，正在生成结构化摘要。",
-      pending: "待确认：是否同步至工作清单。",
-      progress: 76,
-      step: "已识别当前任务 5 / 7",
-      eta: "预计剩余约 5 分钟",
-      currentStep: "整理待办",
+      id: "codex-cli",
+      name: "Codex CLI",
+      windowTitle: "Codex CLI",
+      project: "暂不可用",
+      activeTask: "",
+      taskTitle: "等待 Codex CLI 真实事件",
+      taskCopy: "连接结构化事件后展示当前任务；未上报的信息不生成。",
+      done: "暂未取得已完成步骤。",
+      next: "等待新的 CLI 事件。",
+      output: "等待 CLI 上报",
+      currentOutput: "",
+      lastLog: "",
+      pending: "",
+      progress: null,
+      step: "暂未取得执行步骤",
+      eta: "",
+      currentStep: "等待事件",
     },
     {
       id: "doubao",
@@ -11529,17 +11734,17 @@ const APP_STATE = {
       eta: "预计剩余约 3 分钟",
       currentStep: "生成总结",
     },
-  ],
+  ]).filter((windowItem) => ["Claude Code CLI", "Codex CLI"].includes(windowItem.name)),
   agentMonitor: {
     activeRecordId: "agent-live",
     status: "online",
     label: "在线",
-    stateText: "运行中",
-    syncStatus: "正常同步",
-    currentStep: "生成监控页",
-    progress: 68,
-    elapsed: "00:15:32",
-    lastUpdate: "10:58:24",
+    stateText: "等待任务",
+    syncStatus: "等待 CLI 事件",
+    currentStep: "等待事件",
+    progress: null,
+    elapsed: "",
+    lastUpdate: "",
   },
   agentSecondaryAlert: {
     open: false,
@@ -12327,6 +12532,7 @@ function renderAgentTaskDetail(detail, main) {
   const logEntries = Array.isArray(data.logEntries) ? data.logEntries : [];
   const sourceActions = Array.isArray(data.sourceActions) ? data.sourceActions : [];
   const hasProgress = data.progress !== null && data.progress !== undefined && data.progress !== "" && Number.isFinite(Number(data.progress));
+  const hasAgentDetailValue = (value) => value !== null && value !== undefined && value !== "" && !["暂不可用", "进行中", "等待 CLI 事件", "等待 CLI 上报任务"].includes(String(value));
   const progressValue = hasProgress ? Math.max(0, Math.min(100, Number(data.progress))) : null;
   const actionButtons = detail.actions.length ? `
     <div class="agent-detail-actions">
@@ -12352,15 +12558,7 @@ function renderAgentTaskDetail(detail, main) {
     `;
     return;
   }
-  const progressContent = hasProgress ? `
-    <div class="agent-detail-progress-wrap">
-      <div class="agent-detail-head">
-        <div><h4>来源进度</h4><p>仅展示来源 Agent 当前提供的百分比</p></div>
-        <strong>${escapeHtml(String(progressValue))}%</strong>
-      </div>
-      <div class="agent-detail-progress"><i style="width:${progressValue}%"></i></div>
-    </div>
-  ` : `<div class="agent-detail-progress-empty">来源 Agent 未提供任务百分比，本页不生成模拟进度条。</div>`;
+  const progressContent = "";
   const stepContent = steps.length ? `
     <div class="agent-detail-steps">
       ${steps.map((step) => `
@@ -12427,52 +12625,59 @@ function renderAgentTaskDetail(detail, main) {
   } else {
     resultContent = `<div class="agent-detail-empty">来源任务仍在执行，暂未产生完成或失败结果。</div>`;
   }
+  const agentDetailMetaItems = [
+    hasAgentDetailValue(data.windowTitle) && data.windowTitle !== data.source ? `<div><span>来源窗口</span><strong>${escapeHtml(data.windowTitle)}</strong></div>` : "",
+    hasAgentDetailValue(data.project) ? `<div><span>项目名称</span><strong>${escapeHtml(data.project)}</strong></div>` : "",
+    hasAgentDetailValue(data.startTime) ? `<div><span>开始时间</span><strong>${escapeHtml(data.startTime)}</strong></div>` : "",
+    hasAgentDetailValue(data.endTime) ? `<div><span>${data.status === "失败" ? "失败时间" : data.status === "完成" ? "完成时间" : "结束时间"}</span><strong>${escapeHtml(data.endTime)}</strong></div>` : "",
+    hasAgentDetailValue(data.duration) ? `<div><span>耗时</span><strong>${escapeHtml(data.duration)}</strong></div>` : "",
+    hasAgentDetailValue(data.lastUpdate) ? `<div><span>最后更新</span><strong>${escapeHtml(data.lastUpdate)}</strong></div>` : "",
+  ].filter(Boolean).join("");
+  const sourceStatusItems = [
+    hasAgentDetailValue(data.status) ? `<div><span>任务状态</span><strong>${escapeHtml(data.status)}</strong></div>` : "",
+    hasAgentDetailValue(data.currentStage) ? `<div><span>当前动作</span><strong>${escapeHtml(data.currentStage)}</strong></div>` : "",
+    hasAgentDetailValue(data.lastUpdate) ? `<div><span>最后读取</span><strong>${escapeHtml(data.lastUpdate)}</strong></div>` : "",
+  ].filter(Boolean).join("");
+  const hasExecutionDetails = steps.length > 0 || hasAgentDetailValue(data.currentOutput) || hasAgentDetailValue(data.lastLog) || logEntries.length > 0 || hasAgentDetailValue(data.pendingContent);
+  const sourceSummary = [data.source, data.windowTitle !== data.source ? data.windowTitle : ""].filter(hasAgentDetailValue).map(escapeHtml).join(" · ");
+  const executionContent = hasExecutionDetails ? `
+    <section class="agent-detail-card">
+      <div class="agent-detail-head"><div><h4>执行过程</h4><p>只展示CLI真实上报的步骤、输出和日志</p></div>${steps.length ? `<strong>${steps.length} 步</strong>` : ""}</div>
+      ${steps.length ? stepContent : ""}
+      <div class="agent-detail-output-grid">
+        ${hasAgentDetailValue(data.currentOutput) ? `<div class="agent-detail-output-card wide"><span>${data.status === "完成" ? "最后输出原文" : "当前输出原文"}</span><p>${escapeHtml(data.currentOutput)}</p></div>` : ""}
+        ${hasAgentDetailValue(data.lastLog) ? `<div class="agent-detail-output-card"><span>最后日志</span><p>${escapeHtml(data.lastLog)}</p></div>` : ""}
+        ${hasAgentDetailValue(data.pendingContent) ? `<div class="agent-detail-output-card"><span>待处理信息</span><p>${escapeHtml(data.pendingContent)}</p></div>` : ""}
+        ${logEntries.length ? `<div class="agent-detail-output-card wide"><span>原始日志记录</span>${logContent}</div>` : ""}
+      </div>
+    </section>
+  ` : "";
   main.innerHTML = `
     <div class="agent-task-detail">
       <section class="agent-detail-card agent-detail-overview">
         <div class="agent-detail-titleline">
           <div class="agent-detail-title-copy">
-            <span>Agent task record</span>
-            <strong>${escapeHtml(data.task || "任务名称暂不可用")}</strong>
-            <p>${escapeHtml(data.source || "来源 Agent 暂不可用")} · ${escapeHtml(data.windowTitle || "来源窗口暂不可用")}</p>
+            <strong>${hasAgentDetailValue(data.task) ? escapeHtml(data.task) : "Agent任务详情"}</strong>
+            ${sourceSummary ? `<p>${sourceSummary}</p>` : ""}
           </div>
           <span class="tag ${tagClassForStatus(data.status || "暂不可用")}">${escapeHtml(data.status || "暂不可用")}</span>
         </div>
         <div class="agent-detail-meta">
-          <div><span>Agent 应用</span><strong>${escapeHtml(data.source || "暂不可用")}</strong></div>
-          <div><span>来源窗口</span><strong>${escapeHtml(data.windowTitle || "暂不可用")}</strong></div>
-          <div><span>项目名称</span><strong>${escapeHtml(data.project || "暂不可用")}</strong></div>
-          <div><span>开始时间</span><strong>${escapeHtml(data.startTime || "暂不可用")}</strong></div>
-          <div><span>${data.status === "失败" ? "失败时间" : data.status === "完成" ? "完成时间" : "结束时间"}</span><strong>${escapeHtml(data.endTime || "进行中")}</strong></div>
-          <div><span>耗时</span><strong>${escapeHtml(data.duration || "暂不可用")}</strong></div>
-          <div><span>最后更新</span><strong>${escapeHtml(data.lastUpdate || "暂不可用")}</strong></div>
-          <div><span>监控状态</span><strong>${escapeHtml(data.monitorStatus || "暂不可用")}</strong></div>
-          ${data.estimatedRemaining ? `<div><span>来源预计剩余</span><strong>${escapeHtml(data.estimatedRemaining)}</strong></div>` : ""}
+          ${agentDetailMetaItems}
         </div>
-        <div class="agent-detail-task-copy"><span>来源任务内容</span><p>${escapeHtml(data.taskContent || "来源未展示任务内容")}</p></div>
+        ${hasAgentDetailValue(data.taskContent) ? `<div class="agent-detail-task-copy"><span>本轮指令</span><p>${escapeHtml(data.taskContent)}</p></div>` : ""}
       </section>
       <section class="agent-detail-card">
         <div class="agent-detail-head">
           <div><span class="agent-detail-section-label">Source status</span><h4>来源状态</h4><p>状态和文案按该条任务记录的快照展示</p></div>
         </div>
-        <div class="agent-detail-source-copy"><span>来源 Agent 当前状态文案</span><p>${escapeHtml(data.sourceStatusText || "暂不可用")}</p></div>
+        ${hasAgentDetailValue(data.sourceStatusText) ? `<div class="agent-detail-source-copy"><span>来源状态</span><p>${escapeHtml(data.sourceStatusText)}</p></div>` : ""}
         <div class="agent-detail-stage-grid">
-          <div><span>任务状态</span><strong>${escapeHtml(data.status || "暂不可用")}</strong></div>
-          <div><span>当前阶段</span><strong>${escapeHtml(data.currentStage || "暂不可用")}</strong></div>
-          <div><span>最后读取</span><strong>${escapeHtml(data.lastUpdate || "暂不可用")}</strong></div>
+          ${sourceStatusItems}
         </div>
         ${progressContent}
       </section>
-      <section class="agent-detail-card">
-        <div class="agent-detail-head"><div><span class="agent-detail-section-label">Execution</span><h4>执行过程</h4><p>只展示该条记录保存的来源步骤和关键时间</p></div><strong>${steps.length} 步</strong></div>
-        ${stepContent}
-        <div class="agent-detail-output-grid">
-          <div class="agent-detail-output-card wide"><span>${data.status === "完成" ? "最后输出原文" : "当前输出原文"}</span><p>${escapeHtml(data.currentOutput || "暂不可用")}</p></div>
-          <div class="agent-detail-output-card"><span>最后日志</span><p>${escapeHtml(data.lastLog || "暂不可用")}</p></div>
-          <div class="agent-detail-output-card"><span>待处理信息</span><p>${escapeHtml(data.pendingContent || "暂不可用")}</p></div>
-          <div class="agent-detail-output-card wide"><span>原始日志记录</span>${logContent}</div>
-        </div>
-      </section>
+      ${executionContent}
       <section class="agent-detail-card">
         <div class="agent-detail-head"><div><span class="agent-detail-section-label">Result</span><h4>结果与处理</h4><p>完成展示来源结果，失败仅展示来源步骤和原始错误</p></div></div>
         ${resultContent}
@@ -13420,11 +13625,61 @@ function confirmAgentWindowSelection() {
   renderApp();
 }
 
+const CLI_MONITOR_SETUP={
+  "claude-code-cli":{enabled:false,session:"未连接",lastUpdate:"--:--:--"},
+  "codex-cli":{enabled:false,session:"未连接",lastUpdate:"--:--:--"}
+};
+let CLI_SETUP_CONTEXT={cliId:"claude-code-cli",stage:"idle"};
+function getCliSetupItem(){return APP_STATE.agentWindows.find(item=>item.id===CLI_SETUP_CONTEXT.cliId)||APP_STATE.agentWindows[0];}
+function openCliSetup(cliId,stage="checking"){
+  CLI_SETUP_CONTEXT={cliId,stage};const item=getCliSetupItem(),layer=$("#cli-monitor-dialog-layer"),title=$("#cli-monitor-dialog-title"),content=$("#cli-monitor-dialog-content"),actions=$("#cli-monitor-dialog-actions");
+  layer.classList.add("show");layer.setAttribute("aria-hidden","false");title.textContent=stage==="permission"?`启用${item.name}监测`:stage==="configuring"?"正在配置任务监测……":stage==="success"?"监测启用成功":stage==="failure"?"监测启用失败":`检查${item.name}`;
+  if(stage==="checking"){
+    content.innerHTML=`<div class="dialog-status"><strong>正在检查${escapeHtml(item.name)}……</strong><p>正在检查本机命令和可用安装路径。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button>`;
+    setTimeout(()=>openCliSetup(cliId,cliId==="claude-code-cli"?"found":"not-found"),650);return;
+  }
+  if(stage==="found"){
+    const path=cliId==="claude-code-cli"?"C:\\Users\\Demo\\AppData\\Roaming\\npm\\claude.cmd":"C:\\Users\\Demo\\AppData\\Roaming\\npm\\codex.cmd";
+    content.innerHTML=`<div class="dialog-status"><strong>已找到${escapeHtml(item.name)}</strong><p>安装路径：<span class="cli-path">${escapeHtml(path)}</span></p><p>可以继续启用任务监测。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="permission">下一步</button>`;return;
+  }
+  if(stage==="not-found"){
+    content.innerHTML=`<div class="dialog-status"><strong>未找到${escapeHtml(item.name)}</strong><p>请先自行安装并登录，然后重新检查。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="official">查看官方安装说明</button><button class="soft-button" data-cli-dialog="manual">手动选择路径</button><button class="primary-button" data-cli-dialog="retry">重新检查</button>`;return;
+  }
+  if(stage==="permission"){
+    content.innerHTML=`<p>Agent PC将配置CLI任务事件接入，并获取以下真实数据：</p><ul><li>本轮指令</li><li>任务状态和当前动作</li><li>工具调用、命令执行、文件修改和测试步骤</li><li>审批请求</li><li>失败原因和完成结果</li></ul><div class="cli-permission-box"><strong>数据边界</strong><p>不接管终端、不代替用户执行命令、不读取其他应用，未上报的数据不会推测生成。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="configure">同意并启用</button>`;return;
+  }
+  if(stage==="configuring"){
+    content.innerHTML=`<div class="dialog-status"><strong>正在配置任务监测……</strong><p>正在写入${escapeHtml(item.name)}事件接入配置。</p></div>`;actions.innerHTML="";setTimeout(()=>openCliSetup(cliId,cliId==="claude-code-cli"?"success":"failure"),700);return;
+  }
+  if(stage==="success"){
+    CLI_MONITOR_SETUP[cliId]={enabled:true,session:"等待CLI会话",lastUpdate:"--:--:--"};renderAgentPage();content.innerHTML=`<div class="dialog-status"><strong>${escapeHtml(item.name)}监测已启用</strong><p>请打开终端并启动新的${escapeHtml(item.name)}会话。任务开始后，副屏将自动展示状态和步骤。</p></div>`;actions.innerHTML=`<button class="primary-button" data-cli-dialog="cancel">完成</button>`;
+  }
+  if(stage==="failure"){
+    title.textContent="监测启用失败";content.innerHTML=`<div class="dialog-status"><strong>监测启用失败</strong><p>无法写入CLI事件配置：当前用户没有配置文件写入权限。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="soft-button" data-cli-dialog="manual-guide">查看手动配置</button><button class="primary-button" data-cli-dialog="configure">重新启用</button>`;
+  }
+}
+function closeCliSetup(){const layer=$("#cli-monitor-dialog-layer");layer.classList.remove("show");layer.setAttribute("aria-hidden","true");}
+function handleCliCardAction(action,cliId){if(action==="enable"||action==="recheck")openCliSetup(cliId,"checking");if(action==="disable"){CLI_MONITOR_SETUP[cliId]={enabled:false,session:"未连接",lastUpdate:"--:--:--"};renderAgentPage();}if(action==="preview"){APP_STATE.selectedAgentWindow=cliId;window.scrollTo({top:0,behavior:"smooth"});}}
+function handleCliDialogAction(action){const item=getCliSetupItem();if(action==="cancel")closeCliSetup();if(action==="permission")openCliSetup(item.id,"permission");if(action==="configure")openCliSetup(item.id,"configuring");if(action==="retry")openCliSetup(item.id,"checking");if(action==="manual")openCliSetup(item.id,"found");if(action==="manual-guide")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/settings":"https://developers.openai.com/codex/config-reference/","_blank");if(action==="official")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/setup":"https://developers.openai.com/codex/cli/","_blank");}
+
 function renderAgentPage() {
   const table = $("#agent-record-table");
   if (!table) return;
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
+  const integrationGrid = $("#cli-integration-grid");
+  if (integrationGrid) {
+    integrationGrid.innerHTML = APP_STATE.agentWindows.filter(item=>["claude-code-cli","codex-cli"].includes(item.id)).map((item) => {const setup=CLI_MONITOR_SETUP[item.id]||{enabled:false,session:"未连接",lastUpdate:"--:--:--"};return `
+      <section class="cli-integration-card ${setup.enabled ? "active" : ""}">
+        <div class="cli-integration-card-head">
+          <div><h4>${escapeHtml(item.name)}</h4><p>状态：${setup.enabled?"已启用":"未启用"}</p></div>
+          <span class="tag ${setup.enabled?"green":"cyan"}">${setup.enabled?"已启用":"未启用"}</span>
+        </div>
+        ${setup.enabled?`<p>会话状态：${escapeHtml(setup.session)}<br>最近更新：${escapeHtml(setup.lastUpdate)}</p>`:`<p>启用后，Agent PC将接收该CLI实际上报的任务事件。</p>`}
+        <div class="action-row">${setup.enabled?`<button class="soft-button" data-cli-card-action="recheck" data-cli-id="${item.id}">重新检查</button><button class="soft-button" data-cli-card-action="preview" data-cli-id="${item.id}">查看副屏预览</button><button class="soft-button api-delete-button" data-cli-card-action="disable" data-cli-id="${item.id}">停用监测</button>`:`<button class="primary-button" data-cli-card-action="enable" data-cli-id="${item.id}">启用监测</button>`}</div>
+      </section>
+    `}).join("");
+  }
   const widePreviewImage = $(".wide-agent-window-image");
   const liveWindowImage = $(".agent-live-window-image");
   if (IS_WIDE_PROTOTYPE && widePreviewImage && liveWindowImage) {
@@ -13440,7 +13695,7 @@ function renderAgentPage() {
   const refreshButton = $('[data-agent-control="refresh"]');
   const stopButton = $('[data-agent-control="stop"]');
   const liveRecord = APP_STATE.agentRecords.find((item) => item.id === "agent-live");
-  if (liveRecord) {
+  if (liveRecord && !monitor.previewState) {
     liveRecord.task = agentWindow.activeTask;
     liveRecord.source = agentWindow.name;
     liveRecord.windowTitle = agentWindow.windowTitle;
@@ -13457,6 +13712,7 @@ function renderAgentPage() {
       liveRecord.progress = failedMonitor ? null : Number.isFinite(Number(agentWindow.progress)) ? Number(agentWindow.progress) : null;
       liveRecord.currentStage = agentWindow.currentStep || "暂不可用";
       liveRecord.estimatedRemaining = failedMonitor ? null : agentWindow.eta ? agentWindow.eta.replace(/^预计剩余\s*/, "") : null;
+      liveRecord.steps = Array.isArray(agentWindow.steps) ? agentWindow.steps.map((step) => ({ ...step })) : [];
       liveRecord.sourceStatusText = agentWindow.currentOutput || "暂不可用";
       liveRecord.currentOutput = agentWindow.currentOutput || "暂不可用";
       liveRecord.lastLog = agentWindow.lastLog || "暂不可用";
@@ -13483,39 +13739,34 @@ function renderAgentPage() {
       liveRecord.estimatedRemaining = null;
     }
   }
-  $("#agent-monitor-pill").textContent = monitor.label;
-  $("#agent-monitor-pill").className = pillClass;
-  $(".agent-live-window").classList.toggle("recognizing", recognizing);
-  $("#agent-window-title").textContent = agentWindow.windowTitle;
-  $("#agent-app-name").textContent = agentWindow.name;
+  const monitorPill = $("#agent-monitor-pill");
+  if (monitorPill) { monitorPill.textContent = monitor.label; monitorPill.className = pillClass; }
+  $(".agent-live-window")?.classList.toggle("recognizing", recognizing);
+  const agentTextValues = {
+    "#agent-window-title": agentWindow.windowTitle,
+    "#agent-app-name": agentWindow.name,
+    "#agent-project-name": agentWindow.project,
+    "#agent-active-task": agentWindow.activeTask,
+    "#agent-task-title": agentWindow.taskTitle,
+    "#agent-task-copy": agentWindow.taskCopy,
+    "#agent-task-done": agentWindow.done,
+    "#agent-task-next": agentWindow.next,
+    "#agent-current-output": agentWindow.currentOutput,
+    "#agent-last-log": agentWindow.lastLog,
+    "#agent-pending-line": agentWindow.pending,
+    "#agent-step-line": agentWindow.step,
+    "#agent-eta-line": agentWindow.eta,
+    "#agent-monitor-object": agentWindow.name,
+  };
+  Object.entries(agentTextValues).forEach(([selector, value]) => { const node=$(selector); if(node) node.textContent=value; });
   const selectorCurrent = $("#agent-selector-current");
   if (selectorCurrent && IS_WIDE_PROTOTYPE) selectorCurrent.textContent = `当前展示：${agentWindow.name} · ${agentWindow.windowTitle}`;
-  $("#agent-project-name").textContent = agentWindow.project;
-  $("#agent-active-task").textContent = agentWindow.activeTask;
-  $("#agent-task-title").textContent = agentWindow.taskTitle;
-  $("#agent-task-copy").textContent = agentWindow.taskCopy;
-  $("#agent-task-done").textContent = agentWindow.done;
-  $("#agent-task-next").textContent = agentWindow.next;
-  $("#agent-current-output").textContent = agentWindow.currentOutput;
-  $("#agent-last-log").textContent = agentWindow.lastLog;
-  $("#agent-pending-line").textContent = agentWindow.pending;
-  $("#agent-step-line").textContent = agentWindow.step;
-  $("#agent-eta-line").textContent = agentWindow.eta;
-  $("#agent-monitor-object").textContent = agentWindow.name;
-  $("#agent-window-state").textContent = monitor.stateText;
-  $("#agent-sync-status").textContent = monitor.syncStatus;
-  $("#agent-last-update").textContent = monitor.lastUpdate;
-  $("#agent-sync-line").textContent = `${monitor.lastUpdate} 已识别为${running ? "运行中" : "已停止"}。`;
   $("#agent-sub-monitor-object").textContent = agentWindow.name;
-  $("#agent-output-line").textContent = running ? agentWindow.output : "监控已停止，保留最后一次识别结果";
-  $("#agent-progress-pill").textContent = failedMonitor ? "失败" : running ? "执行中" : monitor.stateText === "已拒绝" ? "已拒绝" : "已停止";
   $("#agent-sub-status-wrap").classList.toggle("stopped", !running);
-  $("#agent-progress-number").textContent = `${monitor.progress}%`;
-  $("#agent-progress-bar").style.width = `${monitor.progress}%`;
-  $("#agent-progress-task").textContent = agentWindow.activeTask;
-  $("#agent-elapsed-time").textContent = monitor.elapsed || "00:15:32";
-  const etaText = agentWindow.eta.replace(/^预计剩余/, "").replace(/^约\s*/, "~").replace(/\s+/g, "");
-  $("#agent-remaining-time").textContent = failedMonitor ? "任务异常结束" : running ? `预计剩余 ${etaText}` : "监控已停止";
+  const progressNumber = $("#agent-progress-number");
+  const progressBar = $("#agent-progress-bar");
+  if (progressNumber) progressNumber.textContent = Number.isFinite(monitor.progress) ? `${monitor.progress}%` : "暂不可用";
+  if (progressBar) progressBar.style.width = Number.isFinite(monitor.progress) ? `${monitor.progress}%` : "0";
   if (selectButton) selectButton.textContent = running ? "选择Agent窗口" : "重新选择窗口";
   if (refreshButton) {
     refreshButton.textContent = recognizing ? "检测中..." : "重新检测";
@@ -13526,32 +13777,75 @@ function renderAgentPage() {
     stopButton.disabled = !running;
   }
   renderAgentPetOverlay();
+  const hasRealSteps = Array.isArray(agentWindow.steps) && agentWindow.steps.length > 0;
+  const cliConnected = monitor.status !== "disconnected" && monitor.syncStatus !== "CLI事件未连接";
+  const alertType = APP_STATE.agentSecondaryAlert.open ? APP_STATE.agentSecondaryAlert.type : "";
+  const contentState = !cliConnected
+    ? "disconnected"
+    : alertType === "confirm" || ["待确认", "等待审批"].includes(monitor.stateText)
+      ? "approval"
+      : alertType === "failed" || failedMonitor || ["失败", "执行失败"].includes(monitor.stateText)
+        ? "failed"
+        : ["已完成", "完成"].includes(monitor.stateText) || monitor.status === "completed"
+          ? "completed"
+          : hasRealSteps || monitor.stateText === "执行中"
+            ? "running"
+            : "waiting";
+  const realPrompt = agentWindow.activeTask || "";
+  const realUpdatedAt = monitor.lastUpdate || "";
+  const monitorStateView = {
+    disconnected: { prompt: "未获取本轮指令", status: "CLI事件未连接", updatedAt: "--:--:--", updateSource: "等待事件接入" },
+    waiting: { prompt: "暂无本轮指令", status: "等待任务", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "最近连接时间" : "暂无事件时间" },
+    running: { prompt: realPrompt || "本轮指令未上报", status: "执行中", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "最近事件时间" : "事件时间未上报" },
+    approval: { prompt: realPrompt || "本轮指令未上报", status: "等待审批", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "审批事件时间" : "事件时间未上报" },
+    failed: { prompt: realPrompt || "本轮指令未上报", status: "执行失败", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "失败事件时间" : "事件时间未上报" },
+    completed: { prompt: realPrompt || "本轮指令未上报", status: "已完成", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "完成事件时间" : "事件时间未上报" },
+  };
+  const stateView = monitorStateView[contentState];
+  $("#agent-progress-task").textContent = stateView.prompt;
+  $("#agent-progress-pill").textContent = stateView.status;
+  $("#agent-elapsed-time").textContent = stateView.updatedAt;
+  $("#agent-update-source").textContent = stateView.updateSource;
+  const optionalStateText = {
+    "#agent-window-state": stateView.status,
+    "#agent-sync-status": contentState === "disconnected" ? "CLI事件未连接" : monitor.syncStatus,
+    "#agent-last-update": stateView.updatedAt,
+    "#agent-sync-line": realUpdatedAt ? `${realUpdatedAt} · ${stateView.status}` : "尚未收到可用的 CLI 事件时间。",
+    "#agent-output-line": agentWindow.output || "尚未收到真实输出",
+  };
+  Object.entries(optionalStateText).forEach(([selector, value]) => { const node=$(selector); if(node) node.textContent=value; });
+  $$('[data-agent-preview-state]').forEach((button) => {
+    button.classList.toggle("active", monitor.previewState ? button.dataset.agentPreviewState === monitor.previewState : button.dataset.agentPreviewState === "live");
+  });
   renderAgentSecondaryAlert();
-  const stepIndex = running ? Math.min(4, Math.max(0, Math.ceil(monitor.progress / 18) - 1)) : 4;
-  const steps = failedMonitor
-    ? [
-      { state: "done", icon: "✓", title: "读取窗口", desc: `已连接 ${agentWindow.name} 窗口`, duration: "已完成" },
-      { state: "done", icon: "✓", title: "识别任务", desc: agentWindow.activeTask, duration: "已完成" },
-      { state: "failed", icon: "!", title: "执行命令失败", desc: agentWindow.currentOutput, duration: "异常结束" },
-      { state: "done", icon: "✓", title: "写入记录", desc: "原始错误已保存到 Agent 任务记录", duration: "已记录" },
-    ]
-    : running ? [
-      { title: "读取窗口", desc: `已连接 ${agentWindow.name} 窗口`, duration: "已完成 · 18秒" },
-      { title: "识别任务", desc: agentWindow.activeTask, duration: "已完成 · 46秒" },
-      { title: "同步进度", desc: "进度、日志和输出已写入副屏", duration: "已完成 · 1分20秒" },
-      { title: "校验状态", desc: agentWindow.currentOutput, duration: "进行中 · 4分50秒" },
-      { title: "写入记录", desc: "完成后沉淀到 Agent 任务记录", duration: "待执行" },
-    ]
-    : [
-      { title: "读取窗口", desc: `已连接 ${agentWindow.name} 窗口`, duration: "已完成" },
-      { title: "识别任务", desc: agentWindow.activeTask, duration: "已完成" },
-      { title: "同步进度", desc: "保留最后一次识别结果", duration: "已完成" },
-      { title: "停止监控", desc: "用户已停止当前窗口监控", duration: "当前" },
-      { title: "保留结果", desc: "任务记录可继续查看", duration: "已完成" },
-    ];
+  const stepsPanel = $("#agent-steps-panel");
+  const currentAction = $("#agent-current-action");
+  const currentActionWrap = $("#agent-current-action-wrap");
+  const emptyState = $("#agent-monitor-empty-state");
+  const emptyTitle = $("#agent-monitor-empty-title");
+  const emptyCopy = $("#agent-monitor-empty-copy");
+  const hasRealAction = Boolean(agentWindow.currentOutput);
+  const canShowProcess = ["running", "approval", "failed", "completed"].includes(contentState);
+  const showAction = canShowProcess && hasRealAction;
+  const showSteps = canShowProcess && hasRealSteps;
+  if (stepsPanel) stepsPanel.hidden = !showSteps;
+  if (currentActionWrap) currentActionWrap.hidden = !showAction;
+  if (currentAction) currentAction.textContent = showAction ? agentWindow.currentOutput : "";
+  if (emptyState) emptyState.hidden = showAction || showSteps;
+  const emptyStateCopy = {
+    disconnected: ["CLI事件尚未连接", "完成结构化事件接入后，才能展示当前动作和真实执行步骤。"],
+    waiting: ["暂无执行中的任务", "在 Claude Code CLI 或 Codex CLI 发起编程任务后，这里将展示 CLI 实际上报的内容。"],
+    running: ["正在等待执行事件", "CLI 已进入执行状态，但尚未上报当前动作或执行步骤。"],
+    approval: ["等待用户审批", "未取得审批操作详情，不生成模拟命令。"],
+    failed: ["任务执行失败", "未取得可展示的失败动作或步骤，仅保留真实状态。"],
+    completed: ["任务已完成", "未取得可展示的完成结果，不生成模拟摘要。"],
+  };
+  if (emptyTitle) emptyTitle.textContent = emptyStateCopy[contentState][0];
+  if (emptyCopy) emptyCopy.textContent = emptyStateCopy[contentState][1];
+  const steps = hasRealSteps ? agentWindow.steps : [];
   $("#agent-step-strip").innerHTML = steps.map((step, index) => {
-    const stateClass = step.state || (index < stepIndex ? "done" : index === stepIndex ? "active" : "waiting");
-    const stateIcon = step.icon || (index < stepIndex ? "✓" : index === stepIndex ? "●" : "○");
+    const stateClass = step.state || "waiting";
+    const stateIcon = step.icon || "○";
     return `
       <div class="agent-step-row ${stateClass}">
         <span class="agent-step-icon">${stateIcon}</span>
@@ -13560,9 +13854,10 @@ function renderAgentPage() {
       </div>
     `;
   }).join("");
+  const visibleAgentRecords = APP_STATE.agentRecords.filter((record) => record.id !== "agent-live");
   table.innerHTML = `
     <div class="table-head"><span>任务</span><span>来源</span><span>状态</span><span>耗时</span><span>操作</span></div>
-    ${APP_STATE.agentRecords.length ? APP_STATE.agentRecords.map((record) => `
+    ${visibleAgentRecords.length ? visibleAgentRecords.map((record) => `
       <div class="table-row" data-agent-record="${escapeHtml(record.id)}">
         <span>${escapeHtml(record.task)}</span>
         <span>${escapeHtml(record.source)}</span>
@@ -13572,7 +13867,7 @@ function renderAgentPage() {
           <button class="table-action hot" data-agent-record="${escapeHtml(record.id)}">查看详情</button>
         </span>
       </div>
-    `).join("") : renderEmptyState("暂无 Agent 任务记录")}
+    `).join("") : renderEmptyState("暂无任务记录")}
   `;
 }
 
@@ -13581,35 +13876,34 @@ function getAgentSecondaryAlertData(type) {
   const agentWindow = getSelectedAgentWindow();
   const data = {
     confirm: {
-      title: "Claude Code 请求执行命令",
+      title: `${agentWindow.name} 请求审批`,
       badge: "等待授权",
       fields: [
-        ["请求内容", "npm run build", true],
+        ["请求内容", agentWindow.pending, true],
         ["来源窗口", `${agentWindow.name} · ${agentWindow.windowTitle}`, true],
         ["最后更新时间", monitor.lastUpdate],
-      ],
+      ].filter(([, value]) => Boolean(value)),
       actions: [["拒绝", "reject", "soft-button"], ["本次允许", "approve", "primary-button"]],
     },
-    stuck: {
-      title: "疑似卡住提醒",
-      badge: "7 分钟无更新",
+    completed: {
+      title: `${agentWindow.name} 任务已完成`,
+      badge: "已完成",
       fields: [
-        ["当前任务", agentWindow.activeTask, true],
-        ["无更新时长", "7 分 12 秒"],
+        ["本轮指令", agentWindow.activeTask, true],
+        ["完成结果", agentWindow.currentOutput || agentWindow.output, true],
         ["最后更新时间", monitor.lastUpdate],
-        ["最后输出", agentWindow.currentOutput || "当前步骤暂无新输出", true],
-      ],
-      actions: [["重新识别", "refresh", "primary-button"]],
+      ].filter(([, value]) => Boolean(value)),
+      actions: [["知道了", "acknowledge", "primary-button"]],
     },
     failed: {
-      title: "Claude Code 任务失败",
+      title: `${agentWindow.name} 任务失败`,
       badge: "异常结束",
       fields: [
-        ["当前任务", agentWindow.activeTask, true],
-        ["失败步骤", "运行 npm run build"],
+        ["本轮指令", agentWindow.activeTask, true],
+        ["失败步骤", agentWindow.currentStep],
         ["最后更新时间", monitor.lastUpdate],
-        ["原始错误", "Command failed with exit code 2 · TS2322: ButtonGroup props 类型不一致", true],
-      ],
+        ["原始错误", agentWindow.pending || agentWindow.lastLog || agentWindow.currentOutput, true],
+      ].filter(([, value]) => Boolean(value)),
       actions: [["确定", "acknowledge", "primary-button"]],
     },
   };
@@ -13688,8 +13982,6 @@ function openAgentSecondaryAlert(type, { autoClose = false } = {}) {
   if (type === "confirm") {
     monitor.stateText = "待确认";
     monitor.syncStatus = "等待用户";
-    agentWindow.currentOutput = "Claude Code 请求执行命令：npm run build";
-    agentWindow.pending = "等待授权：npm run build";
     const liveRecord = APP_STATE.agentRecords.find((item) => item.id === APP_STATE.agentMonitor.activeRecordId);
     const sourceEvent = getAgentSecondaryAlertData("confirm");
     if (liveRecord && sourceEvent) {
@@ -13698,10 +13990,10 @@ function openAgentSecondaryAlert(type, { autoClose = false } = {}) {
       liveRecord.actionStatus = "等待用户操作";
       liveRecord.sourceActions = sourceEvent.actions.map(([label, action, className]) => ({ label, action, primary: className === "primary-button" }));
     }
-  } else if (type === "stuck") {
-    monitor.stateText = "疑似卡住";
-    monitor.syncStatus = "7 分钟无更新";
-    agentWindow.pending = "当前任务 7 分钟无新输出或状态变化。";
+  } else if (type === "completed") {
+    monitor.status = "completed";
+    monitor.stateText = "已完成";
+    monitor.syncStatus = "任务已完成";
   } else if (type === "failed") {
     const liveRecord = APP_STATE.agentRecords.find((item) => item.id === "agent-live");
     if (liveRecord) {
@@ -13715,10 +14007,6 @@ function openAgentSecondaryAlert(type, { autoClose = false } = {}) {
     monitor.status = "failed";
     monitor.stateText = "失败";
     monitor.syncStatus = "异常结束";
-    agentWindow.currentStep = "运行 npm run build";
-    agentWindow.currentOutput = "Command failed with exit code 2";
-    agentWindow.lastLog = "Command failed with exit code 2 · TS2322: ButtonGroup props 类型不一致";
-    agentWindow.pending = "Command failed with exit code 2 · TS2322: ButtonGroup props 类型不一致";
     if (liveRecord) {
       liveRecord.preAlertSteps = Array.isArray(liveRecord.steps) ? liveRecord.steps.map((step) => ({ ...step })) : [];
       liveRecord.status = "失败";
@@ -13766,6 +14054,21 @@ function closeAgentSecondaryAlert({ reset = false, render = false } = {}) {
 function handleAgentSecondaryAlertAction(action, recordId = "") {
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
+  if (monitor.previewState) {
+    if (action === "approve") {
+      previewAgentMonitorState("running");
+      return;
+    }
+    if (action === "reject") {
+      previewAgentMonitorState("waiting");
+      return;
+    }
+    if (action === "acknowledge") {
+      APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+      renderApp();
+      return;
+    }
+  }
   const targetRecordId = recordId || monitor.activeRecordId;
   const liveRecord = APP_STATE.agentRecords.find((item) => item.id === targetRecordId);
   if (["approve", "reject"].includes(action) && (!liveRecord || targetRecordId !== monitor.activeRecordId || liveRecord.status !== "待确认" || monitor.status === "stopped")) {
@@ -13784,8 +14087,8 @@ function handleAgentSecondaryAlertAction(action, recordId = "") {
     monitor.stateText = "运行中";
     monitor.syncStatus = "正常同步";
     monitor.lastUpdate = actionTime;
-    agentWindow.currentOutput = "授权结果已回传：本次允许 npm run build";
-    agentWindow.lastLog = "授权结果：本次允许 npm run build";
+    agentWindow.currentOutput = "审批结果已回传：本次允许";
+    agentWindow.lastLog = "审批结果：本次允许";
     agentWindow.pending = "无授权确认；命令继续执行。";
     if (liveRecord) {
       liveRecord.status = "运行中";
@@ -13812,8 +14115,8 @@ function handleAgentSecondaryAlertAction(action, recordId = "") {
     monitor.stateText = "已拒绝";
     monitor.syncStatus = "授权已拒绝";
     monitor.lastUpdate = actionTime;
-    agentWindow.currentOutput = "授权结果已回传：拒绝执行 npm run build";
-    agentWindow.lastLog = "授权结果：拒绝执行 npm run build";
+    agentWindow.currentOutput = "审批结果已回传：已拒绝";
+    agentWindow.lastLog = "审批结果：已拒绝";
     agentWindow.pending = "本次命令已拒绝。";
     if (liveRecord) {
       liveRecord.status = "已取消";
@@ -14927,6 +15230,7 @@ let agentAlertDemoTimer = null;
 let agentAlertAutoCloseTimer = null;
 let albumSlideshowTimer = null;
 let agentAlertDemoIndex = 0;
+let agentPreviewSnapshot = null;
 const scheduleRunTimers = new Map();
 
 function stopAgentAlertDemo() {
@@ -14937,22 +15241,8 @@ function stopAgentAlertDemo() {
 }
 
 function syncAgentAlertDemo() {
-  if (APP_STATE.currentPage !== "monitor") {
-    stopAgentAlertDemo();
-    if (APP_STATE.agentSecondaryAlert.open) {
-      APP_STATE.agentSecondaryAlert = { open: false, type: "" };
-      resetAgentAlertDemoState();
-    }
-    return;
-  }
-  if (APP_STATE.agentSecondaryAlert.open || agentAlertDemoTimer || agentAlertAutoCloseTimer) return;
-  agentAlertDemoTimer = window.setTimeout(() => {
-    agentAlertDemoTimer = null;
-    if (APP_STATE.currentPage !== "monitor" || APP_STATE.agentSecondaryAlert.open) return;
-    const types = ["confirm", "stuck", "failed"];
-    openAgentSecondaryAlert(types[agentAlertDemoIndex % types.length], { autoClose: true });
-    agentAlertDemoIndex += 1;
-  }, 5000);
+  // 不自动生成审批、失败或完成事件；弹窗只能由 CLI 真实事件驱动。
+  stopAgentAlertDemo();
 }
 
 const KEYBOARD_MAPPINGS = {
@@ -15835,12 +16125,7 @@ function showAgentRecord(recordId) {
   }
   const monitor = APP_STATE.agentMonitor;
   const isActiveRecord = monitor.activeRecordId === record.id;
-  const actions = isActiveRecord && record.status === "运行中" && monitor.status !== "stopped"
-    ? [
-        { label: "重新识别", action: "refresh-agent", id: record.id, primary: true },
-        { label: "停止监控", action: "stop-agent", id: record.id, danger: true },
-      ]
-    : [];
+  const actions = [];
   openDetailView({
     fromPage: "monitor",
     title: `${record.task} · 任务详情`,
@@ -15971,6 +16256,88 @@ function handleAgentControl(action) {
     }, 650);
     return;
   }
+}
+
+function previewAgentMonitorState(state) {
+  const monitor = APP_STATE.agentMonitor;
+  const agentWindow = getSelectedAgentWindow();
+  if (state === "live") {
+    if (agentPreviewSnapshot) {
+      Object.assign(monitor, agentPreviewSnapshot.monitor);
+      Object.assign(agentWindow, agentPreviewSnapshot.agentWindow);
+    }
+    agentPreviewSnapshot = null;
+    delete monitor.previewState;
+    APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+    renderApp();
+    return;
+  }
+  if (!agentPreviewSnapshot) {
+    agentPreviewSnapshot = {
+      monitor: JSON.parse(JSON.stringify(monitor)),
+      agentWindow: JSON.parse(JSON.stringify(agentWindow)),
+    };
+  }
+  const previewTime = `${nowText()}:00`;
+  Object.assign(agentWindow, {
+    activeTask: "",
+    currentOutput: "",
+    output: "",
+    lastLog: "",
+    pending: "",
+    currentStep: "",
+    steps: [],
+  });
+  Object.assign(monitor, {
+    previewState: state,
+    status: "online",
+    label: "原型预览",
+    stateText: "等待任务",
+    syncStatus: "演示数据",
+    lastUpdate: previewTime,
+  });
+  APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+  if (state === "disconnected") {
+    Object.assign(monitor, { status: "disconnected", stateText: "CLI事件未连接", syncStatus: "CLI事件未连接", lastUpdate: "" });
+  } else if (state === "running") {
+    Object.assign(monitor, { stateText: "执行中", syncStatus: "演示数据 · 执行中" });
+    Object.assign(agentWindow, {
+      activeTask: "[演示] 修复登录接口并运行测试",
+      currentOutput: "[演示] 正在运行登录模块测试",
+      output: "[演示] 执行中",
+      currentStep: "[演示] 运行测试",
+      steps: [
+        { state: "done", icon: "✓", title: "[演示] 读取相关代码", desc: "已完成", duration: "已完成" },
+        { state: "active", icon: "●", title: "[演示] 运行登录测试", desc: "执行中", duration: "进行中" },
+      ],
+    });
+  } else if (state === "approval") {
+    Object.assign(monitor, { stateText: "待确认", syncStatus: "演示数据 · 等待用户" });
+    Object.assign(agentWindow, {
+      activeTask: "[演示] 修复登录接口并运行测试",
+      currentOutput: "[演示] 等待用户确认命令执行",
+      pending: "[演示] 执行 npm test",
+    });
+    APP_STATE.agentSecondaryAlert = { open: true, type: "confirm" };
+  } else if (state === "failed") {
+    Object.assign(monitor, { status: "failed", stateText: "失败", syncStatus: "演示数据 · 异常结束" });
+    Object.assign(agentWindow, {
+      activeTask: "[演示] 修复登录接口并运行测试",
+      currentOutput: "[演示] 测试命令执行失败",
+      currentStep: "[演示] 运行登录测试",
+      pending: "[演示] 测试未通过，请回主屏查看原始输出",
+    });
+    APP_STATE.agentSecondaryAlert = { open: true, type: "failed" };
+  } else if (state === "completed") {
+    Object.assign(monitor, { status: "completed", stateText: "已完成", syncStatus: "演示数据 · 已完成" });
+    Object.assign(agentWindow, {
+      activeTask: "[演示] 修复登录接口并运行测试",
+      currentOutput: "[演示] 登录接口已修复，相关测试已通过",
+      output: "[演示] 任务已完成",
+    });
+    APP_STATE.agentSecondaryAlert = { open: true, type: "completed" };
+  }
+  renderApp();
 }
 
 function applyAgentStop() {
@@ -16749,11 +17116,11 @@ function saveDeviceSettings() {
 }
 
 const API_PROVIDER_DEFS = {
-  "OpenAI": { id:"openai", baseUrl:"https://api.openai.com/v1", models:["gpt-5.4-mini","gpt-4.1","gpt-4.1-mini"], help:"https://platform.openai.com/api-keys" },
+  "OpenAI": { id:"openai", baseUrl:"https://api.openai.com/v1", models:["gpt-5.4-mini","gpt-4.1","gpt-4.1-mini"], voiceModels:["gpt-realtime"], help:"https://platform.openai.com/api-keys" },
   "Anthropic": { id:"anthropic", baseUrl:"https://api.anthropic.com", models:["claude-opus-4-6","claude-sonnet-4-6","claude-haiku-4-5"], help:"https://console.anthropic.com/settings/keys" },
-  "Google Gemini": { id:"gemini", baseUrl:"https://generativelanguage.googleapis.com/v1beta", models:["gemini-3.6-flash","gemini-3.5-flash","gemini-2.5-flash"], help:"https://aistudio.google.com/app/apikey" },
+  "Google Gemini": { id:"gemini", baseUrl:"https://generativelanguage.googleapis.com/v1beta", models:["gemini-3.6-flash","gemini-3.5-flash","gemini-2.5-flash"], voiceModels:["gemini-live"], help:"https://aistudio.google.com/app/apikey" },
   "DeepSeek": { id:"deepseek", baseUrl:"https://api.deepseek.com", models:["deepseek-v4-flash","deepseek-v4-pro"], help:"https://platform.deepseek.com/api_keys" },
-  "阿里云百炼": { id:"qwen", baseUrl:"https://dashscope.aliyuncs.com/compatible-mode/v1", models:["qwen-plus","qwen-turbo","qwen-max"], help:"https://bailian.console.aliyun.com/" },
+  "阿里云百炼": { id:"qwen", baseUrl:"https://dashscope.aliyuncs.com/compatible-mode/v1", models:["qwen-plus","qwen-turbo","qwen-max"], voiceModels:["qwen-omni"], help:"https://bailian.console.aliyun.com/" },
   "火山方舟": { id:"volc-ark", baseUrl:"https://ark.cn-beijing.volces.com/api/v3", models:["doubao-seed-2-0-lite","doubao-seed-1-6-flash"], help:"https://console.volcengine.com/ark/region:ark+cn-beijing/apikey" },
   "智谱 GLM": { id:"zhipu", baseUrl:"https://open.bigmodel.cn/api/paas/v4", models:["glm-5","glm-4.5","glm-4-flash"], help:"https://open.bigmodel.cn/usercenter/apikeys" },
   "腾讯混元": { id:"hunyuan", baseUrl:"https://api.hunyuan.cloud.tencent.com/v1", models:["hunyuan-turbos-latest","hunyuan-turbo"], help:"https://console.cloud.tencent.com/hunyuan/api-key" },
@@ -16762,7 +17129,7 @@ const API_PROVIDER_DEFS = {
 
 function createApiDraft(provider="OpenAI") {
   const def=API_PROVIDER_DEFS[provider];
-  return { configId:`api-${globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2,8)}`}`,displayName:"",provider,providerId:def.id,baseUrl:def.baseUrl,apiKey:"",hasSavedKey:false,credentialRef:null,protocol:"openai",region:"cn-beijing",customModel:"",model:"",defaultModelId:"",availableModels:[],status:"未配置",connectionStatus:"unconfigured",lastTest:"",lastValidatedAt:null,validationErrorCode:null,scopes:["AI 智能问答"],saved:false };
+  return { configId:`api-${globalThis.crypto?.randomUUID?.()||`${Date.now()}-${Math.random().toString(36).slice(2,8)}`}`,displayName:"",provider,providerId:def.id,baseUrl:def.baseUrl,apiKey:"",hasSavedKey:false,credentialRef:null,protocol:"openai",region:"cn-beijing",customModel:"",model:"",defaultModelId:"",voiceModel:"",availableModels:[],availableVoiceModels:[],status:"未配置",connectionStatus:"unconfigured",lastTest:"",lastValidatedAt:null,validationErrorCode:null,scopes:["AI 智能问答"],saved:false };
 }
 
 function apiStatusClass(config){ return config.connectionStatus==="connected"&&config.saved?"connected":["failed","expired"].includes(config.connectionStatus)?"error":""; }
@@ -16772,7 +17139,7 @@ function renderApiSettings() {
   const provider=$("#api-provider");
   if(!provider)return;
   const cards=$("#api-provider-cards");
-  cards.innerHTML=APP_STATE.apiConfigs.length?APP_STATE.apiConfigs.map(config=>`<button class="api-provider-card ${config.configId===APP_STATE.apiEditingId?"active":""}" data-api-edit="${escapeHtml(config.configId)}"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>${escapeHtml(config.displayName||config.provider)}</strong></span><small>${escapeHtml(config.provider)} · 默认模型：${escapeHtml(config.model||"未选择")} · ${config.availableModels.length} 个可用模型</small></span><span class="api-provider-status ${apiStatusClass(config)}">${escapeHtml(config.status)}</span></button>`).join(""):'<div class="api-provider-empty">还没有服务商配置。<br>点击“添加”开始配置。</div>';
+  cards.innerHTML=APP_STATE.apiConfigs.length?APP_STATE.apiConfigs.map(config=>`<button class="api-provider-card ${config.configId===APP_STATE.apiEditingId?"active":""}" data-api-edit="${escapeHtml(config.configId)}"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>${escapeHtml(config.displayName||config.provider)}</strong></span><small>${escapeHtml(config.provider)} · 默认模型：${escapeHtml(config.model||"未选择")}</small></span><span class="api-provider-status ${apiStatusClass(config)}">${escapeHtml(config.status)}</span></button>`).join(""):'<div class="api-provider-empty">还没有大语言模型配置。<br>点击“添加”开始配置。</div>';
   provider.value=settings.provider;
   $("#api-config-name").value=settings.displayName||"";
   $("#api-editor-title").textContent=APP_STATE.apiEditingId?`编辑 ${settings.provider}`:"添加服务商";
@@ -16810,7 +17177,7 @@ function updateApiSetting(key,value){
     const next=createApiDraft(value);next.configId=settings.configId;APP_STATE.apiSettings=next;
   }else{
     if(key==="region"&&settings.provider==="阿里云百炼")settings.baseUrl=value==="ap-southeast-1"?"https://dashscope-intl.aliyuncs.com/compatible-mode/v1":value==="us"?"https://dashscope-us.aliyuncs.com/compatible-mode/v1":"https://dashscope.aliyuncs.com/compatible-mode/v1";
-    settings.status=(settings.apiKey||settings.hasSavedKey)?"待验证":"未配置";settings.connectionStatus=(settings.apiKey||settings.hasSavedKey)?"pending":"unconfigured";settings.availableModels=[];settings.model="";settings.defaultModelId="";settings.saved=false;settings.validationErrorCode=null;
+    settings.status=(settings.apiKey||settings.hasSavedKey)?"待验证":"未配置";settings.connectionStatus=(settings.apiKey||settings.hasSavedKey)?"pending":"unconfigured";settings.availableModels=[];settings.availableVoiceModels=[];settings.model="";settings.defaultModelId="";settings.voiceModel="";settings.saved=false;settings.validationErrorCode=null;
   }
   const feedback=$("#api-form-feedback");if(feedback){feedback.className="api-form-feedback";feedback.textContent="配置已修改，请重新测试连接。";}renderApiSettings();
 }
@@ -16832,7 +17199,7 @@ function saveApiSettings(){
   const stored={...JSON.parse(JSON.stringify(settings)),apiKey:""};const nextConfigs=APP_STATE.apiConfigs.map(item=>({...item}));const index=nextConfigs.findIndex(item=>item.configId===settings.configId);if(index>=0)nextConfigs[index]=stored;else nextConfigs.push(stored);
   try{persistApiConfigs(nextConfigs);}catch(_){settings.saved=false;settings.status="保存失败";feedback.className="api-form-feedback error";feedback.textContent="配置保存失败，本次修改不会生效，请重新保存。";renderApiSettings();return;}
   APP_STATE.apiConfigs=nextConfigs;APP_STATE.apiEditingId=settings.configId;
-  feedback.className="api-form-feedback success";feedback.textContent="配置已保存，可用模型列表已刷新。";renderApiSettings();showSheet({type:"Toast",title:"服务商配置已保存",copy:`${settings.provider} 已保存，默认模型：${settings.model}。`,detail:"screen-config"});
+  feedback.className="api-form-feedback success";feedback.textContent="大语言模型配置已保存，默认模型已生效。";renderApiSettings();showSheet({type:"Toast",title:"大语言模型配置已保存",copy:`${settings.provider} 已保存，默认模型：${settings.model}。`,detail:"screen-config"});
 }
 
 function testApiConnection(){
@@ -16843,10 +17210,10 @@ function testApiConnection(){
   const key=settings.apiKey.trim();if(key&&key.length<12){settings.status="连接失败";settings.connectionStatus="failed";settings.validationErrorCode="INVALID_CREDENTIAL_FORMAT";feedback.className="api-form-feedback error";feedback.textContent="API Key 格式不正确，请检查后重试。";renderApiSettings();return;}
   if(settings.provider==="自定义兼容 API"&&!settings.customModel.trim()){settings.status="连接失败";settings.connectionStatus="failed";feedback.className="api-form-feedback error";feedback.textContent="请输入模型 ID 后再测试连接。";renderApiSettings();return;}
   settings.status="验证中";settings.connectionStatus="testing";feedback.className="api-form-feedback";feedback.textContent="正在模拟验证连接并获取可用模型…";renderApiSettings();
-  setTimeout(()=>{const def=API_PROVIDER_DEFS[settings.provider];settings.availableModels=settings.provider==="自定义兼容 API"?[settings.customModel.trim()]:[...def.models];settings.model=settings.availableModels[0]||"";settings.defaultModelId=settings.model;settings.status="已连接未保存";settings.connectionStatus="connected";settings.lastTest=nowText();settings.lastValidatedAt=new Date().toISOString();settings.validationErrorCode=null;settings.saved=false;feedback.className="api-form-feedback success";feedback.textContent=`原型模拟验证成功，已获取 ${settings.availableModels.length} 个可用模型；请选择默认模型并保存。`;renderApiSettings();},700);
+  setTimeout(()=>{const def=API_PROVIDER_DEFS[settings.provider];settings.availableModels=settings.provider==="自定义兼容 API"?[settings.customModel.trim()]:[...def.models];settings.model=settings.availableModels[0]||"";settings.defaultModelId=settings.model;settings.status="已连接未保存";settings.connectionStatus="connected";settings.lastTest=nowText();settings.lastValidatedAt=new Date().toISOString();settings.validationErrorCode=null;settings.saved=false;feedback.className="api-form-feedback success";feedback.textContent="原型模拟验证成功，请选择默认模型后保存。";renderApiSettings();},700);
 }
 
-function refreshApiModels(){const settings=APP_STATE.apiSettings,feedback=$("#api-form-feedback");if(settings.connectionStatus!=="connected"){feedback.className="api-form-feedback error";feedback.textContent="请先测试连接，再刷新模型列表。";return;}settings.status="验证中";settings.connectionStatus="testing";feedback.className="api-form-feedback";feedback.textContent="正在刷新可用模型…";renderApiSettings();setTimeout(()=>{const def=API_PROVIDER_DEFS[settings.provider];settings.availableModels=settings.provider==="自定义兼容 API"?[settings.customModel.trim()].filter(Boolean):[...def.models];if(!settings.availableModels.includes(settings.model))settings.model=settings.availableModels[0]||"";settings.connectionStatus="connected";settings.saved=false;settings.status="模型已刷新待保存";feedback.className="api-form-feedback success";feedback.textContent=`模型列表已刷新，共 ${settings.availableModels.length} 个可用模型；保存后生效。`;renderApiSettings();},500);}
+function refreshApiModels(){const settings=APP_STATE.apiSettings,feedback=$("#api-form-feedback");if(settings.connectionStatus!=="connected"){feedback.className="api-form-feedback error";feedback.textContent="请先测试连接，再刷新模型列表。";return;}settings.status="验证中";settings.connectionStatus="testing";feedback.className="api-form-feedback";feedback.textContent="正在刷新可用模型…";renderApiSettings();setTimeout(()=>{const def=API_PROVIDER_DEFS[settings.provider];settings.availableModels=settings.provider==="自定义兼容 API"?[settings.customModel.trim()].filter(Boolean):[...def.models];if(!settings.availableModels.includes(settings.model))settings.model=settings.availableModels[0]||"";settings.connectionStatus="connected";settings.saved=false;settings.status="模型已刷新待保存";feedback.className="api-form-feedback success";feedback.textContent="默认模型已刷新，保存后生效。";renderApiSettings();},500);}
 
 function showApiDemoState(value){
   const settings=APP_STATE.apiSettings,feedback=$("#api-form-feedback");
@@ -16865,6 +17232,27 @@ function deleteApiConfig(){const id=APP_STATE.apiEditingId;if(!id)return;const n
 
 function resetApiSettings(){startNewApiConfig();}
 function restoreApiSettings(){try{const saved=JSON.parse(localStorage.getItem("agentPcApiConfigs")||"[]");APP_STATE.apiConfigs=Array.isArray(saved)?saved.map(item=>({...item,apiKey:"",hasSavedKey:true})):[];}catch(_){APP_STATE.apiConfigs=[];localStorage.removeItem("agentPcApiConfigs");}if(APP_STATE.apiConfigs.length)editApiConfig(APP_STATE.apiConfigs[0].configId);else startNewApiConfig();}
+
+const VOICE_PROVIDER_MODELS={
+  "豆包语音（火山引擎）":["服务商可用语音模型"],"阿里云语音":["服务商可用语音模型"],"腾讯云语音":["服务商可用语音模型"],
+  "百度智能云语音":["服务商可用语音模型"],"讯飞开放平台":["服务商可用语音模型"],"自定义语音 API":["自定义语音模型"]
+};
+const VOICE_API_STATE={provider:"豆包语音（火山引擎）",name:"",baseUrl:"",apiKey:"",status:"未配置",connected:false,model:"",lastTest:""};
+function switchApiModelTab(type){
+  const llm=type==="llm";$("#llm-api-panel").hidden=!llm;$("#voice-api-panel").hidden=llm;
+  $("#api-tab-llm").classList.toggle("active",llm);$("#api-tab-voice").classList.toggle("active",!llm);
+  $("#api-tab-llm").setAttribute("aria-selected",String(llm));$("#api-tab-voice").setAttribute("aria-selected",String(!llm));
+}
+function renderVoiceApi(){
+  const s=VOICE_API_STATE;document.querySelectorAll("[data-voice-provider]").forEach(card=>card.classList.toggle("active",card.dataset.voiceProvider===s.provider));
+  $("#voice-editor-title").textContent=`配置${s.provider}`;$("#voice-config-name").value=s.name;$("#voice-api-key").value=s.apiKey;
+  const custom=s.provider==="自定义语音 API",url=$("#voice-base-url");url.disabled=!custom;url.value=custom?s.baseUrl:"";url.placeholder=custom?"输入统一语音服务地址":"使用服务商内置接入地址";
+  $("#voice-status-text").textContent=s.status;$("#voice-status-dot").classList.toggle("connected",s.connected);$("#voice-last-tested").textContent=s.lastTest?`最近验证 ${s.lastTest}`:"尚未验证";
+  const model=$("#voice-model-id"),models=s.connected?VOICE_PROVIDER_MODELS[s.provider]:[];model.innerHTML=models.length?models.map(v=>`<option>${escapeHtml(v)}</option>`).join(""):'<option value="">请先测试连接</option>';model.disabled=!models.length;if(models.length){s.model=s.model||models[0];model.value=s.model;}
+}
+function selectVoiceProvider(provider){Object.assign(VOICE_API_STATE,{provider,name:"",baseUrl:"",apiKey:"",status:"未配置",connected:false,model:"",lastTest:""});$("#voice-form-feedback").className="api-form-feedback";$("#voice-form-feedback").textContent="填写配置并测试连接，验证成功后选择语音模型并保存。";renderVoiceApi();}
+function testVoiceApi(){const s=VOICE_API_STATE,f=$("#voice-form-feedback");s.name=$("#voice-config-name").value.trim();s.apiKey=$("#voice-api-key").value.trim();s.baseUrl=$("#voice-base-url").value.trim();if(!s.apiKey){f.className="api-form-feedback error";f.textContent="请输入 API Key 后再测试连接。";return;}if(s.provider==="自定义语音 API"&&!s.baseUrl){f.className="api-form-feedback error";f.textContent="请输入统一语音服务地址。";return;}s.status="验证中";s.connected=false;renderVoiceApi();f.className="api-form-feedback";f.textContent="正在模拟验证语音服务连接…";setTimeout(()=>{s.status="已连接未保存";s.connected=true;s.lastTest=nowText();renderVoiceApi();f.className="api-form-feedback success";f.textContent="原型模拟验证成功，请选择语音模型后保存。";},500);}
+function saveVoiceApi(){const s=VOICE_API_STATE,f=$("#voice-form-feedback");s.name=$("#voice-config-name").value.trim();s.model=$("#voice-model-id").value;if(!s.name){f.className="api-form-feedback error";f.textContent="请输入配置名称。";return;}if(!s.connected){f.className="api-form-feedback error";f.textContent="请先测试连接。";return;}s.status="已保存可用";localStorage.setItem("agentPcVoiceApiConfig",JSON.stringify({...s,apiKey:""}));renderVoiceApi();f.className="api-form-feedback success";f.textContent="语音模型配置已保存。";showSheet({type:"Toast",title:"语音模型配置已保存",copy:`${s.provider} 已保存。`,detail:"screen-config"});}
 
 function resetConfigPage() {
   resetApiSettings();
@@ -17206,6 +17594,15 @@ function bindEvents() {
     $("#api-key-toggle").title = visible ? "显示 API Key" : "隐藏 API Key";
   });
   $("#api-refresh-models").addEventListener("click", refreshApiModels);
+  $("#api-tab-llm").addEventListener("click",()=>switchApiModelTab("llm"));
+  $("#api-tab-voice").addEventListener("click",()=>{switchApiModelTab("voice");renderVoiceApi();});
+  $("#voice-provider-cards").addEventListener("click",event=>{const card=event.target.closest("[data-voice-provider]");if(card)selectVoiceProvider(card.dataset.voiceProvider);});
+  $("#voice-test-connection").addEventListener("click",testVoiceApi);
+  $("#voice-save-config").addEventListener("click",saveVoiceApi);
+  $("#voice-model-id").addEventListener("change",event=>VOICE_API_STATE.model=event.target.value);
+  $("#voice-key-toggle").addEventListener("click",()=>{const input=$("#voice-api-key"),visible=input.type==="text";input.type=visible?"password":"text";$("#voice-key-toggle").textContent=visible?"显示":"隐藏";});
+  try{const savedVoice=JSON.parse(localStorage.getItem("agentPcVoiceApiConfig")||"null");if(savedVoice)Object.assign(VOICE_API_STATE,savedVoice,{apiKey:"",connected:true});}catch(_){}
+  renderVoiceApi();
   const tokenQuotaModal = $("#token-quota-modal");
   const hideTokenQuotaModal = () => {
     tokenQuotaModal.classList.remove("show");
@@ -17527,6 +17924,18 @@ function bindEvents() {
       return;
     }
 
+    const cliCardAction = event.target.closest("[data-cli-card-action]");
+    if (cliCardAction) {
+      handleCliCardAction(cliCardAction.dataset.cliCardAction, cliCardAction.dataset.cliId);
+      return;
+    }
+
+    const cliDialogAction = event.target.closest("[data-cli-dialog]");
+    if (cliDialogAction) {
+      handleCliDialogAction(cliDialogAction.dataset.cliDialog);
+      return;
+    }
+
     const agentControl = event.target.closest("[data-agent-control]");
     if (agentControl) {
       handleAgentControl(agentControl.dataset.agentControl);
@@ -17661,6 +18070,10 @@ restoreQuickActions();
 restoreTimeSettings();
 syncQuickFeatureConfig();
 renderApp();
+const requestedAgentPreviewState = new URLSearchParams(window.location.search).get("agentState");
+if (["disconnected", "waiting", "running", "approval", "failed", "completed"].includes(requestedAgentPreviewState)) {
+  previewAgentMonitorState(requestedAgentPreviewState);
+}
 loadWindowsInstalledApps();
 setInterval(updateTimeDisplay, 1000);
     </script>
@@ -17862,6 +18275,15 @@ document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRen
 window.addEventListener("offline",()=>{QA_STATE.issue="offline";qaRender();});
 window.addEventListener("online",()=>{if(QA_STATE.issue==="offline")QA_STATE.issue="";qaRender();});
 qaRender();
+const handleAgentStatePreviewPointer = (event) => {
+  const control = event.target.closest("[data-agent-preview-state]");
+  if (!control) return;
+  event.preventDefault();
+  event.stopImmediatePropagation();
+  previewAgentMonitorState(control.dataset.agentPreviewState);
+};
+document.addEventListener("pointerdown", handleAgentStatePreviewPointer, true);
+document.addEventListener("click", handleAgentStatePreviewPointer, true);
     </script>
   </body>
 </html>
