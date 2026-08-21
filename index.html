@@ -2780,6 +2780,9 @@ p {
   display: flex;
   align-items: center;
 }
+.agent-state-overlay[hidden] {
+  display: none !important;
+}
 
 .agent-subscreen-steps-head h4 {
   margin: 0;
@@ -7137,7 +7140,7 @@ pre {
   pointer-events: none !important;
 }
 
-/* Token 物理副屏中的时间范围属于真实触控操作，不是静态镜像。 */
+/* Token 自带小屏中的时间范围属于真实触控操作，不是静态镜像。 */
 .physical-screen-mirror-source.token-preview-canvas {
   pointer-events: auto !important;
 }
@@ -7146,7 +7149,7 @@ pre {
   pointer-events: auto !important;
 }
 
-/* 主屏中的物理副屏缩略图按约 0.6 倍展示，放大逻辑热区以保留 44px 实际命中范围。 */
+/* 主屏中的自带小屏缩略图按约 0.6 倍展示，放大逻辑热区以保留 44px 实际命中范围。 */
 .physical-screen-mirror-source.token-preview-canvas .range-switch {
   grid-template-columns: repeat(3, 74px);
 }
@@ -9775,8 +9778,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -9900,8 +9903,8 @@ pre {
                 <div class="preview-title-main"><h3>Agent 快捷操作</h3></div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -9961,8 +9964,8 @@ pre {
                   <h3>Token用量</h3>
                 </div>
                 <div class="preview-config-switch">
-                  <span>副屏展示效果</span>
-                  <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                  <span>小屏展示效果</span>
+                  <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                   <small data-toggle-label>打开</small>
                 </div>
               </div>
@@ -10106,8 +10109,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -10223,7 +10226,7 @@ pre {
                 <div class="section-actions">
                   <div class="preview-config-switch">
                     <span>功能开关</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -10419,8 +10422,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -10476,7 +10479,7 @@ pre {
         <section class="view" id="window-app">
           <div class="window-app-page">
             <section class="panel main-panel">
-              <div class="section-title"><div class="preview-title-main"><h3>窗口应用</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="section-title"><div class="preview-title-main"><h3>窗口应用</h3><p class="muted">小屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>小屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
               <div class="window-secondary-screen connected" id="window-secondary-screen" data-subscreen-preview="window-app" data-subscreen-title="窗口应用" aria-label="2:1 横屏副屏窗口应用预览">
                 <div class="window-empty-state"><strong>暂无应用窗口</strong><p>请在主屏窗口接入区域中拖入已打开的浏览器、PDF、聊天或终端窗口。</p></div>
                 <div class="mirrored-window">
@@ -10526,7 +10529,7 @@ pre {
         <section class="view" id="album">
           <div class="album-page">
             <section class="panel main-panel">
-              <div class="section-title"><div class="preview-title-main"><h3>AI 相册</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="section-title"><div class="preview-title-main"><h3>AI 相册</h3><p class="muted">小屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>小屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
               <div class="album-preview has-photos" id="album-preview" data-subscreen-preview="album" data-subscreen-title="AI 相册" aria-label="2:1 横屏副屏电子相册预览">
                 <div class="album-empty"><strong>暂无照片</strong><p>请在主屏选择本机图片库、指定照片文件夹或手动导入照片。</p></div>
                 <div class="album-stage">
@@ -10559,7 +10562,7 @@ pre {
         <section class="view" id="keyboard">
           <div class="agent-keyboard-page">
             <section class="panel main-panel">
-              <div class="section-title"><div class="preview-title-main"><h3>Agent 虚拟键盘</h3><p class="muted">副屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>副屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
+              <div class="section-title"><div class="preview-title-main"><h3>Agent 虚拟键盘</h3><p class="muted">小屏展示效果</p></div><div class="section-actions"><div class="preview-config-switch"><span>小屏展示效果</span><button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button><small data-toggle-label>打开</small></div></div></div>
               <div class="agent-keyboard-preview" data-subscreen-preview="keyboard" data-subscreen-title="Agent 虚拟键盘" aria-label="2:1 横屏副屏Agent虚拟键盘预览">
                 <div class="keyboard-console">
                   <div class="keyboard-connection">
@@ -10609,8 +10612,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -10698,8 +10701,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -10774,8 +10777,8 @@ pre {
                 </div>
                 <div class="section-actions">
                   <div class="preview-config-switch">
-                    <span>副屏展示效果</span>
-                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="副屏展示效果已打开"></button>
+                    <span>小屏展示效果</span>
+                    <button class="toggle" data-preview-config-toggle aria-pressed="true" aria-label="小屏展示效果已打开"></button>
                     <small data-toggle-label>打开</small>
                   </div>
                 </div>
@@ -12391,7 +12394,7 @@ function saveCurrentFeatureConfig() {
   const counts = countDisplayStates();
   showSheet({
     type: "Toast",
-    title: "副屏展示效果已保存",
+    title: "小屏展示效果已保存",
     copy: `${APP_STATE.selectedFeature}：${counts.persistent} 个常驻，${counts.triggered} 个触发时出现，${counts.hidden} 个不显示。`,
     detail: "screen-config",
   });
@@ -14347,8 +14350,8 @@ function toggleFeatureOnSecondary(featureName) {
   renderApp();
   showSheet({
     type: "Toast",
-    title: enabled ? "已关闭副屏展示效果" : "已打开副屏展示效果",
-    copy: `${featureName} ${enabled ? "已从副屏隐藏，主屏仍保留功能页。" : "已恢复推荐的副屏展示效果规则。"}`,
+    title: enabled ? "已关闭小屏展示效果" : "已打开小屏展示效果",
+    copy: `${featureName} ${enabled ? "已从自带小屏隐藏，主屏仍保留功能页。" : "已恢复推荐的小屏展示效果规则。"}`,
     detail: "screen-config",
   });
 }
@@ -16827,7 +16830,7 @@ function renderPreviewToggles() {
     const page = view?.id;
     const enabled = page ? APP_STATE.previewEnabled[page] !== false : true;
     toggle.setAttribute("aria-pressed", String(enabled));
-    toggle.setAttribute("aria-label", `副屏展示效果已${enabled ? "打开" : "关闭"}`);
+    toggle.setAttribute("aria-label", `小屏展示效果已${enabled ? "打开" : "关闭"}`);
     toggle.classList.toggle("off", !enabled);
     const label = toggle.parentElement.querySelector("[data-toggle-label]");
     if (label) label.textContent = enabled ? "打开" : "关闭";
@@ -16840,7 +16843,7 @@ function setPreviewEnabled(page, enabled) {
   renderPreviewToggles();
   showSheet({
     type: "Toast",
-    title: `副屏展示效果已${enabled ? "打开" : "关闭"}`,
+    title: `小屏展示效果已${enabled ? "打开" : "关闭"}`,
     copy: `${PAGE_TITLES[page]} ${enabled ? "会继续同步到副屏预览。" : "已从副屏临时隐藏，主屏记录不受影响。"}`,
     detail: page,
   });
@@ -16988,11 +16991,10 @@ function ensurePhysicalScreenPreviews() {
       physical = document.createElement("div");
       physical.className = "physical-screen-preview";
       physical.dataset.physicalFor = page;
-      physical.setAttribute("aria-label", `${title}物理副屏效果预览`);
+      physical.setAttribute("aria-label", `${title}自带小屏预览`);
       physical.innerHTML = `
         <div class="physical-screen-preview-head">
-          <strong>物理副屏效果</strong>
-          <span>实时同步当前副屏展示内容</span>
+          <strong>自带小屏</strong>
         </div>
         <div class="physical-screen-device">
           <div class="physical-screen-glass"><div class="physical-screen-canvas"></div></div>
