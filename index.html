@@ -6741,6 +6741,82 @@ pre {
 @media(max-width:980px){.api-provider-layout{grid-template-columns:1fr}.api-setting-row{grid-template-columns:1fr;gap:10px}.api-setting-control{justify-content:flex-start}}
 .voice-api-panel[hidden],.llm-api-panel[hidden] { display:none!important; }
 
+.api-unified-panel { overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:12px; background:rgba(255,255,255,.018); }
+.api-unified-head { display:flex; align-items:center; justify-content:space-between; gap:18px; padding:18px; border-bottom:1px solid rgba(255,255,255,.08); }
+.api-unified-head > div { display:grid; gap:5px; }
+.api-unified-head strong { font-size:17px; }
+.api-unified-head small { max-width:760px; color:var(--muted); line-height:1.55; }
+.api-config-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:12px; padding:16px; }
+.api-config-grid:empty { display:none; }
+.api-config-card { display:grid; gap:14px; min-height:154px; border:1px solid rgba(255,255,255,.09); border-radius:11px; background:rgba(255,255,255,.026); padding:16px; }
+.api-config-card-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+.api-config-card-title { display:grid; gap:4px; min-width:0; }
+.api-config-card-title strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.api-config-card-title small,.api-config-card-meta { color:var(--muted); font-size:11px; line-height:1.55; }
+.api-config-card-actions { display:flex; justify-content:flex-end; gap:8px; margin-top:auto; }
+.api-config-card-actions button { min-height:36px; }
+.api-unified-panel > .api-provider-empty { display:grid; gap:6px; padding:42px 18px; }
+.api-unified-panel > .api-provider-empty[hidden] { display:none; }
+.api-unified-panel > .api-provider-empty strong { color:var(--text); font-size:15px; }
+
+.api-dialog-layer { position:fixed; z-index:140; inset:0; display:none; place-items:center; padding:24px; background:rgba(0,0,0,.72); backdrop-filter:blur(7px); }
+.api-dialog-layer.open { display:grid; }
+.api-config-dialog { display:grid; grid-template-rows:auto minmax(0,1fr) auto; width:min(860px,94vw); max-height:min(820px,92vh); overflow:hidden; border:1px solid rgba(32,230,230,.3); border-radius:16px; background:#11191d; box-shadow:0 28px 90px rgba(0,0,0,.62); }
+.api-dialog-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; padding:22px 24px 18px; border-bottom:1px solid rgba(255,255,255,.08); }
+.api-dialog-head h3 { margin:5px 0 4px; font-size:22px; }
+.api-dialog-head p { margin:0; color:var(--muted); font-size:12px; }
+.api-dialog-close { display:grid; width:42px; height:42px; flex:0 0 auto; place-items:center; border:1px solid rgba(255,255,255,.1); border-radius:10px; background:rgba(255,255,255,.03); color:var(--muted); font-size:25px; }
+.api-dialog-close:hover { border-color:rgba(32,230,230,.45); color:var(--text); }
+.api-dialog-body { min-height:0; overflow-y:auto; padding:20px 24px; }
+.api-provider-groups { display:grid; gap:22px; }
+.api-provider-group { display:grid; gap:10px; }
+.api-provider-group-head { display:flex; align-items:center; gap:9px; }
+.api-provider-group-head strong { font-size:14px; }
+.api-provider-group-head small { color:var(--muted); font-size:11px; }
+.api-provider-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.api-provider-option { display:grid; grid-template-columns:40px minmax(0,1fr) 18px; align-items:center; gap:11px; min-height:76px; border:1px solid rgba(255,255,255,.09); border-radius:11px; background:rgba(255,255,255,.025); color:var(--text); padding:12px; text-align:left; }
+.api-provider-option:hover,.api-provider-option.selected { border-color:rgba(32,230,230,.52); background:rgba(32,230,230,.08); }
+.api-provider-option-logo { display:grid; width:40px; height:40px; place-items:center; border-radius:10px; background:rgba(255,255,255,.07); color:var(--cyan); font-size:12px; font-weight:950; }
+.api-provider-option-copy { display:grid; gap:4px; min-width:0; }
+.api-provider-option-copy strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.api-provider-option-copy small { color:var(--muted); font-size:11px; line-height:1.35; }
+.api-provider-option-check { display:grid; width:18px; height:18px; place-items:center; border:1px solid rgba(255,255,255,.18); border-radius:50%; color:transparent; font-size:11px; }
+.api-provider-option.selected .api-provider-option-check { border-color:var(--cyan); background:var(--cyan); color:#071719; }
+
+.api-selected-provider { display:flex; align-items:center; gap:12px; margin-bottom:16px; border:1px solid rgba(32,230,230,.25); border-radius:11px; background:rgba(32,230,230,.055); padding:12px 14px; }
+.api-selected-provider > span { display:grid; gap:3px; }
+.api-selected-provider small { color:var(--muted); }
+.api-dynamic-fields { display:grid; gap:0; overflow:hidden; border:1px solid rgba(255,255,255,.08); border-radius:11px; }
+.api-dynamic-field { display:grid; grid-template-columns:minmax(190px,.42fr) minmax(280px,.58fr); align-items:center; gap:20px; min-height:78px; padding:14px 16px; border-bottom:1px solid rgba(255,255,255,.08); }
+.api-dynamic-field:last-child { border-bottom:0; }
+.api-dynamic-field-label { display:grid; gap:4px; }
+.api-dynamic-field-label label { font-weight:850; }
+.api-dynamic-field-label small { color:var(--muted); font-size:11px; line-height:1.45; }
+.api-dynamic-field-control { display:grid; gap:7px; }
+.api-dynamic-field-control input,.api-dynamic-field-control select { width:100%; min-height:44px; border:1px solid rgba(255,255,255,.1); border-radius:8px; background:#35404d; color:var(--text); padding:0 13px; }
+.api-dynamic-field-control input:disabled { color:var(--muted); opacity:.78; }
+.api-dynamic-secret { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px; }
+.api-dynamic-secret button { min-width:66px; min-height:44px; }
+.api-field-help { color:var(--cyan); font-size:11px; text-decoration:none; }
+.api-dialog-feedback { margin-top:14px; border-radius:9px; background:rgba(255,255,255,.035); color:var(--muted); padding:11px 13px; font-size:12px; line-height:1.55; }
+.api-dialog-feedback.success { background:rgba(46,242,138,.08); color:#83f5b9; }
+.api-dialog-feedback.error { background:rgba(255,92,92,.08); color:#ffb2b2; }
+.api-dialog-actions { display:grid; grid-template-columns:auto 1fr auto auto; align-items:center; gap:10px; padding:16px 24px; border-top:1px solid rgba(255,255,255,.08); }
+.api-dialog-actions button { min-width:104px; }
+.api-dialog-actions button:disabled { cursor:not-allowed; opacity:.45; box-shadow:none; }
+body.api-dialog-open { overflow:hidden; }
+
+@media(max-width:760px){
+  .api-unified-head{align-items:flex-start;flex-direction:column}
+  .api-provider-grid{grid-template-columns:1fr}
+  .api-dynamic-field{grid-template-columns:1fr;gap:9px}
+  .api-config-dialog{width:96vw;max-height:94vh}
+  .api-dialog-head,.api-dialog-body,.api-dialog-actions{padding-left:16px;padding-right:16px}
+  .api-dialog-actions{grid-template-columns:1fr 1fr}
+  .api-dialog-actions span{display:none}
+  .api-dialog-actions button{width:100%;min-width:0}
+}
+
 .api-settings-list {
   display: grid;
   gap: 0;
@@ -10878,188 +10954,67 @@ pre {
                   <button class="api-model-tab active" id="api-tab-llm" type="button" role="tab" aria-selected="true">大语言模型</button>
                   <button class="api-model-tab" id="api-tab-voice" type="button" role="tab" aria-selected="false">语音模型</button>
                 </div>
-                <div class="llm-api-panel" id="llm-api-panel">
-                <div class="api-provider-layout">
-                  <aside class="api-provider-sidebar">
-                    <div class="api-provider-sidebar-head">
-                      <div><strong>大语言模型服务商</strong><small>选择服务商后配置连接；仅已保存且可用的模型进入问答模型列表</small></div>
-                      <button class="primary-button" id="api-add-provider">＋ 添加</button>
+                <div class="api-unified-panel">
+                  <div class="api-unified-head">
+                    <div>
+                      <strong id="api-category-title">大语言模型</strong>
+                      <small id="api-category-description">配置国内与海外的文字问答模型，内置服务商由系统自动适配协议。</small>
                     </div>
-                    <div class="api-provider-cards" id="api-provider-cards"></div>
-                  </aside>
-                  <div class="api-provider-editor">
-                    <div class="api-editor-head">
-                      <div><strong id="api-editor-title">添加服务商</strong><small id="api-editor-subtitle">填写配置并完成验证后保存</small></div>
-                      <div class="api-editor-head-actions"><button class="soft-button" id="api-return-qa">返回AI问答</button><button class="soft-button api-delete-button" id="api-delete-config" hidden>删除配置</button></div>
-                    </div>
-                <div class="api-settings-list">
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <span>接入状态</span>
-                      <small>HTML 原型仅模拟检查 API Key 格式和服务地址，不发起真实请求</small>
-                    </div>
-                    <div class="api-setting-control">
-                      <div class="api-status-line">
-                        <i class="api-status-dot" id="api-status-dot" aria-hidden="true"></i>
-                        <strong id="api-status-text">未配置</strong>
-                        <small id="api-last-tested">尚未验证</small>
+                    <button class="primary-button" id="api-add-model" type="button">＋ 添加模型</button>
+                  </div>
+                  <div class="api-config-grid" id="api-config-list"></div>
+                  <div class="api-provider-empty" id="api-config-empty">
+                    <strong>还没有大语言模型配置</strong>
+                    <span>点击“添加模型”，选择国内、海外或自定义服务商。</span>
+                  </div>
+                </div>
+
+                <div class="api-dialog-layer" id="api-config-dialog-layer" aria-hidden="true">
+                  <div class="api-config-dialog" id="api-config-dialog" role="dialog" aria-modal="true" aria-labelledby="api-dialog-title">
+                    <div class="api-dialog-head">
+                      <div>
+                        <h3 id="api-dialog-title">添加模型</h3>
+                        <p id="api-dialog-subtitle">内置服务商会自动配置协议和接口地址。</p>
                       </div>
+                      <button class="api-dialog-close" id="api-dialog-close" type="button" aria-label="关闭配置弹窗">×</button>
                     </div>
-                  </article>
 
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <label for="api-state-demo">原型状态演示</label>
-                      <small>仅用于截图和研发核对，正式产品不展示</small>
+                    <div class="api-dialog-body">
+                      <section id="api-dialog-step-provider" class="api-dialog-step">
+                        <div class="api-provider-groups" id="api-dialog-provider-groups"></div>
+                      </section>
+                      <section id="api-dialog-step-config" class="api-dialog-step" hidden>
+                        <div class="api-selected-provider" id="api-selected-provider"></div>
+                        <div class="api-dynamic-fields" id="api-dynamic-fields"></div>
+                        <div class="api-dialog-feedback" id="api-dialog-feedback" role="status" aria-live="polite">填写必填项后保存。本页仅展示 HTML 配置交互。</div>
+                      </section>
                     </div>
-                    <div class="api-setting-control">
-                      <select id="api-state-demo">
-                        <option value="normal">正常配置</option>
-                        <option value="expired">配置已失效</option>
-                        <option value="network">网络连接失败</option>
-                        <option value="credential">API Key 无效</option>
-                        <option value="empty-models">未获取到可用模型</option>
-                      </select>
-                    </div>
-                  </article>
 
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <label for="api-provider">服务商</label>
-                      <small>选择当前配置对应的模型服务</small>
+                    <div class="api-dialog-actions">
+                      <button class="soft-button" id="api-dialog-cancel" type="button">取消</button>
+                      <span></span>
+                      <button class="soft-button" id="api-dialog-previous" type="button" hidden>上一步</button>
+                      <button class="primary-button" id="api-dialog-next" type="button" disabled>下一步</button>
+                      <button class="primary-button" id="api-dialog-save" type="button" hidden>保存</button>
                     </div>
-                    <div class="api-setting-control">
-                      <select id="api-provider">
-                        <option>OpenAI</option>
-                        <option>Anthropic</option>
-                        <option>Google Gemini</option>
-                        <option>DeepSeek</option>
-                        <option>阿里云百炼</option>
-                        <option>火山方舟</option>
-                        <option>智谱 GLM</option>
-                        <option>腾讯混元</option>
-                        <option>自定义兼容 API</option>
-                      </select>
-                    </div>
-                  </article>
-
-                  <article class="api-setting-row">
-                    <div class="api-setting-name"><label for="api-config-name">配置名称</label><small>用于区分同一服务商的多个配置</small></div>
-                    <div class="api-setting-control"><input id="api-config-name" type="text" placeholder="例如：工作账号" /></div>
-                  </article>
-
-                  <article class="api-setting-row" id="api-region-row" hidden>
-                    <div class="api-setting-name"><label for="api-region">地域</label><small>地域必须与 API Key 和服务地址匹配</small></div>
-                    <div class="api-setting-control"><select id="api-region"><option value="cn-beijing">中国（北京）</option><option value="ap-southeast-1">新加坡</option><option value="us">美国</option></select></div>
-                  </article>
-
-                  <article class="api-setting-row" id="api-protocol-row" hidden>
-                    <div class="api-setting-name"><label for="api-protocol">兼容协议</label><small>选择自定义服务实际兼容的接口规范</small></div>
-                    <div class="api-setting-control"><select id="api-protocol"><option value="openai">OpenAI 兼容</option><option value="anthropic">Anthropic 兼容</option></select></div>
-                  </article>
-
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <label for="api-base-url">API Base URL</label>
-                      <small>内置服务商使用默认地址；自定义兼容 API 可编辑</small>
-                    </div>
-                    <div class="api-setting-control">
-                      <input id="api-base-url" type="text" placeholder="https://api.openai.com/v1" />
-                    </div>
-                  </article>
-
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <label for="api-key">API Key</label>
-                      <small>密钥仅用于连接所选模型服务，不会明文回显</small>
-                    </div>
-                    <div class="api-setting-control">
-                      <div class="api-secret-field">
-                        <input id="api-key" type="password" placeholder="输入 API Key" autocomplete="new-password" />
-                        <button type="button" class="api-icon-button" id="api-key-toggle" aria-label="显示 API Key" title="显示 API Key">显示</button>
-                      </div>
-                      <a class="api-help-link" id="api-key-help" href="https://platform.openai.com/api-keys" target="_blank" rel="noreferrer">获取 API Key</a>
-                    </div>
-                  </article>
-
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <label for="api-model">默认模型</label>
-                      <small>连接验证成功后刷新可用模型</small>
-                    </div>
-                    <div class="api-setting-control">
-                      <select id="api-model" aria-label="选择默认模型">
-                        <option value="">请先测试连接</option>
-                      </select>
-                      <button type="button" class="soft-button" id="api-refresh-models">刷新模型</button>
-                    </div>
-                  </article>
-
-                  <article class="api-setting-row" id="api-custom-model-row" hidden>
-                    <div class="api-setting-name"><label for="api-custom-model">模型 ID</label><small>填写服务商提供的准确模型标识</small></div>
-                    <div class="api-setting-control"><input id="api-custom-model" type="text" placeholder="例如 model-name" /></div>
-                  </article>
-
-                  <article class="api-setting-row">
-                    <div class="api-setting-name">
-                      <span>功能点使用范围</span>
-                      <small>当前配置仅供本功能使用</small>
-                    </div>
-                    <div class="api-setting-control">
-                      <div class="api-scope-list" id="api-scope-list"></div>
-                    </div>
-                  </article>
-                </div>
-                <div class="api-form-feedback" id="api-form-feedback" role="status" aria-live="polite"></div>
-                <div class="api-form-actions">
-                  <button class="soft-button" id="api-cancel-edit" hidden>取消</button>
-                  <span></span>
-                  <button class="soft-button" id="api-test-connection">测试连接</button>
-                  <button class="primary-button" id="save-config">保存设置</button>
-                </div>
                   </div>
                 </div>
-                </div>
-                <div class="voice-api-panel" id="voice-api-panel" hidden>
-                  <div class="api-provider-sidebar">
-                    <div class="api-provider-sidebar-head"><div><strong>语音服务商</strong><small>一个语音服务同时用于语音输入识别和回答播报</small></div></div>
-                    <div class="api-provider-cards" id="voice-provider-cards">
-                      <button class="api-provider-card active" type="button" data-voice-provider="豆包语音（火山引擎）"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>豆包语音（火山引擎）</strong></span><small>语音识别与语音合成</small></span></button>
-                      <button class="api-provider-card" type="button" data-voice-provider="阿里云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>阿里云语音</strong></span><small>智能语音交互服务</small></span></button>
-                      <button class="api-provider-card" type="button" data-voice-provider="腾讯云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>腾讯云语音</strong></span><small>语音识别与合成</small></span></button>
-                      <button class="api-provider-card" type="button" data-voice-provider="百度智能云语音"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>百度智能云语音</strong></span><small>语音技术服务</small></span></button>
-                      <button class="api-provider-card" type="button" data-voice-provider="讯飞开放平台"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>讯飞开放平台</strong></span><small>语音听写与语音合成</small></span></button>
-                      <button class="api-provider-card" type="button" data-voice-provider="自定义语音 API"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>自定义语音 API</strong></span><small>接入兼容的统一语音服务</small></span></button>
-                    </div>
-                  </div>
-                  <div class="api-provider-editor" style="margin-top:14px">
-                    <div class="api-editor-head"><div><strong id="voice-editor-title">配置豆包语音（火山引擎）</strong><small>只需配置一套语音服务，不分别配置ASR和TTS</small></div></div>
-                    <div class="api-settings-list">
-                      <article class="api-setting-row"><div class="api-setting-name"><span>接入状态</span><small>测试连接成功后才可保存使用</small></div><div class="api-setting-control"><div class="api-status-line"><i class="api-status-dot" id="voice-status-dot"></i><strong id="voice-status-text">未配置</strong><small id="voice-last-tested">尚未验证</small></div></div></article>
-                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-config-name">配置名称</label><small>用于区分不同语音服务配置</small></div><div class="api-setting-control"><input id="voice-config-name" type="text" placeholder="例如：默认语音服务"></div></article>
-                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-base-url">API Base URL</label><small>内置服务商自动带出；自定义语音API可编辑</small></div><div class="api-setting-control"><input id="voice-base-url" type="text"></div></article>
-                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-api-key">API Key</label><small>密钥仅用于连接语音服务，不会明文回显</small></div><div class="api-setting-control"><div class="api-secret-field"><input id="voice-api-key" type="password" placeholder="输入 API Key" autocomplete="new-password"><button type="button" class="api-icon-button" id="voice-key-toggle">显示</button></div></div></article>
-                      <article class="api-setting-row"><div class="api-setting-name"><label for="voice-model-id">语音模型</label><small>连接验证成功后选择服务商返回的语音模型</small></div><div class="api-setting-control"><select id="voice-model-id"><option value="">请先测试连接</option></select></div></article>
-                    </div>
-                    <div class="api-form-feedback" id="voice-form-feedback">填写配置并测试连接，验证成功后选择语音模型并保存。</div>
-                    <div class="api-form-actions"><span></span><span></span><button class="soft-button" id="voice-test-connection" type="button">测试连接</button><button class="primary-button" id="voice-save-config" type="button">保存设置</button></div>
-                  </div>
-                </div>
+
                 <div class="api-confirm-layer" id="api-confirm-layer" aria-hidden="true">
                   <div class="api-confirm-dialog" role="dialog" aria-modal="true" aria-labelledby="api-confirm-title">
-                    <h4 id="api-confirm-title">删除服务商配置？</h4>
-                    <p id="api-confirm-copy">删除后，该服务商的模型将从AI问答页移除。</p>
+                    <h4 id="api-confirm-title">删除模型配置？</h4>
+                    <p id="api-confirm-copy">删除后，该配置将从可用模型列表移除。</p>
                     <div class="api-confirm-actions"><button class="soft-button" id="api-confirm-cancel">取消</button><button class="primary-button api-delete-button" id="api-confirm-delete">确认删除</button></div>
                   </div>
                 </div>
                 <details class="dev-field-notes">
                   <summary>研发字段标注 · API配置</summary>
                   <div class="dev-field-grid">
-                    <div class="dev-field-item"><strong>配置标识</strong><code>configId / providerId / defaultModelId: string</code><br>主键使用稳定ID，不使用中文名称。</div>
-                    <div class="dev-field-item"><strong>密钥存储</strong><code>credentialRef: string|null</code><br>前端、日志和业务数据不保存或回显完整API Key。</div>
+                    <div class="dev-field-item"><strong>配置标识</strong><code>configId / category / providerId</code><br>大语言模型与语音模型独立存储和路由。</div>
+                    <div class="dev-field-item"><strong>密钥存储</strong><code>credentialRef: string|null</code><br>正式版由 Electron 主进程和 Windows 安全凭据模块保存，页面不回显明文。</div>
                     <div class="dev-field-item"><strong>连接状态</strong><code>unconfigured / pending / testing / connected / failed / expired</code><br>页面中文文案由状态枚举映射。</div>
                     <div class="dev-field-item"><strong>验证结果</strong><code>lastValidatedAt: ISO 8601|null</code><br><code>validationErrorCode</code>用于区分URL、密钥、模型和网络错误。</div>
-                    <div class="dev-field-item dev-field-rule"><strong>原型边界</strong>HTML只模拟格式验证；正式产品由安全凭证模块保存密钥，并由主进程发起连接验证。</div>
+                    <div class="dev-field-item dev-field-rule"><strong>原型边界</strong>HTML 模拟动态字段、失败与成功状态；正式产品由服务商适配器发起真实验证。</div>
                   </div>
                 </details>
               </section>
@@ -17245,6 +17200,113 @@ function selectVoiceProvider(provider){Object.assign(VOICE_API_STATE,{provider,n
 function testVoiceApi(){const s=VOICE_API_STATE,f=$("#voice-form-feedback");s.name=$("#voice-config-name").value.trim();s.apiKey=$("#voice-api-key").value.trim();s.baseUrl=$("#voice-base-url").value.trim();if(!s.apiKey){f.className="api-form-feedback error";f.textContent="请输入 API Key 后再测试连接。";return;}if(s.provider==="自定义语音 API"&&!s.baseUrl){f.className="api-form-feedback error";f.textContent="请输入统一语音服务地址。";return;}s.status="验证中";s.connected=false;renderVoiceApi();f.className="api-form-feedback";f.textContent="正在模拟验证语音服务连接…";setTimeout(()=>{s.status="已连接未保存";s.connected=true;s.lastTest=nowText();renderVoiceApi();f.className="api-form-feedback success";f.textContent="原型模拟验证成功，请选择语音模型后保存。";},500);}
 function saveVoiceApi(){const s=VOICE_API_STATE,f=$("#voice-form-feedback");s.name=$("#voice-config-name").value.trim();s.model=$("#voice-model-id").value;if(!s.name){f.className="api-form-feedback error";f.textContent="请输入配置名称。";return;}if(!s.connected){f.className="api-form-feedback error";f.textContent="请先测试连接。";return;}s.status="已保存可用";localStorage.setItem("agentPcVoiceApiConfig",JSON.stringify({...s,apiKey:""}));renderVoiceApi();f.className="api-form-feedback success";f.textContent="语音模型配置已保存。";showSheet({type:"Toast",title:"语音模型配置已保存",copy:`${s.provider} 已保存。`,detail:"screen-config"});}
 
+// 国内/海外统一模型 API 配置原型。本段只模拟页面交互，不发起真实 API 请求。
+const API_PROVIDER_GROUPS={domestic:{label:"国内服务",hint:"适合中国大陆业务"},global:{label:"海外服务",hint:"适合出海和海外部署"},custom:{label:"自定义",hint:"接入已兼容的大语言模型接口"}};
+const API_UNIFIED_PROVIDERS={
+  llm:[
+    {id:"deepseek",group:"domestic",label:"DeepSeek",logo:"DS",description:"官方 API · 系统自动使用 OpenAI 兼容协议",region:"中国大陆",baseUrl:"https://api.deepseek.com",help:"https://platform.deepseek.com/api_keys",models:["deepseek-v4-flash","deepseek-v4-pro"],fields:[{key:"apiKey",label:"API Key",hint:"在 DeepSeek 开放平台创建",type:"secret",required:true}]},
+    {id:"kimi",group:"domestic",label:"Kimi",logo:"K",description:"Moonshot AI · 国内开放平台",region:"中国大陆",baseUrl:"https://api.moonshot.cn/v1",help:"https://platform.kimi.com/console/api-keys",models:["kimi-k2.6","kimi-k2.5"],fields:[{key:"apiKey",label:"API Key",hint:"在 Kimi 开放平台创建",type:"secret",required:true}]},
+    {id:"qwen",group:"domestic",label:"通义千问",logo:"QW",description:"阿里云百炼大模型",region:"中国大陆",baseUrl:"https://dashscope.aliyuncs.com/compatible-mode/v1",models:["qwen-plus","qwen-max"],fields:[{key:"apiKey",label:"API Key",hint:"在阿里云百炼控制台创建",type:"secret",required:true}]},
+    {id:"doubao-ark",group:"domestic",label:"豆包",logo:"DB",description:"火山引擎·方舟大模型",region:"中国大陆",baseUrl:"https://ark.cn-beijing.volces.com/api/v3",models:["账号可用模型"],fields:[{key:"apiKey",label:"API Key",hint:"在火山方舟控制台创建",type:"secret",required:true}]},
+    {id:"zhipu",group:"domestic",label:"智谱 GLM",logo:"GLM",description:"智谱开放平台大模型",region:"中国大陆",baseUrl:"https://open.bigmodel.cn/api/paas/v4",models:["glm-5","glm-4.5"],fields:[{key:"apiKey",label:"API Key",hint:"在智谱开放平台创建",type:"secret",required:true}]},
+    {id:"hunyuan",group:"domestic",label:"腾讯混元",logo:"HY",description:"腾讯云混元大模型",region:"中国大陆",baseUrl:"https://api.hunyuan.cloud.tencent.com/v1",models:["账号可用模型"],fields:[{key:"apiKey",label:"API Key",hint:"在腾讯混元控制台创建",type:"secret",required:true}]},
+    {id:"openai",group:"global",label:"OpenAI",logo:"OA",description:"OpenAI 官方 API",region:"海外/全球",baseUrl:"https://api.openai.com/v1",help:"https://platform.openai.com/api-keys",models:["gpt-5.4-mini","gpt-4.1"],fields:[{key:"apiKey",label:"API Key",hint:"在 OpenAI Platform 创建",type:"secret",required:true}]},
+    {id:"anthropic",group:"global",label:"Anthropic",logo:"AN",description:"Claude · Anthropic Messages 协议",region:"海外/全球",baseUrl:"https://api.anthropic.com",help:"https://console.anthropic.com/settings/keys",models:["claude-sonnet-4-6","claude-haiku-4-5"],fields:[{key:"apiKey",label:"API Key",hint:"在 Anthropic Console 创建",type:"secret",required:true}]},
+    {id:"gemini",group:"global",label:"Google Gemini",logo:"GM",description:"Google AI 大模型",region:"海外/全球",baseUrl:"https://generativelanguage.googleapis.com/v1beta",models:["gemini-3.5-flash","gemini-2.5-flash"],fields:[{key:"apiKey",label:"API Key",hint:"在 Google AI Studio 创建",type:"secret",required:true}]},
+    {id:"azure-openai",group:"global",label:"Azure OpenAI",logo:"AZ",description:"Microsoft Azure 企业模型服务",region:"海外/全球",fields:[{key:"endpoint",label:"Endpoint",hint:"Azure 资源接口地址",type:"url",required:true},{key:"apiKey",label:"API Key",hint:"Azure 资源密钥",type:"secret",required:true},{key:"deployment",label:"Deployment",hint:"已部署的模型名称",type:"text",required:true},{key:"azureRegion",label:"Region",hint:"Azure 资源所在区域",type:"text",required:true}]},
+    {id:"custom-openai",group:"custom",label:"OpenAI 兼容",logo:"OAI",description:"自定义 OpenAI 兼容模型",region:"自定义",protocol:"OpenAI 兼容",fields:[{key:"baseUrl",label:"API 基础地址",hint:"填写到 /v1 或服务商要求的基础路径",type:"url",required:true},{key:"apiKey",label:"API Key",hint:"由自定义服务商提供",type:"secret",required:true},{key:"modelId",label:"模型 ID",hint:"填写服务商提供的准确标识",type:"text",required:true}]},
+    {id:"custom-anthropic",group:"custom",label:"Anthropic 兼容",logo:"ANT",description:"自定义 Anthropic Messages 兼容模型",region:"自定义",protocol:"Anthropic 兼容",fields:[{key:"baseUrl",label:"API 基础地址",hint:"填写服务商要求的 Anthropic 基础路径",type:"url",required:true},{key:"apiKey",label:"API Key",hint:"由自定义服务商提供",type:"secret",required:true},{key:"modelId",label:"模型 ID",hint:"填写服务商提供的准确标识",type:"text",required:true}]}
+  ],
+  voice:[
+    {id:"doubao-realtime",group:"domestic",label:"火山引擎·豆包实时语音",logo:"DB",description:"支持麦克风对话、语音回答和实时打断",region:"中国大陆",fields:[{key:"appId",label:"APP ID",hint:"在豆包语音控制台获取",type:"text",required:true},{key:"accessToken",label:"Access Token",hint:"在豆包语音控制台获取",type:"secret",required:true},{key:"serviceVersion",label:"服务版本",hint:"选择账号已开通的实时语音服务",type:"select",required:true,options:["豆包实时语音"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认中文音色","已开通音色"]}]},
+    {id:"qwen-realtime",group:"domestic",label:"千问实时语音",logo:"QW",description:"阿里云百炼实时语音对话",region:"中国大陆",fields:[{key:"apiKey",label:"API Key",hint:"在阿里云百炼控制台创建",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择账号可用的实时模型",type:"select",required:true,options:["账号可用实时模型"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认音色"]}]},
+    {id:"openai-realtime",group:"global",label:"OpenAI Realtime",logo:"OA",description:"支持实时语音输入、语音回答和打断",region:"海外/全球",fields:[{key:"apiKey",label:"API Key",hint:"正式版由主进程换取临时凭据",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择 Realtime 模型",type:"select",required:true,options:["gpt-realtime"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认英文音色","默认中文音色"]}]},
+    {id:"gemini-live",group:"global",label:"Gemini Live",logo:"GM",description:"Google 实时语音对话",region:"海外/全球",fields:[{key:"apiKey",label:"API Key",hint:"在 Google AI Studio 创建",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择 Live 模型",type:"select",required:true,options:["账号可用 Live 模型"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认音色"]}]},
+    {id:"azure-voice-live",group:"global",label:"Azure Voice Live",logo:"AZ",description:"Microsoft Azure 企业实时语音",region:"海外/全球",fields:[{key:"endpoint",label:"Endpoint",hint:"Azure Voice Live 资源地址",type:"url",required:true},{key:"apiKey",label:"API Key",hint:"Azure 资源密钥",type:"secret",required:true},{key:"deployment",label:"Deployment / Model",hint:"已部署的语音模型",type:"text",required:true},{key:"azureRegion",label:"Region",hint:"Azure 资源所在区域",type:"text",required:true},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"text",required:true}]}
+  ]
+};
+
+const API_CONFIG_UI={category:"llm",step:1,selectedProviderId:"",editingId:"",deleteId:"",values:{},hasCredential:false,connectionStatus:"unconfigured",lastValidatedAt:null};
+APP_STATE.voiceApiConfigs=APP_STATE.voiceApiConfigs||[];
+function apiCategoryMeta(){return API_CONFIG_UI.category==="llm"?{title:"大语言模型",description:"配置国内与海外的文字问答模型，内置服务商由系统自动适配协议。",empty:"还没有大语言模型配置"}:{title:"语音模型",description:"配置国内与海外的麦克风对话、语音回答和实时打断模型。",empty:"还没有语音模型配置"};}
+function apiCategoryConfigs(category=API_CONFIG_UI.category){return category==="llm"?APP_STATE.apiConfigs:APP_STATE.voiceApiConfigs;}
+function apiProviderById(id,category=API_CONFIG_UI.category){return API_UNIFIED_PROVIDERS[category].find(provider=>provider.id===id);}
+function apiStorageKey(category){return category==="llm"?"agentPcLlmApiConfigs":"agentPcVoiceModelConfigs";}
+function apiModelValue(provider,values){if(provider.models?.length)return values.model||provider.models[0];return values.voiceModel||values.deployment||values.modelId||values.serviceVersion||"未选择";}
+function apiSyncLegacyDefault(){const config=APP_STATE.apiConfigs.find(item=>item.saved&&item.connectionStatus==="connected");if(!config)return;APP_STATE.apiSettings={...APP_STATE.apiSettings,provider:config.provider,providerId:config.providerId,model:config.model,defaultModelId:config.model,availableModels:config.availableModels||[config.model],status:config.status,connectionStatus:config.connectionStatus};}
+function persistUnifiedApiConfigs(category,configs){localStorage.setItem(apiStorageKey(category),JSON.stringify(configs));}
+
+function renderApiSettings(){
+  const title=$("#api-category-title");if(!title)return;
+  const meta=apiCategoryMeta(),configs=apiCategoryConfigs();
+  title.textContent=meta.title;$("#api-category-description").textContent=meta.description;
+  $("#api-add-model").textContent=`＋ 添加${meta.title}`;
+  $("#api-tab-llm").classList.toggle("active",API_CONFIG_UI.category==="llm");$("#api-tab-voice").classList.toggle("active",API_CONFIG_UI.category==="voice");
+  $("#api-tab-llm").setAttribute("aria-selected",String(API_CONFIG_UI.category==="llm"));$("#api-tab-voice").setAttribute("aria-selected",String(API_CONFIG_UI.category==="voice"));
+  const list=$("#api-config-list");list.innerHTML=configs.map(config=>`<article class="api-config-card"><div class="api-config-card-head"><div class="api-config-card-title"><strong>${escapeHtml(config.displayName)}</strong><small>${escapeHtml(config.provider)} · ${escapeHtml(config.marketLabel)}</small></div><span class="api-provider-status connected">已配置</span></div><div class="api-config-card-meta">${escapeHtml(API_CONFIG_UI.category==="llm"?`默认模型：${config.model}`:`语音模型/服务：${config.model}`)}<br>最近更新：${escapeHtml(config.lastTest||"尚未保存")}</div><div class="api-config-card-actions"><button class="soft-button" type="button" data-api-edit="${escapeHtml(config.configId)}">编辑</button><button class="soft-button api-delete-button" type="button" data-api-delete="${escapeHtml(config.configId)}">删除</button></div></article>`).join("");
+  const empty=$("#api-config-empty");empty.hidden=Boolean(configs.length);empty.querySelector("strong").textContent=meta.empty;empty.querySelector("span").textContent=`点击“添加${meta.title}”，选择国内、海外${API_CONFIG_UI.category==="llm"?"或自定义":""}服务商。`;
+}
+
+function switchApiModelTab(type){API_CONFIG_UI.category=type==="voice"?"voice":"llm";closeApiConfigDialog();renderApiSettings();}
+function apiResetDialog(){Object.assign(API_CONFIG_UI,{step:1,selectedProviderId:"",editingId:"",values:{},hasCredential:false,connectionStatus:"unconfigured",lastValidatedAt:null});}
+function openApiConfigDialog(editingId=""){
+  apiResetDialog();API_CONFIG_UI.editingId=editingId;
+  if(editingId){const config=apiCategoryConfigs().find(item=>item.configId===editingId);if(!config)return;API_CONFIG_UI.step=2;API_CONFIG_UI.selectedProviderId=config.providerId;API_CONFIG_UI.values={...config.values,displayName:config.displayName,model:config.model};API_CONFIG_UI.hasCredential=Boolean(config.hasCredential);API_CONFIG_UI.connectionStatus=config.connectionStatus;API_CONFIG_UI.lastValidatedAt=config.lastValidatedAt;}
+  const layer=$("#api-config-dialog-layer");layer.classList.add("open");layer.setAttribute("aria-hidden","false");document.body.classList.add("api-dialog-open");renderApiConfigDialog();setTimeout(()=>$("#api-dialog-close")?.focus(),0);
+}
+function closeApiConfigDialog(){const layer=$("#api-config-dialog-layer");if(!layer)return;layer.classList.remove("open");layer.setAttribute("aria-hidden","true");document.body.classList.remove("api-dialog-open");}
+function selectApiDialogProvider(id){API_CONFIG_UI.selectedProviderId=id;API_CONFIG_UI.values={};API_CONFIG_UI.connectionStatus="unconfigured";renderApiConfigDialog();}
+function apiProviderGroupsHtml(){return Object.entries(API_PROVIDER_GROUPS).map(([groupId,group])=>{const providers=API_UNIFIED_PROVIDERS[API_CONFIG_UI.category].filter(provider=>provider.group===groupId);if(!providers.length)return"";return `<section class="api-provider-group"><div class="api-provider-group-head"><strong>${escapeHtml(group.label)}</strong><small>${escapeHtml(group.hint)}</small></div><div class="api-provider-grid">${providers.map(provider=>`<button class="api-provider-option ${API_CONFIG_UI.selectedProviderId===provider.id?"selected":""}" type="button" data-api-provider-option="${escapeHtml(provider.id)}"><span class="api-provider-option-logo">${escapeHtml(provider.logo)}</span><span class="api-provider-option-copy"><strong>${escapeHtml(provider.label)}</strong><small>${escapeHtml(provider.description)}</small></span><span class="api-provider-option-check">✓</span></button>`).join("")}</div></section>`;}).join("");}
+function apiFieldValue(key,defaultValue=""){return API_CONFIG_UI.values[key]??defaultValue;}
+function apiFieldHtml(field){
+  const id=`api-dynamic-${field.key}`,value=apiFieldValue(field.key,field.options?.[0]||"");
+  let control="";
+  if(field.type==="select")control=`<select id="${id}" name="${field.key}" ${field.required?"required":""}>${(field.options||[]).map(option=>`<option value="${escapeHtml(option)}" ${value===option?"selected":""}>${escapeHtml(option)}</option>`).join("")}</select>`;
+  else if(field.type==="readonly")control=`<input id="${id}" name="${field.key}" value="${escapeHtml(value)}" disabled>`;
+  else if(field.type==="secret")control=`<div class="api-dynamic-secret"><input id="${id}" name="${field.key}" type="password" value="" placeholder="${API_CONFIG_UI.hasCredential?"已安全保存，留空表示不更换":`输入 ${field.label}`}" autocomplete="new-password" ${field.required?"required":""}><button class="soft-button" type="button" data-api-secret-toggle="${id}">显示</button></div>`;
+  else control=`<input id="${id}" name="${field.key}" type="${field.type==="url"?"url":"text"}" value="${escapeHtml(value)}" placeholder="输入${escapeHtml(field.label)}" ${field.required?"required":""}>`;
+  return `<div class="api-dynamic-field"><div class="api-dynamic-field-label"><label for="${id}">${escapeHtml(field.label)}${field.required?" *":""}</label><small>${escapeHtml(field.hint||"")}</small></div><div class="api-dynamic-field-control">${control}</div></div>`;
+}
+function apiDynamicFieldsHtml(provider){
+  const common=[{key:"displayName",label:"配置名称",hint:"用于区分同一服务商的多个配置",type:"text",required:true},{key:"marketLabel",label:"服务区域",hint:"由服务商与当前平台自动确定",type:"readonly",required:false}];
+  API_CONFIG_UI.values.marketLabel=provider.region;
+  const protocol=provider.protocol?[{key:"protocol",label:"兼容协议",hint:"当前自定义适配器使用的协议",type:"readonly"}]:[];if(provider.protocol)API_CONFIG_UI.values.protocol=provider.protocol;
+  const endpoint=provider.baseUrl?[{key:"baseUrl",label:"API 基础地址",hint:"内置服务商由系统预设，无需修改",type:"readonly"}]:[];if(provider.baseUrl)API_CONFIG_UI.values.baseUrl=provider.baseUrl;
+  const models=provider.models?.length?[{key:"model",label:"默认模型",hint:"原型展示候选项；正式版以服务商返回的可用模型为准",type:"select",required:true,options:provider.models}]:[];
+  return [...common,...protocol,...endpoint,...provider.fields,...models].map(apiFieldHtml).join("");
+}
+function renderApiConfigDialog(){
+  const provider=apiProviderById(API_CONFIG_UI.selectedProviderId),stepTwo=API_CONFIG_UI.step===2,category=apiCategoryMeta();
+  $("#api-dialog-step-provider").hidden=stepTwo;$("#api-dialog-step-config").hidden=!stepTwo;
+  $("#api-dialog-title").textContent=stepTwo?(API_CONFIG_UI.editingId?"编辑模型":"配置模型"):"添加模型";
+  $("#api-dialog-subtitle").textContent=stepTwo?"不同服务商使用各自的凭据和模型字段。":"内置服务商会自动配置协议和接口地址。";
+  $("#api-dialog-provider-groups").innerHTML=apiProviderGroupsHtml();
+  $("#api-dialog-next").hidden=stepTwo;$("#api-dialog-next").disabled=!provider;$("#api-dialog-previous").hidden=!stepTwo;$("#api-dialog-save").hidden=!stepTwo;$("#api-dialog-save").disabled=false;
+  if(stepTwo&&provider){$("#api-selected-provider").innerHTML=`<span class="api-provider-option-logo">${escapeHtml(provider.logo)}</span><span><strong>${escapeHtml(provider.label)}</strong><small>${escapeHtml(provider.description)}</small></span>`;$("#api-dynamic-fields").innerHTML=apiDynamicFieldsHtml(provider);const feedback=$("#api-dialog-feedback");feedback.className="api-dialog-feedback";feedback.textContent="填写必填项后保存。本页仅展示 HTML 配置交互。";}
+}
+function collectApiDynamicValues(){document.querySelectorAll("#api-dynamic-fields [name]").forEach(input=>{if(!input.disabled)API_CONFIG_UI.values[input.name]=input.value.trim();});}
+function validateApiDynamicValues(){
+  collectApiDynamicValues();const provider=apiProviderById(API_CONFIG_UI.selectedProviderId);if(!provider)return"请先选择服务商。";
+  const fields=[{key:"displayName",label:"配置名称",required:true},...provider.fields,...(provider.models?.length?[{key:"model",label:"默认模型",required:true}]:[])];
+  for(const field of fields){const value=(API_CONFIG_UI.values[field.key]||"").trim();if(field.required&&!value&&!(field.type==="secret"&&API_CONFIG_UI.hasCredential))return`请填写${field.label}。`;if(field.type==="url"&&value){try{if(!["http:","https:","ws:","wss:"].includes(new URL(value).protocol))return`${field.label}格式不正确。`;}catch(_){return`${field.label}格式不正确。`;}}}
+  return"";
+}
+function saveUnifiedApiConfig(){
+  const error=validateApiDynamicValues(),feedback=$("#api-dialog-feedback");if(error){feedback.className="api-dialog-feedback error";feedback.textContent=error;return;}
+  const provider=apiProviderById(API_CONFIG_UI.selectedProviderId),configs=[...apiCategoryConfigs()],secretKeys=new Set(provider.fields.filter(field=>field.type==="secret").map(field=>field.key)),safeValues={};Object.entries(API_CONFIG_UI.values).forEach(([key,value])=>{if(!secretKeys.has(key))safeValues[key]=value;});
+  const configId=API_CONFIG_UI.editingId||`model-${globalThis.crypto?.randomUUID?.()||Date.now()}`,model=apiModelValue(provider,API_CONFIG_UI.values),record={configId,category:API_CONFIG_UI.category,providerId:provider.id,provider:provider.label,displayName:API_CONFIG_UI.values.displayName,marketLabel:provider.region,model,defaultModelId:model,availableModels:[model],values:safeValues,hasCredential:true,credentialRef:`credential://${configId}`,status:"已配置",connectionStatus:"connected",saved:true,lastTest:nowText(),lastValidatedAt:null};
+  const index=configs.findIndex(item=>item.configId===configId);if(index>=0)configs[index]=record;else configs.push(record);persistUnifiedApiConfigs(API_CONFIG_UI.category,configs);if(API_CONFIG_UI.category==="llm")APP_STATE.apiConfigs=configs;else APP_STATE.voiceApiConfigs=configs;apiSyncLegacyDefault();closeApiConfigDialog();renderApiSettings();showSheet({type:"Toast",title:`${apiCategoryMeta().title}配置已保存`,copy:`${provider.label} 已加入可用模型列表。`,detail:"screen-config"});
+}
+function openApiDeleteConfirm(id){API_CONFIG_UI.deleteId=id;const config=apiCategoryConfigs().find(item=>item.configId===id);if(!config)return;const layer=$("#api-confirm-layer");$("#api-confirm-copy").textContent=`删除“${config.displayName}”后，${config.provider} 将从可用模型列表移除。`;layer.classList.add("open");layer.setAttribute("aria-hidden","false");}
+function closeApiDeleteConfirm(){const layer=$("#api-confirm-layer");if(!layer)return;layer.classList.remove("open");layer.setAttribute("aria-hidden","true");API_CONFIG_UI.deleteId="";}
+function deleteApiConfig(){const id=API_CONFIG_UI.deleteId;if(!id)return;const configs=apiCategoryConfigs().filter(item=>item.configId!==id);persistUnifiedApiConfigs(API_CONFIG_UI.category,configs);if(API_CONFIG_UI.category==="llm")APP_STATE.apiConfigs=configs;else APP_STATE.voiceApiConfigs=configs;closeApiDeleteConfirm();renderApiSettings();showSheet({type:"Toast",title:"模型配置已删除",copy:"对应模型已从可用列表移除。",detail:"screen-config"});}
+function resetApiSettings(){apiResetDialog();renderApiSettings();}
+function saveApiSettings(){openApiConfigDialog();}
+function restoreApiSettings(){
+  try{const llm=JSON.parse(localStorage.getItem(apiStorageKey("llm"))||"[]"),voice=JSON.parse(localStorage.getItem(apiStorageKey("voice"))||"[]");APP_STATE.apiConfigs=Array.isArray(llm)?llm:[];APP_STATE.voiceApiConfigs=Array.isArray(voice)?voice:[];}catch(_){APP_STATE.apiConfigs=[];APP_STATE.voiceApiConfigs=[];localStorage.removeItem(apiStorageKey("llm"));localStorage.removeItem(apiStorageKey("voice"));}
+  apiSyncLegacyDefault();renderApiSettings();
+}
+
 function resetConfigPage() {
   resetApiSettings();
 }
@@ -17549,7 +17611,6 @@ function bindEvents() {
     }
     setActiveTab(target);
   });
-  $("#save-config").addEventListener("click", saveConfigPage);
   $("#device-brightness").addEventListener("input", (event) => updateDeviceSetting("brightness", Number(event.target.value)));
   $("#device-sleep-time").addEventListener("change", (event) => updateDeviceSetting("sleepTime", event.target.value));
   $("#device-wake-touch").addEventListener("change", (event) => updateDeviceSetting("wakeTouch", event.target.checked));
@@ -17558,42 +17619,23 @@ function bindEvents() {
   $("#device-always-on").addEventListener("click", () => updateDeviceSetting("alwaysOn", !APP_STATE.deviceSettings.alwaysOn));
   $("#device-alert-wake").addEventListener("click", () => updateDeviceSetting("alertWake", !APP_STATE.deviceSettings.alertWake));
   $("#device-touch-feedback").addEventListener("click", () => updateDeviceSetting("touchFeedback", !APP_STATE.deviceSettings.touchFeedback));
-  $("#api-provider").addEventListener("change", (event) => updateApiSetting("provider", event.target.value));
-  $("#api-config-name").addEventListener("input", (event) => updateApiSetting("displayName", event.target.value));
-  $("#api-base-url").addEventListener("input", (event) => updateApiSetting("baseUrl", event.target.value));
-  $("#api-key").addEventListener("input", (event) => updateApiSetting("apiKey", event.target.value));
-  $("#api-model").addEventListener("input", (event) => updateApiSetting("model", event.target.value));
-  $("#api-region").addEventListener("change", (event) => updateApiSetting("region", event.target.value));
-  $("#api-protocol").addEventListener("change", (event) => updateApiSetting("protocol", event.target.value));
-  $("#api-custom-model").addEventListener("input", (event) => updateApiSetting("customModel", event.target.value));
-  $("#api-add-provider").addEventListener("click", startNewApiConfig);
-  $("#api-cancel-edit").addEventListener("click", () => { const target=APP_STATE.apiConfigs.find(item=>item.configId===APP_STATE.apiReturnEditingId)||APP_STATE.apiConfigs[0]; if(target) editApiConfig(target.configId); else startNewApiConfig(); });
-  $("#api-state-demo").addEventListener("change", (event) => showApiDemoState(event.target.value));
-  $("#api-provider-cards").addEventListener("click", (event) => { const card=event.target.closest("[data-api-edit]"); if(card) editApiConfig(card.dataset.apiEdit); });
-  $("#api-delete-config").addEventListener("click", openApiDeleteConfirm);
-  $("#api-return-qa").addEventListener("click", () => setActiveTab("voice"));
+  $("#api-tab-llm").addEventListener("click",()=>switchApiModelTab("llm"));
+  $("#api-tab-voice").addEventListener("click",()=>switchApiModelTab("voice"));
+  $("#api-add-model").addEventListener("click",()=>openApiConfigDialog());
+  $("#api-config-list").addEventListener("click",event=>{const edit=event.target.closest("[data-api-edit]"),remove=event.target.closest("[data-api-delete]");if(edit)openApiConfigDialog(edit.dataset.apiEdit);if(remove)openApiDeleteConfirm(remove.dataset.apiDelete);});
+  $("#api-dialog-provider-groups").addEventListener("click",event=>{const option=event.target.closest("[data-api-provider-option]");if(option)selectApiDialogProvider(option.dataset.apiProviderOption);});
+  $("#api-dialog-next").addEventListener("click",()=>{if(!API_CONFIG_UI.selectedProviderId)return;API_CONFIG_UI.step=2;API_CONFIG_UI.connectionStatus="unconfigured";renderApiConfigDialog();});
+  $("#api-dialog-previous").addEventListener("click",()=>{API_CONFIG_UI.step=1;API_CONFIG_UI.connectionStatus="unconfigured";renderApiConfigDialog();});
+  $("#api-dialog-save").addEventListener("click",saveUnifiedApiConfig);
+  $("#api-dialog-close").addEventListener("click",closeApiConfigDialog);
+  $("#api-dialog-cancel").addEventListener("click",closeApiConfigDialog);
+  $("#api-config-dialog-layer").addEventListener("click",event=>{if(event.target.id==="api-config-dialog-layer")closeApiConfigDialog();});
+  $("#api-dynamic-fields").addEventListener("input",event=>{if(event.target.name)API_CONFIG_UI.values[event.target.name]=event.target.value;const feedback=$("#api-dialog-feedback");feedback.className="api-dialog-feedback";feedback.textContent="配置已修改，点击保存后生效。";});
+  $("#api-dynamic-fields").addEventListener("click",event=>{const toggle=event.target.closest("[data-api-secret-toggle]");if(!toggle)return;const input=document.getElementById(toggle.dataset.apiSecretToggle),visible=input.type==="text";input.type=visible?"password":"text";toggle.textContent=visible?"显示":"隐藏";});
   $("#api-confirm-cancel").addEventListener("click", closeApiDeleteConfirm);
   $("#api-confirm-delete").addEventListener("click", deleteApiConfig);
   $("#api-confirm-layer").addEventListener("click", (event) => { if(event.target.id==="api-confirm-layer") closeApiDeleteConfirm(); });
-  $("#api-test-connection").addEventListener("click", testApiConnection);
-  $("#api-key-toggle").addEventListener("click", () => {
-    const input = $("#api-key");
-    const visible = input.type === "text";
-    input.type = visible ? "password" : "text";
-    $("#api-key-toggle").textContent = visible ? "显示" : "隐藏";
-    $("#api-key-toggle").setAttribute("aria-label", visible ? "显示 API Key" : "隐藏 API Key");
-    $("#api-key-toggle").title = visible ? "显示 API Key" : "隐藏 API Key";
-  });
-  $("#api-refresh-models").addEventListener("click", refreshApiModels);
-  $("#api-tab-llm").addEventListener("click",()=>switchApiModelTab("llm"));
-  $("#api-tab-voice").addEventListener("click",()=>{switchApiModelTab("voice");renderVoiceApi();});
-  $("#voice-provider-cards").addEventListener("click",event=>{const card=event.target.closest("[data-voice-provider]");if(card)selectVoiceProvider(card.dataset.voiceProvider);});
-  $("#voice-test-connection").addEventListener("click",testVoiceApi);
-  $("#voice-save-config").addEventListener("click",saveVoiceApi);
-  $("#voice-model-id").addEventListener("change",event=>VOICE_API_STATE.model=event.target.value);
-  $("#voice-key-toggle").addEventListener("click",()=>{const input=$("#voice-api-key"),visible=input.type==="text";input.type=visible?"password":"text";$("#voice-key-toggle").textContent=visible?"显示":"隐藏";});
-  try{const savedVoice=JSON.parse(localStorage.getItem("agentPcVoiceApiConfig")||"null");if(savedVoice)Object.assign(VOICE_API_STATE,savedVoice,{apiKey:"",connected:true});}catch(_){}
-  renderVoiceApi();
+  document.addEventListener("keydown",event=>{if(event.key==="Escape"&&$("#api-config-dialog-layer").classList.contains("open"))closeApiConfigDialog();});
   const tokenQuotaModal = $("#token-quota-modal");
   const hideTokenQuotaModal = () => {
     tokenQuotaModal.classList.remove("show");
