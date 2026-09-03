@@ -9739,7 +9739,12 @@ body.prototype-medium .hybrid-token-preview-panel{display:grid;margin-bottom:18p
 .hybrid-token-preview-content{margin-top:12px}.hybrid-token-preview-content .hybrid-token-hero{padding:2px 2px 0}.hybrid-token-preview-content .hybrid-token-total strong{font-size:34px}.hybrid-token-preview-content .hybrid-token-dashboard-grid{gap:8px}.hybrid-token-preview-content .hybrid-token-card{min-height:142px;padding:10px 12px;border-radius:11px}.hybrid-token-preview-content .hybrid-token-card-head{margin-bottom:8px}.hybrid-token-preview-content .hybrid-token-card h3{font-size:12px}.hybrid-token-preview-content .hybrid-token-card-head small{font-size:8px}.hybrid-token-preview-content .hybrid-token-cost-total{margin:0 0 6px;font-size:23px}.hybrid-token-preview-content .hybrid-token-list{gap:4px}.hybrid-token-preview-content .hybrid-token-list-row{grid-template-columns:minmax(0,1fr) 68px auto;gap:6px;font-size:9px}.hybrid-token-preview-content .hybrid-token-trend-shell{height:70px}.hybrid-token-preview-content .hybrid-token-axis{font-size:7px}.hybrid-token-preview-content .hybrid-token-legend{gap:2px 8px;margin-top:3px}.hybrid-token-preview-content .hybrid-token-legend button,.hybrid-token-preview-content .hybrid-token-legend span{min-height:17px;font-size:8px}.hybrid-token-preview-content .hybrid-token-composition-total{height:6px;margin:4px 0 8px}.hybrid-token-preview-content .hybrid-token-composition-list{gap:5px}.hybrid-token-preview-content .hybrid-token-composition-row{font-size:9px}
 
 /* X3 Cloud：保留原有自带小屏/主屏/明细三段外壳，仅更新 Token 内容。 */
-body.prototype-small .token-preview-canvas{display:block;padding:58px 14px 14px}
+body.prototype-small .token-preview-canvas{display:block;overflow:hidden;padding:58px 14px 14px}
+body.prototype-small .cloud-token-dashboard{display:flex;min-height:0;flex-direction:column}
+body.prototype-small .cloud-token-scroll-region{display:flex;min-height:0;flex:1;flex-direction:column;gap:7px;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable}
+body.prototype-small .cloud-token-scroll-region>.cloud-token-grid{min-height:0;flex:0 0 calc(100% - 52px)}
+body.prototype-small .cloud-token-scroll-region>.token-history-panel{margin-top:7px;border:0;background:transparent;box-shadow:none;padding:0}
+body.prototype-small .cloud-token-scroll-region>.token-history-panel .cloud-token-details{padding-bottom:2px}
 body.prototype-small .token-preview-canvas>.token-top-grid,
 body.prototype-small .token-preview-canvas>.token-bottom-grid{display:none!important}
 .cloud-token-dashboard{display:grid;height:100%;grid-template-rows:auto auto minmax(0,1fr);gap:7px}
@@ -10261,9 +10266,10 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   <button class="active" type="button" data-token-agent-app="ChatGPT" aria-pressed="true"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/chatgpt.png" alt=""><span>ChatGPT</span></button><button type="button" data-token-agent-app="WorkBuddy" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/workbuddy.png" alt=""><span>WorkBuddy</span></button><button type="button" data-token-agent-app="Kimi" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/kimi.png" alt=""><span>Kimi</span></button><button type="button" data-token-agent-app="Qwen" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/qwen.png" alt=""><span>Qwen</span></button>
                 </div>
                 <div class="hybrid-token-ranges" aria-label="Token时间范围">
-                  <button class="hybrid-token-range active" type="button" data-hybrid-token-range="今日" aria-pressed="true">今日</button>
-                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="7天">7天</button>
-                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="30天">30天</button>
+                  <button class="hybrid-token-range active" type="button" data-hybrid-token-range="日" aria-pressed="true">日</button>
+                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="周">周</button>
+                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="月">月</button>
+                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="总计">总计</button>
                 </div>
               </div>
               <div class="hybrid-token-panel active" data-hybrid-token-panel="api">
@@ -10338,9 +10344,10 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 	                    <button class="active" type="button" data-token-agent-app="ChatGPT" aria-pressed="true"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/chatgpt.png" alt=""><span>ChatGPT</span></button><button type="button" data-token-agent-app="WorkBuddy" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/workbuddy.png" alt=""><span>WorkBuddy</span></button><button type="button" data-token-agent-app="Kimi" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/kimi.png" alt=""><span>Kimi</span></button><button type="button" data-token-agent-app="Qwen" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/qwen.png" alt=""><span>Qwen</span></button>
 	                  </div>
 	                  <div class="hybrid-token-ranges" aria-label="Token时间范围">
-	                    <button class="hybrid-token-range active" type="button" data-cloud-token-range="今日" aria-pressed="true">今日</button>
-	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="7天" aria-pressed="false">7天</button>
-	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="30天" aria-pressed="false">30天</button>
+	                    <button class="hybrid-token-range active" type="button" data-cloud-token-range="日" aria-pressed="true">日</button>
+	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="周" aria-pressed="false">周</button>
+	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="月" aria-pressed="false">月</button>
+	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="总计" aria-pressed="false">总计</button>
 	                  </div>
 	                </div>
 	                <div class="cloud-token-summary"><span data-token-value="period">今日 API Token</span><strong><b data-token-value="total">12.6M</b><small> tokens</small></strong><p data-token-value="comparison">↑ 比近7日同时段高 <b>12%</b></p></div>
@@ -10444,9 +10451,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 
             <section class="panel main-panel token-history-panel">
 	              <div class="cloud-token-details" data-cloud-token-details>
-	                <div class="cloud-token-detail-head">
-	                  <div class="hybrid-token-tabs" role="tablist" aria-label="用量明细统计口径"><button class="hybrid-token-tab active" type="button" data-cloud-detail-tab="api" aria-selected="true">API用量</button><button class="hybrid-token-tab" type="button" data-cloud-detail-tab="agent" aria-selected="false">Agent用量</button></div>
-	                </div>
 	                <section data-cloud-detail-view="api">
 	                  <div class="hybrid-token-record-head"><h3>每日明细</h3></div>
 	                  <div class="hybrid-token-table-wrap"><table class="hybrid-token-table"><thead><tr><th>日期</th><th>总计</th><th>输入</th><th>输出</th><th>缓存</th><th>推理</th><th>请求数</th></tr></thead><tbody><tr><td>2026-09-02</td><td>12.6M</td><td>2.27M</td><td>882K</td><td>9.20M</td><td>252K</td><td>164</td></tr><tr><td>2026-09-01</td><td>18.4M</td><td>3.12M</td><td>1.26M</td><td>13.6M</td><td>420K</td><td>231</td></tr><tr><td>2026-08-31</td><td>9.8M</td><td>1.86M</td><td>740K</td><td>7.0M</td><td>—</td><td>126</td></tr></tbody></table></div>
@@ -10745,6 +10749,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
             <section class="panel main-panel qa-office-dialog-demo" aria-label="办公场景弹出框演示">
               <div><h3>问答（办公场景）弹出框</h3><p>原型演示入口，正式产品由对应操作触发。</p></div>
               <div class="qa-office-dialog-buttons">
+                <button type="button" data-qa-office-dialog="success">成功</button>
                 <button type="button" data-qa-office-dialog="permission">操作授权</button>
                 <button type="button" data-qa-office-dialog="clarification">补充信息</button>
                 <button type="button" data-qa-office-dialog="connection">登录与连接</button>
@@ -11557,8 +11562,9 @@ const HYBRID_TOKEN_DATA = {
     }
   }
 };
-const HYBRID_TOKEN_STATE = { tab: "api", range: "今日", agentApp: "ChatGPT", hiddenSeries: new Set() };
-const CLOUD_TOKEN_DETAIL_STATE = { tab: "api" };
+const HYBRID_TOKEN_STATE = { tab: "api", range: "日", agentApp: "ChatGPT", hiddenSeries: new Set() };
+const HYBRID_TOKEN_RANGE_DATA_KEY = { "日": "今日", "周": "7天", "月": "30天", "总计": "30天" };
+const HYBRID_TOKEN_RANGE_LABEL = { "日": "今日", "周": "本周", "月": "本月", "总计": "累计" };
 const HYBRID_AGENT_APP_DATA = {
   ChatGPT: { color: "#5793ef", model: "GPT-5", composition: [6, 1, 92, 1], ranges: { "今日": ["63.2M", 63.2, "$45.58"], "7天": ["365M", 365, "$250.74"], "30天": ["1.48B", 1480, "$1,037"] } },
   WorkBuddy: { color: "#55b878", model: "GLM-4.5", composition: [7, 2, 89, 2], ranges: { "今日": ["12.3M", 12.3, "$8.62"], "7天": ["82M", 82, "$57.31"], "30天": ["392M", 392, "$275"] } },
@@ -11573,16 +11579,19 @@ function formatAgentTokenPart(valueM) {
 }
 
 function getHybridTokenData() {
-  const base = HYBRID_TOKEN_DATA[HYBRID_TOKEN_STATE.tab][HYBRID_TOKEN_STATE.range];
+  const dataRange = HYBRID_TOKEN_RANGE_DATA_KEY[HYBRID_TOKEN_STATE.range];
+  const rangeLabel = HYBRID_TOKEN_RANGE_LABEL[HYBRID_TOKEN_STATE.range];
+  const source = HYBRID_TOKEN_DATA[HYBRID_TOKEN_STATE.tab][dataRange];
+  const base = { ...source, period: `${rangeLabel} ${HYBRID_TOKEN_STATE.tab === "agent" ? "Agent" : "API"} Token`, costPeriod: rangeLabel };
   if (HYBRID_TOKEN_STATE.tab !== "agent") return base;
   const app = HYBRID_AGENT_APP_DATA[HYBRID_TOKEN_STATE.agentApp];
-  const [total, totalM, cost] = app.ranges[HYBRID_TOKEN_STATE.range];
+  const [total, totalM, cost] = app.ranges[dataRange];
   const labels = ["输入", "输出", "缓存", "推理"];
   const colors = ["#317de8", "#f06b45", "#9fc4ff", "#785be9"];
   const series = base.series.find(([name]) => name === HYBRID_TOKEN_STATE.agentApp) || base.series[0];
   return {
     ...base,
-    period: `${HYBRID_TOKEN_STATE.range === "今日" ? "今日" : `近${HYBRID_TOKEN_STATE.range}`} ${HYBRID_TOKEN_STATE.agentApp} Token`,
+    period: `${rangeLabel} ${HYBRID_TOKEN_STATE.agentApp} Token`,
     total,
     cost,
     costItems: [[HYBRID_TOKEN_STATE.agentApp, "100%", cost, app.color]],
@@ -11642,17 +11651,26 @@ function updateHybridTokenDashboard() {
     item.classList.toggle('active', active);
     item.setAttribute('aria-pressed', String(active));
   });
+  updateCloudTokenDetails();
 }
 
 function updateCloudTokenDetails() {
-  $$('[data-cloud-detail-tab]').forEach((item) => {
-    const active = item.dataset.cloudDetailTab === CLOUD_TOKEN_DETAIL_STATE.tab;
-    item.classList.toggle('active', active);
-    item.setAttribute('aria-selected', String(active));
-  });
   $$('[data-cloud-detail-view]').forEach((panel) => {
-    panel.hidden = panel.dataset.cloudDetailView !== CLOUD_TOKEN_DETAIL_STATE.tab;
+    panel.hidden = panel.dataset.cloudDetailView !== HYBRID_TOKEN_STATE.tab;
   });
+}
+
+function mountCloudTokenDetailsInPreview() {
+  const preview = document.querySelector('.token-dashboard > .token-preview-canvas');
+  const dashboard = preview?.querySelector('[data-cloud-token-dashboard]');
+  const summary = dashboard?.querySelector('.cloud-token-summary');
+  const grid = dashboard?.querySelector('.cloud-token-grid');
+  const details = document.querySelector('.token-page > .token-history-panel');
+  if (!dashboard || !summary || !grid || !details) return;
+  const scrollRegion = document.createElement('div');
+  scrollRegion.className = 'cloud-token-scroll-region';
+  dashboard.insertBefore(scrollRegion, summary);
+  scrollRegion.append(summary, grid, details);
 }
 
 $$('[data-hybrid-token-tab]').forEach((button) => button.addEventListener('click', () => {
@@ -11685,12 +11703,6 @@ $('#usage')?.addEventListener('click', (event) => {
   if (cloudRange) {
     HYBRID_TOKEN_STATE.range = cloudRange.dataset.cloudTokenRange;
     updateHybridTokenDashboard();
-    return;
-  }
-  const detailTab = event.target.closest('[data-cloud-detail-tab]');
-  if (detailTab) {
-    CLOUD_TOKEN_DETAIL_STATE.tab = detailTab.dataset.cloudDetailTab;
-    updateCloudTokenDetails();
     return;
   }
   const agentApp = event.target.closest('[data-token-agent-app]');
@@ -11733,6 +11745,7 @@ $$('[data-token-record-tab]').forEach((button) => button.addEventListener('click
     panel.hidden = panel.dataset.tokenRecordPanel !== view;
   });
 }));
+mountCloudTokenDetailsInPreview();
 updateHybridTokenDashboard();
 updateCloudTokenDetails();
 
@@ -18801,6 +18814,7 @@ let qaPermissionSuccessTimer = null;
 let qaTextDictationTimer = null;
 const QA_PERMISSION_API_CODES={"first-use":"not_requested",requesting:"requesting_system",authorized:"granted",unauthorized:"denied",expired:"revoked",waiting:"waiting_settings","recheck-denied":"waiting_settings_denied",checking:"checking","settings-error":"settings_open_failed",error:"check_failed"};
 const QA_OFFICE_DIALOG_TYPES={
+  success:{title:"操作成功",light:true},
   permission:{title:"操作授权",buttons:["取消","本次允许","始终允许"]},
   clarification:{title:"补充信息",buttons:["取消","确认"],field:"clarification"},
   connection:{title:"登录与连接授权",buttons:["取消","连接"]},
@@ -18822,6 +18836,7 @@ function qaShowModal(title, copy, confirmLabel, onConfirm, cancelLabel="取消",
 }
 function qaShowOfficeDialog(type){
   const config=QA_OFFICE_DIALOG_TYPES[type];if(!config)return;
+  if(config.light){showLightToast(config.title);return;}
   let layer=document.querySelector("#qa-modal-layer");
   if(!layer){layer=document.createElement("div");layer.id="qa-modal-layer";layer.className="qa-modal-layer";qaRoot()?.append(layer);}
   const field=config.field==='clarification'?'<div class="qa-office-dialog-field"><label for="qa-office-clarification">请选择需要处理的内容</label><select id="qa-office-clarification"><option>当前文档</option><option>当前文件夹</option><option>手动选择</option></select></div>':'';
