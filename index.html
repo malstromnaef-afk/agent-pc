@@ -722,6 +722,18 @@ p {
   gap: 18px;
 }
 
+.main-panel.agent-detail-page-shell {
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  padding: 0;
+}
+
+.agent-detail-page-shell #detail-main {
+  border: 1px solid var(--line);
+  background: rgba(32, 34, 38, 0.9);
+}
+
 .detail-field-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -784,10 +796,27 @@ p {
   padding: 16px;
 }
 
+.agent-detail-shell {
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  gap: 0;
+  overflow: hidden;
+  padding: 0;
+}
+
+.agent-detail-panel {
+  display: grid;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+.agent-detail-panel + .agent-detail-panel {
+  border-top: 1px solid var(--line-soft);
+}
+
 .agent-detail-overview {
-  background:
-    radial-gradient(circle at 88% 12%, rgba(46, 242, 138, 0.11), transparent 28%),
-    rgba(255, 255, 255, 0.04);
+  padding-top: 4px;
 }
 
 .agent-detail-titleline {
@@ -832,6 +861,45 @@ p {
   color: var(--text);
   font-size: 16px;
   line-height: 1.35;
+}
+
+.agent-detail-overview-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border: 0;
+}
+
+.agent-detail-overview-field {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  min-width: 0;
+  margin-right: 24px;
+  border: 0;
+  padding: 12px 0;
+}
+
+.agent-detail-overview-field span {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.agent-detail-overview-field strong,
+.agent-detail-overview-field p {
+  margin: 0;
+  color: var(--text);
+  font-size: 14px;
+  line-height: 1.55;
+  overflow-wrap: anywhere;
+}
+
+.agent-detail-overview-field-wide {
+  flex: 0 0 100%;
+  margin-right: 0;
+  border: 0;
+  padding-right: 0;
 }
 
 .agent-detail-head {
@@ -1026,6 +1094,27 @@ p {
   min-width: 0;
 }
 
+.agent-detail-event-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.agent-detail-event-kind {
+  display: inline-flex;
+  min-height: 22px;
+  align-items: center;
+  border: 1px solid rgba(32, 230, 230, 0.24);
+  border-radius: 5px;
+  background: rgba(32, 230, 230, 0.07);
+  color: var(--cyan);
+  padding: 0 7px;
+  font-size: 10px;
+  font-weight: 900;
+  line-height: 1;
+}
+
 .agent-detail-step-copy span {
   display: block;
   margin-top: 4px;
@@ -1060,43 +1149,72 @@ p {
 }
 
 .agent-detail-file-list {
-  display: grid;
-  gap: 8px;
-  margin-top: 2px;
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  gap: 8px 16px;
 }
 
 .agent-detail-file-item {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  gap: 4px 10px;
-  border: 1px solid rgba(32, 230, 230, 0.28);
-  border-radius: 8px;
-  background: rgba(32, 230, 230, 0.08);
-  padding: 9px 10px;
+  display: inline-flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 8px;
 }
 
 .agent-detail-file-item strong {
-  color: var(--cyan);
-  font-size: 12px;
+  color: var(--text);
+  font-size: 14px;
   font-weight: 850;
 }
 
-.agent-detail-file-item span,
 .agent-detail-file-item small {
   color: var(--muted);
-  font-size: 10px;
-  font-weight: 800;
+  font-size: 12px;
+  font-weight: 700;
+  overflow-wrap: anywhere;
 }
 
-.agent-detail-file-item small {
-  grid-column: 1 / -1;
-  overflow-wrap: anywhere;
+.agent-detail-file-field {
+  display: flex;
+  min-width: 0;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.agent-detail-file-field > span {
+  flex: 0 0 auto;
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 900;
 }
 
 .agent-detail-log-list {
   display: grid;
   gap: 8px;
   margin-top: 2px;
+}
+
+.agent-detail-log-details {
+  grid-column: 1 / -1;
+  border: 1px solid var(--line-soft);
+  border-radius: 9px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 12px 14px;
+}
+
+.agent-detail-log-details summary {
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--cyan);
+  font-size: 13px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.agent-detail-log-details[open] summary {
+  margin-bottom: 10px;
 }
 
 .agent-detail-log-row {
@@ -1158,6 +1276,18 @@ p {
 
   .agent-detail-step > span:last-child {
     grid-column: 2;
+  }
+
+  .agent-detail-overview-inline {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .agent-detail-overview-field,
+  .agent-detail-overview-field-wide {
+    margin-right: 0;
+    border-right: 0;
+    padding-right: 0;
   }
 }
 
@@ -2135,8 +2265,7 @@ p {
 
 .cli-integration-card {
   display: grid;
-  gap: 14px;
-  min-height: 190px;
+  gap: 12px;
   border: 1px solid var(--line);
   border-radius: 14px;
   background: rgba(20, 23, 29, 0.72);
@@ -2148,6 +2277,11 @@ p {
   box-shadow: inset 0 0 0 1px rgba(32, 230, 230, 0.14);
 }
 
+.cli-integration-card.failed {
+  border-color: rgba(255, 92, 92, 0.62);
+  box-shadow: inset 0 0 0 1px rgba(255, 92, 92, 0.12);
+}
+
 .cli-integration-card-head {
   display: flex;
   justify-content: space-between;
@@ -2157,7 +2291,13 @@ p {
 
 .cli-integration-card h4 { margin: 0; font-size: 23px; }
 .cli-integration-card p { margin: 0; color: var(--muted); line-height: 1.6; }
-.cli-integration-card .action-row { margin-top: auto; justify-content: flex-start; }
+.cli-integration-card .action-row { align-self:start; align-items:flex-start; margin-top:4px; justify-content:flex-start; }
+.cli-monitor-summary { display:flex; flex-wrap:wrap; gap:10px 24px; margin:0 0 16px; padding:14px 16px; border:1px solid var(--line); border-radius:10px; background:rgba(255,255,255,.025); color:var(--muted); }
+.cli-monitor-summary strong { color:var(--text); font-weight:650; }
+.cli-monitor-summary small { flex-basis:100%; color:var(--muted); }
+.cli-integration-card-copy[hidden] { display:none; }
+.cli-integration-card.switching { border-color:rgba(32,230,230,.45); opacity:.78; }
+.cli-integration-card button:disabled { cursor:wait; opacity:.55; }
 .cli-monitor-note { margin:16px 0 0; padding:14px 16px; border-left:3px solid var(--cyan); border-radius:8px; background:rgba(32,230,230,.055); color:var(--muted); line-height:1.65; }
 .cli-monitor-dialog-layer { position:fixed; z-index:180; inset:0; display:none; place-items:center; padding:24px; background:rgba(3,7,10,.76); backdrop-filter:blur(5px); }
 .cli-monitor-dialog-layer.show { display:grid; }
@@ -2527,7 +2667,8 @@ p {
   border-color: rgba(245, 185, 78, 0.68);
 }
 
-.agent-state-overlay.failed .agent-state-dialog {
+.agent-state-overlay.failed .agent-state-dialog,
+.agent-state-overlay.connection-lost .agent-state-dialog {
   border-color: rgba(255, 92, 92, 0.72);
   box-shadow: 0 18px 54px rgba(0, 0, 0, 0.48), 0 0 24px rgba(255, 92, 92, 0.14);
 }
@@ -2556,7 +2697,8 @@ p {
   font-weight: 950;
 }
 
-.agent-state-overlay.failed .agent-state-badge {
+.agent-state-overlay.failed .agent-state-badge,
+.agent-state-overlay.connection-lost .agent-state-badge {
   background: rgba(255, 92, 92, 0.16);
   color: #ff8a8a;
 }
@@ -9112,11 +9254,6 @@ body.api-dialog-open { overflow:hidden; }
         gap: clamp(64px, 5.5vw, 96px);
       }
 
-      /* 中屏原型暂时屏蔽：保留入口代码，后续可直接恢复 */
-      .prototype-link-grid.medium-screened {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
-
       .prototype-system-links {
         display: flex;
         justify-content: center;
@@ -9237,10 +9374,6 @@ body.api-dialog-open { overflow:hidden; }
       .system-mute-button,.system-output-button { min-width:42px; min-height:38px; border:1px solid rgba(255,255,255,.16); border-radius:12px; padding:0 10px; background:rgba(255,255,255,.08); color:#fff; cursor:pointer; }
       .system-mute-button.muted { color:#ff8aa0; border-color:rgba(255,95,125,.45); }
       .system-control-hint { margin:0; color:rgba(224,238,239,.48); font-size:11px; text-align:center; }
-
-      .prototype-size-link.is-screened-off {
-        display: none !important;
-      }
 
       .prototype-size-link {
         --device-width: 46%;
@@ -9574,6 +9707,8 @@ body.api-dialog-open { overflow:hidden; }
 .qa-modal-layer { position:absolute; z-index:80; inset:0; display:none; place-items:center; background:rgba(0,0,0,.62); }
 .qa-modal-layer.open { display:grid; }.qa-modal{width:min(410px,82%);padding:22px;border:1px solid rgba(70,235,222,.28);border-radius:18px;background:#10171b;box-shadow:0 24px 70px rgba(0,0,0,.5)}
 .qa-modal h4{margin:0 0 8px;font-size:18px}.qa-modal p{margin:0;color:rgba(211,224,228,.68);font-size:12px;line-height:1.6}.qa-modal-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:20px}.qa-modal-actions button{min-height:34px;padding:0 15px;border:1px solid rgba(255,255,255,.14);border-radius:999px;background:transparent;color:#dffbfa;cursor:pointer}.qa-modal-actions .primary{border:0;background:linear-gradient(135deg,#2ef28a,#20e6e6);color:#061017;font-weight:900}
+.qa-office-dialog-demo{display:grid;gap:12px;margin-top:14px;padding:18px 20px}.qa-office-dialog-demo h3{margin:0;font-size:16px}.qa-office-dialog-demo p{margin:0;color:var(--muted);font-size:11px}.qa-office-dialog-buttons{display:flex;flex-wrap:wrap;gap:8px}.qa-office-dialog-buttons button{min-height:44px;padding:0 14px;border:1px solid rgba(70,235,222,.28);border-radius:999px;background:rgba(10,21,25,.9);color:#dffbfa;font-weight:850;cursor:pointer}.qa-office-dialog-buttons button:hover{background:rgba(25,182,171,.14)}
+.qa-office-dialog-field{display:grid;gap:7px;margin-top:16px}.qa-office-dialog-field label{color:rgba(211,224,228,.7);font-size:11px}.qa-office-dialog-field select,.qa-office-dialog-field input{width:100%;min-height:44px;border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:0 11px;background:#0b1215;color:#e8ffff}
 .qa-error-card{position:relative;z-index:2;max-width:430px;padding:18px;border:1px solid rgba(255,110,130,.34);border-radius:16px;background:rgba(42,15,22,.65)}.qa-error-card button{margin-top:12px}
 #voice .preview-config-switch span:first-child{font-weight:850}
 .qa-permission-panel{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:18px;align-items:center;padding:18px 20px;border:1px solid rgba(70,235,222,.2);border-radius:16px;background:rgba(7,15,19,.66)}
@@ -9586,24 +9721,114 @@ body.api-dialog-open { overflow:hidden; }
 <style>
 #monitor .agent-subscreen-console{display:grid!important}
 #monitor .history-panel{display:block!important}
+
+#hybrid-token-dashboard{display:none}
+.hybrid-token-preview-panel{display:none}
+body.prototype-medium #usage .token-page{display:none}
+body.prototype-medium #hybrid-token-dashboard{display:grid}
+body.prototype-medium .hybrid-token-preview-panel{display:grid;margin-bottom:18px}
+.hybrid-token-preview-panel{gap:14px;padding:18px;border:1px solid var(--line);border-radius:8px;background:rgba(32,34,38,.9);box-shadow:var(--shadow)}.hybrid-token-preview-head{display:flex;align-items:center;justify-content:space-between;gap:18px}.hybrid-token-preview-head h2{margin:0;font-size:22px}.hybrid-token-preview-head p{margin:5px 0 0;color:#7e8a96;font-size:11px}.hybrid-token-preview-frame{overflow:hidden;border:2px solid rgba(32,230,230,.82);border-radius:14px;padding:14px;background:radial-gradient(circle at 86% 2%,rgba(46,242,138,.11),transparent 30%),#11171c;box-shadow:0 0 25px rgba(32,230,230,.15)}
+.hybrid-token-board{gap:14px;padding:18px;border:1px solid rgba(38,220,225,.25);border-radius:18px;background:radial-gradient(circle at 88% 7%,rgba(20,190,166,.13),transparent 32%),linear-gradient(145deg,#111827,#101a20);box-shadow:0 24px 70px rgba(0,0,0,.34)}
+.hybrid-token-head{display:flex;align-items:center;justify-content:space-between;gap:18px}.hybrid-token-head h2{margin:0;font-size:28px}.hybrid-token-demo{border:1px solid rgba(245,185,78,.34);border-radius:999px;padding:5px 10px;color:#f4c978;background:rgba(245,185,78,.08);font-size:11px;font-weight:850}.hybrid-token-controls,.hybrid-token-tabs,.hybrid-token-ranges{display:flex;gap:8px}.hybrid-token-controls{justify-content:space-between}.hybrid-token-tab,.hybrid-token-range{min-height:44px;border:1px solid rgba(124,143,161,.24);border-radius:10px;padding:0 24px;background:rgba(255,255,255,.025);color:#8e9bab;font-weight:800}.hybrid-token-tab.active,.hybrid-token-range.active{border-color:#20dce3;background:rgba(22,207,205,.12);color:#30e1e7;box-shadow:inset 0 0 18px rgba(30,221,218,.08)}
+.token-agent-switch{display:flex;align-items:center;justify-content:center;gap:5px}.token-agent-switch button{display:inline-flex;min-height:34px;align-items:center;gap:7px;border:1px solid rgba(124,143,161,.22);border-radius:8px;padding:0 11px;background:rgba(255,255,255,.025);color:#8795a3;font-size:10px;font-weight:850}.token-agent-switch button.active{border-color:rgba(46,242,138,.65);background:rgba(46,242,138,.11);color:#67efad;box-shadow:inset 0 0 14px rgba(46,242,138,.07)}.token-agent-icon{display:block;width:20px;height:20px;flex:0 0 20px;border-radius:6px;object-fit:cover}
+.hybrid-token-panel{display:none;gap:14px}.hybrid-token-panel.active{display:grid}.hybrid-token-hero{display:flex;align-items:end;justify-content:space-between;gap:18px;padding:8px 4px 4px}.hybrid-token-total{display:grid;gap:4px}.hybrid-token-total>span{color:#a4afbc;font-size:13px;font-weight:850}.hybrid-token-total strong{display:flex;align-items:baseline;gap:8px;font-family:Georgia,"Times New Roman",serif;font-size:54px;font-weight:500;letter-spacing:-.035em}.hybrid-token-total strong small{color:#9ba5b1;font-family:inherit;font-size:17px;font-weight:500}.hybrid-token-comparison{margin:0 0 6px;color:#8ba0b0;font-size:13px}.hybrid-token-comparison b{color:#66a1ff}
+.hybrid-token-dashboard-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.hybrid-token-card{min-width:0;min-height:214px;border:1px solid rgba(91,124,145,.27);border-radius:15px;padding:16px 18px;background:rgba(255,255,255,.022)}.hybrid-token-card-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:13px}.hybrid-token-card h3{margin:0;font-size:16px}.hybrid-token-card-head small{color:#738291;font-size:10px}.hybrid-token-cost-total{display:flex;align-items:baseline;gap:8px;margin:2px 0 12px;color:#f2f5f7;font-family:Georgia,"Times New Roman",serif;font-size:34px}.hybrid-token-cost-total small{color:#778591;font-family:inherit;font-size:11px}.hybrid-token-list{display:grid;gap:9px}.hybrid-token-list-row{display:grid;grid-template-columns:minmax(0,1fr) 110px auto;align-items:center;gap:10px;color:#9aa6b4;font-size:12px}.hybrid-token-list-row strong{overflow:hidden;color:#dce5e9;font-weight:800;text-overflow:ellipsis;white-space:nowrap}.hybrid-token-list-row i{display:block;height:5px;border-radius:999px;background:rgba(255,255,255,.07);overflow:hidden}.hybrid-token-list-row i::after{display:block;width:var(--share);height:100%;border-radius:inherit;background:var(--color,#20e6e6);content:""}.hybrid-token-list-row em{color:#aab5bf;font-style:normal;text-align:right}
+.hybrid-token-trend-shell{position:relative;height:132px;margin-top:4px;border-bottom:1px solid rgba(121,142,158,.18);background:repeating-linear-gradient(to bottom,transparent 0,transparent 32px,rgba(255,255,255,.045) 33px)}.hybrid-token-trend-shell svg{width:100%;height:100%;overflow:visible}.hybrid-token-trend-shell polyline{fill:none;stroke:var(--series-color);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 4px color-mix(in srgb,var(--series-color) 42%,transparent))}.hybrid-token-legend{display:flex;flex-wrap:wrap;gap:7px 14px;margin-top:13px}.hybrid-token-legend button,.hybrid-token-legend span{display:inline-flex;min-height:28px;align-items:center;gap:7px;border:0;background:transparent;color:#929eaa;padding:0;font-size:11px}.hybrid-token-legend button{cursor:pointer}.hybrid-token-legend button::before,.hybrid-token-legend span::before{width:16px;height:3px;border-radius:999px;background:var(--series-color);content:""}.hybrid-token-legend button[aria-pressed="false"]{opacity:.35}.hybrid-token-legend button[aria-pressed="false"]::before{background:#69737d}.hybrid-token-axis{display:flex;justify-content:space-between;margin-top:6px;color:#6f7c88;font-size:9px}
+.hybrid-token-composition-total{height:8px;display:flex;overflow:hidden;border-radius:999px;background:#25303a;margin:9px 0 16px}.hybrid-token-composition-total i{display:block;width:var(--share);background:var(--color)}.hybrid-token-composition-list{display:grid;gap:10px}.hybrid-token-composition-row{display:grid;grid-template-columns:12px minmax(0,1fr) auto;align-items:center;gap:8px;color:#9ca8b5;font-size:12px}.hybrid-token-composition-row i{width:9px;height:9px;border-radius:3px;background:var(--color)}.hybrid-token-composition-row strong{color:#dce4e8;font-weight:750}.hybrid-token-note{color:#748494;font-size:11px}
+.hybrid-token-records{overflow:hidden;border:1px solid rgba(91,124,145,.27);border-radius:15px;background:rgba(255,255,255,.018)}.hybrid-token-record-head{display:flex;min-height:56px;align-items:center;justify-content:space-between;gap:12px;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.07)}.hybrid-token-record-head h3{margin:0;font-size:16px}.hybrid-token-record-tabs{display:flex;gap:6px}.hybrid-token-record-tab{min-height:36px;border:0;border-radius:9px;padding:0 14px;background:transparent;color:#8f9ba8;font-size:12px;font-weight:800}.hybrid-token-record-tab.active{background:rgba(255,255,255,.065);color:#f0f4f6}.hybrid-token-table-wrap{overflow-x:auto}.hybrid-token-table{width:100%;min-width:760px;border-collapse:collapse}.hybrid-token-table th,.hybrid-token-table td{height:52px;padding:0 18px;border-bottom:1px solid rgba(255,255,255,.055);text-align:left;white-space:nowrap}.hybrid-token-table th{height:46px;color:#8e9aa7;font-size:11px;font-weight:850}.hybrid-token-table td{color:#c8d0d6;font-size:12px}.hybrid-token-table tr:last-child td{border-bottom:0}.hybrid-token-table td:nth-child(2){color:#f2f5f7;font-weight:850}.hybrid-token-record-panel[hidden]{display:none}.hybrid-token-app-list{display:grid;padding:6px 18px 12px}.hybrid-token-app-row{display:grid;grid-template-columns:minmax(0,1fr) 150px 90px;align-items:center;gap:14px;min-height:64px;border-bottom:1px solid rgba(255,255,255,.06)}.hybrid-token-app-row:last-child{border-bottom:0}.hybrid-token-app-name{display:flex;align-items:center;gap:11px;color:#e8edf0;font-size:13px;font-weight:850}.hybrid-token-app-icon{display:grid;width:36px;height:36px;place-items:center;border-radius:10px;background:linear-gradient(145deg,rgba(32,230,230,.22),rgba(46,242,138,.12));color:#a7fff4;font-weight:950}.hybrid-token-app-meter{height:6px;overflow:hidden;border-radius:999px;background:rgba(255,255,255,.065)}.hybrid-token-app-meter i{display:block;width:var(--share);height:100%;border-radius:inherit;background:linear-gradient(90deg,#20e6e6,#2ef28a)}.hybrid-token-app-row strong{color:#e8eef1;font-size:13px;text-align:right}.hybrid-token-app-row small{color:#6fdcaa;font-size:10px;font-weight:850}
+.hybrid-token-preview-content{margin-top:12px}.hybrid-token-preview-content .hybrid-token-hero{padding:2px 2px 0}.hybrid-token-preview-content .hybrid-token-total strong{font-size:34px}.hybrid-token-preview-content .hybrid-token-dashboard-grid{gap:8px}.hybrid-token-preview-content .hybrid-token-card{min-height:142px;padding:10px 12px;border-radius:11px}.hybrid-token-preview-content .hybrid-token-card-head{margin-bottom:8px}.hybrid-token-preview-content .hybrid-token-card h3{font-size:12px}.hybrid-token-preview-content .hybrid-token-card-head small{font-size:8px}.hybrid-token-preview-content .hybrid-token-cost-total{margin:0 0 6px;font-size:23px}.hybrid-token-preview-content .hybrid-token-list{gap:4px}.hybrid-token-preview-content .hybrid-token-list-row{grid-template-columns:minmax(0,1fr) 68px auto;gap:6px;font-size:9px}.hybrid-token-preview-content .hybrid-token-trend-shell{height:70px}.hybrid-token-preview-content .hybrid-token-axis{font-size:7px}.hybrid-token-preview-content .hybrid-token-legend{gap:2px 8px;margin-top:3px}.hybrid-token-preview-content .hybrid-token-legend button,.hybrid-token-preview-content .hybrid-token-legend span{min-height:17px;font-size:8px}.hybrid-token-preview-content .hybrid-token-composition-total{height:6px;margin:4px 0 8px}.hybrid-token-preview-content .hybrid-token-composition-list{gap:5px}.hybrid-token-preview-content .hybrid-token-composition-row{font-size:9px}
+
+/* X3 Cloud：保留原有自带小屏/主屏/明细三段外壳，仅更新 Token 内容。 */
+body.prototype-small .token-preview-canvas{display:block;padding:58px 14px 14px}
+body.prototype-small .token-preview-canvas>.token-top-grid,
+body.prototype-small .token-preview-canvas>.token-bottom-grid{display:none!important}
+.cloud-token-dashboard{display:grid;height:100%;grid-template-rows:auto auto minmax(0,1fr);gap:7px}
+.cloud-token-toolbar{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:10px}
+.cloud-token-toolbar>.hybrid-token-tabs{grid-column:1}
+.cloud-token-toolbar .token-agent-switch{grid-column:2;justify-self:center}
+.cloud-token-toolbar .hybrid-token-ranges{grid-column:3;justify-self:end}
+.cloud-token-toolbar .hybrid-token-tab,.cloud-token-toolbar .hybrid-token-range{min-height:32px;border-radius:8px;padding:0 14px;font-size:10px}
+.cloud-token-toolbar .token-agent-switch button{min-height:32px;gap:5px;padding:0 8px;font-size:8px}.cloud-token-toolbar .token-agent-icon{width:17px;height:17px;flex-basis:17px;border-radius:5px}
+.cloud-token-toolbar .hybrid-token-demo{padding:3px 8px;font-size:8px}
+.cloud-token-summary{display:flex;align-items:baseline;gap:8px;min-height:34px;color:#9eabb7;font-size:10px;font-weight:800}
+.cloud-token-summary strong{display:flex;align-items:baseline;color:#f2f5f7;font-family:Georgia,"Times New Roman",serif;font-size:25px;font-weight:500}
+.cloud-token-summary strong small{color:#7f8b97;font-size:9px}
+.cloud-token-summary p{margin:0 0 0 auto;color:#81909d}.cloud-token-summary p b{color:#66a1ff}
+.cloud-token-grid{display:grid;min-height:0;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:repeat(2,minmax(0,1fr));gap:7px}
+.cloud-token-grid .hybrid-token-card{display:flex;min-height:0;flex-direction:column;border-radius:9px;padding:8px 10px}
+.cloud-token-grid .hybrid-token-card-head{margin-bottom:5px}.cloud-token-grid .hybrid-token-card h3{font-size:11px}.cloud-token-grid .hybrid-token-card-head small{font-size:7px}
+.cloud-token-grid .hybrid-token-cost-total{margin:0 0 4px;font-size:20px}.cloud-token-grid .hybrid-token-cost-total small{font-size:8px}
+.cloud-token-grid .hybrid-token-list{flex:1;align-content:space-evenly;gap:3px}.cloud-token-grid .hybrid-token-list-row{min-height:16px;grid-template-columns:minmax(0,1fr) 62px auto;gap:5px;font-size:9px}
+.cloud-token-grid .hybrid-token-trend-shell{height:72px;margin-top:auto}.cloud-token-grid .hybrid-token-axis{margin-top:2px;font-size:6px}.cloud-token-grid .hybrid-token-legend{gap:2px 8px;margin-top:1px}
+.cloud-token-grid .hybrid-token-legend button,.cloud-token-grid .hybrid-token-legend span{min-height:13px;font-size:7px}.cloud-token-grid .hybrid-token-legend button::before,.cloud-token-grid .hybrid-token-legend span::before{width:10px;height:2px}
+.cloud-token-grid .hybrid-token-composition-total{height:6px;margin:3px 0 6px}.cloud-token-grid .hybrid-token-composition-list{display:grid;flex:1;align-content:space-evenly;gap:3px}.cloud-token-grid .hybrid-token-composition-row{min-height:16px;font-size:9px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-toolbar .hybrid-token-tab,
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-toolbar .hybrid-token-range{min-height:40px;padding:0 18px;font-size:12px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-summary{min-height:45px;font-size:13px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-summary strong{font-size:34px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid{gap:10px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-card{padding:13px 15px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-card h3{font-size:15px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-card-head{margin-bottom:10px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-card-head small{font-size:10px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-cost-total{margin:0 0 8px;font-size:31px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-list{gap:7px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-list-row{min-height:25px;grid-template-columns:minmax(0,1fr) 110px auto;gap:9px;font-size:12px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-trend-shell{height:140px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-axis{margin-top:5px;font-size:9px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-legend{gap:6px 14px;margin-top:6px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-legend button,
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-legend span{min-height:20px;font-size:10px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-composition-total{height:9px;margin:8px 0 14px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-composition-list{gap:10px}
+body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-composition-row{min-height:23px;font-size:12px}
+@media(max-width:1500px){
+  body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-trend-shell{height:56px}
+  body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-list-row{min-height:18px;font-size:10px}
+  body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-composition-list{gap:5px}
+  body.prototype-small .token-dashboard>.token-preview-canvas .cloud-token-grid .hybrid-token-composition-row{min-height:16px;font-size:10px}
+}
+body.prototype-medium #hybrid-token-dashboard{gap:10px;padding:16px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-head h2{font-size:24px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-controls{align-items:center}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-tab,
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-range{min-height:38px;padding:0 18px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-hero{min-height:66px;padding:2px 4px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-total strong{font-size:44px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-dashboard-grid{grid-template-rows:170px 210px;gap:10px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-card{min-height:0;overflow:hidden;padding:13px 15px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-card-head{margin-bottom:9px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-cost-total{margin:0 0 7px;font-size:30px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-list{gap:6px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-list-row{grid-template-columns:minmax(0,1fr) 88px auto;gap:8px;font-size:11px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-trend-shell{height:102px;margin-top:0}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-legend{margin-top:5px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-composition-total{margin:5px 0 10px}
+body.prototype-medium #hybrid-token-dashboard .hybrid-token-composition-list{gap:7px}
+body.prototype-small .token-history-panel>.section-title,
+body.prototype-small .token-history-panel>#token-record-table,
+body.prototype-small .token-history-panel>.dev-field-notes{display:none!important}
+.cloud-token-details{display:grid;gap:12px}.cloud-token-detail-head{display:flex;align-items:center;justify-content:flex-start}.cloud-token-detail-head .hybrid-token-tab{min-height:38px;padding:0 18px}.cloud-token-details>[data-cloud-detail-view]{overflow:hidden;border:1px solid rgba(91,124,145,.27);border-radius:12px;background:rgba(255,255,255,.018)}
+.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-tab],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-range]{pointer-events:auto!important;min-height:44px}
+@media(max-width:1150px){.hybrid-token-dashboard-grid{grid-template-columns:1fr}.hybrid-token-card{min-height:200px}.hybrid-token-total strong{font-size:44px}}
 </style>
 </head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
       <div class="prototype-launcher-inner">
         <h1>Agent X3</h1>
-        <nav class="prototype-link-grid medium-screened" aria-label="选择原型尺寸">
+        <nav class="prototype-link-grid" aria-label="选择 Agent X3 款型">
           <a class="prototype-size-link" data-prototype-size="small" href="?prototype=small">
             <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>小屏原型链接</strong>
+            <strong>X3 Cloud</strong>
           </a>
-          <a class="prototype-size-link is-screened-off" data-prototype-size="medium" href="?prototype=medium" aria-hidden="true" tabindex="-1">
+          <a class="prototype-size-link" data-prototype-size="medium" href="?prototype=medium">
             <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>中屏原型链接</strong>
+            <strong>X3 Hybrid</strong>
           </a>
           <a class="prototype-size-link" data-prototype-size="large" href="?prototype=large">
             <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>大屏原型链接</strong>
+            <strong>X3 Local</strong>
           </a>
         </nav>
         <nav class="prototype-system-links" aria-label="系统级原型演示">
@@ -9852,12 +10077,13 @@ body.api-dialog-open { overflow:hidden; }
               </div>
               <div class="agent-state-preview-tools" aria-label="Agent任务状态原型预览">
                 <span>原型状态预览</span>
-                <a data-agent-preview-state="disconnected" href="?prototype=small&amp;agentState=disconnected">CLI未连接</a>
+                <a data-agent-preview-state="disconnected" href="?prototype=small&amp;agentState=disconnected">未开始监测</a>
                 <a data-agent-preview-state="waiting" href="?prototype=small&amp;agentState=waiting">等待任务</a>
                 <a data-agent-preview-state="running" href="?prototype=small&amp;agentState=running">执行中</a>
                 <a data-agent-preview-state="approval" href="?prototype=small&amp;agentState=approval">等待审批</a>
-                <a data-agent-preview-state="failed" href="?prototype=small&amp;agentState=failed">失败</a>
-                <a data-agent-preview-state="completed" href="?prototype=small&amp;agentState=completed">完成</a>
+                <a data-agent-preview-state="connection-lost" href="?prototype=small&amp;agentState=connection-lost">监测中断</a>
+                <a data-agent-preview-state="failed" href="?prototype=small&amp;agentState=failed">任务失败</a>
+                <a data-agent-preview-state="completed" href="?prototype=small&amp;agentState=completed">任务完成</a>
                 <small class="agent-state-preview-note">仅用于原型评审，演示内容不写入真实任务数据。</small>
               </div>
               <div class="agent-subscreen-preview" data-subscreen-preview="monitor" data-subscreen-title="Agent 任务进度" aria-label="2:1 横屏副屏 Agent 任务进度预览">
@@ -9935,8 +10161,9 @@ body.api-dialog-open { overflow:hidden; }
               </div>
               <div class="monitor-workspace">
                 <article class="inner-card agent-window-card">
+                  <div class="cli-monitor-summary" id="cli-monitor-summary" aria-live="polite"></div>
                   <div class="cli-integration-grid" id="cli-integration-grid"></div>
-                  <p class="cli-monitor-note">使用前请自行安装并登录对应CLI。Agent PC仅支持Claude Code CLI和Codex CLI。</p>
+                  <p class="cli-monitor-note">使用前，请先在当前设备安装并登录对应CLI。停止或切换监测不会关闭CLI，也不会终止正在运行的任务。</p>
                 </article>
               </div>
             </section>
@@ -9954,9 +10181,9 @@ body.api-dialog-open { overflow:hidden; }
               </div>
               <div class="table" id="agent-record-table">
                 <div class="table-head"><span>任务</span><span>来源</span><span>状态</span><span>耗时</span><span>操作</span></div>
-                <div class="table-row"><span>修复构建 Bug</span><span>Terminal</span><span class="tag green">完成</span><span>18 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
-                <div class="table-row"><span>批量重构组件</span><span>Claude Code</span><span class="tag red">失败</span><span>11 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
-                <div class="table-row"><span>整理竞品资料</span><span>Codex</span><span class="tag green">完成</span><span>24 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>修复构建 Bug</span><span>Claude Code CLI</span><span class="tag green">任务完成</span><span>18 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>批量重构组件</span><span>Claude Code CLI</span><span class="tag red">任务失败</span><span>11 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
+                <div class="table-row"><span>整理竞品资料</span><span>Codex CLI</span><span class="tag green">任务完成</span><span>24 分钟</span><span><button class="table-action hot">查看详情</button></span></div>
               </div>
             </section>
           </div>
@@ -10023,6 +10250,71 @@ body.api-dialog-open { overflow:hidden; }
         </section>
 
 	        <section class="view" id="usage">
+		          <section class="hybrid-token-board" id="hybrid-token-dashboard" data-token-surface="main" aria-label="X3 Hybrid Token用量">
+              <header class="hybrid-token-head"><h2>Token用量</h2></header>
+              <div class="hybrid-token-controls">
+                <div class="hybrid-token-tabs" role="tablist" aria-label="Token统计口径">
+                  <button class="hybrid-token-tab active" type="button" data-hybrid-token-tab="api" aria-selected="true">API用量</button>
+                  <button class="hybrid-token-tab" type="button" data-hybrid-token-tab="agent" aria-selected="false">Agent用量</button>
+                </div>
+                <div class="token-agent-switch" data-token-agent-switch hidden aria-label="Agent应用">
+                  <button class="active" type="button" data-token-agent-app="ChatGPT" aria-pressed="true"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/chatgpt.png" alt=""><span>ChatGPT</span></button><button type="button" data-token-agent-app="WorkBuddy" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/workbuddy.png" alt=""><span>WorkBuddy</span></button><button type="button" data-token-agent-app="Kimi" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/kimi.png" alt=""><span>Kimi</span></button><button type="button" data-token-agent-app="Qwen" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/qwen.png" alt=""><span>Qwen</span></button>
+                </div>
+                <div class="hybrid-token-ranges" aria-label="Token时间范围">
+                  <button class="hybrid-token-range active" type="button" data-hybrid-token-range="今日" aria-pressed="true">今日</button>
+                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="7天">7天</button>
+                  <button class="hybrid-token-range" type="button" data-hybrid-token-range="30天">30天</button>
+                </div>
+              </div>
+              <div class="hybrid-token-panel active" data-hybrid-token-panel="api">
+                <div class="hybrid-token-hero">
+                  <div class="hybrid-token-total"><span data-token-value="period">今日 API Token</span><strong><b data-token-value="total">12.6M</b><small>tokens</small></strong></div>
+                  <p class="hybrid-token-comparison" data-token-value="comparison">↑ 比近7日同时段高 <b>12%</b></p>
+                </div>
+                <div class="hybrid-token-dashboard-grid">
+                  <article class="hybrid-token-card" data-token-card="cost"><div class="hybrid-token-card-head"><h3>成本估算</h3><small>按公开 API 价格折算</small></div><div class="hybrid-token-cost-total"><span data-token-value="cost">$8.42</span><small data-token-value="costPeriod">今日</small></div><div class="hybrid-token-list" data-token-cost-list></div></article>
+                  <article class="hybrid-token-card" data-token-card="models"><div class="hybrid-token-card-head"><h3>模型分布</h3><small>按真实模型名称统计</small></div><div class="hybrid-token-list" data-token-model-list><div class="hybrid-token-list-row"><strong>GPT-5</strong><i style="--share:64%;--color:#4d8dff"></i><em>8.1M · 64%</em></div><div class="hybrid-token-list-row"><strong>Claude Sonnet 4</strong><i style="--share:24%;--color:#2ed29a"></i><em>3.0M · 24%</em></div><div class="hybrid-token-list-row"><strong>Gemini 2.5 Pro</strong><i style="--share:12%;--color:#f5b94e"></i><em>1.5M · 12%</em></div></div></article>
+                  <article class="hybrid-token-card" data-token-card="trend"><div class="hybrid-token-card-head"><h3>Token用量趋势</h3><small data-token-value="trendUnit">当日累计</small></div><div class="hybrid-token-trend-shell"><svg viewBox="0 0 600 150" preserveAspectRatio="none" data-token-trend aria-label="API Token用量趋势"></svg></div><div class="hybrid-token-axis" data-token-axis><span>00:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span></div><div class="hybrid-token-legend" data-token-legend></div></article>
+                  <article class="hybrid-token-card" data-token-card="composition"><div class="hybrid-token-card-head"><h3>Token构成</h3><small>接口返回字段</small></div><div class="hybrid-token-composition-total" data-token-composition-bar></div><div class="hybrid-token-composition-list" data-token-composition-list></div></article>
+                </div>
+                <div class="hybrid-token-note">ⓘ 仅统计通过 Agent PC 接入的 API；接口未返回的字段显示“—”。</div>
+                <section class="hybrid-token-records" data-token-detail-surface data-token-record-view="api-daily" aria-label="API每日明细">
+                  <div class="hybrid-token-record-head"><h3>每日明细</h3></div>
+                  <div class="hybrid-token-table-wrap"><table class="hybrid-token-table"><thead><tr><th>日期</th><th>总计</th><th>输入</th><th>输出</th><th>缓存</th><th>推理</th><th>请求数</th></tr></thead><tbody data-token-record-body>
+                    <tr><td>2026-09-02</td><td>12.6M</td><td>2.27M</td><td>882K</td><td>9.20M</td><td>252K</td><td>164</td></tr>
+                    <tr><td>2026-09-01</td><td>18.4M</td><td>3.12M</td><td>1.26M</td><td>13.6M</td><td>420K</td><td>231</td></tr>
+                    <tr><td>2026-08-31</td><td>9.8M</td><td>1.86M</td><td>740K</td><td>7.0M</td><td>200K</td><td>126</td></tr>
+                  </tbody></table></div>
+                </section>
+              </div>
+              <div class="hybrid-token-panel" data-hybrid-token-panel="agent">
+                <div class="hybrid-token-hero">
+                  <div class="hybrid-token-total"><span data-token-value="period">今日 Agent Token</span><strong><b data-token-value="total">87.8M</b><small>tokens</small></strong></div>
+                  <p class="hybrid-token-comparison" data-token-value="comparison">↑ 比近7日同时段高 <b>20%</b></p>
+                </div>
+                <div class="hybrid-token-dashboard-grid">
+                  <article class="hybrid-token-card" data-token-card="cost"><div class="hybrid-token-card-head"><h3>成本估算</h3><small>按公开 API 价格折算</small></div><div class="hybrid-token-cost-total"><span data-token-value="cost">$61.60</span><small data-token-value="costPeriod">今日</small></div><div class="hybrid-token-list" data-token-cost-list></div></article>
+                  <article class="hybrid-token-card" data-token-card="models"><div class="hybrid-token-card-head"><h3>模型分布</h3><small>按应用上报模型统计</small></div><div class="hybrid-token-list" data-token-model-list></div></article>
+                  <article class="hybrid-token-card" data-token-card="trend"><div class="hybrid-token-card-head"><h3>Token用量趋势</h3><small data-token-value="trendUnit">当日累计</small></div><div class="hybrid-token-trend-shell"><svg viewBox="0 0 600 150" preserveAspectRatio="none" data-token-trend aria-label="Agent Token用量趋势"></svg></div><div class="hybrid-token-axis" data-token-axis><span>00:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span></div><div class="hybrid-token-legend" data-token-legend></div></article>
+                  <article class="hybrid-token-card" data-token-card="composition"><div class="hybrid-token-card-head"><h3>Token构成</h3><small>已接入应用上报</small></div><div class="hybrid-token-composition-total" data-token-composition-bar></div><div class="hybrid-token-composition-list" data-token-composition-list></div></article>
+                </div>
+                <div class="hybrid-token-note">ⓘ Agent用量仅展示已接入并能返回 Token 字段的本地应用：ChatGPT、WorkBuddy、Kimi、Qwen。</div>
+                <section class="hybrid-token-records" data-token-detail-surface data-token-record-view="agent" aria-label="Agent用量明细">
+                  <div class="hybrid-token-record-head"><div class="hybrid-token-record-tabs" role="tablist" aria-label="Agent用量明细视图"><button class="hybrid-token-record-tab active" type="button" data-token-record-tab="daily" aria-selected="true">每日明细</button><button class="hybrid-token-record-tab" type="button" data-token-record-tab="apps" aria-selected="false">应用用量</button></div></div>
+                  <div class="hybrid-token-record-panel" data-token-record-panel="daily"><div class="hybrid-token-table-wrap"><table class="hybrid-token-table"><thead><tr><th>日期</th><th>总计</th><th>输入</th><th>输出</th><th>缓存</th><th>推理</th><th>对话数</th></tr></thead><tbody data-token-record-body>
+                    <tr><td>2026-09-02</td><td>87.8M</td><td>5.27M</td><td>878K</td><td>80.77M</td><td>878K</td><td>579</td></tr>
+                    <tr><td>2026-09-01</td><td>152M</td><td>9.4M</td><td>1.52M</td><td>139.6M</td><td>1.48M</td><td>1,077</td></tr>
+                    <tr><td>2026-08-31</td><td>118.5M</td><td>7.1M</td><td>1.18M</td><td>109.0M</td><td>1.22M</td><td>864</td></tr>
+                  </tbody></table></div></div>
+                  <div class="hybrid-token-record-panel" data-token-record-panel="apps" data-token-apps-view hidden><div class="hybrid-token-app-list">
+                    <div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">C</i><span>ChatGPT<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:100%"></i></span><strong>63.2M</strong></div>
+                    <div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">W</i><span>WorkBuddy<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:20%"></i></span><strong>12.3M</strong></div>
+                    <div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">K</i><span>Kimi<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:11%"></i></span><strong>7.0M</strong></div>
+                    <div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">Q</i><span>Qwen<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:8%"></i></span><strong>5.3M</strong></div>
+                  </div></div>
+                </section>
+              </div>
+            </section>
 	          <div class="token-page">
 	            <section class="panel main-panel token-dashboard">
               <div class="section-title">
@@ -10036,6 +10328,29 @@ body.api-dialog-open { overflow:hidden; }
                 </div>
               </div>
               <div class="token-preview-canvas" data-subscreen-preview="usage" data-subscreen-title="Token用量">
+	              <div class="cloud-token-dashboard" data-cloud-token-dashboard>
+	                <div class="cloud-token-toolbar">
+	                  <div class="hybrid-token-tabs" role="tablist" aria-label="Token统计口径">
+	                    <button class="hybrid-token-tab active" type="button" data-cloud-token-tab="api" aria-selected="true">API用量</button>
+	                    <button class="hybrid-token-tab" type="button" data-cloud-token-tab="agent" aria-selected="false">Agent用量</button>
+	                  </div>
+	                  <div class="token-agent-switch" data-token-agent-switch hidden aria-label="Agent应用">
+	                    <button class="active" type="button" data-token-agent-app="ChatGPT" aria-pressed="true"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/chatgpt.png" alt=""><span>ChatGPT</span></button><button type="button" data-token-agent-app="WorkBuddy" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/workbuddy.png" alt=""><span>WorkBuddy</span></button><button type="button" data-token-agent-app="Kimi" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/kimi.png" alt=""><span>Kimi</span></button><button type="button" data-token-agent-app="Qwen" aria-pressed="false"><img class="token-agent-icon" src="assets/demo-quick-actions/figma-icons/qwen.png" alt=""><span>Qwen</span></button>
+	                  </div>
+	                  <div class="hybrid-token-ranges" aria-label="Token时间范围">
+	                    <button class="hybrid-token-range active" type="button" data-cloud-token-range="今日" aria-pressed="true">今日</button>
+	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="7天" aria-pressed="false">7天</button>
+	                    <button class="hybrid-token-range" type="button" data-cloud-token-range="30天" aria-pressed="false">30天</button>
+	                  </div>
+	                </div>
+	                <div class="cloud-token-summary"><span data-token-value="period">今日 API Token</span><strong><b data-token-value="total">12.6M</b><small> tokens</small></strong><p data-token-value="comparison">↑ 比近7日同时段高 <b>12%</b></p></div>
+	                <div class="cloud-token-grid" data-cloud-token-grid>
+	                  <article class="hybrid-token-card" data-token-card="cost"><div class="hybrid-token-card-head"><h3>成本估算</h3><small>API价格折算</small></div><div class="hybrid-token-cost-total"><span data-token-value="cost">$8.42</span><small data-token-value="costPeriod">今日</small></div><div class="hybrid-token-list" data-token-cost-list></div></article>
+	                  <article class="hybrid-token-card" data-token-card="models"><div class="hybrid-token-card-head"><h3>模型分布</h3><small>真实模型名称</small></div><div class="hybrid-token-list" data-token-model-list><div class="hybrid-token-list-row"><strong>GPT-5</strong><i style="--share:64%;--color:#4d8dff"></i><em>8.1M · 64%</em></div><div class="hybrid-token-list-row"><strong>Claude Sonnet 4</strong><i style="--share:24%;--color:#2ed29a"></i><em>3.0M · 24%</em></div><div class="hybrid-token-list-row"><strong>Gemini 2.5 Pro</strong><i style="--share:12%;--color:#f5b94e"></i><em>1.5M · 12%</em></div></div></article>
+	                  <article class="hybrid-token-card" data-token-card="trend"><div class="hybrid-token-card-head"><h3>Token用量趋势</h3><small data-token-value="trendUnit">当日累计</small></div><div class="hybrid-token-trend-shell"><svg viewBox="0 0 600 150" preserveAspectRatio="none" data-token-trend aria-label="Token用量趋势"></svg></div><div class="hybrid-token-axis" data-token-axis></div><div class="hybrid-token-legend" data-token-legend></div></article>
+	                  <article class="hybrid-token-card" data-token-card="composition"><div class="hybrid-token-card-head"><h3>Token构成</h3><small>输入 / 输出 / 缓存 / 推理</small></div><div class="hybrid-token-composition-total" data-token-composition-bar></div><div class="hybrid-token-composition-list" data-token-composition-list></div></article>
+	                </div>
+	              </div>
 	              <div class="token-top-grid">
 	                <aside class="panel threshold-panel">
 	                  <article class="inner-card quota-display-card">
@@ -10128,26 +10443,20 @@ body.api-dialog-open { overflow:hidden; }
             </section>
 
             <section class="panel main-panel token-history-panel">
-              <div class="section-title">
-                <h3>任务消耗记录</h3>
-                <span class="qa-demo-badge">原型演示数据</span>
-              </div>
-	              <div class="table" id="token-record-table">
-	                <div class="table-head"><span>任务</span><span>来源</span><span>执行时间</span><span>消耗 Token</span><span>结果</span><span>操作</span></div>
-	                <div class="table-row token-row"><span>Agent PC 原型重构</span><span>Codex</span><span>10:54</span><span>141K</span><span class="tag cyan">运行中</span><span><button class="table-action hot">查看详情</button></span></div>
-	                <div class="table-row token-row"><span>长文档逻辑梳理</span><span>Claude Code</span><span>09:18</span><span>188K</span><span class="tag green">完成</span><span><button class="table-action hot">查看详情</button></span></div>
-	                <div class="table-row token-row"><span>批量生成页面规范</span><span>Cursor</span><span>昨天</span><span>512K</span><span class="tag red">异常偏高</span><span><button class="table-action hot">查看详情</button></span></div>
+	              <div class="cloud-token-details" data-cloud-token-details>
+	                <div class="cloud-token-detail-head">
+	                  <div class="hybrid-token-tabs" role="tablist" aria-label="用量明细统计口径"><button class="hybrid-token-tab active" type="button" data-cloud-detail-tab="api" aria-selected="true">API用量</button><button class="hybrid-token-tab" type="button" data-cloud-detail-tab="agent" aria-selected="false">Agent用量</button></div>
+	                </div>
+	                <section data-cloud-detail-view="api">
+	                  <div class="hybrid-token-record-head"><h3>每日明细</h3></div>
+	                  <div class="hybrid-token-table-wrap"><table class="hybrid-token-table"><thead><tr><th>日期</th><th>总计</th><th>输入</th><th>输出</th><th>缓存</th><th>推理</th><th>请求数</th></tr></thead><tbody><tr><td>2026-09-02</td><td>12.6M</td><td>2.27M</td><td>882K</td><td>9.20M</td><td>252K</td><td>164</td></tr><tr><td>2026-09-01</td><td>18.4M</td><td>3.12M</td><td>1.26M</td><td>13.6M</td><td>420K</td><td>231</td></tr><tr><td>2026-08-31</td><td>9.8M</td><td>1.86M</td><td>740K</td><td>7.0M</td><td>—</td><td>126</td></tr></tbody></table></div>
+	                </section>
+	                <section data-cloud-detail-view="agent" hidden>
+	                  <div class="hybrid-token-record-head"><div class="hybrid-token-record-tabs" role="tablist" aria-label="Agent用量明细"><button class="hybrid-token-record-tab active" type="button" data-cloud-record-tab="daily" aria-selected="true">每日明细</button><button class="hybrid-token-record-tab" type="button" data-cloud-record-tab="apps" aria-selected="false">应用用量</button></div></div>
+	                  <div data-cloud-record-panel="daily"><div class="hybrid-token-table-wrap"><table class="hybrid-token-table"><thead><tr><th>日期</th><th>总计</th><th>输入</th><th>输出</th><th>缓存</th><th>推理</th><th>对话数</th></tr></thead><tbody><tr><td>2026-09-02</td><td>87.8M</td><td>5.27M</td><td>878K</td><td>80.77M</td><td>878K</td><td>579</td></tr><tr><td>2026-09-01</td><td>152M</td><td>9.4M</td><td>1.52M</td><td>139.6M</td><td>1.48M</td><td>1,077</td></tr><tr><td>2026-08-31</td><td>118.5M</td><td>7.1M</td><td>1.18M</td><td>109.0M</td><td>1.22M</td><td>864</td></tr></tbody></table></div></div>
+	                  <div data-cloud-record-panel="apps" hidden><div class="hybrid-token-app-list"><div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">C</i><span>ChatGPT<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:100%"></i></span><strong>63.2M</strong></div><div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">W</i><span>WorkBuddy<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:20%"></i></span><strong>12.3M</strong></div><div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">K</i><span>Kimi<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:11%"></i></span><strong>7.0M</strong></div><div class="hybrid-token-app-row"><span class="hybrid-token-app-name"><i class="hybrid-token-app-icon">Q</i><span>Qwen<small>监测中</small></span></span><span class="hybrid-token-app-meter"><i style="--share:8%"></i></span><strong>5.3M</strong></div></div></div>
+	                </section>
 	              </div>
-              <details class="dev-field-notes">
-                <summary>研发字段标注 · Token原始数据</summary>
-                <div class="dev-field-grid">
-                  <div class="dev-field-item"><strong>唯一标识</strong><code>taskId / callId: string</code><br><code>callId</code>用于API调用去重，详情不使用列表序号。</div>
-                  <div class="dev-field-item"><strong>Token数值</strong><code>inputTokens / outputTokens / totalTokens: integer|null</code><br>存储原始整数；141K仅为界面格式化结果。</div>
-                  <div class="dev-field-item"><strong>时间和状态</strong><code>startedAt / updatedAt: ISO 8601</code><br><code>status: running / completed / failed</code>。</div>
-                  <div class="dev-field-item"><strong>数据可用性</strong><code>dataStatus: available / partial / unavailable</code><br>API未返回时Token字段为<code>null</code>，不写0、不估算。</div>
-                  <div class="dev-field-item dev-field-rule"><strong>校验规则</strong><code>totalTokens = inputTokens + outputTokens</code>；模型明细之和必须等于任务总Token；缺失任一原始值时标注数据不完整。</div>
-                </div>
-              </details>
             </section>
 
             <div class="schedule-create-modal" id="token-quota-modal" aria-hidden="true">
@@ -10307,7 +10616,7 @@ body.api-dialog-open { overflow:hidden; }
                       </div>
                       <div class="voice-dialog-mode-switch" role="group" aria-label="对话模式切换">
                         <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true">语音</button>
-                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">文字</button>
+                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">问答</button>
                       </div>
                     </div>
                     <aside class="qa-session-drawer" id="qa-session-drawer" aria-hidden="true">
@@ -10432,6 +10741,15 @@ body.api-dialog-open { overflow:hidden; }
                   <button type="button" id="qa-permission-primary" hidden>允许使用麦克风</button>
                   <button type="button" class="secondary" id="qa-permission-recheck" hidden>重新检查</button>
                 </div>
+            </section>
+            <section class="panel main-panel qa-office-dialog-demo" aria-label="办公场景弹出框演示">
+              <div><h3>问答（办公场景）弹出框</h3><p>原型演示入口，正式产品由对应操作触发。</p></div>
+              <div class="qa-office-dialog-buttons">
+                <button type="button" data-qa-office-dialog="permission">操作授权</button>
+                <button type="button" data-qa-office-dialog="clarification">补充信息</button>
+                <button type="button" data-qa-office-dialog="connection">登录与连接</button>
+                <button type="button" data-qa-office-dialog="recovery">失败处理</button>
+              </div>
             </section>
             <details class="dev-field-notes">
               <summary>研发字段标注 · 麦克风权限</summary>
@@ -11171,15 +11489,252 @@ const $ = (selector) => document.querySelector(selector);
 const $$ = (selector) => Array.from(document.querySelectorAll(selector));
 const PROTOTYPE_SIZE = document.body.dataset.prototypeSize || "small";
 const IS_WIDE_PROTOTYPE = PROTOTYPE_SIZE === "medium" || PROTOTYPE_SIZE === "large";
+$$('[data-agent-preview-state]').forEach((link) => {
+  const agentState = link.dataset.agentPreviewState;
+  link.href = `?prototype=${PROTOTYPE_SIZE}&agentState=${agentState}`;
+});
 const PROTOTYPE_WORKBENCH_TITLES = {
-  small: "AI Agent 小屏工作台",
-  medium: "AI Agent 中屏工作台",
-  large: "AI Agent 大屏工作台",
+  small: "X3 Cloud",
+  medium: "X3 Hybrid",
+  large: "X3 Local",
 };
 const prototypeWorkbenchTitle = $("#prototype-workbench-title");
 if (prototypeWorkbenchTitle) {
   prototypeWorkbenchTitle.textContent = PROTOTYPE_WORKBENCH_TITLES[PROTOTYPE_SIZE] || "AI Agent 双屏工作台";
 }
+
+const HYBRID_TOKEN_DATA = {
+  api: {
+    "今日": {
+      period: "今日 API Token", total: "12.6M", comparison: "↑ 比近7日同时段高 <b>12%</b>", cost: "$8.42", costPeriod: "今日", trendUnit: "当日累计",
+      axis: ["00:00", "08:00", "12:00", "16:00", "20:00"],
+      costItems: [["OpenAI", "72%", "$6.10", "#4d8dff"], ["Anthropic", "20%", "$1.68", "#2ed29a"], ["Google", "8%", "$0.64", "#f5b94e"]],
+      models: [["GPT-5", "64%", "8.1M · 64%", "#4d8dff"], ["Claude Sonnet 4", "24%", "3.0M · 24%", "#2ed29a"], ["Gemini 2.5 Pro", "12%", "1.5M · 12%", "#f5b94e"]],
+      composition: [["输入", "18%", "2.27M", "#317de8"], ["输出", "7%", "882K", "#f06b45"], ["缓存", "73%", "9.20M", "#9fc4ff"], ["推理", "2%", "252K", "#785be9"]],
+      series: [["GPT-5", "#4d8dff", [0, 2, 4, 9, 18, 34, 58, 81]], ["Claude Sonnet 4", "#2ed29a", [0, 1, 3, 7, 15, 25, 36, 44]], ["Gemini 2.5 Pro", "#f5b94e", [0, 0, 1, 3, 7, 13, 19, 23]]]
+    },
+    "7天": {
+      period: "近7天 API Token", total: "68.4M", comparison: "↓ 比上一个7天低 <b>6%</b>", cost: "$46.90", costPeriod: "近7天", trendUnit: "按日累计",
+      axis: ["周三", "周四", "周五", "周六", "周日", "周一", "今天"],
+      costItems: [["OpenAI", "69%", "$32.36", "#4d8dff"], ["Anthropic", "22%", "$10.32", "#2ed29a"], ["Google", "9%", "$4.22", "#f5b94e"]],
+      models: [["GPT-5", "61%", "41.7M · 61%", "#4d8dff"], ["Claude Sonnet 4", "26%", "17.8M · 26%", "#2ed29a"], ["Gemini 2.5 Pro", "13%", "8.9M · 13%", "#f5b94e"]],
+      composition: [["输入", "20%", "13.7M", "#317de8"], ["输出", "8%", "5.5M", "#f06b45"], ["缓存", "69%", "47.2M", "#9fc4ff"], ["推理", "3%", "2.0M", "#785be9"]],
+      series: [["GPT-5", "#4d8dff", [12, 25, 33, 48, 57, 72, 88]], ["Claude Sonnet 4", "#2ed29a", [8, 16, 29, 31, 47, 55, 69]], ["Gemini 2.5 Pro", "#f5b94e", [3, 8, 14, 21, 24, 35, 43]]]
+    },
+    "30天": {
+      period: "近30天 API Token", total: "301M", comparison: "↑ 比上一个30天高 <b>9%</b>", cost: "$204.30", costPeriod: "近30天", trendUnit: "按日期累计",
+      axis: ["08-04", "08-10", "08-16", "08-22", "08-28", "今天"],
+      costItems: [["OpenAI", "67%", "$136.88", "#4d8dff"], ["Anthropic", "24%", "$49.03", "#2ed29a"], ["Google", "9%", "$18.39", "#f5b94e"]],
+      models: [["GPT-5", "59%", "177.6M · 59%", "#4d8dff"], ["Claude Sonnet 4", "28%", "84.3M · 28%", "#2ed29a"], ["Gemini 2.5 Pro", "13%", "39.1M · 13%", "#f5b94e"]],
+      composition: [["输入", "19%", "57.2M", "#317de8"], ["输出", "8%", "24.1M", "#f06b45"], ["缓存", "70%", "210.7M", "#9fc4ff"], ["推理", "3%", "9.0M", "#785be9"]],
+      series: [["GPT-5", "#4d8dff", [7, 18, 32, 45, 61, 75, 86, 96]], ["Claude Sonnet 4", "#2ed29a", [4, 11, 24, 36, 49, 58, 72, 82]], ["Gemini 2.5 Pro", "#f5b94e", [2, 6, 12, 18, 27, 38, 44, 53]]]
+    }
+  },
+  agent: {
+    "今日": {
+      period: "今日 Agent Token", total: "87.8M", comparison: "↑ 比近7日同时段高 <b>20%</b>", cost: "$61.60", costPeriod: "今日", trendUnit: "当日累计",
+      axis: ["00:00", "08:00", "12:00", "16:00", "20:00"],
+      costItems: [["ChatGPT", "74%", "$45.58", "#5793ef"], ["WorkBuddy", "14%", "$8.62", "#55b878"], ["Kimi", "7%", "$4.31", "#d9dde4"], ["Qwen", "5%", "$3.09", "#7a70ff"]],
+      models: [["GPT-5", "72%", "63.2M · 72%", "#5793ef"], ["GLM-4.5", "14%", "12.3M · 14%", "#55b878"], ["Kimi K2", "8%", "7.0M · 8%", "#d9dde4"], ["Qwen3-Coder", "6%", "5.3M · 6%", "#7a70ff"]],
+      composition: [["输入", "6%", "5.27M", "#317de8"], ["输出", "1%", "878K", "#f06b45"], ["缓存", "92%", "80.77M", "#9fc4ff"], ["推理", "1%", "878K", "#785be9"]],
+      series: [["ChatGPT", "#5793ef", [0, 0, 3, 4, 6, 52, 78, 88]], ["WorkBuddy", "#55b878", [0, 0, 1, 1, 2, 4, 8, 9]], ["Kimi", "#d9dde4", [0, 0, 0, 1, 1, 3, 5, 6]], ["Qwen", "#7a70ff", [0, 0, 0, 0, 1, 2, 3, 4]]]
+    },
+    "7天": {
+      period: "近7天 Agent Token", total: "512M", comparison: "↑ 比上一个7天高 <b>8%</b>", cost: "$358.20", costPeriod: "近7天", trendUnit: "按日累计",
+      axis: ["周三", "周四", "周五", "周六", "周日", "周一", "今天"],
+      costItems: [["ChatGPT", "70%", "$250.74", "#5793ef"], ["WorkBuddy", "16%", "$57.31", "#55b878"], ["Kimi", "8%", "$28.66", "#d9dde4"], ["Qwen", "6%", "$21.49", "#7a70ff"]],
+      models: [["GPT-5", "68%", "348M · 68%", "#5793ef"], ["GLM-4.5", "17%", "87M · 17%", "#55b878"], ["Kimi K2", "9%", "46M · 9%", "#d9dde4"], ["Qwen3-Coder", "6%", "31M · 6%", "#7a70ff"]],
+      composition: [["输入", "7%", "35.8M", "#317de8"], ["输出", "2%", "10.2M", "#f06b45"], ["缓存", "89%", "455.7M", "#9fc4ff"], ["推理", "2%", "10.3M", "#785be9"]],
+      series: [["ChatGPT", "#5793ef", [18, 30, 42, 51, 66, 79, 94]], ["WorkBuddy", "#55b878", [7, 16, 24, 38, 44, 57, 69]], ["Kimi", "#d9dde4", [4, 9, 18, 22, 31, 39, 48]], ["Qwen", "#7a70ff", [2, 5, 11, 17, 23, 30, 38]]]
+    },
+    "30天": {
+      period: "近30天 Agent Token", total: "2.18B", comparison: "↑ 比上一个30天高 <b>15%</b>", cost: "$1,526", costPeriod: "近30天", trendUnit: "按日期累计",
+      axis: ["08-04", "08-10", "08-16", "08-22", "08-28", "今天"],
+      costItems: [["ChatGPT", "68%", "$1,037", "#5793ef"], ["WorkBuddy", "18%", "$275", "#55b878"], ["Kimi", "8%", "$122", "#d9dde4"], ["Qwen", "6%", "$92", "#7a70ff"]],
+      models: [["GPT-5", "66%", "1.44B · 66%", "#5793ef"], ["GLM-4.5", "18%", "392M · 18%", "#55b878"], ["Kimi K2", "9%", "196M · 9%", "#d9dde4"], ["Qwen3-Coder", "7%", "152M · 7%", "#7a70ff"]],
+      composition: [["输入", "8%", "174M", "#317de8"], ["输出", "2%", "44M", "#f06b45"], ["缓存", "88%", "1.92B", "#9fc4ff"], ["推理", "2%", "42M", "#785be9"]],
+      series: [["ChatGPT", "#5793ef", [8, 21, 35, 48, 59, 70, 83, 96]], ["WorkBuddy", "#55b878", [5, 12, 23, 34, 43, 56, 67, 78]], ["Kimi", "#d9dde4", [2, 7, 13, 22, 30, 38, 47, 58]], ["Qwen", "#7a70ff", [1, 4, 9, 14, 21, 29, 37, 45]]]
+    }
+  }
+};
+const HYBRID_TOKEN_STATE = { tab: "api", range: "今日", agentApp: "ChatGPT", hiddenSeries: new Set() };
+const CLOUD_TOKEN_DETAIL_STATE = { tab: "api" };
+const HYBRID_AGENT_APP_DATA = {
+  ChatGPT: { color: "#5793ef", model: "GPT-5", composition: [6, 1, 92, 1], ranges: { "今日": ["63.2M", 63.2, "$45.58"], "7天": ["365M", 365, "$250.74"], "30天": ["1.48B", 1480, "$1,037"] } },
+  WorkBuddy: { color: "#55b878", model: "GLM-4.5", composition: [7, 2, 89, 2], ranges: { "今日": ["12.3M", 12.3, "$8.62"], "7天": ["82M", 82, "$57.31"], "30天": ["392M", 392, "$275"] } },
+  Kimi: { color: "#d9dde4", model: "Kimi K2", composition: [8, 2, 88, 2], ranges: { "今日": ["7.0M", 7, "$4.31"], "7天": ["39M", 39, "$28.66"], "30天": ["196M", 196, "$122"] } },
+  Qwen: { color: "#7a70ff", model: "Qwen3-Coder", composition: [8, 2, 88, 2], ranges: { "今日": ["5.3M", 5.3, "$3.09"], "7天": ["26M", 26, "$21.49"], "30天": ["112M", 112, "$92"] } },
+};
+
+function formatAgentTokenPart(valueM) {
+  if (valueM >= 1000) return `${(valueM / 1000).toFixed(2).replace(/0+$/, "").replace(/\.$/, "")}B`;
+  if (valueM >= 1) return `${valueM.toFixed(valueM < 10 ? 2 : 1).replace(/0+$/, "").replace(/\.$/, "")}M`;
+  return `${Math.round(valueM * 1000)}K`;
+}
+
+function getHybridTokenData() {
+  const base = HYBRID_TOKEN_DATA[HYBRID_TOKEN_STATE.tab][HYBRID_TOKEN_STATE.range];
+  if (HYBRID_TOKEN_STATE.tab !== "agent") return base;
+  const app = HYBRID_AGENT_APP_DATA[HYBRID_TOKEN_STATE.agentApp];
+  const [total, totalM, cost] = app.ranges[HYBRID_TOKEN_STATE.range];
+  const labels = ["输入", "输出", "缓存", "推理"];
+  const colors = ["#317de8", "#f06b45", "#9fc4ff", "#785be9"];
+  const series = base.series.find(([name]) => name === HYBRID_TOKEN_STATE.agentApp) || base.series[0];
+  return {
+    ...base,
+    period: `${HYBRID_TOKEN_STATE.range === "今日" ? "今日" : `近${HYBRID_TOKEN_STATE.range}`} ${HYBRID_TOKEN_STATE.agentApp} Token`,
+    total,
+    cost,
+    costItems: [[HYBRID_TOKEN_STATE.agentApp, "100%", cost, app.color]],
+    models: [[app.model, "100%", `${total} · 100%`, app.color]],
+    composition: app.composition.map((share, index) => [labels[index], `${share}%`, formatAgentTokenPart(totalM * share / 100), colors[index]]),
+    series: [series],
+  };
+}
+
+function hybridTokenLinePoints(values, maxValue) {
+  return values.map((value, index) => `${(index * 600) / Math.max(values.length - 1, 1)},${142 - (value / maxValue) * 128}`).join(" ");
+}
+
+function renderHybridTokenPanel(panel, data) {
+  if (!panel || !data) return;
+  ["period", "total", "cost", "costPeriod", "trendUnit"].forEach((key) => {
+    const target = panel.querySelector(`[data-token-value="${key}"]`);
+    if (target) target.textContent = data[key];
+  });
+  const comparison = panel.querySelector('[data-token-value="comparison"]');
+  if (comparison) comparison.innerHTML = data.comparison;
+  const renderRows = (items) => items.map(([name, share, value, color]) => `<div class="hybrid-token-list-row"><strong>${name}</strong><i style="--share:${share};--color:${color}"></i><em>${value}</em></div>`).join("");
+  panel.querySelector('[data-token-cost-list]').innerHTML = renderRows(data.costItems);
+  panel.querySelector('[data-token-model-list]').innerHTML = renderRows(data.models);
+  panel.querySelector('[data-token-composition-bar]').innerHTML = data.composition.map(([, share, , color]) => `<i style="--share:${share};--color:${color}"></i>`).join("");
+  panel.querySelector('[data-token-composition-list]').innerHTML = data.composition.map(([name, , value, color]) => `<div class="hybrid-token-composition-row"><i style="--color:${color}"></i><strong>${name}</strong><span>${value}</span></div>`).join("");
+  panel.querySelector('[data-token-axis]').innerHTML = data.axis.map((label) => `<span>${label}</span>`).join("");
+  const visibleSeries = data.series.filter(([name]) => !HYBRID_TOKEN_STATE.hiddenSeries.has(`${HYBRID_TOKEN_STATE.tab}:${name}`));
+  const maxValue = Math.max(1, ...visibleSeries.flatMap(([, , values]) => values));
+  panel.querySelector('[data-token-trend]').innerHTML = visibleSeries.map(([name, color, values]) => `<polyline data-series-name="${name}" style="--series-color:${color}" points="${hybridTokenLinePoints(values, maxValue)}"></polyline>`).join("");
+  panel.querySelector('[data-token-legend]').innerHTML = data.series.map(([name, color]) => HYBRID_TOKEN_STATE.tab === "agent"
+    ? `<button type="button" data-token-series-toggle="${name}" aria-pressed="${!HYBRID_TOKEN_STATE.hiddenSeries.has(`agent:${name}`)}" style="--series-color:${color}">${name}</button>`
+    : `<span style="--series-color:${color}">${name}</span>`).join("");
+}
+
+function updateHybridTokenDashboard() {
+  const data = getHybridTokenData();
+  const panels = [
+    ...$$(`[data-hybrid-token-panel="${HYBRID_TOKEN_STATE.tab}"]`),
+    ...$$('[data-token-preview-panel]'),
+    ...$$('[data-cloud-token-dashboard]'),
+  ];
+  panels.forEach((panel) => renderHybridTokenPanel(panel, data));
+  $$('[data-cloud-token-tab]').forEach((item) => {
+    const active = item.dataset.cloudTokenTab === HYBRID_TOKEN_STATE.tab;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-selected', String(active));
+  });
+  $$('[data-cloud-token-range]').forEach((item) => {
+    const active = item.dataset.cloudTokenRange === HYBRID_TOKEN_STATE.range;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-pressed', String(active));
+  });
+  $$('[data-token-agent-switch]').forEach((switcher) => { switcher.hidden = HYBRID_TOKEN_STATE.tab !== "agent"; });
+  $$('[data-token-agent-app]').forEach((item) => {
+    const active = item.dataset.tokenAgentApp === HYBRID_TOKEN_STATE.agentApp;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-pressed', String(active));
+  });
+}
+
+function updateCloudTokenDetails() {
+  $$('[data-cloud-detail-tab]').forEach((item) => {
+    const active = item.dataset.cloudDetailTab === CLOUD_TOKEN_DETAIL_STATE.tab;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-selected', String(active));
+  });
+  $$('[data-cloud-detail-view]').forEach((panel) => {
+    panel.hidden = panel.dataset.cloudDetailView !== CLOUD_TOKEN_DETAIL_STATE.tab;
+  });
+}
+
+$$('[data-hybrid-token-tab]').forEach((button) => button.addEventListener('click', () => {
+  HYBRID_TOKEN_STATE.tab = button.dataset.hybridTokenTab;
+  $$('[data-hybrid-token-tab]').forEach((item) => {
+    const active = item.dataset.hybridTokenTab === HYBRID_TOKEN_STATE.tab;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-selected', String(active));
+  });
+  $$('[data-hybrid-token-panel]').forEach((panel) => panel.classList.toggle('active', panel.dataset.hybridTokenPanel === HYBRID_TOKEN_STATE.tab));
+  updateHybridTokenDashboard();
+}));
+$$('[data-hybrid-token-range]').forEach((button) => button.addEventListener('click', () => {
+  HYBRID_TOKEN_STATE.range = button.dataset.hybridTokenRange;
+  $$('[data-hybrid-token-range]').forEach((item) => {
+    const active = item.dataset.hybridTokenRange === HYBRID_TOKEN_STATE.range;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-pressed', String(active));
+  });
+  updateHybridTokenDashboard();
+}));
+$('#usage')?.addEventListener('click', (event) => {
+  const cloudTab = event.target.closest('[data-cloud-token-tab]');
+  if (cloudTab) {
+    HYBRID_TOKEN_STATE.tab = cloudTab.dataset.cloudTokenTab;
+    updateHybridTokenDashboard();
+    return;
+  }
+  const cloudRange = event.target.closest('[data-cloud-token-range]');
+  if (cloudRange) {
+    HYBRID_TOKEN_STATE.range = cloudRange.dataset.cloudTokenRange;
+    updateHybridTokenDashboard();
+    return;
+  }
+  const detailTab = event.target.closest('[data-cloud-detail-tab]');
+  if (detailTab) {
+    CLOUD_TOKEN_DETAIL_STATE.tab = detailTab.dataset.cloudDetailTab;
+    updateCloudTokenDetails();
+    return;
+  }
+  const agentApp = event.target.closest('[data-token-agent-app]');
+  if (agentApp) {
+    HYBRID_TOKEN_STATE.agentApp = agentApp.dataset.tokenAgentApp;
+    HYBRID_TOKEN_STATE.hiddenSeries.clear();
+    updateHybridTokenDashboard();
+    return;
+  }
+  const recordTab = event.target.closest('[data-cloud-record-tab]');
+  if (recordTab) {
+    const section = recordTab.closest('[data-cloud-detail-view="agent"]');
+    const view = recordTab.dataset.cloudRecordTab;
+    section?.querySelectorAll('[data-cloud-record-tab]').forEach((item) => {
+      const active = item.dataset.cloudRecordTab === view;
+      item.classList.toggle('active', active);
+      item.setAttribute('aria-selected', String(active));
+    });
+    section?.querySelectorAll('[data-cloud-record-panel]').forEach((panel) => {
+      panel.hidden = panel.dataset.cloudRecordPanel !== view;
+    });
+    return;
+  }
+  const seriesButton = event.target.closest('[data-token-series-toggle]');
+  if (!seriesButton) return;
+  const key = `agent:${seriesButton.dataset.tokenSeriesToggle}`;
+  HYBRID_TOKEN_STATE.hiddenSeries.has(key) ? HYBRID_TOKEN_STATE.hiddenSeries.delete(key) : HYBRID_TOKEN_STATE.hiddenSeries.add(key);
+  updateHybridTokenDashboard();
+});
+$$('[data-token-record-tab]').forEach((button) => button.addEventListener('click', () => {
+  const records = button.closest('.hybrid-token-records');
+  if (!records) return;
+  const view = button.dataset.tokenRecordTab;
+  records.querySelectorAll('[data-token-record-tab]').forEach((item) => {
+    const active = item === button;
+    item.classList.toggle('active', active);
+    item.setAttribute('aria-selected', String(active));
+  });
+  records.querySelectorAll('[data-token-record-panel]').forEach((panel) => {
+    panel.hidden = panel.dataset.tokenRecordPanel !== view;
+  });
+}));
+updateHybridTokenDashboard();
+updateCloudTokenDetails();
 
 const PAGE_TITLES = {
   monitor: "Agent 任务进度",
@@ -11247,7 +11802,7 @@ const FEATURE_CONFIG = {
       { id: "output", title: "产出结果", desc: "产出文件名称、产出状态、结果摘要。", display: "hidden", value: "PRD.md", triggers: ["done"] },
       { id: "log", title: "运行日志", desc: "完整日志不放副屏，只在主屏查看。", display: "hidden", value: "主屏查看", triggers: [] },
       { id: "history", title: "历史记录", desc: "历史任务列表不上副屏。", display: "hidden", value: "主屏查看", triggers: [] },
-      { id: "monitoring", title: "监控状态", desc: "当前监控窗口、连接状态、最后同步时间。", display: "persistent", value: "Claude Code 在线", triggers: [] },
+      { id: "monitoring", title: "监测状态", desc: "当前监测CLI、连接状态、最后同步时间。", display: "persistent", value: "Claude Code CLI 在线", triggers: [] },
     ],
     triggers: [
       { id: "normal", label: "正常运行", title: "", copy: "" },
@@ -11716,9 +12271,9 @@ const APP_STATE = {
       currentStage: "校验状态",
       estimatedRemaining: "约 8 分钟",
       steps: [
-        { state: "done", icon: "✓", title: "分析页面结构", copy: "已确认 Agent 任务、会议助手和详情页的数据结构。", time: "10:44:06" },
-        { state: "done", icon: "✓", title: "重构会议详情", copy: "已补齐会议概览、转写、重点标记和待办字段。", time: "10:49:31" },
-        { state: "active", icon: "●", title: "校验 Agent 任务详情", copy: "正在核对历史记录字段和来源数据边界。", time: "10:58:24" },
+        { state: "done", icon: "✓", kind: "工具调用", title: "分析页面结构", copy: "已确认 Agent 任务、会议助手和详情页的数据结构。", time: "10:44:06" },
+        { state: "done", icon: "✓", kind: "文件修改", title: "重构会议详情", copy: "已补齐会议概览、转写、重点标记和待办字段。", time: "10:49:31" },
+        { state: "active", icon: "●", kind: "命令执行", title: "校验 Agent 任务详情", copy: "正在核对历史记录字段和来源数据边界。", time: "10:58:24" },
       ],
       currentOutput: "正在运行检查脚本，等待最后一轮页面校验。",
       lastLog: "index.html 已写入，准备执行 JavaScript 语法检查。",
@@ -11742,24 +12297,24 @@ const APP_STATE = {
     {
       id: "agent-1",
       task: "修复构建 Bug",
-      source: "Terminal",
-      windowTitle: "zsh - agent pc 原型",
+      source: "Claude Code CLI",
+      windowTitle: "agent pc 原型 - Claude Code CLI",
       project: "agent pc 原型",
       taskContent: "修复构建流程中的状态刷新错误，并重新执行检查。",
-      status: "完成",
+      status: "任务完成",
       sourceStatusText: "Process completed with exit code 0.",
       startTime: "2026-07-24 09:20:14",
       endTime: "2026-07-24 09:38:26",
       duration: "18 分钟",
       lastUpdate: "2026-07-24 09:38:26",
-      monitorStatus: "监控已结束",
+      monitorStatus: "监测已结束",
       progress: null,
       currentStage: "执行完成",
       estimatedRemaining: null,
       steps: [
-        { state: "done", icon: "✓", title: "运行构建检查", copy: "复现页面状态刷新异常。", time: "09:22:08" },
-        { state: "done", icon: "✓", title: "修复刷新逻辑", copy: "修正状态更新和页面重绘顺序。", time: "09:31:42" },
-        { state: "done", icon: "✓", title: "重新执行检查", copy: "检查完成，进程返回 exit code 0。", time: "09:38:26" },
+        { state: "done", icon: "✓", kind: "命令执行", title: "运行构建检查", copy: "复现页面状态刷新异常。", time: "09:22:08" },
+        { state: "done", icon: "✓", kind: "文件修改", title: "修复刷新逻辑", copy: "修正状态更新和页面重绘顺序。", time: "09:31:42" },
+        { state: "done", icon: "✓", kind: "测试", title: "重新执行检查", copy: "检查完成，进程返回 exit code 0。", time: "09:38:26" },
       ],
       currentOutput: "Build completed successfully.",
       lastLog: "运行检查通过，未发现阻塞。",
@@ -11785,24 +12340,24 @@ const APP_STATE = {
     {
       id: "agent-2",
       task: "批量重构组件",
-      source: "Claude Code",
+      source: "Claude Code CLI",
       windowTitle: "components/ButtonGroup.tsx - Claude Code",
       project: "frontend-components",
       taskContent: "统一按钮组件属性并批量替换旧组件调用。",
-      status: "失败",
+      status: "任务失败",
       sourceStatusText: "Type checking failed.",
       startTime: "2026-07-24 11:05:03",
       endTime: "2026-07-24 11:16:19",
       duration: "11 分钟",
       lastUpdate: "2026-07-24 11:16:19",
-      monitorStatus: "监控已结束",
+      monitorStatus: "监测已结束",
       progress: null,
       currentStage: "类型检查",
       estimatedRemaining: null,
       steps: [
-        { state: "done", icon: "✓", title: "扫描组件引用", copy: "已读取 ButtonGroup 相关组件和调用位置。", time: "11:06:11" },
-        { state: "done", icon: "✓", title: "批量修改组件", copy: "已完成组件属性替换。", time: "11:12:47" },
-        { state: "failed", icon: "!", title: "运行类型检查", copy: "ButtonGroup props 类型不一致。", time: "11:16:19" },
+        { state: "done", icon: "✓", kind: "工具调用", title: "扫描组件引用", copy: "已读取 ButtonGroup 相关组件和调用位置。", time: "11:06:11" },
+        { state: "done", icon: "✓", kind: "文件修改", title: "批量修改组件", copy: "已完成组件属性替换。", time: "11:12:47" },
+        { state: "failed", icon: "!", kind: "测试", title: "运行类型检查", copy: "ButtonGroup props 类型不一致。", time: "11:16:19" },
       ],
       currentOutput: "Type checking failed in components/ButtonGroup.tsx.",
       lastLog: "ButtonGroup props 类型不一致。",
@@ -11826,24 +12381,24 @@ const APP_STATE = {
     {
       id: "agent-3",
       task: "整理竞品资料",
-      source: "Codex",
+      source: "Codex CLI",
       windowTitle: "竞品资料整理 - Codex",
       project: "Agent PC 产品研究",
       taskContent: "整理同类产品的功能差异、页面结构和主副屏信息边界。",
-      status: "完成",
+      status: "任务完成",
       sourceStatusText: "Task completed.",
       startTime: "2026-07-23 15:10:08",
       endTime: "2026-07-23 15:34:51",
       duration: "24 分钟",
       lastUpdate: "2026-07-23 15:34:51",
-      monitorStatus: "监控已结束",
+      monitorStatus: "监测已结束",
       progress: null,
       currentStage: "资料整理完成",
       estimatedRemaining: null,
       steps: [
-        { state: "done", icon: "✓", title: "读取竞品资料", copy: "已读取现有竞品页面和会议记录。", time: "15:14:30" },
-        { state: "done", icon: "✓", title: "整理功能差异", copy: "已按功能、字段和交互方式完成分类。", time: "15:25:16" },
-        { state: "done", icon: "✓", title: "输出研究结果", copy: "已保存竞品差异和页面结构文档。", time: "15:34:51" },
+        { state: "done", icon: "✓", kind: "工具调用", title: "读取竞品资料", copy: "已读取现有竞品页面和会议记录。", time: "15:14:30" },
+        { state: "done", icon: "✓", kind: "工具调用", title: "整理功能差异", copy: "已按功能、字段和交互方式完成分类。", time: "15:25:16" },
+        { state: "done", icon: "✓", kind: "文件写入", title: "输出研究结果", copy: "已保存竞品差异和页面结构文档。", time: "15:34:51" },
       ],
       currentOutput: "竞品功能差异和页面结构已整理完成。",
       lastLog: "产出文档已保存到当前项目目录。",
@@ -12419,11 +12974,14 @@ function renderDetailView() {
   const currentCrumb = $("#detail-current-crumb");
   const main = $("#detail-main");
   const side = $("#detail-side");
+  const detailPanel = $("#detail-view .main-panel");
   if (!title || !subtitle || !main) return;
   if (side) side.innerHTML = "";
+  if (detailPanel) detailPanel.classList.toggle("agent-detail-page-shell", detail.variant === "agent-task");
   if (currentCrumb) currentCrumb.textContent = PAGE_TITLES[detail.fromPage] || "功能页";
   title.textContent = detail.title || "详情页";
-  subtitle.textContent = detail.subtitle || "完整详情会在这里展示。";
+  subtitle.textContent = detail.subtitle || "";
+  subtitle.hidden = !detail.subtitle;
   if (detail.variant === "agent-task" && detail.agentDetail) {
     renderAgentTaskDetail(detail, main);
     return;
@@ -12478,9 +13036,16 @@ function renderAgentTaskDetail(detail, main) {
   const outputFiles = Array.isArray(data.outputFiles) ? data.outputFiles : [];
   const logEntries = Array.isArray(data.logEntries) ? data.logEntries : [];
   const sourceActions = Array.isArray(data.sourceActions) ? data.sourceActions : [];
-  const hasProgress = data.progress !== null && data.progress !== undefined && data.progress !== "" && Number.isFinite(Number(data.progress));
   const hasAgentDetailValue = (value) => value !== null && value !== undefined && value !== "" && !["暂不可用", "进行中", "等待 CLI 事件", "等待 CLI 上报任务"].includes(String(value));
-  const progressValue = hasProgress ? Math.max(0, Math.min(100, Number(data.progress))) : null;
+  const isCompletedTask = ["任务完成", "已完成"].includes(data.status);
+  const isFailedTask = ["任务失败", "失败"].includes(data.status);
+  const isFinalTask = isCompletedTask || isFailedTask || data.status === "已取消";
+  const hasPendingContent = hasAgentDetailValue(data.pendingContent) && !["无待处理内容", "无待处理内容。", "任务已异常结束", "任务已异常结束。"].includes(String(data.pendingContent));
+  const renderedLogEntries = logEntries.length
+    ? logEntries
+    : hasAgentDetailValue(data.lastLog)
+      ? [{ time: data.lastUpdate || "时间暂不可用", copy: data.lastLog }]
+      : [];
   const actionButtons = detail.actions.length ? `
     <div class="agent-detail-actions">
       ${detail.actions.map((action) => `
@@ -12505,129 +13070,118 @@ function renderAgentTaskDetail(detail, main) {
     `;
     return;
   }
-  const progressContent = "";
   const stepContent = steps.length ? `
     <div class="agent-detail-steps">
       ${steps.map((step) => `
         <div class="agent-detail-step ${escapeHtml(step.state || "waiting")}">
           <i>${escapeHtml(step.icon || (step.state === "done" ? "✓" : step.state === "failed" ? "!" : "●"))}</i>
-          <div class="agent-detail-step-copy"><strong>${escapeHtml(step.title || "步骤暂不可用")}</strong><span>${escapeHtml(step.copy || "来源未提供步骤说明")}</span></div>
+          <div class="agent-detail-step-copy">
+            <div class="agent-detail-event-heading">
+              <span class="agent-detail-event-kind">${escapeHtml(step.kind || "CLI事件")}</span>
+              <strong>${escapeHtml(step.title || "事件记录")}</strong>
+            </div>
+            ${hasAgentDetailValue(step.copy) ? `<span>${escapeHtml(step.copy)}</span>` : ""}
+          </div>
           <span>${escapeHtml(step.time || "时间暂不可用")}</span>
         </div>
       `).join("")}
     </div>
-  ` : `<div class="agent-detail-empty">来源 Agent 未提供步骤，本页不补造通用执行步骤。</div>`;
+  ` : `<div class="agent-detail-empty">来源CLI未提供步骤，本页不补造通用执行步骤。</div>`;
   const outputFileContent = outputFiles.length
     ? `<div class="agent-detail-file-list">${outputFiles.map((file) => {
         const fileData = file && typeof file === "object" ? file : { name: String(file || "未命名文件"), path: "路径暂不可用", status: "状态暂不可用" };
-        return `<div class="agent-detail-file-item"><strong>${escapeHtml(fileData.name || "未命名文件")}</strong><span>${escapeHtml(fileData.status || "状态暂不可用")}</span><small>${escapeHtml(fileData.path || "路径暂不可用")}</small></div>`;
+        return `<div class="agent-detail-file-item"><strong>${escapeHtml(fileData.name || "未命名文件")}</strong><small>${escapeHtml(fileData.path || "路径暂不可用")}</small></div>`;
       }).join("")}</div>`
-    : `<p>来源 Agent 未提供产出文件。</p>`;
-  const logContent = logEntries.length
-    ? `<div class="agent-detail-log-list">${logEntries.map((entry) => `<div class="agent-detail-log-row"><time>${escapeHtml(entry.time || "时间暂不可用")}</time><code>${escapeHtml(entry.copy || "日志内容暂不可用")}</code></div>`).join("")}</div>`
-    : `<div class="agent-detail-empty">来源 Agent 未提供完整日志记录。</div>`;
+    : `<p>来源CLI未提供产出文件。</p>`;
+  const logContent = renderedLogEntries.length
+    ? `<div class="agent-detail-log-list">${renderedLogEntries.map((entry) => `<div class="agent-detail-log-row"><time>${escapeHtml(entry.time || "时间暂不可用")}</time><code>${escapeHtml(entry.copy || "日志内容暂不可用")}</code></div>`).join("")}</div>`
+    : `<div class="agent-detail-empty">来源CLI未提供完整日志记录。</div>`;
   let resultContent = "";
-  if (data.status === "失败") {
+  if (isFailedTask) {
+    const failedEvent = hasAgentDetailValue(data.failedStep)
+      ? `<div class="agent-detail-result-card"><span>失败事件</span><p>${escapeHtml(data.failedStep)}</p></div>`
+      : "";
+    const originalError = hasAgentDetailValue(data.originalError) || hasAgentDetailValue(data.currentOutput)
+      ? `<div class="agent-detail-result-card error wide"><span>CLI原始错误</span><p>${escapeHtml(data.originalError || data.currentOutput)}</p></div>`
+      : "";
     resultContent = `
       <div class="agent-detail-result-content">
-        <div class="agent-detail-result-card"><span>失败步骤</span><p>${escapeHtml(data.failedStep || "暂不可用")}</p></div>
-        <div class="agent-detail-result-card"><span>失败时间</span><p>${escapeHtml(data.failureTime || data.endTime || "暂不可用")}</p></div>
-        <div class="agent-detail-result-card error wide"><span>来源 Agent 原始错误</span><p>${escapeHtml(data.originalError || "来源未提供原始错误")}</p></div>
+        ${failedEvent}
+        ${originalError || `<div class="agent-detail-empty">该CLI未上报可展示的失败原因。</div>`}
       </div>
     `;
-  } else if (data.status === "完成") {
-    resultContent = `
+  } else if (isCompletedTask) {
+    resultContent = outputFiles.length ? `
       <div class="agent-detail-result-content">
-        <div class="agent-detail-result-card wide"><span>来源结果</span><p>${escapeHtml(data.resultSummary || "来源未提供结果摘要")}</p></div>
-        <div class="agent-detail-result-card"><span>完成时间</span><p>${escapeHtml(data.endTime || "暂不可用")}</p></div>
-        <div class="agent-detail-result-card"><span>产出文件</span>${outputFileContent}</div>
+        <div class="agent-detail-file-field"><span>产出文件</span>${outputFileContent}</div>
       </div>
-    `;
+    ` : "";
   } else if (data.status === "待确认") {
-    const canOperateSource = data.isActiveRecord && data.monitorStatus !== "已停止监控" && data.actionStatus === "等待用户操作";
+    const canOperateSource = data.isActiveRecord && data.monitorStatus !== "已停止监测" && data.actionStatus === "等待用户操作";
     const sourceActionButtons = sourceActions.length && canOperateSource
       ? `<div class="agent-detail-source-actions">${sourceActions.map((action) => `<button class="${action.primary ? "primary-button" : "soft-button"}" data-agent-alert-action="${escapeHtml(action.action)}" data-agent-record-id="${escapeHtml(data.id)}">${escapeHtml(action.label)}</button>`).join("")}</div>`
       : data.actionStatus && data.actionStatus !== "等待用户操作"
         ? `<p>操作状态：${escapeHtml(data.actionStatus)}</p>`
         : sourceActions.length
-          ? `<p>来源操作已失效，请回原 Agent 查看最新状态。</p>`
-          : `<p>来源 Agent 未提供可映射的操作按钮。</p>`;
+          ? `<p>来源操作已失效，请回到对应CLI查看最新状态。</p>`
+          : `<p>来源CLI未提供可映射的操作按钮。</p>`;
     resultContent = `
       <div class="agent-detail-result-content">
-        <div class="agent-detail-result-card wide"><span>来源 Agent 原始请求</span><p>${escapeHtml(data.requestContent || data.pendingContent || "暂不可用")}</p>${sourceActionButtons}</div>
+        <div class="agent-detail-result-card wide"><span>CLI原始请求</span><p>${escapeHtml(data.requestContent || data.pendingContent || "暂不可用")}</p>${sourceActionButtons}</div>
         <div class="agent-detail-result-card"><span>操作状态</span><p>${escapeHtml(data.actionStatus || "等待用户操作")}</p></div>
-        <div class="agent-detail-result-card"><span>最后更新时间</span><p>${escapeHtml(data.lastUpdate || "暂不可用")}</p></div>
       </div>
     `;
   } else if (data.status === "已取消") {
     resultContent = `
       <div class="agent-detail-result-content">
-        <div class="agent-detail-result-card wide"><span>来源最终状态</span><p>${escapeHtml(data.sourceStatusText || data.pendingContent || "任务已取消")}</p></div>
-        <div class="agent-detail-result-card"><span>结束时间</span><p>${escapeHtml(data.endTime || data.lastUpdate || "暂不可用")}</p></div>
+        <div class="agent-detail-result-card wide"><span>CLI最终状态</span><p>${escapeHtml(data.sourceStatusText || data.pendingContent || "任务已取消")}</p></div>
         <div class="agent-detail-result-card"><span>操作状态</span><p>${escapeHtml(data.actionStatus || "已取消")}</p></div>
       </div>
     `;
-  } else if (data.monitorStatus === "已停止监控") {
-    resultContent = `<div class="agent-detail-empty">监控已停止，本页保留停止前最后一次成功读取结果；不会把来源任务标记为完成或失败。</div>`;
+  } else if (data.monitorStatus === "已停止监测") {
+    resultContent = `<div class="agent-detail-empty">监测已停止，本页保留停止前最后一次成功读取结果；不会把来源任务标记为完成或失败。</div>`;
   } else {
     resultContent = `<div class="agent-detail-empty">来源任务仍在执行，暂未产生完成或失败结果。</div>`;
   }
-  const agentDetailMetaItems = [
-    hasAgentDetailValue(data.windowTitle) && data.windowTitle !== data.source ? `<div><span>来源窗口</span><strong>${escapeHtml(data.windowTitle)}</strong></div>` : "",
-    hasAgentDetailValue(data.project) ? `<div><span>项目名称</span><strong>${escapeHtml(data.project)}</strong></div>` : "",
-    hasAgentDetailValue(data.startTime) ? `<div><span>开始时间</span><strong>${escapeHtml(data.startTime)}</strong></div>` : "",
-    hasAgentDetailValue(data.endTime) ? `<div><span>${data.status === "失败" ? "失败时间" : data.status === "完成" ? "完成时间" : "结束时间"}</span><strong>${escapeHtml(data.endTime)}</strong></div>` : "",
-    hasAgentDetailValue(data.duration) ? `<div><span>耗时</span><strong>${escapeHtml(data.duration)}</strong></div>` : "",
-    hasAgentDetailValue(data.lastUpdate) ? `<div><span>最后更新</span><strong>${escapeHtml(data.lastUpdate)}</strong></div>` : "",
+  const hasStartTime = hasAgentDetailValue(data.startTime);
+  const hasEndTime = hasAgentDetailValue(data.endTime);
+  const endTimeLabel = isFailedTask ? "失败时间" : isCompletedTask ? "完成时间" : "结束时间";
+  const overviewFields = [
+    `<div class="agent-detail-overview-field"><span>任务</span><strong>${hasAgentDetailValue(data.task) ? escapeHtml(data.task) : "Agent任务详情"}</strong></div>`,
+    hasAgentDetailValue(data.source) ? `<div class="agent-detail-overview-field"><span>来源CLI</span><strong>${escapeHtml(data.source)}</strong></div>` : "",
+    hasAgentDetailValue(data.project) ? `<div class="agent-detail-overview-field"><span>工作目录</span><strong>${escapeHtml(data.project)}</strong></div>` : "",
+    hasAgentDetailValue(data.status) ? `<div class="agent-detail-overview-field"><span>任务状态</span><strong><span class="tag ${tagClassForStatus(data.status)}">${escapeHtml(data.status)}</span></strong></div>` : "",
+    hasStartTime ? `<div class="agent-detail-overview-field"><span>开始时间</span><strong>${escapeHtml(data.startTime)}</strong></div>` : "",
+    hasEndTime ? `<div class="agent-detail-overview-field"><span>${endTimeLabel}</span><strong>${escapeHtml(data.endTime)}</strong></div>` : "",
+    hasAgentDetailValue(data.duration) ? `<div class="agent-detail-overview-field"><span>耗时</span><strong>${escapeHtml(data.duration)}</strong></div>` : "",
+    !isFinalTask && hasAgentDetailValue(data.lastUpdate) ? `<div class="agent-detail-overview-field"><span>最后更新</span><strong>${escapeHtml(data.lastUpdate)}</strong></div>` : "",
+    hasAgentDetailValue(data.taskContent) ? `<div class="agent-detail-overview-field agent-detail-overview-field-wide"><span>本轮指令</span><p>${escapeHtml(data.taskContent)}</p></div>` : "",
+    !isFinalTask && hasAgentDetailValue(data.sourceStatusText) ? `<div class="agent-detail-overview-field agent-detail-overview-field-wide"><span>CLI当前状态</span><p>${escapeHtml(data.sourceStatusText)}</p></div>` : "",
   ].filter(Boolean).join("");
-  const sourceStatusItems = [
-    hasAgentDetailValue(data.status) ? `<div><span>任务状态</span><strong>${escapeHtml(data.status)}</strong></div>` : "",
-    hasAgentDetailValue(data.currentStage) ? `<div><span>当前动作</span><strong>${escapeHtml(data.currentStage)}</strong></div>` : "",
-    hasAgentDetailValue(data.lastUpdate) ? `<div><span>最后读取</span><strong>${escapeHtml(data.lastUpdate)}</strong></div>` : "",
-  ].filter(Boolean).join("");
-  const hasExecutionDetails = steps.length > 0 || hasAgentDetailValue(data.currentOutput) || hasAgentDetailValue(data.lastLog) || logEntries.length > 0 || hasAgentDetailValue(data.pendingContent);
-  const sourceSummary = [data.source, data.windowTitle !== data.source ? data.windowTitle : ""].filter(hasAgentDetailValue).map(escapeHtml).join(" · ");
+  const hasExecutionDetails = steps.length > 0 || hasAgentDetailValue(data.currentOutput) || renderedLogEntries.length > 0 || hasPendingContent;
   const executionContent = hasExecutionDetails ? `
-    <section class="agent-detail-card">
-      <div class="agent-detail-head"><div><h4>执行过程</h4><p>只展示CLI真实上报的步骤、输出和日志</p></div>${steps.length ? `<strong>${steps.length} 步</strong>` : ""}</div>
+    <div class="agent-detail-panel agent-detail-execution">
+      <div class="agent-detail-head"><div><h4>执行过程</h4></div></div>
       ${steps.length ? stepContent : ""}
       <div class="agent-detail-output-grid">
-        ${hasAgentDetailValue(data.currentOutput) ? `<div class="agent-detail-output-card wide"><span>${data.status === "完成" ? "最后输出原文" : "当前输出原文"}</span><p>${escapeHtml(data.currentOutput)}</p></div>` : ""}
-        ${hasAgentDetailValue(data.lastLog) ? `<div class="agent-detail-output-card"><span>最后日志</span><p>${escapeHtml(data.lastLog)}</p></div>` : ""}
-        ${hasAgentDetailValue(data.pendingContent) ? `<div class="agent-detail-output-card"><span>待处理信息</span><p>${escapeHtml(data.pendingContent)}</p></div>` : ""}
-        ${logEntries.length ? `<div class="agent-detail-output-card wide"><span>原始日志记录</span>${logContent}</div>` : ""}
+        ${!isFinalTask && hasAgentDetailValue(data.currentOutput) ? `<div class="agent-detail-output-card wide"><span>当前输出原文</span><p>${escapeHtml(data.currentOutput)}</p></div>` : ""}
+        ${hasPendingContent ? `<div class="agent-detail-output-card"><span>待处理信息</span><p>${escapeHtml(data.pendingContent)}</p></div>` : ""}
+        ${renderedLogEntries.length ? `<details class="agent-detail-log-details"><summary>查看原始日志（${renderedLogEntries.length}条）</summary>${logContent}</details>` : ""}
       </div>
-    </section>
+    </div>
   ` : "";
   main.innerHTML = `
     <div class="agent-task-detail">
-      <section class="agent-detail-card agent-detail-overview">
-        <div class="agent-detail-titleline">
-          <div class="agent-detail-title-copy">
-            <strong>${hasAgentDetailValue(data.task) ? escapeHtml(data.task) : "Agent任务详情"}</strong>
-            ${sourceSummary ? `<p>${sourceSummary}</p>` : ""}
-          </div>
-          <span class="tag ${tagClassForStatus(data.status || "暂不可用")}">${escapeHtml(data.status || "暂不可用")}</span>
+      <section class="agent-detail-card agent-detail-shell">
+        <div class="agent-detail-panel agent-detail-overview">
+          <div class="agent-detail-head"><div><h4>任务概览</h4></div></div>
+          ${overviewFields ? `<div class="agent-detail-overview-inline">${overviewFields}</div>` : ""}
         </div>
-        <div class="agent-detail-meta">
-          ${agentDetailMetaItems}
-        </div>
-        ${hasAgentDetailValue(data.taskContent) ? `<div class="agent-detail-task-copy"><span>本轮指令</span><p>${escapeHtml(data.taskContent)}</p></div>` : ""}
-      </section>
-      <section class="agent-detail-card">
-        <div class="agent-detail-head">
-          <div><span class="agent-detail-section-label">Source status</span><h4>来源状态</h4><p>状态和文案按该条任务记录的快照展示</p></div>
-        </div>
-        ${hasAgentDetailValue(data.sourceStatusText) ? `<div class="agent-detail-source-copy"><span>来源状态</span><p>${escapeHtml(data.sourceStatusText)}</p></div>` : ""}
-        <div class="agent-detail-stage-grid">
-          ${sourceStatusItems}
-        </div>
-        ${progressContent}
-      </section>
-      ${executionContent}
-      <section class="agent-detail-card">
-        <div class="agent-detail-head"><div><span class="agent-detail-section-label">Result</span><h4>结果与处理</h4><p>完成展示来源结果，失败仅展示来源步骤和原始错误</p></div></div>
-        ${resultContent}
+        ${executionContent}
+        ${resultContent ? `<div class="agent-detail-panel agent-detail-result">
+          <div class="agent-detail-head"><div><h4>任务结果</h4></div></div>
+          ${resultContent}
+        </div>` : ""}
       </section>
       ${actionButtons}
     </div>
@@ -13514,7 +14068,7 @@ function confirmAgentWindowSelection() {
     APP_STATE.agentRecords.splice(1, 0, {
       ...liveRecord,
       id: `agent-${Date.now()}-snapshot`,
-      monitorStatus: "已停止监控",
+      monitorStatus: "已停止监测",
       estimatedRemaining: null,
       actionStatus: liveRecord.status === "待确认" ? "操作已失效" : liveRecord.actionStatus,
       sourceActions: [],
@@ -13551,7 +14105,13 @@ function confirmAgentWindowSelection() {
       progress: Number.isFinite(Number(selected.progress)) ? Number(selected.progress) : null,
       currentStage: selected.currentStep || "暂不可用",
       estimatedRemaining: selected.eta ? selected.eta.replace(/^预计剩余\s*/, "") : null,
-      steps: Array.isArray(selected.sourceSteps) ? selected.sourceSteps.map((step) => ({ ...step })) : [],
+      steps: Array.isArray(selected.sourceSteps)
+        ? selected.sourceSteps.map((step) => ({
+            ...step,
+            kind: step.kind || "CLI事件",
+            copy: step.copy || step.desc || "",
+          }))
+        : [],
       currentOutput: selected.currentOutput,
       lastLog: selected.lastLog,
       pendingContent: selected.pending,
@@ -13573,41 +14133,117 @@ function confirmAgentWindowSelection() {
 }
 
 const CLI_MONITOR_SETUP={
-  "claude-code-cli":{enabled:false,session:"未连接",lastUpdate:"--:--:--"},
-  "codex-cli":{enabled:false,session:"未连接",lastUpdate:"--:--:--"}
+  "claude-code-cli":{enabled:false,status:"idle",session:"未连接",lastUpdate:"--:--:--"},
+  "codex-cli":{enabled:false,status:"idle",session:"未连接",lastUpdate:"--:--:--"}
 };
-let CLI_SETUP_CONTEXT={cliId:"claude-code-cli",stage:"idle"};
+let CLI_SWITCHING_TO="";
+let CLI_SETUP_CONTEXT={cliId:"claude-code-cli",stage:"idle",intent:""};
+const CLI_SETUP_DEMO_RESULT=new URLSearchParams(window.location.search).get("cliSetupResult")==="failure"?"failure":"success";
+function getActiveCliId(){return Object.keys(CLI_MONITOR_SETUP).find(id=>CLI_MONITOR_SETUP[id].enabled)||"";}
 function getCliSetupItem(){return APP_STATE.agentWindows.find(item=>item.id===CLI_SETUP_CONTEXT.cliId)||APP_STATE.agentWindows[0];}
-function openCliSetup(cliId,stage="checking"){
-  CLI_SETUP_CONTEXT={cliId,stage};const item=getCliSetupItem(),layer=$("#cli-monitor-dialog-layer"),title=$("#cli-monitor-dialog-title"),content=$("#cli-monitor-dialog-content"),actions=$("#cli-monitor-dialog-actions");
-  layer.classList.add("show");layer.setAttribute("aria-hidden","false");title.textContent=stage==="permission"?`启用${item.name}监测`:stage==="configuring"?"正在配置任务监测……":stage==="success"?"监测启用成功":stage==="failure"?"监测启用失败":`检查${item.name}`;
+function setActiveCli(cliId){
+  Object.keys(CLI_MONITOR_SETUP).forEach(id=>{CLI_MONITOR_SETUP[id]={...CLI_MONITOR_SETUP[id],enabled:id===cliId,status:id===cliId?"active":"idle",session:id===cliId?"等待CLI会话":"未连接",lastUpdate:"--:--:--"};});
+  if(cliId) APP_STATE.selectedAgentWindow=cliId;
+}
+function openCliSetup(cliId,stage="checking",intent=CLI_SETUP_CONTEXT.intent||""){
+  CLI_SETUP_CONTEXT={cliId,stage,intent};const item=getCliSetupItem(),layer=$("#cli-monitor-dialog-layer"),title=$("#cli-monitor-dialog-title"),content=$("#cli-monitor-dialog-content"),actions=$("#cli-monitor-dialog-actions");
+  const activeId=getActiveCliId();const activeItem=APP_STATE.agentWindows.find(candidate=>candidate.id===activeId);
+  layer.classList.add("show");layer.setAttribute("aria-hidden","false");
+  if(stage==="switch-confirm"){
+    title.textContent=`切换至${item.name}？`;
+    content.innerHTML=`<p>切换后，Agent PC将停止监测${escapeHtml(activeItem?.name||"当前CLI")}，转为监测${escapeHtml(item.name)}。${escapeHtml(activeItem?.name||"原CLI")}中正在运行的任务不会被终止，但其后续任务事件将不再展示。</p>`;
+    actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="confirm-switch">确认切换</button>`;return;
+  }
+  if(stage==="switch-success"){
+    setActiveCli(cliId);CLI_SWITCHING_TO="";renderAgentPage();title.textContent="监测来源切换成功";
+    content.innerHTML=`<div class="dialog-status"><strong>已切换至${escapeHtml(item.name)}</strong><p>原CLI中正在运行的任务未被终止。</p></div>`;actions.innerHTML=`<button class="primary-button" data-cli-dialog="cancel">完成</button>`;return;
+  }
+  if(stage==="switch-failure"){
+    CLI_SWITCHING_TO="";renderAgentPage();title.textContent="监测来源切换失败";
+    content.innerHTML=`<div class="dialog-status"><strong>切换失败，仍在监测${escapeHtml(activeItem?.name||"原CLI")}</strong><p>未能完成${escapeHtml(item.name)}的状态检测或任务事件接入，当前监测来源未改变。</p></div>`;
+    actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="retry-switch">重新检测</button>`;return;
+  }
+  if(stage==="stop-confirm"){
+    title.textContent=`停止监测${item.name}？`;
+    content.innerHTML=`<p>停止后，Agent PC将不再展示该CLI的后续任务事件。CLI中正在运行的任务不会被终止，你可以稍后重新开始监测。</p>`;
+    actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="soft-button api-delete-button" data-cli-dialog="confirm-stop">停止监测</button>`;return;
+  }
+  if(stage==="status-checking"){
+    title.textContent=`检测${item.name}状态`;content.innerHTML=`<div class="dialog-status"><strong>正在检测状态……</strong><p>正在检查CLI安装、登录及监测链路。</p></div>`;actions.innerHTML="";
+    setTimeout(()=>openCliSetup(cliId,"status-ok","recheck"),650);return;
+  }
+  if(stage==="status-ok"){
+    title.textContent="状态检测完成";content.innerHTML=`<div class="dialog-status"><strong>${escapeHtml(item.name)}监测状态正常</strong><p>当前已选择该CLI作为监测来源，正在等待CLI会话。</p></div>`;actions.innerHTML=`<button class="primary-button" data-cli-dialog="cancel">完成</button>`;return;
+  }
+  title.textContent=stage==="permission"?(intent==="switch"?`切换监测至${item.name}`:`开始监测${item.name}`):stage==="configuring"?"正在配置任务监测……":stage==="success"?"监测已开始":stage==="failure"?"监测启动失败":`检查${item.name}`;
   if(stage==="checking"){
+    if(intent==="switch"){CLI_SWITCHING_TO=cliId;renderAgentPage();}
     content.innerHTML=`<div class="dialog-status"><strong>正在检查${escapeHtml(item.name)}……</strong><p>正在检查本机命令和可用安装路径。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button>`;
-    setTimeout(()=>openCliSetup(cliId,cliId==="claude-code-cli"?"found":"not-found"),650);return;
+    setTimeout(()=>openCliSetup(cliId,"found",intent),650);return;
   }
   if(stage==="found"){
     const path=cliId==="claude-code-cli"?"C:\\Users\\Demo\\AppData\\Roaming\\npm\\claude.cmd":"C:\\Users\\Demo\\AppData\\Roaming\\npm\\codex.cmd";
-    content.innerHTML=`<div class="dialog-status"><strong>已找到${escapeHtml(item.name)}</strong><p>安装路径：<span class="cli-path">${escapeHtml(path)}</span></p><p>可以继续启用任务监测。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="permission">下一步</button>`;return;
+    content.innerHTML=`<div class="dialog-status"><strong>已找到${escapeHtml(item.name)}</strong><p>安装路径：<span class="cli-path">${escapeHtml(path)}</span></p><p>${intent==="switch"?"可以继续切换监测来源。":"可以继续开始任务监测。"}</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="permission">下一步</button>`;return;
   }
   if(stage==="not-found"){
     content.innerHTML=`<div class="dialog-status"><strong>未找到${escapeHtml(item.name)}</strong><p>请先自行安装并登录，然后重新检查。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="official">查看官方安装说明</button><button class="soft-button" data-cli-dialog="manual">手动选择路径</button><button class="primary-button" data-cli-dialog="retry">重新检查</button>`;return;
   }
   if(stage==="permission"){
-    content.innerHTML=`<p>Agent PC将配置CLI任务事件接入，并获取以下真实数据：</p><ul><li>本轮指令</li><li>任务状态和当前动作</li><li>工具调用、命令执行、文件修改和测试步骤</li><li>审批请求</li><li>失败原因和完成结果</li></ul><div class="cli-permission-box"><strong>数据边界</strong><p>不接管终端、不代替用户执行命令、不读取其他应用，未上报的数据不会推测生成。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="configure">同意并启用</button>`;return;
+    content.innerHTML=`<p>Agent PC将配置CLI任务事件接入，并获取以下真实数据：</p><ul><li>本轮指令</li><li>任务状态和当前动作</li><li>工具调用、命令执行、文件修改和测试步骤</li><li>审批请求</li><li>失败原因和完成结果</li></ul><div class="cli-permission-box"><strong>数据边界</strong><p>不接管终端、不代替用户执行命令、不读取其他应用，未上报的数据不会推测生成。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="configure">${intent==="switch"?"同意并切换监测":"同意并开始监测"}</button>`;return;
   }
   if(stage==="configuring"){
-    content.innerHTML=`<div class="dialog-status"><strong>正在配置任务监测……</strong><p>正在写入${escapeHtml(item.name)}事件接入配置。</p></div>`;actions.innerHTML="";setTimeout(()=>openCliSetup(cliId,cliId==="claude-code-cli"?"success":"failure"),700);return;
+    content.innerHTML=`<div class="dialog-status"><strong>正在配置任务监测……</strong><p>正在写入${escapeHtml(item.name)}事件接入配置。${intent==="switch"?"配置完成前，当前监测来源保持不变。":""}</p></div>`;actions.innerHTML="";
+    setTimeout(()=>openCliSetup(cliId,intent==="switch"?(CLI_SETUP_DEMO_RESULT==="failure"?"switch-failure":"switch-success"):CLI_SETUP_DEMO_RESULT,intent),700);return;
   }
   if(stage==="success"){
-    CLI_MONITOR_SETUP[cliId]={enabled:true,session:"等待CLI会话",lastUpdate:"--:--:--"};renderAgentPage();content.innerHTML=`<div class="dialog-status"><strong>${escapeHtml(item.name)}监测已启用</strong><p>请打开终端并启动新的${escapeHtml(item.name)}会话。任务开始后，副屏将自动展示状态和步骤。</p></div>`;actions.innerHTML=`<button class="primary-button" data-cli-dialog="cancel">完成</button>`;
+    setActiveCli(cliId);renderAgentPage();content.innerHTML=`<div class="dialog-status"><strong>监测已开始</strong><p>已完成${escapeHtml(item.name)}的状态检测和任务事件接入。该CLI已设为当前监测来源，正在等待任务事件。</p></div>`;actions.innerHTML=`<button class="primary-button" data-cli-dialog="cancel">完成</button>`;
   }
   if(stage==="failure"){
-    title.textContent="监测启用失败";content.innerHTML=`<div class="dialog-status"><strong>监测启用失败</strong><p>无法写入CLI事件配置：当前用户没有配置文件写入权限。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="soft-button" data-cli-dialog="manual-guide">查看手动配置</button><button class="primary-button" data-cli-dialog="configure">重新启用</button>`;
+    title.textContent="监测启动失败";content.innerHTML=`<div class="dialog-status"><strong>监测启动失败</strong><p>未能完成${escapeHtml(item.name)}的任务事件接入，尚未开始监测。</p></div>`;actions.innerHTML=`<button class="soft-button" data-cli-dialog="cancel">取消</button><button class="primary-button" data-cli-dialog="retry-detection">重新检测</button>`;
+    return;
   }
 }
-function closeCliSetup(){const layer=$("#cli-monitor-dialog-layer");layer.classList.remove("show");layer.setAttribute("aria-hidden","true");}
-function handleCliCardAction(action,cliId){if(action==="enable"||action==="recheck")openCliSetup(cliId,"checking");if(action==="disable"){CLI_MONITOR_SETUP[cliId]={enabled:false,session:"未连接",lastUpdate:"--:--:--"};renderAgentPage();}if(action==="preview"){APP_STATE.selectedAgentWindow=cliId;window.scrollTo({top:0,behavior:"smooth"});}}
-function handleCliDialogAction(action){const item=getCliSetupItem();if(action==="cancel")closeCliSetup();if(action==="permission")openCliSetup(item.id,"permission");if(action==="configure")openCliSetup(item.id,"configuring");if(action==="retry")openCliSetup(item.id,"checking");if(action==="manual")openCliSetup(item.id,"found");if(action==="manual-guide")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/settings":"https://developers.openai.com/codex/config-reference/","_blank");if(action==="official")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/setup":"https://developers.openai.com/codex/cli/","_blank");}
+function closeCliSetup(){const layer=$("#cli-monitor-dialog-layer");if(CLI_SETUP_CONTEXT.intent==="switch"&&CLI_SWITCHING_TO){CLI_SWITCHING_TO="";renderAgentPage();}layer.classList.remove("show");layer.setAttribute("aria-hidden","true");}
+let cliReconnectTimer=null;
+function reconnectCliMonitor(cliId){
+  const setup=CLI_MONITOR_SETUP[cliId];if(!setup)return;
+  if(cliReconnectTimer)window.clearTimeout(cliReconnectTimer);
+  APP_STATE.agentSecondaryAlert={open:false,type:""};
+  setup.status="reconnecting";setup.session="正在重新连接";
+  APP_STATE.agentMonitor.syncStatus="正在重新连接";
+  renderApp();
+  cliReconnectTimer=window.setTimeout(()=>{
+    setup.status="active";setup.session="等待CLI会话";setup.lastUpdate=`${nowText()}:00`;
+    APP_STATE.agentMonitor.status="online";APP_STATE.agentMonitor.syncStatus="等待 CLI 事件";APP_STATE.agentMonitor.lastUpdate=setup.lastUpdate;
+    if(APP_STATE.agentMonitor.previewState==="connection-lost")APP_STATE.agentMonitor.previewState="waiting";
+    cliReconnectTimer=null;renderApp();showLightToast("监测连接已恢复",'[data-subscreen-preview="monitor"]');
+  },700);
+}
+function handleCliCardAction(action,cliId){
+  const activeId=getActiveCliId();
+  if(action==="start")openCliSetup(cliId,"checking","start");
+  if(action==="switch")openCliSetup(cliId,"switch-confirm","switch");
+  if(action==="recheck")openCliSetup(cliId,"status-checking","recheck");
+  if(action==="stop"&&activeId===cliId)openCliSetup(cliId,"stop-confirm","stop");
+  if(action==="reconnect"&&activeId===cliId)reconnectCliMonitor(cliId);
+  if(action==="preview"){APP_STATE.selectedAgentWindow=cliId;window.scrollTo({top:0,behavior:"smooth"});}
+}
+function handleCliDialogAction(action){
+  const item=getCliSetupItem();
+  if(action==="cancel")closeCliSetup();
+  if(action==="permission")openCliSetup(item.id,"permission",CLI_SETUP_CONTEXT.intent);
+  if(action==="configure")openCliSetup(item.id,"configuring",CLI_SETUP_CONTEXT.intent);
+  if(action==="confirm-switch")openCliSetup(item.id,"checking","switch");
+  if(action==="retry-switch")openCliSetup(item.id,"checking","switch");
+  if(action==="confirm-stop"){
+    setActiveCli("");closeAgentSecondaryAlert();renderAgentPage();closeCliSetup();showLightToast(`已停止监测${item.name}，CLI中正在运行的任务不受影响。`);
+  }
+  if(action==="retry")openCliSetup(item.id,"checking","start");
+  if(action==="retry-detection")openCliSetup(item.id,"checking",CLI_SETUP_CONTEXT.intent||"start");
+  if(action==="manual")openCliSetup(item.id,"found",CLI_SETUP_CONTEXT.intent||"start");
+  if(action==="manual-guide")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/settings":"https://developers.openai.com/codex/config-reference/","_blank");
+  if(action==="official")window.open(item.id==="claude-code-cli"?"https://docs.anthropic.com/en/docs/claude-code/setup":"https://developers.openai.com/codex/cli/","_blank");
+}
 
 function renderAgentPage() {
   const table = $("#agent-record-table");
@@ -13615,15 +14251,19 @@ function renderAgentPage() {
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
   const integrationGrid = $("#cli-integration-grid");
+  const integrationSummary = $("#cli-monitor-summary");
+  const activeCliId = getActiveCliId();
+  const activeCliItem = APP_STATE.agentWindows.find(item=>item.id===activeCliId);
+  if (integrationSummary) integrationSummary.innerHTML = `<span>当前设备：<strong>本机</strong></span><span>当前监测来源：<strong>${escapeHtml(activeCliItem?.name||"无")}</strong></span><small>当前仅支持监测本机，同一时间只能选择一个CLI作为监测来源。</small>`;
   if (integrationGrid) {
-    integrationGrid.innerHTML = APP_STATE.agentWindows.filter(item=>["claude-code-cli","codex-cli"].includes(item.id)).map((item) => {const setup=CLI_MONITOR_SETUP[item.id]||{enabled:false,session:"未连接",lastUpdate:"--:--:--"};return `
-      <section class="cli-integration-card ${setup.enabled ? "active" : ""}">
+    integrationGrid.innerHTML = APP_STATE.agentWindows.filter(item=>["claude-code-cli","codex-cli"].includes(item.id)).map((item) => {const setup=CLI_MONITOR_SETUP[item.id]||{enabled:false,status:"idle",session:"未连接",lastUpdate:"--:--:--"};const isActive=item.id===activeCliId;const isFailed=isActive&&setup.status==="failed";const isReconnecting=isActive&&setup.status==="reconnecting";const isSwitching=item.id===CLI_SWITCHING_TO;const controlsDisabled=Boolean(CLI_SWITCHING_TO)||isReconnecting;return `
+      <section class="cli-integration-card ${isActive ? "active" : ""} ${isFailed ? "failed" : ""} ${isSwitching ? "switching" : ""}">
         <div class="cli-integration-card-head">
-          <div><h4>${escapeHtml(item.name)}</h4><p>状态：${setup.enabled?"已启用":"未启用"}</p></div>
-          <span class="tag ${setup.enabled?"green":"cyan"}">${setup.enabled?"已启用":"未启用"}</span>
+          <div><h4>${escapeHtml(item.name)}</h4></div>
+          <span class="tag ${isFailed?"red":isActive?"green":"cyan"}">${isSwitching?"切换中":isReconnecting?"重新连接中":isFailed?"监测异常":isActive?"监测中":"未监测"}</span>
         </div>
-        ${setup.enabled?`<p>会话状态：${escapeHtml(setup.session)}<br>最近更新：${escapeHtml(setup.lastUpdate)}</p>`:`<p>启用后，Agent PC将接收该CLI实际上报的任务事件。</p>`}
-        <div class="action-row">${setup.enabled?`<button class="soft-button" data-cli-card-action="recheck" data-cli-id="${item.id}">重新检查</button><button class="soft-button" data-cli-card-action="preview" data-cli-id="${item.id}">查看副屏预览</button><button class="soft-button api-delete-button" data-cli-card-action="disable" data-cli-id="${item.id}">停用监测</button>`:`<button class="primary-button" data-cli-card-action="enable" data-cli-id="${item.id}">启用监测</button>`}</div>
+        <p class="cli-integration-card-copy" ${isActive?"":"hidden"}>${isFailed?"任务事件连接已中断":`${isSwitching?"切换完成前仍为当前监测来源。<br>":""}会话状态：${escapeHtml(setup.session)}`}</p>
+        <div class="action-row">${isFailed?`<button class="primary-button" data-cli-card-action="reconnect" data-cli-id="${item.id}">重新连接</button><button class="soft-button api-delete-button" data-cli-card-action="stop" data-cli-id="${item.id}">停止监测</button>`:isActive?`<button class="soft-button api-delete-button" data-cli-card-action="stop" data-cli-id="${item.id}" ${controlsDisabled?"disabled":""}>停止监测</button>`:`<button class="primary-button" data-cli-card-action="${activeCliId?"switch":"start"}" data-cli-id="${item.id}" ${controlsDisabled?"disabled":""}>${isSwitching?"切换中…":activeCliId?"切换监测":"开始监测"}</button>`}</div>
       </section>
     `}).join("");
   }
@@ -13682,7 +14322,7 @@ function renderAgentPage() {
         liveRecord.originalError = agentWindow.pending || agentWindow.currentOutput || "来源未提供原始错误";
       }
     } else {
-      liveRecord.monitorStatus = "已停止监控";
+      liveRecord.monitorStatus = "已停止监测";
       liveRecord.estimatedRemaining = null;
     }
   }
@@ -13741,11 +14381,11 @@ function renderAgentPage() {
   const realPrompt = agentWindow.activeTask || "";
   const realUpdatedAt = monitor.lastUpdate || "";
   const monitorStateView = {
-    disconnected: { prompt: "未获取本轮指令", status: "CLI事件未连接", updatedAt: "--:--:--", updateSource: "等待事件接入" },
+    disconnected: { prompt: "未获取本轮指令", status: "未开始监测", updatedAt: "--:--:--", updateSource: "等待开始监测" },
     waiting: { prompt: "暂无本轮指令", status: "等待任务", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "最近连接时间" : "暂无事件时间" },
     running: { prompt: realPrompt || "本轮指令未上报", status: "执行中", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "最近事件时间" : "事件时间未上报" },
     approval: { prompt: realPrompt || "本轮指令未上报", status: "等待审批", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "审批事件时间" : "事件时间未上报" },
-    failed: { prompt: realPrompt || "本轮指令未上报", status: "执行失败", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "失败事件时间" : "事件时间未上报" },
+    failed: { prompt: realPrompt || "本轮指令未上报", status: "任务失败", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "失败事件时间" : "事件时间未上报" },
     completed: { prompt: realPrompt || "本轮指令未上报", status: "已完成", updatedAt: realUpdatedAt || "--:--:--", updateSource: realUpdatedAt ? "完成事件时间" : "事件时间未上报" },
   };
   const stateView = monitorStateView[contentState];
@@ -13821,7 +14461,16 @@ function renderAgentPage() {
 function getAgentSecondaryAlertData(type) {
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
+  const activeCliItem = APP_STATE.agentWindows.find((item) => item.id === getActiveCliId()) || agentWindow;
   const data = {
+    "connection-lost": {
+      title: "监测连接中断",
+      badge: "监测异常",
+      fields: [
+        ["说明", `暂时无法接收 ${activeCliItem.name} 的新任务事件。CLI中正在运行的任务不受影响。`, true],
+      ],
+      actions: [["取消", "dismiss-monitor-alert", "soft-button"], ["重新连接", "reconnect-monitor", "primary-button"]],
+    },
     confirm: {
       title: `${agentWindow.name} 请求审批`,
       badge: "等待授权",
@@ -13843,8 +14492,8 @@ function getAgentSecondaryAlertData(type) {
       actions: [["知道了", "acknowledge", "primary-button"]],
     },
     failed: {
-      title: `${agentWindow.name} 任务失败`,
-      badge: "异常结束",
+      title: "Agent任务执行失败",
+      badge: "任务失败",
       fields: [
         ["本轮指令", agentWindow.activeTask, true],
         ["失败步骤", agentWindow.currentStep],
@@ -13975,7 +14624,7 @@ function openAgentSecondaryAlert(type, { autoClose = false } = {}) {
         { time: monitor.lastUpdate, copy: agentWindow.pending },
       ];
       liveRecord.steps = [
-        { state: "failed", icon: "!", title: agentWindow.currentStep, copy: agentWindow.pending, time: monitor.lastUpdate },
+        { state: "failed", icon: "!", kind: "CLI错误", title: agentWindow.currentStep, copy: agentWindow.pending, time: monitor.lastUpdate },
       ];
     }
   }
@@ -14001,6 +14650,14 @@ function closeAgentSecondaryAlert({ reset = false, render = false } = {}) {
 function handleAgentSecondaryAlertAction(action, recordId = "") {
   const monitor = APP_STATE.agentMonitor;
   const agentWindow = getSelectedAgentWindow();
+  if(action==="dismiss-monitor-alert"){
+    closeAgentSecondaryAlert({render:true});
+    return;
+  }
+  if(action==="reconnect-monitor"){
+    reconnectCliMonitor(getActiveCliId());
+    return;
+  }
   if (monitor.previewState) {
     if (action === "approve") {
       previewAgentMonitorState("running");
@@ -14070,7 +14727,7 @@ function handleAgentSecondaryAlertAction(action, recordId = "") {
       liveRecord.sourceStatusText = agentWindow.currentOutput;
       liveRecord.endTime = agentRecordDateTime(actionTime);
       liveRecord.lastUpdate = agentRecordDateTime(actionTime);
-      liveRecord.monitorStatus = "已停止监控";
+      liveRecord.monitorStatus = "已停止监测";
       liveRecord.currentOutput = agentWindow.currentOutput;
       liveRecord.pendingContent = agentWindow.pending;
       liveRecord.actionStatus = "已拒绝";
@@ -14209,12 +14866,15 @@ function renderTokenPage() {
       <span>${escapeHtml(item.label)}</span>
     </div>
   `).join("");
-  $("#token-record-table").innerHTML = `
-    <div class="table-head"><span>任务</span><span>来源</span><span>执行时间</span><span>消耗 Token</span><span>结果</span><span>操作</span></div>
-    ${token.records.length ? token.records.map((record) => `
-      <div class="table-row token-row" data-token-record="${escapeHtml(record.taskId)}"><span>${escapeHtml(record.task)}</span><span>${escapeHtml(record.source)}</span><span>${escapeHtml(record.time)}</span><span>${escapeHtml(record.cost || "Token暂不可用")}</span><span class="tag ${tagClassForStatus(record.result)}">${escapeHtml(record.result)}</span><span><button class="table-action hot" data-token-record="${escapeHtml(record.taskId)}">查看详情</button></span></div>
-    `).join("") : renderEmptyState("暂无任务消耗记录")}
-  `;
+  const legacyTokenRecordTable = $("#token-record-table");
+  if (legacyTokenRecordTable) {
+    legacyTokenRecordTable.innerHTML = `
+      <div class="table-head"><span>任务</span><span>来源</span><span>执行时间</span><span>消耗 Token</span><span>结果</span><span>操作</span></div>
+      ${token.records.length ? token.records.map((record) => `
+        <div class="table-row token-row" data-token-record="${escapeHtml(record.taskId)}"><span>${escapeHtml(record.task)}</span><span>${escapeHtml(record.source)}</span><span>${escapeHtml(record.time)}</span><span>${escapeHtml(record.cost || "Token暂不可用")}</span><span class="tag ${tagClassForStatus(record.result)}">${escapeHtml(record.result)}</span><span><button class="table-action hot" data-token-record="${escapeHtml(record.taskId)}">查看详情</button></span></div>
+      `).join("") : renderEmptyState("暂无任务消耗记录")}
+    `;
+  }
 }
 
 function showTokenRecord(recordId) {
@@ -16075,8 +16735,8 @@ function showAgentRecord(recordId) {
   const actions = [];
   openDetailView({
     fromPage: "monitor",
-    title: `${record.task} · 任务详情`,
-    subtitle: "查看该条任务记录的概览、来源状态、执行过程和结果，不混入其他任务数据。",
+    title: "详情页",
+    subtitle: "",
     status: record.status,
     variant: "agent-task",
     agentDetail: {
@@ -16165,11 +16825,11 @@ function handleAgentControl(action) {
   if (action === "stop") {
     showSheet({
       type: "Confirm",
-      title: "确认停止监控？",
-      copy: "停止后将不再读取当前 Agent 窗口和终端输出，页面只保留最后一次识别结果。你可以之后重新选择监控窗口恢复。",
+      title: "确认停止监测？",
+      copy: "停止后将不再接收当前CLI的任务事件，页面只保留最后一次读取结果。你可以稍后重新开始监测。",
       detail: "monitor",
       readLabel: "取消",
-      retryLabel: "停止监控",
+      retryLabel: "停止监测",
       detailLabel: "查看当前状态",
       retryContext: { type: "agent-stop" },
     });
@@ -16212,6 +16872,7 @@ function previewAgentMonitorState(state) {
     if (agentPreviewSnapshot) {
       Object.assign(monitor, agentPreviewSnapshot.monitor);
       Object.assign(agentWindow, agentPreviewSnapshot.agentWindow);
+      Object.entries(agentPreviewSnapshot.cliMonitorSetup || {}).forEach(([id, setup]) => { CLI_MONITOR_SETUP[id] = { ...setup }; });
     }
     agentPreviewSnapshot = null;
     delete monitor.previewState;
@@ -16223,6 +16884,7 @@ function previewAgentMonitorState(state) {
     agentPreviewSnapshot = {
       monitor: JSON.parse(JSON.stringify(monitor)),
       agentWindow: JSON.parse(JSON.stringify(agentWindow)),
+      cliMonitorSetup: JSON.parse(JSON.stringify(CLI_MONITOR_SETUP)),
     };
   }
   const previewTime = `${nowText()}:00`;
@@ -16244,8 +16906,17 @@ function previewAgentMonitorState(state) {
     lastUpdate: previewTime,
   });
   APP_STATE.agentSecondaryAlert = { open: false, type: "" };
+  const previewCliId = agentWindow.id && CLI_MONITOR_SETUP[agentWindow.id] ? agentWindow.id : "claude-code-cli";
+  if (state === "disconnected") setActiveCli("");
+  if (["waiting", "running", "approval", "failed", "completed"].includes(state)) setActiveCli(previewCliId);
   if (state === "disconnected") {
-    Object.assign(monitor, { status: "disconnected", stateText: "CLI事件未连接", syncStatus: "CLI事件未连接", lastUpdate: "" });
+    Object.assign(monitor, { status: "disconnected", stateText: "未开始监测", syncStatus: "未开始监测", lastUpdate: "" });
+  } else if (state === "connection-lost") {
+    setActiveCli(previewCliId);
+    CLI_MONITOR_SETUP[previewCliId].status = "failed";
+    CLI_MONITOR_SETUP[previewCliId].session = "连接已中断";
+    Object.assign(monitor, { status: "connection-lost", stateText: "等待任务", syncStatus: "监测连接中断" });
+    APP_STATE.agentSecondaryAlert = { open: true, type: "connection-lost" };
   } else if (state === "running") {
     Object.assign(monitor, { stateText: "执行中", syncStatus: "演示数据 · 执行中" });
     Object.assign(agentWindow, {
@@ -16267,7 +16938,7 @@ function previewAgentMonitorState(state) {
     });
     APP_STATE.agentSecondaryAlert = { open: true, type: "confirm" };
   } else if (state === "failed") {
-    Object.assign(monitor, { status: "failed", stateText: "失败", syncStatus: "演示数据 · 异常结束" });
+    Object.assign(monitor, { status: "failed", stateText: "Agent任务执行失败", syncStatus: "演示数据 · 任务执行失败" });
     Object.assign(agentWindow, {
       activeTask: "[演示] 修复登录接口并运行测试",
       currentOutput: "[演示] 测试命令执行失败",
@@ -16296,14 +16967,14 @@ function applyAgentStop() {
     status: "stopped",
     label: "已停止",
     stateText: "已停止",
-    syncStatus: "停止监控",
+    syncStatus: "停止监测",
     currentStep: "保留最后结果",
     elapsed: "已停止",
     lastUpdate: `${nowText()}:00`,
   });
   const liveRecord = APP_STATE.agentRecords.find((item) => item.id === APP_STATE.agentMonitor.activeRecordId);
   if (liveRecord) {
-    liveRecord.monitorStatus = "已停止监控";
+    liveRecord.monitorStatus = "已停止监测";
     liveRecord.estimatedRemaining = null;
   }
   APP_STATE.sheet.open = false;
@@ -16899,7 +17570,7 @@ function sanitizePhysicalScreenClone(clone) {
     node.setAttribute("aria-hidden", "true");
   });
   if (clone.classList.contains("token-preview-canvas")) {
-    clone.querySelectorAll("[data-token-model-range]").forEach((node) => {
+    clone.querySelectorAll("[data-token-model-range], [data-cloud-token-tab], [data-cloud-token-range], [data-token-agent-app]").forEach((node) => {
       node.setAttribute("tabindex", "0");
       node.removeAttribute("aria-hidden");
     });
@@ -17218,7 +17889,7 @@ const API_UNIFIED_PROVIDERS={
     {id:"custom-anthropic",group:"custom",label:"Anthropic 兼容",logo:"ANT",description:"自定义 Anthropic Messages 兼容模型",region:"自定义",protocol:"Anthropic 兼容",fields:[{key:"baseUrl",label:"API 基础地址",hint:"填写服务商要求的 Anthropic 基础路径",type:"url",required:true},{key:"apiKey",label:"API Key",hint:"由自定义服务商提供",type:"secret",required:true},{key:"modelId",label:"模型 ID",hint:"填写服务商提供的准确标识",type:"text",required:true}]}
   ],
   voice:[
-    {id:"doubao-realtime",group:"domestic",label:"火山引擎·豆包实时语音",logo:"DB",description:"支持麦克风对话、语音回答和实时打断",region:"中国大陆",fields:[{key:"appId",label:"APP ID",hint:"在豆包语音控制台获取",type:"text",required:true},{key:"accessToken",label:"Access Token",hint:"在豆包语音控制台获取",type:"secret",required:true},{key:"serviceVersion",label:"服务版本",hint:"选择账号已开通的实时语音服务",type:"select",required:true,options:["豆包实时语音"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认中文音色","已开通音色"]}]},
+    {id:"doubao-realtime",group:"domestic",label:"火山引擎·豆包实时语音",logo:"DB",description:"支持麦克风对话、语音回答和实时打断",region:"中国大陆",fields:[{key:"apiKey",label:"API Key",hint:"在火山引擎豆包语音新版控制台获取",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"当前实时语音固定模型版本",type:"select",required:true,options:["1.2.6.1"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认中文音色","已开通音色"]}]},
     {id:"qwen-realtime",group:"domestic",label:"千问实时语音",logo:"QW",description:"阿里云百炼实时语音对话",region:"中国大陆",fields:[{key:"apiKey",label:"API Key",hint:"在阿里云百炼控制台创建",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择账号可用的实时模型",type:"select",required:true,options:["账号可用实时模型"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认音色"]}]},
     {id:"openai-realtime",group:"global",label:"OpenAI Realtime",logo:"OA",description:"支持实时语音输入、语音回答和打断",region:"海外/全球",fields:[{key:"apiKey",label:"API Key",hint:"正式版由主进程换取临时凭据",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择 Realtime 模型",type:"select",required:true,options:["gpt-realtime"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认英文音色","默认中文音色"]}]},
     {id:"gemini-live",group:"global",label:"Gemini Live",logo:"GM",description:"Google 实时语音对话",region:"海外/全球",fields:[{key:"apiKey",label:"API Key",hint:"在 Google AI Studio 创建",type:"secret",required:true},{key:"voiceModel",label:"语音模型",hint:"选择 Live 模型",type:"select",required:true,options:["账号可用 Live 模型"]},{key:"voice",label:"音色",hint:"选择回答播报音色",type:"select",required:true,options:["默认音色"]}]},
@@ -18129,6 +18800,12 @@ let qaAutoListenTimer = null;
 let qaPermissionSuccessTimer = null;
 let qaTextDictationTimer = null;
 const QA_PERMISSION_API_CODES={"first-use":"not_requested",requesting:"requesting_system",authorized:"granted",unauthorized:"denied",expired:"revoked",waiting:"waiting_settings","recheck-denied":"waiting_settings_denied",checking:"checking","settings-error":"settings_open_failed",error:"check_failed"};
+const QA_OFFICE_DIALOG_TYPES={
+  permission:{title:"操作授权",buttons:["取消","本次允许","始终允许"]},
+  clarification:{title:"补充信息",buttons:["取消","确认"],field:"clarification"},
+  connection:{title:"登录与连接授权",buttons:["取消","连接"]},
+  recovery:{title:"失败或需要处理",buttons:["取消","重试"]},
+};
 function qaModels(){
   return APP_STATE.apiConfigs.filter(config=>config.saved&&config.connectionStatus==="connected").flatMap(config=>(config.availableModels||[]).map(model=>`${config.configId}|${config.provider}|${model}`));
 }
@@ -18142,6 +18819,15 @@ function qaShowModal(title, copy, confirmLabel, onConfirm, cancelLabel="取消",
   layer.classList.add("open");
   layer.querySelector("[data-qa-modal-cancel]").onclick=()=>{layer.classList.remove("open");onCancel?.();};
   layer.querySelector("[data-qa-modal-confirm]").onclick=()=>{layer.classList.remove("open");onConfirm?.();};
+}
+function qaShowOfficeDialog(type){
+  const config=QA_OFFICE_DIALOG_TYPES[type];if(!config)return;
+  let layer=document.querySelector("#qa-modal-layer");
+  if(!layer){layer=document.createElement("div");layer.id="qa-modal-layer";layer.className="qa-modal-layer";qaRoot()?.append(layer);}
+  const field=config.field==='clarification'?'<div class="qa-office-dialog-field"><label for="qa-office-clarification">请选择需要处理的内容</label><select id="qa-office-clarification"><option>当前文档</option><option>当前文件夹</option><option>手动选择</option></select></div>':'';
+  layer.innerHTML=`<div class="qa-modal" role="dialog" aria-modal="true" data-qa-office-dialog-type="${type}"><h4>${config.title}</h4>${field}<div class="qa-modal-actions">${config.buttons.map((label,index)=>`<button type="button" data-qa-office-dialog-action="${index}" class="${config.danger&&index===config.buttons.length-1?'danger':index>0?'primary':''}">${label}</button>`).join('')}</div></div>`;
+  layer.classList.add("open");
+  layer.querySelectorAll("[data-qa-office-dialog-action]").forEach(button=>{button.onclick=()=>layer.classList.remove("open");});
 }
 function qaAnswer(text){
   const stamp=new Date().toISOString(),requestId=`req-${Date.now()}`;
@@ -18276,6 +18962,7 @@ document.addEventListener("input",e=>{if(e.target.id==="voice-text-input")QA_STA
 document.addEventListener("pointerdown",e=>{if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();}},true);
 document.addEventListener("keydown",e=>{if(e.target.id==="voice-text-input"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.stopImmediatePropagation();QA_STATE.draft=e.target.value;qaSubmit(QA_STATE.draft);QA_STATE.draft="";e.target.value="";}},true);
 document.addEventListener("click",e=>{
+  const officeDialog=e.target.closest("[data-qa-office-dialog]");if(officeDialog){e.preventDefault();e.stopImmediatePropagation();qaShowOfficeDialog(officeDialog.dataset.qaOfficeDialog);return;}
   const entry=e.target.closest("[data-subscreen-ai-ball]");if(entry){e.preventDefault();e.stopImmediatePropagation();QA_STATE.sourcePage=APP_STATE.currentPage==="voice"?QA_STATE.sourcePage:APP_STATE.currentPage;QA_STATE.mode=QA_STATE.mode||"voice";setActiveTab("voice");qaRender();return;}
   const mode=e.target.closest("[data-voice-input-mode]");if(mode){e.preventDefault();e.stopImmediatePropagation();const next=mode.dataset.voiceInputMode;if(next==="text"){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;if(["listening","muted"].includes(QA_STATE.phase))QA_STATE.phase="idle";if(QA_STATE.phase==="speaking"){QA_STATE.phase="stopped";QA_STATE.speaking=false;}}QA_STATE.mode=next;qaRender();if(next==="text")qaRoot()?.querySelector("#voice-text-input")?.focus();return;}
   if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();qaHandleVoiceEntry();return;}
