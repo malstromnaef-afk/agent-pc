@@ -19263,7 +19263,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         return `<div class="am-request-actions">${controls}</div>`;
       }
       function requestMarkup(task,r,inPopup=false){
-        if(r.type!=='permission')return '';
+        if(r.type!=='permission'||r.status==='resolved')return '';
         const blocked=r.status==='submitting'?'':requestBlocked(task,r);
         const compact=inPopup&&r.type==='permission'&&r.operation&&r.scope&&r.target;
         const description=compact?`<h4>允许${e(r.operation)} ${e(r.target)}${e(r.scope)}？</h4>`:`<h4>${e(r.title)}</h4><p>${e(r.details)}</p><p>操作对象：${e(r.target)}</p>`;
