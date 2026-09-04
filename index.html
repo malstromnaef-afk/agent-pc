@@ -14319,6 +14319,7 @@ function handleCliDialogAction(action){
 }
 
 function renderAgentPage() {
+  if (window.agentMultiMonitor) { window.agentMultiMonitor.render(); return; }
   const table = $("#agent-record-table");
   if (!table) return;
   const monitor = APP_STATE.agentMonitor;
@@ -17642,6 +17643,10 @@ function sanitizePhysicalScreenClone(clone) {
     node.setAttribute("tabindex", "-1");
     node.setAttribute("aria-hidden", "true");
   });
+  clone.querySelectorAll('[data-am]').forEach(node => {
+    node.setAttribute('tabindex', '0');
+    node.removeAttribute('aria-hidden');
+  });
   if (clone.classList.contains("token-preview-canvas")) {
     clone.querySelectorAll("[data-token-model-range], [data-cloud-token-tab], [data-cloud-token-range], [data-token-agent-app]").forEach((node) => {
       node.setAttribute("tabindex", "0");
@@ -17651,6 +17656,31 @@ function sanitizePhysicalScreenClone(clone) {
   return clone;
 }
 
+function captureAgentInteraction(root) {
+  if (!root) return () => {};
+  const view = root.querySelector('.am-multi-console')?.dataset.view;
+  const request = root.querySelector('.am-pending-overlay')?.dataset.activeRequest;
+  const positions = ['.am-task-list','.am-pending-body'].map(selector => ({selector,values:[...root.querySelectorAll(selector)].map(n=>n.scrollTop)}));
+  const old = document.activeElement;
+  const focus = old && root.contains(old) ? {
+    keys:{...old.dataset},value:old.value,start:old.selectionStart,end:old.selectionEnd,scroll:old.scrollTop
+  } : null;
+  return () => {
+    positions.forEach(({selector,values})=>{
+      if(selector==='.am-task-list'&&view!==root.querySelector('.am-multi-console')?.dataset.view)return;
+      if(selector==='.am-pending-body'&&request!==root.querySelector('.am-pending-overlay')?.dataset.activeRequest)return;
+      root.querySelectorAll(selector).forEach((node,i)=>{node.scrollTop=values[i]||0;});
+    });
+    if(!focus||!Object.keys(focus.keys).length)return;
+    const target=[...root.querySelectorAll('[data-am], [data-request-section]')].find(n=>Object.entries(focus.keys).every(([k,v])=>n.dataset[k]===v)&&!n.disabled&&!n.closest?.('[hidden]'));
+    if(!target)return;
+    if(focus.keys.am==='pending-input')target.value=focus.value;
+    target.focus({preventScroll:true});
+    if(focus.keys.am==='pending-input'&&typeof focus.start==='number')target.setSelectionRange(focus.start,focus.end);
+    target.scrollTop=focus.scroll||0;
+  };
+}
+
 function syncPhysicalScreenPreview(preview) {
   const page = preview?.dataset?.subscreenPreview;
   if (!page) return;
@@ -17658,6 +17688,7 @@ function syncPhysicalScreenPreview(preview) {
   const physical = panel?.querySelector(`.physical-screen-preview[data-physical-for="${page}"]`);
   const canvas = physical?.querySelector(".physical-screen-canvas");
   if (!canvas) return;
+  const restore = page === 'monitor' && PROTOTYPE_SIZE === 'small' ? captureAgentInteraction(canvas) : () => {};
   const clone = sanitizePhysicalScreenClone(preview.cloneNode(true));
   if (page === "usage") {
     const scale = Math.min(canvas.clientWidth / 960, canvas.clientHeight / 480);
@@ -17666,6 +17697,7 @@ function syncPhysicalScreenPreview(preview) {
     clone.style.setProperty("zoom", String(scale));
   }
   canvas.replaceChildren(clone);
+  restore();
 }
 
 function ensurePhysicalScreenPreviews() {
@@ -19073,12 +19105,397 @@ qaRender();
 const handleAgentStatePreviewPointer = (event) => {
   const control = event.target.closest("[data-agent-preview-state]");
   if (!control) return;
+  if (window.agentMultiMonitor && event.type === 'pointerdown') return;
   event.preventDefault();
   event.stopImmediatePropagation();
-  previewAgentMonitorState(control.dataset.agentPreviewState);
+  if(window.agentMultiMonitor) window.agentMultiMonitor.preview(control.dataset.agentPreviewState);
+  else previewAgentMonitorState(control.dataset.agentPreviewState);
 };
 document.addEventListener("pointerdown", handleAgentStatePreviewPointer, true);
 document.addEventListener("click", handleAgentStatePreviewPointer, true);
+    </script>
+    <style>
+      #monitor .am-tabs{display:flex;gap:12px;margin-bottom:18px}
+      body.prototype-small #monitor .cli-monitor-summary{border:0;background:transparent;box-shadow:none;border-radius:0}
+      #monitor .am-selector{padding:16px 24px 0;width:100%}
+      #monitor .am-multi-console{display:flex!important;flex-direction:column!important;gap:0!important;height:calc(100% - 34px);min-height:0!important;overflow:hidden!important;padding:16px 24px!important}
+      #monitor .am-multi-console > .agent-subscreen-main{display:none!important}
+      #monitor .am-multi-console .am-selector{padding:0;flex:none}
+      #monitor .am-task-list{display:flex;flex-direction:column;flex:1 1 0;gap:12px;overflow-y:auto;min-height:0;max-height:none;width:100%;padding:0 3px 24px;scroll-padding-block:16px 24px;overscroll-behavior:contain;pointer-events:auto}
+      #monitor .am-task-row{flex:none;display:block;width:100%;text-align:left;color:#eef2f6;background:linear-gradient(110deg,rgba(255,255,255,.055),rgba(255,255,255,.025));border:1px solid #39424b;border-radius:14px;padding:18px 20px;cursor:pointer;font:inherit}
+      #monitor article.am-task-row{cursor:default}
+      #monitor .am-task-open{display:block;width:100%;padding:0;border:0;background:none;color:inherit;text-align:left;font:inherit;min-height:44px}
+      #monitor .am-connection-note button{min-height:44px;border:1px solid #46515a;border-radius:9px;padding:8px 14px;background:transparent;color:#cce8eb;font:inherit;cursor:pointer}
+      #monitor .am-task-result{margin:10px 0 0;color:#b9c6cf;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+      #monitor .am-connection-note{flex:none;padding:14px 18px;border:1px solid #806139;border-radius:12px;background:#ffbe500a;color:#ffcd79}
+      #monitor .am-connection-note p{margin:7px 0;line-height:1.5;color:#b9c6cf;font-size:14px}
+      #monitor .am-task-columns{display:grid;grid-template-columns:minmax(0,1.8fr) minmax(100px,.8fr) minmax(90px,.65fr);gap:20px}
+      #monitor .am-task-columns small{display:block;color:#939eab;font-size:13px;margin-bottom:7px}
+      #monitor .am-task-columns strong{display:block;font-size:20px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+      #monitor .am-task-columns em{display:block;font-size:13px;color:#a8b2bf;font-style:normal;margin-top:7px}
+      #monitor .am-task-action{display:block;border-top:1px solid #ffffff0d;margin-top:12px;padding-top:10px;color:#c7d1da;font-size:15px;line-height:1.5}
+      #monitor .am-task-state[data-status="等待审批"]{color:#ffbe50}
+      #monitor .am-task-state[data-status="任务完成"]{color:#29e694}
+      #monitor .am-task-state[data-status="任务失败"]{color:#ff8a8a}
+      #monitor .am-list-note{font-size:12px;color:#8e9ba8;margin:0 0 10px}
+      #monitor [data-agent-preview-state][aria-current="true"]{border-color:#19dce3;background:#153b40;color:#24dce3}
+      #monitor .am-task-row[data-state-target="true"]{border-color:#19dce3}
+      #monitor .am-selector .am-tabs{flex-wrap:wrap}
+      #monitor .am-selector button[aria-pressed="true"]{border-color:#19dce3;color:#24dce3}
+      #monitor .physical-screen-mirror-source [data-am]{pointer-events:auto!important}
+      #monitor .physical-screen-mirror-source .am-console,#monitor .physical-screen-mirror-source [data-am]{pointer-events:auto!important}
+      #monitor .am-tabs button{min-height:44px;padding:10px 24px;border:1px solid var(--line,#39434a);border-radius:12px;background:transparent;color:var(--muted,#9ca8b4);font:inherit;cursor:pointer}
+      #monitor .am-tabs button[aria-selected="true"]{border-color:#19dce3;background:#153b40;color:#24dce3}
+      #monitor .am-tasks{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;max-height:460px;overflow:auto}
+      #monitor .am-task{padding:20px;border:1px solid #36434a;border-radius:16px;background:rgba(255,255,255,.035);min-width:0}
+      #monitor .am-task h4{margin:0 0 12px;font-size:19px}
+      #monitor .am-task p{color:#a4b0ba;line-height:1.6;overflow-wrap:anywhere}
+      #monitor .am-task button{min-height:44px}
+      #monitor .am-empty{padding:40px 20px;color:#a4b0ba;grid-column:1/-1;text-align:center}
+      #monitor .am-task-list > .am-empty{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
+      #monitor .am-empty > strong{font-size:24px;color:#e7edf2}
+      #monitor .am-empty [data-am="manage"]{min-height:48px;padding:12px 30px;border:0;border-radius:10px;background:linear-gradient(100deg,#55b9c1,#00abd1);color:white;font:inherit;cursor:pointer}
+      #monitor .am-console{padding:24px;width:100%;min-height:360px}
+      #monitor .am-console header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+      #monitor .am-console small,#monitor .am-note{color:#9ca8b4;line-height:1.6}
+      #monitor .am-records{overflow:auto}
+      #monitor .am-records table{width:100%;border-collapse:collapse;min-width:700px}
+      #monitor .am-records th,#monitor .am-records td{text-align:left;padding:16px;border-bottom:1px solid #343a40}
+      #monitor .am-records summary{cursor:pointer;min-height:44px;align-content:center;overflow-wrap:anywhere;white-space:normal}
+      #monitor .am-records details dl{display:grid;grid-template-columns:auto minmax(0,1fr);gap:12px;margin-top:16px;white-space:normal}
+      #monitor .am-records details dd{margin:0;overflow-wrap:anywhere}
+      #monitor .am-dialog{position:fixed;inset:0;z-index:10000;background:#0009;display:grid;place-items:center;padding:24px}
+      #monitor .am-dialog[hidden]{display:none}
+      #monitor .am-dialog section{width:min(560px,100%);max-height:85vh;overflow:auto;background:#20262a;border:1px solid #465159;border-radius:20px;padding:28px}
+      #monitor .am-dialog-head{display:flex;align-items:center;justify-content:space-between;gap:16px}
+      #monitor .am-dialog-head h3{margin:0}
+      #monitor .am-dialog-close{flex:none;width:44px;height:44px;padding:0;border:0;background:transparent;color:inherit;font:inherit;font-size:28px;cursor:pointer}
+      #monitor .am-dialog-close:focus-visible{outline:2px solid #19dce3;outline-offset:2px;border-radius:6px}
+      #monitor .am-dialog p{line-height:1.8;color:#b5bfc7}
+      #monitor .am-dialog .action-row{margin-top:24px;flex-wrap:wrap}
+      #monitor .am-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
+      #monitor .am-toolbar .am-tabs{margin:0;overflow-x:auto;min-width:0}
+      #monitor .am-pending-entry{position:relative;flex:none;width:48px;height:48px;border:1px solid #526168;border-radius:14px;background:#263338;color:#c9eeee;display:grid;place-items:center;cursor:pointer}
+      #monitor .am-pending-entry svg{width:25px;height:25px}
+      #monitor .am-pending-count{position:absolute;right:-5px;top:-6px;min-width:21px;height:21px;padding:0 5px;border-radius:12px;background:#ee4d58;color:white;font-size:12px;font-weight:700;display:grid;place-items:center}
+      #monitor .am-request{margin-top:14px;padding-top:14px;border-top:1px solid #ffffff18;scroll-margin:16px;outline:none}
+      #monitor .am-request[data-current="true"]{border-left:3px solid #15d3df;padding-left:14px;background:#16cadb08}
+      #monitor .am-request h4{font-size:17px;margin:0 0 8px;color:#edf5f7}
+      #monitor .am-request p{font-size:14px;line-height:1.6;margin:6px 0;overflow-wrap:anywhere;color:#b9c9cf}
+      #monitor .am-request-meta{font-size:13px;color:#a4b4bd;line-height:1.5}
+      #monitor .am-request-actions{display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap;margin-top:12px}
+      #monitor .am-request-actions button,#monitor .am-pending-close{min-height:44px;min-width:44px;padding:10px 18px;border-radius:10px;border:1px solid #566970;background:#253338;color:#dfedef;cursor:pointer;font:inherit}
+      #monitor .am-request-actions .am-allow{background:#16d5bd;color:#072522;border-color:#16d5bd;font-weight:700}
+      #monitor .am-request-actions button:disabled{opacity:.45;cursor:not-allowed}
+      #monitor .am-request-actions button:focus-visible,#monitor .am-pending-entry:focus-visible,#monitor .am-pending-close:focus-visible{outline:2px solid #4de9f0;outline-offset:3px}
+      #monitor .am-pending-overlay{background:#091114a8;display:grid;place-items:center;padding:20px;pointer-events:auto}
+      #monitor .am-pending-overlay[hidden]{display:none!important}
+      #monitor .am-pending-overlay .agent-state-dialog{display:flex;flex-direction:column;gap:0;width:min(680px,96%);max-height:100%;overflow:hidden;padding:22px;background:#202b30;border:1px solid #577077;border-radius:20px}
+      #monitor .am-pending-overlay .agent-state-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;margin-bottom:12px}
+      #monitor .am-pending-overlay .agent-state-head h4{font-size:22px;margin:0}
+      #monitor .am-pending-body{display:block;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 4px}
+      #monitor .am-pending-body .am-request{margin:0;border:0;padding:0;background:none}
+      #monitor .am-pending-body .am-request p{font-size:16px}
+      #monitor .am-pending-overlay .agent-state-actions{display:block;margin:0;flex:none}
+      #monitor .am-pending-empty{margin:0 0 12px;color:#b9cbd0;font-size:14px}
+      @media(max-width:760px){#monitor .am-tasks{grid-template-columns:1fr}#monitor .am-console{padding:14px}}
+    </style>
+    <script>
+    /* Agent progress v2: independent application subscriptions, stable per-task keys.
+       This adapter is prototype-only; it does not claim to connect to installed apps.
+       State matrix: idle -> consent dialog -> connecting -> active/error;
+       active -> interrupted -> reconnecting -> active/interrupted;
+       stop -> idle (tasks retained), viewing/record tabs never change subscriptions. */
+    (() => {
+      if (PROTOTYPE_SIZE !== 'small') return; // X3 Cloud only; retain other products' original page.
+      const page=document.querySelector('#monitor');
+      const names={workbuddy:'WorkBuddy',codex:'Codex'};
+      const state={view:'workbuddy',records:'workbuddy',apps:{workbuddy:'idle',codex:'idle'},tasks:[],demo:false,detail:null};
+      const labels={idle:'未监测',checking:'检查中',permission:'等待授权',connecting:'连接中',active:'监测中',missing:'未找到应用',error:'监测失败',interrupted:'监测中断',reconnecting:'重新连接中'};
+      const e=escapeHtml;
+      let dialog=null,lastFocus=null;
+      const consoleRoot=page.querySelector('[data-subscreen-preview="monitor"] .agent-subscreen-console');
+      // Retain the original KPI / action / steps / empty-state layout.
+      const host=document.createElement('div');host.className='am-selector';consoleRoot.prepend(host);
+      consoleRoot.classList.add('am-multi-console');
+      const taskList=document.createElement('div');taskList.className='am-task-list';taskList.setAttribute('aria-label','当前应用的任务列表');host.after(taskList);
+      const selected={workbuddy:null,codex:null};
+      const previewStates={workbuddy:'disconnected',codex:'disconnected'};
+      const syncPending=new Set();
+      const connectionAttempts={workbuddy:0,codex:0};
+      const pendingUi={current:null,open:false,empty:false};
+      let requestSequence=0;
+      const pendingOverlay=page.querySelector('#agent-state-overlay');
+      pendingOverlay.classList.add('am-pending-overlay');
+      page.querySelector('#agent-state-overlay').hidden=true;
+      page.querySelector('.agent-monitor-panel h3').textContent='Agent 监测管理';
+      page.querySelector('.cli-monitor-note').textContent='';
+      page.querySelector('.cli-monitor-note').hidden=true;
+      const records=page.querySelector('#agent-record-table');records.className='am-records';
+      const expandedRecords=new Set();
+      const modal=document.createElement('div');modal.className='am-dialog';modal.hidden=true;page.append(modal);
+      function tabs(group,current,apps=Object.keys(names)){return `<div class="am-tabs" role="tablist" aria-label="${group==='view'?'当前任务':'任务记录'}应用">${apps.map(id=>`<button role="tab" aria-selected="${current===id}" data-am="${group}" data-app="${id}">${names[id]}</button>`).join('')}</div>`;}
+      function stale(t){return !['任务完成','任务失败'].includes(t.status)&&(state.apps[t.app]!=='active'||syncPending.has(t.app));}
+      function allRequests(){return state.tasks.flatMap(task=>(task.requests||[]).filter(request=>request.type==='permission').map(request=>({task,request}))).sort((a,b)=>a.request.sequence-b.request.sequence);}
+      function pendingRequests(){return allRequests().filter(({request})=>['pending','submitting','unknown'].includes(request.status));}
+      function findRequest(id){return allRequests().find(({request})=>request.id===id);}
+      function requestBlocked(task,r){
+        if(r.status==='submitting')return '正在提交，请等待回执';
+        if(r.status==='unknown')return '提交结果待确认，请勿重复操作';
+        if(r.status==='expired')return '该请求已过期';
+        if(r.status==='cancelled')return '该请求已取消';
+        if(r.status==='resolved')return r.decision==='external'?'已在来源应用处理':`${r.decision==='allow'?'已允许本次':r.decision==='deny'?'已拒绝本次':'已提交'}`;
+        if(state.apps[task.app]!=='active'||syncPending.has(task.app))return `${names[task.app]} 连接不可用或等待同步，暂不能处理`;
+        if(!r.title||!r.details||!r.target)return '请求信息不完整，暂不能处理';
+        if(!r.demo)return '尚未接入操作回传，暂不能处理';
+        return '';
+      }
+      function requestActions(task,r,inPopup=false){
+        const blocked=requestBlocked(task,r),disabled=blocked?'disabled':'';
+        const pending=r.status==='pending';
+        let controls='';
+        if(pending||r.status==='submitting'){
+          if(r.type==='permission'&&(inPopup||r.details.length<=180))controls=`<button data-am="pending-answer" data-request="${e(r.id)}" data-value="deny" ${disabled}>拒绝本次</button><button class="am-allow" data-am="pending-answer" data-request="${e(r.id)}" data-value="allow" ${disabled}>允许本次</button>`;
+          else controls=`<button data-am="pending-open" data-request="${e(r.id)}" ${disabled}>查看授权内容</button>`;
+        }
+        return `<div class="am-request-actions">${controls}</div>`;
+      }
+      function requestMarkup(task,r,inPopup=false){
+        if(r.type!=='permission')return '';
+        const blocked=requestBlocked(task,r);
+        const compact=inPopup&&r.type==='permission'&&r.operation&&r.scope&&r.target;
+        const description=compact?`<h4>允许${e(r.operation)} ${e(r.target)}${e(r.scope)}？</h4>`:`<h4>${e(r.title)}</h4><p>${e(r.details)}</p><p>操作对象：${e(r.target)}</p>`;
+        return `<section class="am-request" data-request-section="${e(r.id)}" data-current="${pendingUi.current===r.id}" tabindex="-1">${description}${r.warning?`<p class="am-request-warning">${e(r.warning)}</p>`:''}${blocked||r.error?`<p class="am-request-feedback" role="status">${e(blocked||r.error)}</p>`:''}${inPopup?'':requestActions(task,r)}</section>`;
+      }
+      function speaker(){const n=pendingRequests().length;return `<button class="am-pending-entry" data-am="pending-locate" aria-label="待处理事项，${n} 项" title="待处理事项"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l6-5v16l-6-5H4z"/><path d="M17 8a7 7 0 0 1 0 8m3-11a11 11 0 0 1 0 14"/></svg>${n?`<span class="am-pending-count" aria-hidden="true">${n}</span>`:''}</button>`;}
+      function renderPending(){
+        const item=findRequest(pendingUi.current);
+        pendingOverlay.hidden=!(pendingUi.open&&item);
+        pendingOverlay.dataset.activeRequest=item?.request.id||'';
+        pendingOverlay.setAttribute('aria-hidden',String(pendingOverlay.hidden));
+        pendingOverlay.classList.toggle('show',!pendingOverlay.hidden);
+        consoleRoot.inert=!pendingOverlay.hidden;
+        if(pendingOverlay.hidden)return;
+        const {task,request:r}=item;
+        pendingOverlay.querySelector('.agent-state-dialog').setAttribute('aria-label','待处理事项');
+        pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4>待处理事项</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
+        const body=page.querySelector('#agent-state-fields');body.className='agent-state-fields am-pending-body';
+        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(task.window)} · ${e(task.session)}<br>${e(task.title)}</p>${requestMarkup(task,r,true)}`;
+        page.querySelector('#agent-state-actions').innerHTML=`${requestActions(task,r,true)}${!pendingRequests().length?`<p class="am-request-meta" role="status">${r.status==='resolved'?'全部处理完成':'暂无待处理事项'}</p>`:''}`;
+      }
+      function receiveRequest(task,type='permission',autoOpen=true){
+        if(type!=='permission')return;
+        const sequence=++requestSequence;
+        const r={id:task.id+'-request-'+sequence,sequence,type,status:'pending',demo:true,title:'允许修改需求文档？',details:'仅修改该文档的需求条目，不删除文件，不访问其他目录。',target:'项目 B / requirements.md'};
+        (task.requests||=([])).push(r);task.status='等待审批';task.action='等待用户处理请求';
+        r.target=(task.session||'当前项目')+' / requirements.md';
+        // Structured demo data, not a summary inferred from task text or screenshots.
+        if(type==='permission'){
+          Object.assign(r,{operation:'修改',scope:'中的需求条目',...(task.permissionRequest||{})});
+        }
+        pendingUi.empty=false;
+        if(autoOpen&&!pendingUi.open){pendingUi.current=r.id;pendingUi.open=true;}
+        return r;
+      }
+      function locatePending(){
+        const items=pendingRequests();
+        const item=items.find(x=>x.request.id===pendingUi.current)||items[0];
+        pendingUi.open=false;pendingUi.empty=!item;
+        if(!item){render();return;}
+        pendingUi.current=item.request.id;state.view=item.task.app;selected[item.task.app]=item.task.id;
+        render();
+        page.querySelectorAll('[data-request-section]').forEach(node=>{
+          if(node.dataset.requestSection!==item.request.id)return;
+          const list=node.closest('.am-task-list');if(!list)return;
+          list.scrollTop+=node.getBoundingClientRect().top-list.getBoundingClientRect().top-16;
+          node.focus({preventScroll:true});
+        });
+      }
+      function submitRequest(id,value){
+        const item=findRequest(id);if(!item)return;
+        const {task,request:r}=item;if(r.status!=='pending'||requestBlocked(task,r))return;
+        if(r.type!=='permission'||!['allow','deny'].includes(value))return;
+        r.status='submitting';r.error='';const attempt=(r.attempt||0)+1;r.attempt=attempt;
+        const outcome=r.nextOutcome||'success';delete r.nextOutcome;render();
+        // Local demo acknowledgment only. Never sends approval to an installed Agent.
+        setTimeout(()=>{
+          if(findRequest(id)?.request!==r||r.status!=='submitting'||r.attempt!==attempt)return;
+          if(outcome==='unknown'||state.apps[task.app]!=='active'||syncPending.has(task.app)){r.status='unknown';}
+          else if(outcome==='fail'){r.status='pending';r.error='提交失败，未生效，请重试';}
+          else{r.status='resolved';r.decision=value;}
+          render();
+        },600);
+      }
+      function pendingDemo(scenario){
+        if(['single','multiple'].includes(scenario)){
+          state.tasks.forEach(t=>t.requests=[]);pendingUi.current=null;pendingUi.open=false;pendingUi.empty=false;
+          state.demo=true;Object.keys(names).forEach(app=>{state.apps[app]='active';previewStates[app]='running';});syncPending.clear();
+          const demoTask=app=>{let t=state.tasks.find(t=>t.app===app&&t.status==='等待审批')||state.tasks.find(t=>t.app===app);if(!t){t={id:app+'-pending-demo',app,window:'窗口 1',session:'项目 B',title:'整理需求文档',start:'14:00',updated:'14:20'};state.tasks.push(t);}return t;};
+          const t=demoTask('workbuddy');receiveRequest(t,'permission');state.view='workbuddy';
+          if(scenario==='multiple'){receiveRequest(t,'permission',false);receiveRequest(demoTask('codex'),'permission',false);}
+        }else if(scenario==='arrive'){
+          const t=state.tasks.find(t=>t.app==='codex')||state.tasks[0];if(t)receiveRequest(t,'permission');
+        }else{
+          const item=findRequest(pendingUi.current)||pendingRequests()[0];if(item){pendingUi.current=item.request.id;if(scenario==='expire')item.request.status='expired';else if(['fail','unknown'].includes(scenario))item.request.nextOutcome=scenario;}
+        }
+        render();
+      }
+      function taskCard(t){
+        const terminal=['任务失败','任务完成'].includes(t.status);
+        const copy=t.status==='等待审批'&&!(t.requests||[]).length?'暂未收到具体请求内容，不能授权。':terminal&&t.result?`${t.status==='任务失败'?'失败原因':'完成结果'}：${t.result}`:'';
+        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(t.status)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令</small><strong>${e(t.title)}</strong><em>${e(t.window)}／${e(t.session)}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(t.status)}">${e(t.status)}</strong></span><span><small>最后更新</small><strong>${e(t.updated||'--:--:--')}</strong></span></span>${!terminal&&t.action?`<span class="am-task-action">${stale(t)?'最后收到的动作':'当前动作'}　${e(t.action)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">状态未更新，以上为最后收到的任务信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
+      }
+      function render(){
+        const restore=captureAgentInteraction(host.closest('[data-subscreen-preview]'));
+        // App visibility follows monitoring, not whether the app has received a task yet.
+        const visibleApps=Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])||state.tasks.some(t=>t.app===id&&!['disconnected','waiting'].includes(previewStates[id])));
+        if(visibleApps.length&&!visibleApps.includes(state.view))state.view=visibleApps[0];
+        const viewState=previewStates[state.view];
+        consoleRoot.dataset.view=state.view;
+        const tasks=['disconnected','waiting'].includes(viewState)?[]:state.tasks.filter(t=>t.app===state.view);
+        page.querySelectorAll('[data-agent-preview-state]').forEach(button=>button.setAttribute('aria-current',String(button.dataset.agentPreviewState===viewState)));
+        const hasAnyTasks=state.tasks.some(t=>!['disconnected','waiting'].includes(previewStates[t.app]));
+        const allIdle=Object.values(state.apps).every(status=>status==='idle');
+        host.hidden=!visibleApps.length;
+        host.innerHTML=visibleApps.length?`<div class="am-toolbar">${tabs('view',state.view,visibleApps)}${speaker()}</div>${pendingUi.empty?'<p class="am-pending-empty" role="status">暂无待处理事项</p>':''}`:'';
+        taskList.innerHTML=tasks.map(taskCard).join('');
+        renderOriginalPanel();
+        if(!tasks.length){
+          const initial=allIdle&&!hasAnyTasks;
+          const waiting=state.apps[state.view]==='active'&&!syncPending.has(state.view);
+          taskList.innerHTML=`<div class="am-empty"><strong>${initial?'尚未开始监测':waiting?'去 Agent 应用提问':syncPending.has(state.view)?'等待任务状态同步':'暂未获取任务状态'}</strong>${waiting?'<span>监测已开启，任务开始后将在这里显示进度</span>':''}${initial?'<button data-am="manage">启用监测</button>':''}</div>`;
+        }
+        taskList.querySelectorAll('[data-task]').forEach(row=>row.setAttribute('data-state-target',String(row.dataset.task===selected[state.view])));
+        if(state.apps[state.view]==='interrupted'||state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='interrupted'?'监测中断':state.apps[state.view]==='reconnecting'?'重新连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
+        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>已开启监测的应用：<strong>${Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])).map(id=>names[id]).join('、')||'无'}</strong></span>`;
+        page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>`<section data-monitor-app="${id}" class="cli-integration-card ${state.apps[id]==='active'?'active':''}"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${state.apps[id]==='active'?'green':'cyan'}">${syncPending.has(id)&&state.apps[id]==='active'?'等待任务状态同步':labels[state.apps[id]]}</span></div><p class="am-note">${state.tasks.filter(t=>t.app===id).length} 条任务记录</p>${state.apps[id]==='error'?'<p class="am-note" role="status">未能连接应用。</p>':''}<div class="action-row">${['checking','permission','connecting','reconnecting'].includes(state.apps[id])?`<button class="soft-button" disabled>${labels[state.apps[id]]}</button>`:['active','interrupted'].includes(state.apps[id])?`${state.apps[id]==='interrupted'?`<button class="primary-button" data-am="reconnect" data-app="${id}">重新连接</button>`:''}<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:`<button class="primary-button" data-am="start" data-app="${id}">${['error','missing'].includes(state.apps[id])?'重试':'启用监测'}</button>`}</div></section>`).join('');
+        let demo=page.querySelector('.am-demo');if(!demo){demo=document.createElement('div');demo.className='am-demo action-row';page.querySelector('.cli-monitor-note').after(demo);}
+        demo.innerHTML=['idle','connecting','active','error','interrupted'].map(status=>`<button class="${state.apps[state.view]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${state.view}" data-status="${status}" aria-pressed="${state.apps[state.view]===status}">${labels[status]}</button>`).join('');
+        const rows=state.tasks.filter(t=>t.app===state.records);
+        records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>任务</th><th>窗口／会话</th><th>状态</th><th>开始时间</th><th>耗时</th></tr></thead><tbody>${rows.map(t=>`<tr><td><details data-record="${e(t.id)}"${expandedRecords.has(t.id)?' open':''}><summary>${e(t.title)}</summary>${recordContent(t)}</details></td><td>${e(t.window)}／${e(t.session)}</td><td>${e(t.status)}${stale(t)?'<br><small>状态未更新</small>':''}</td><td>${e(t.start)}</td><td>${e(t.duration||'暂未获取')}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
+        renderPending();
+        restore();
+        syncPhysicalScreenPreview(host.closest('[data-subscreen-preview]'));
+      }
+      function renderOriginalPanel(){
+        const t=state.tasks.find(t=>t.id===selected[state.view]);
+        const key=state.apps[state.view]==='idle'?'disconnected':state.apps[state.view]==='interrupted'?'connection-lost':previewStates[state.view];
+        const status={disconnected:'未开始监测',waiting:'等待任务',running:'执行中',approval:'等待审批',failed:'任务失败',completed:'任务完成','connection-lost':'监测中断'}[key]||'等待任务';
+        const text=(id,value)=>{page.querySelector('#'+id).textContent=value;};
+        text('agent-progress-task',t?.title||(key==='disconnected'?'未获取本轮指令':'暂无本轮指令'));
+        text('agent-sub-monitor-object',names[state.view]+(t?' · '+t.window+'／'+t.session:''));
+        text('agent-progress-pill',status);text('agent-elapsed-time',t?.updated||'--:--:--');text('agent-update-source',t?'最近任务更新时间':'暂无事件时间');
+        const action=page.querySelector('#agent-current-action-wrap');action.hidden=!t?.action;text('agent-current-action',t?.action||'暂未获取');
+        page.querySelector('#agent-steps-panel').hidden=true;
+        page.querySelector('#agent-step-strip').innerHTML='';
+        page.querySelector('#agent-monitor-empty-state').hidden=Boolean(t?.action);
+        text('agent-monitor-empty-title',key==='disconnected'?'尚未开始监测':key==='connection-lost'?'监测连接中断':key==='running'?'正在等待执行信息':'暂无执行中的任务');
+        text('agent-monitor-empty-copy',key==='disconnected'?'请先开启对应应用的监测。':key==='connection-lost'?'暂时无法接收应用的任务更新，应用中的任务不受影响。':'在当前监测的 WorkBuddy 或 Codex 中发起任务后，这里将展示应用上报的任务信息。');
+        // The request renderer controls the small-screen dialog, not task-status changes.
+      }
+      function preview(key){
+        // Empty-page review scenarios apply to the whole demo panel, not one app.
+        // Normal application start/stop controls remain independent.
+        if(key==='disconnected'||key==='waiting'){
+          pendingUi.open=false;pendingUi.current=null;pendingUi.empty=false;
+          state.tasks.forEach(t=>(t.requests||[]).forEach(r=>{if(['pending','submitting','unknown'].includes(r.status))r.status='cancelled';}));
+          Object.keys(state.apps).forEach(app=>{
+            state.apps[app]=key==='disconnected'?'idle':'active';
+            previewStates[app]=key;
+            selected[app]=null;
+          });
+          syncPending.clear();state.demo=true;state.detail=null;render();return;
+        }
+        syncPending.delete(state.view);state.demo=true;previewStates[state.view]=key;
+        state.apps[state.view]=key==='disconnected'?'idle':key==='connection-lost'?'interrupted':'active';
+        if(['running','approval','failed','completed'].includes(key)){
+          const status={running:'执行中',approval:'等待审批',failed:'任务失败',completed:'任务完成'}[key];
+          let t=state.tasks.find(t=>t.app===state.view&&t.id===selected[state.view])||state.tasks.find(t=>t.app===state.view);
+          if(!t){t={id:state.view+'-preview-task',app:state.view,window:'窗口 1',session:'项目 A',title:'整理项目文件',start:'14:00'};state.tasks.push(t);}
+          Object.assign(t,{status,updated:'14:20',action:key==='running'?'正在处理当前任务':key==='approval'?'等待用户确认':'',result:key==='completed'?'项目文件已整理':key==='failed'?'文件写入失败':'',end:['failed','completed'].includes(key)?'14:20':'',duration:['failed','completed'].includes(key)?'20 分钟':''});selected[state.view]=t.id;
+          if(key==='approval'){
+            const existing=(t.requests||[]).find(r=>['pending','submitting','unknown'].includes(r.status));
+            if(existing){pendingUi.current=existing.id;pendingUi.open=true;}else{receiveRequest(t);}
+          }else{(t.requests||[]).forEach(r=>{if(['pending','submitting','unknown'].includes(r.status))r.status='cancelled';});if(findRequest(pendingUi.current)?.task===t)pendingUi.open=false;}
+        }else selected[state.view]=null;
+        render();
+      }
+      function recordContent(t){
+        const terminal=['任务完成','任务失败'].includes(t.status);
+        const fields=[['结束时间',t.end],['最后更新时间',t.updated],...(!terminal&&t.action?[[stale(t)?'最后收到的动作':'当前动作',t.action]]:[]),...(t.result?[[t.status==='任务失败'?'失败原因':'完成结果',t.result]]:[])];
+        return `<dl>${fields.filter(([,value])=>value).map(([k,v])=>`<dt>${e(k)}</dt><dd>${e(v)}</dd>`).join('')}</dl>`;
+      }
+      function beginConnection(app){
+        if(!Object.hasOwn(names,app)||['connecting','reconnecting'].includes(state.apps[app]))return;
+        const recovering=state.apps[app]==='interrupted'||syncPending.has(app);
+        const attempt=++connectionAttempts[app];
+        state.apps[app]=recovering?'reconnecting':'connecting';render();
+        // Prototype-only connection and synchronization acknowledgment; no real app connection.
+        setTimeout(()=>{
+          if(connectionAttempts[app]!==attempt||!['connecting','reconnecting'].includes(state.apps[app]))return;
+          state.apps[app]='active';syncPending.delete(app);
+          const task=state.tasks.find(t=>t.app===app&&t.id===selected[app])||state.tasks.find(t=>t.app===app);
+          previewStates[app]=task?({'执行中':'running','等待审批':'approval','任务失败':'failed','任务完成':'completed'}[task.status]||'running'):'waiting';
+          render();
+        },600);
+      }
+      function show(app,stage){
+        if(!Object.hasOwn(names,app)||!['permission','stop'].includes(stage))return;
+        dialog={app,stage};if(modal.hidden)lastFocus=document.activeElement;modal.hidden=false;
+        const title=stage==='permission'?'允许监测':'停止监测';
+        const copy=stage==='permission'?'开启后，将接收该应用的任务指令、窗口／会话信息、任务状态、当前动作、更新时间、执行结果及待处理请求，用于展示任务进度，并在小屏处理请求。':`停止后，将不再接收 ${names[app]} 各窗口／会话的任务更新。`;
+        const buttons=stage==='permission'?[['cancel','取消'],['connect','允许监测']]:[['confirm-stop','停止监测'],['close','取消']];
+        modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="${e(title)}" tabindex="-1"><h3>${e(title)}</h3><p>${e(copy)}</p><div class="action-row">${buttons.map(([action,label])=>`<button class="soft-button" data-am="dialog" data-stage="${action}">${label}</button>`).join('')}</div></section>`;render();modal.querySelector('button')?.focus();
+      }
+      function close(){modal.hidden=true;modal.innerHTML='';dialog=null;render();lastFocus?.isConnected&&lastFocus.focus();}
+      page.addEventListener('toggle',event=>{const id=event.target.dataset?.record;if(!id)return;if(event.target.open)expandedRecords.add(id);else expandedRecords.delete(id);},true);
+      page.addEventListener('keydown',event=>{
+        const overlay=event.target.closest?.('.am-pending-overlay');if(!overlay||!pendingUi.open)return;
+        if(event.key==='Escape'){event.preventDefault();event.stopPropagation();pendingUi.open=false;render();return;}
+        if(event.key==='Tab'){
+          const controls=[...overlay.querySelectorAll('button:not(:disabled)')],first=controls[0],last=controls.at(-1);
+          if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}
+          else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}
+        }
+      });
+      page.addEventListener('click',event=>{const b=event.target.closest('[data-am]');if(!b)return;event.preventDefault();event.stopPropagation();const a=b.dataset.am,id=b.dataset.app;
+        if(a==='pending-locate')locatePending();
+        if(a==='pending-close'){pendingUi.open=false;render();}
+        if(a==='pending-open'&&findRequest(b.dataset.request)){pendingUi.current=b.dataset.request;pendingUi.open=true;render();}
+        if(a==='pending-answer')submitRequest(b.dataset.request,b.dataset.value);
+        if(a==='pending-demo')pendingDemo(b.dataset.scenario);
+        if(a==='monitor-preview'&&Object.hasOwn(names,id)&&['idle','connecting','active','error','interrupted'].includes(b.dataset.status)){
+          // Review-only connection fixtures; preserve task data and per-request decisions.
+          modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;syncPending.delete(id);++connectionAttempts[id];
+          state.apps[id]=b.dataset.status;
+          render();
+        }
+        if(a==='view'||a==='records'){state[a]=id;if(a==='records')state.detail=null;render();}
+        if(a==='select-task'){const t=state.tasks.find(t=>t.id===b.dataset.task);if(t){selected[t.app]=t.id;render();}}
+        if(a==='manage'){const panel=id?page.querySelector(`[data-monitor-app="${id}"]`):page.querySelector('.agent-monitor-panel');panel?.scrollIntoView({behavior:'smooth',block:'start'});panel?.setAttribute('tabindex','-1');panel?.focus({preventScroll:true});}
+        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(state.apps[id]==='idle')show(id,'permission');else beginConnection(id);}
+        if(a==='reconnect'&&state.apps[id]==='interrupted')beginConnection(id);
+        if(a==='stop')show(id,'stop');
+        if(a==='interrupt'){state.apps[id]='interrupted';previewStates[id]='connection-lost';render();}
+        if(a==='demo'){state.demo=!state.demo;state.tasks=state.demo?Object.keys(names).flatMap(app=>['执行中','等待审批','任务完成','任务失败'].map((status,i)=>({id:app+'-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','资料整理','测试验证'][i],title:['修复登录问题','更新项目文件','整理需求文档','运行测试'][i],status,start:'14:0'+i,updated:'14:20',end:i>1?'14:18':'',duration:i>1?'15 分钟':'',action:['检查相关代码','等待用户确认','已整理文档','测试返回错误'][i],result:i===2?'需求文档已整理':i===3?'测试断言未通过':''}))):[];state.detail=null;pendingUi.open=false;pendingUi.current=null;pendingUi.empty=false;if(state.demo){state.tasks.filter(t=>t.status==='等待审批').forEach(t=>receiveRequest(t,'permission',false));Object.keys(names).forEach(app=>{state.apps[app]='active';previewStates[app]='running';});syncPending.clear();}render();}
+        if(a==='dialog'&&dialog){const app=dialog.app,s=b.dataset.stage;if(s==='close'||s==='cancel')close();else if(s==='confirm-stop'&&dialog.stage==='stop'){++connectionAttempts[app];state.apps[app]='idle';syncPending.delete(app);close();}else if(s==='connect'&&dialog.stage==='permission'){close();beginConnection(app);}}
+      });
+      modal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close(true);}if(event.key==='Tab'){const buttons=[...modal.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
+      // Start this review prototype with explicitly labelled multi-window examples.
+      state.demo=true;
+      state.tasks=Object.keys(names).flatMap(app=>['执行中','等待审批','任务完成'].map((status,i)=>({
+        id:app+'-review-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','项目 C'][i],
+        title:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],status,
+        permissionRequest:i===0?{title:'允许运行登录测试？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:undefined,
+        start:['14:00','14:02','14:05'][i],updated:['14:20','14:18','14:16'][i],
+        end:i===2?'14:16':'',duration:i===2?'11 分钟':'',
+        action:['正在运行登录模块测试','等待确认文件修改',''][i],result:i===2?'页面样式已更新':''
+      })));
+      state.apps.workbuddy='active';state.apps.codex='active';
+      previewStates.workbuddy='running';previewStates.codex='running';
+      state.tasks.filter(t=>t.status==='等待审批').forEach(t=>receiveRequest(t,'permission',false));
+      window.agentMultiMonitor={render,preview};render();
+    })();
     </script>
   </body>
 </html>
