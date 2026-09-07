@@ -9753,6 +9753,16 @@ body.prototype-small .token-preview-canvas>.token-bottom-grid{display:none!impor
 .cloud-token-toolbar>.hybrid-token-tabs{grid-column:1}
 .cloud-token-toolbar .token-agent-switch{grid-column:2;justify-self:center}
 .cloud-token-toolbar .hybrid-token-ranges{grid-column:3;justify-self:end}
+body.prototype-small .cloud-token-toolbar{grid-template-columns:minmax(0,1fr) auto}
+body.prototype-small .cloud-token-toolbar .token-agent-switch{grid-column:1;justify-self:stretch;justify-content:flex-start;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:5px}
+body.prototype-small .cloud-token-toolbar .token-agent-switch button{flex:0 0 44px;width:44px;justify-content:center;gap:0;padding:0;white-space:nowrap;min-height:44px}
+body.prototype-small .cloud-token-toolbar .token-agent-switch button>span:not(.token-agent-icon){display:none}
+body.prototype-small .cloud-token-toolbar .token-agent-icon{object-fit:contain}
+body.prototype-small .cloud-agent-empty{display:none;margin:0;padding:24px;color:#9eabb7;font-size:13px;text-align:center;align-content:center}
+body.prototype-small [data-cloud-token-dashboard][data-token-empty] .cloud-token-grid>article,
+body.prototype-small [data-cloud-detail-view="agent"][data-token-empty]>:not(.cloud-agent-empty){display:none}
+body.prototype-small [data-token-empty] .cloud-agent-empty{display:block;grid-column:1/-1;grid-row:1/-1}
+body.prototype-small .cloud-token-toolbar .hybrid-token-ranges{grid-column:2;justify-self:end}
 .cloud-token-toolbar .hybrid-token-tab,.cloud-token-toolbar .hybrid-token-range{min-height:32px;border-radius:8px;padding:0 14px;font-size:10px}
 .cloud-token-toolbar .token-agent-switch button{min-height:32px;gap:5px;padding:0 8px;font-size:8px}.cloud-token-toolbar .token-agent-icon{width:17px;height:17px;flex-basis:17px;border-radius:5px}
 .cloud-token-toolbar .hybrid-token-demo{padding:3px 8px;font-size:8px}
@@ -9830,7 +9840,7 @@ body.prototype-small .token-history-panel>.section-title,
 body.prototype-small .token-history-panel>#token-record-table,
 body.prototype-small .token-history-panel>.dev-field-notes{display:none!important}
 .cloud-token-details{display:grid;gap:12px}.cloud-token-detail-head{display:flex;align-items:center;justify-content:flex-start}.cloud-token-detail-head .hybrid-token-tab{min-height:38px;padding:0 18px}.cloud-token-details>[data-cloud-detail-view]{overflow:hidden;border:1px solid rgba(91,124,145,.27);border-radius:12px;background:rgba(255,255,255,.018)}
-.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-tab],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-range]{pointer-events:auto!important;min-height:44px}
+.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-tab],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-range],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-refresh]{pointer-events:auto!important;min-height:44px}
 @media(max-width:1150px){.hybrid-token-dashboard-grid{grid-template-columns:1fr}.hybrid-token-card{min-height:200px}.hybrid-token-total strong{font-size:44px}}
 </style>
 </head>
@@ -11578,7 +11588,25 @@ const HYBRID_TOKEN_DATA = {
     }
   }
 };
-const HYBRID_TOKEN_STATE = { tab: "api", range: "日", agentApp: "ChatGPT", hiddenSeries: new Set() };
+// X3 Cloud only exposes Agent usage; retain API usage for the other product variants.
+const HYBRID_TOKEN_STATE = { tab: PROTOTYPE_SIZE === "small" ? "agent" : "api", range: "日", agentApp: "ChatGPT", hiddenSeries: new Set() };
+if (PROTOTYPE_SIZE === "small") {
+  $$('[data-cloud-token-tab="api"], [data-cloud-detail-view="api"]').forEach((node) => node.remove());
+  $$('[data-cloud-token-dashboard] .hybrid-token-tabs').forEach((node) => node.remove());
+  $$('[data-cloud-token-dashboard] .hybrid-token-ranges').forEach((node) => {
+    node.insertAdjacentHTML('beforeend', '<button class="hybrid-token-range" type="button" data-cloud-token-refresh title="刷新当前用量视图">刷新</button>');
+  });
+  $$('[data-cloud-token-dashboard] [data-token-agent-switch]').forEach((node) => {
+    node.insertAdjacentHTML('beforeend', [['Claude','claude.png'],['OpenCode','opencode.png'],['GLM','glm.svg'],['Antigravity','antigravity.png'],['Qoder','qoder.png'],['Grok','grok.jpg'],['Pi','pi.svg']].map(([name,icon]) => `<button type="button" data-token-agent-app="${name}" aria-pressed="false"><img class="token-agent-icon" src="assets/agent-official-icons/${icon}?v=20260907" alt=""><span>${name}</span></button>`).join(''));
+  });
+  $$('[data-cloud-token-grid], [data-cloud-detail-view="agent"]').forEach((node) => {
+    node.insertAdjacentHTML('beforeend', '<p class="cloud-agent-empty" role="status">暂无用量数据</p>');
+  });
+  $$('[data-cloud-token-dashboard] [data-token-agent-app]').forEach((button) => {
+    button.setAttribute('aria-label', button.dataset.tokenAgentApp);
+    button.title = button.dataset.tokenAgentApp;
+  });
+}
 const HYBRID_TOKEN_RANGE_DATA_KEY = { "日": "今日", "周": "7天", "月": "30天", "总计": "30天" };
 const HYBRID_TOKEN_RANGE_LABEL = { "日": "今日", "周": "本周", "月": "本月", "总计": "累计" };
 const HYBRID_AGENT_APP_DATA = {
@@ -11602,6 +11630,44 @@ const HYBRID_AGENT_APP_DATA = {
     models: [["Qwen3-Coder-Plus", 52, 55], ["Qwen3-Max", 24, 23], ["Qwen3-235B-A22B", 15, 14], ["Qwen3-32B", 9, 8]],
     ranges: { "今日": ["5.3M", 5.3, "$3.09"], "7天": ["26M", 26, "$21.49"], "30天": ["112M", 112, "$92"] }
   },
+  // Local prototype fixtures, matching the existing four apps. Not collected usage or billing.
+  ...(PROTOTYPE_SIZE === "small" ? {
+    Claude: {
+      color: "#da805a", composition: [12, 6, 78, 4], trend: [0, 0.04, 0.18, 0.46, 0.77, 1],
+      models: [["Claude Sonnet 4", 62, 48], ["Claude Opus 4", 26, 46], ["Claude Haiku 3.5", 12, 6]],
+      ranges: { "今日": ["18.6M", 18.6, "$24.80"], "7天": ["124M", 124, "$165.30"], "30天": ["536M", 536, "$714.50"], "总计": ["1.82B", 1820, "$2,426.70"] }
+    },
+    OpenCode: {
+      color: "#d7d8dc", composition: [16, 7, 71, 6], trend: [0, 0.09, 0.31, 0.39, 0.86, 1],
+      models: [["Claude Sonnet 4", 46, 52], ["GPT-5", 34, 36], ["Qwen3-Coder", 20, 12]],
+      ranges: { "今日": ["9.4M", 9.4, "$10.52"], "7天": ["61M", 61, "$68.32"], "30天": ["268M", 268, "$300.16"], "总计": ["924M", 924, "$1,034.88"] }
+    },
+    GLM: {
+      color: "#b7c7df", composition: [18, 5, 72, 5], trend: [0, 0.12, 0.22, 0.57, 0.74, 1],
+      models: [["GLM-4.5", 60, 68], ["GLM-4.5-Air", 28, 24], ["GLM-4-Flash", 12, 8]],
+      ranges: { "今日": ["8.2M", 8.2, "$4.76"], "7天": ["54M", 54, "$31.32"], "30天": ["231M", 231, "$133.98"], "总计": ["786M", 786, "$455.88"] }
+    },
+    Antigravity: {
+      color: "#68a5ff", composition: [14, 6, 72, 8], trend: [0, 0.03, 0.28, 0.63, 0.81, 1],
+      models: [["Gemini 2.5 Pro", 64, 74], ["Gemini 2.5 Flash", 36, 26]],
+      ranges: { "今日": ["14.8M", 14.8, "$12.58"], "7天": ["96M", 96, "$81.60"], "30天": ["418M", 418, "$355.30"], "总计": ["1.36B", 1360, "$1,156"] }
+    },
+    Qoder: {
+      color: "#55c898", composition: [15, 5, 76, 4], trend: [0, 0.08, 0.16, 0.42, 0.9, 1],
+      models: [["Auto", 72, 68], ["Performance", 28, 32]],
+      ranges: { "今日": ["6.7M", 6.7, "$5.36"], "7天": ["43M", 43, "$34.40"], "30天": ["187M", 187, "$149.60"], "总计": ["642M", 642, "$513.60"] }
+    },
+    Grok: {
+      color: "#bfc3cc", composition: [21, 8, 59, 12], trend: [0, 0.14, 0.37, 0.51, 0.72, 1],
+      models: [["Grok 4", 68, 82], ["Grok 3 Mini", 32, 18]],
+      ranges: { "今日": ["4.6M", 4.6, "$6.44"], "7天": ["31M", 31, "$43.40"], "30天": ["138M", 138, "$193.20"], "总计": ["475M", 475, "$665"] }
+    },
+    Pi: {
+      color: "#cfb3ff", composition: [17, 7, 70, 6], trend: [0, 0.06, 0.34, 0.59, 0.69, 1],
+      models: [["Claude Sonnet 4", 54, 60], ["GPT-5", 30, 32], ["Gemini 2.5 Flash", 16, 8]],
+      ranges: { "今日": ["3.8M", 3.8, "$4.18"], "7天": ["25M", 25, "$27.50"], "30天": ["109M", 109, "$119.90"], "总计": ["364M", 364, "$400.40"] }
+    },
+  } : {}),
 };
 
 function formatAgentTokenPart(valueM) {
@@ -11621,16 +11687,41 @@ function getHybridTokenData() {
   const base = { ...source, period: `${rangeLabel} ${HYBRID_TOKEN_STATE.tab === "agent" ? "Agent" : "API"} Token`, costPeriod: rangeLabel };
   if (HYBRID_TOKEN_STATE.tab !== "agent") return base;
   const app = HYBRID_AGENT_APP_DATA[HYBRID_TOKEN_STATE.agentApp];
-  const [total, totalM, cost] = app.ranges[dataRange];
+  if (!app) return {
+    empty: true, period: `${rangeLabel} ${HYBRID_TOKEN_STATE.agentApp} Token`, total: '—', cost: '—',
+    costPeriod: rangeLabel, comparison: '', trendUnit: '', axis: [], costItems: [], models: [], composition: [], series: [],
+  };
+  const [total, totalM, cost] = app.ranges[HYBRID_TOKEN_STATE.range] || app.ranges[dataRange];
   const appModels = app.models;
   const costValue = Number(cost.replace(/[$,]/g, ""));
   const labels = ["输入", "输出", "缓存", "推理"];
   const colors = ["#317de8", "#f06b45", "#9fc4ff", "#785be9"];
-  const series = base.series.find(([name]) => name === HYBRID_TOKEN_STATE.agentApp) || base.series[0];
+  const axis = app.trend && HYBRID_TOKEN_STATE.range === "总计" ? ["4月", "5月", "6月", "7月", "8月", "9月"] : base.axis;
+  const series = app.trend
+    ? [HYBRID_TOKEN_STATE.agentApp, app.color, axis.map((_, index) => {
+        const position = index * (app.trend.length - 1) / (axis.length - 1);
+        const left = Math.floor(position), right = Math.ceil(position);
+        return totalM * (app.trend[left] + (app.trend[right] - app.trend[left]) * (position - left));
+      })]
+    : base.series.find(([name]) => name === HYBRID_TOKEN_STATE.agentApp) || base.series[0];
+  // Keep prototype daily rows and application comparison on the same selected range.
+  const dayCount = { "日": 1, "周": 7, "月": 30, "总计": 160 }[HYBRID_TOKEN_STATE.range];
+  const weights = Array.from({ length: dayCount }, (_, index) => 8 + (index * 7 + Math.round(totalM)) % 11);
+  const weightTotal = weights.reduce((sum, value) => sum + value, 0);
+  const daily = weights.map((weight, index) => {
+    const valueM = totalM * weight / weightTotal;
+    return { date: new Date(Date.UTC(2026, 8, 7 - index)).toISOString().slice(0, 10), totalM: valueM,
+      parts: app.composition.map(share => valueM * share / 100), conversations: Math.max(1, Math.round(valueM * 9)) };
+  });
+  const appUsage = Object.entries(HYBRID_AGENT_APP_DATA).map(([name, entry]) => {
+    const values = entry.ranges[HYBRID_TOKEN_STATE.range] || entry.ranges[dataRange];
+    return { name, total: values[0], totalM: values[1], color: entry.color };
+  });
   return {
     ...base,
     period: `${rangeLabel} ${HYBRID_TOKEN_STATE.agentApp} Token`,
     total,
+    totalM, daily, appUsage, axis,
     cost,
     costItems: appModels.map(([name, , costShare]) => [name, `${costShare}%`, formatAgentCost(costValue * costShare / 100), app.color]),
     models: appModels.map(([name, tokenShare]) => [name, `${tokenShare}%`, `${formatAgentTokenPart(totalM * tokenShare / 100)} · ${tokenShare}%`, app.color]),
@@ -11688,7 +11779,11 @@ function renderHybridTokenPanel(panel, data) {
 }
 
 function updateHybridTokenDashboard() {
+  if (PROTOTYPE_SIZE === "small") HYBRID_TOKEN_STATE.tab = "agent";
   const data = getHybridTokenData();
+  if (PROTOTYPE_SIZE === "small") {
+    $$('[data-cloud-token-dashboard], [data-cloud-detail-view="agent"]').forEach((node) => node.toggleAttribute('data-token-empty', Boolean(data.empty)));
+  }
   const panels = [
     ...$$(`[data-hybrid-token-panel="${HYBRID_TOKEN_STATE.tab}"]`),
     ...$$('[data-token-preview-panel]'),
@@ -11717,6 +11812,16 @@ function updateHybridTokenDashboard() {
 function updateCloudTokenDetails() {
   $$('[data-cloud-detail-view]').forEach((panel) => {
     panel.hidden = panel.dataset.cloudDetailView !== HYBRID_TOKEN_STATE.tab;
+  });
+  if (PROTOTYPE_SIZE !== "small") return;
+  const data = getHybridTokenData();
+  if (data.empty) return;
+  $$('[data-cloud-detail-view="agent"] [data-cloud-record-panel="daily"] tbody').forEach((body) => {
+    body.innerHTML = data.daily.map(row => `<tr><td>${row.date}</td><td>${formatAgentTokenPart(row.totalM)}</td>${row.parts.map(value => `<td>${formatAgentTokenPart(value)}</td>`).join('')}<td>${row.conversations.toLocaleString('en-US')}</td></tr>`).join('');
+  });
+  const maximum = Math.max(...data.appUsage.map(row => row.totalM));
+  $$('[data-cloud-detail-view="agent"] .hybrid-token-app-list').forEach((list) => {
+    list.innerHTML = data.appUsage.map(row => `<div class="hybrid-token-app-row"><span class="hybrid-token-app-name">${row.name}</span><span class="hybrid-token-app-meter"><i style="--share:${row.totalM / maximum * 100}%;background:${row.color}"></i></span><strong>${row.total}</strong></div>`).join('');
   });
 }
 
@@ -11753,6 +11858,12 @@ $$('[data-hybrid-token-range]').forEach((button) => button.addEventListener('cli
   updateHybridTokenDashboard();
 }));
 $('#usage')?.addEventListener('click', (event) => {
+  const refresh = event.target.closest('[data-cloud-token-refresh]');
+  if (refresh && PROTOTYPE_SIZE === "small") {
+    updateHybridTokenDashboard();
+    showLightToast('已刷新');
+    return;
+  }
   const cloudTab = event.target.closest('[data-cloud-token-tab]');
   if (cloudTab) {
     HYBRID_TOKEN_STATE.tab = cloudTab.dataset.cloudTokenTab;
@@ -17648,7 +17759,7 @@ function sanitizePhysicalScreenClone(clone) {
     node.removeAttribute('aria-hidden');
   });
   if (clone.classList.contains("token-preview-canvas")) {
-    clone.querySelectorAll("[data-token-model-range], [data-cloud-token-tab], [data-cloud-token-range], [data-token-agent-app]").forEach((node) => {
+    clone.querySelectorAll("[data-token-model-range], [data-cloud-token-tab], [data-cloud-token-range], [data-cloud-token-refresh], [data-token-agent-app]").forEach((node) => {
       node.setAttribute("tabindex", "0");
       node.removeAttribute("aria-hidden");
     });
@@ -17689,6 +17800,10 @@ function syncPhysicalScreenPreview(preview) {
   const canvas = physical?.querySelector(".physical-screen-canvas");
   if (!canvas) return;
   const restore = page === 'monitor' && PROTOTYPE_SIZE === 'small' ? captureAgentInteraction(canvas) : () => {};
+  const usageScroll = page === 'usage' && PROTOTYPE_SIZE === 'small' ? {
+    left: canvas.querySelector('[data-token-agent-switch]')?.scrollLeft || 0,
+    top: canvas.querySelector('.cloud-token-scroll-region')?.scrollTop || 0,
+  } : null;
   const clone = sanitizePhysicalScreenClone(preview.cloneNode(true));
   if (page === "usage") {
     const scale = Math.min(canvas.clientWidth / 960, canvas.clientHeight / 480);
@@ -17697,6 +17812,12 @@ function syncPhysicalScreenPreview(preview) {
     clone.style.setProperty("zoom", String(scale));
   }
   canvas.replaceChildren(clone);
+  if (usageScroll) {
+    const strip = clone.querySelector('[data-token-agent-switch]');
+    const region = clone.querySelector('.cloud-token-scroll-region');
+    if (strip) strip.scrollLeft = usageScroll.left;
+    if (region) region.scrollTop = usageScroll.top;
+  }
   restore();
 }
 
@@ -19460,7 +19581,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           const prerequisiteMethod=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpenPrerequisite=Boolean(ui.prerequisiteScenario)||typeof window.x3MonitorConnector?.[prerequisiteMethod]==='function';
           const prerequisiteControl=ui.prerequisite?`<button class="soft-button" data-am="prerequisite-open" data-app="${id}" ${ui.opening||!canOpenPrerequisite?'disabled':''}>${ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用'}</button>${!canOpenPrerequisite?`<span class="am-note">${ui.prerequisite==='installed'?'请自行从官方渠道安装后重试':'请手动打开应用'+(ui.prerequisite==='loggedIn'?'并登录':'')+'后重试'}</span>`:''}`:'';
-          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条${ui.preview?'示例':''}任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p>${ui.guideOpen?`<p class="am-note">${id==='workbuddy'?'采用 Hooks 时，先在来源应用完成配置并确认生效，再检查本机事件接收服务。':'按 Codex 实际接入方式配置连接，不沿用其他应用的授权步骤。'}完成后点击“重新监测”；具体配置入口以所用版本为准。</p>`:''}<div class="action-row" style="margin-top:auto;flex-wrap:wrap">${ui.needsSetup?`<button class="soft-button" data-am="setup-guide" data-app="${id}" aria-expanded="${Boolean(ui.guideOpen)}">${ui.guideOpen?'收起指引':'接入指引'}</button>`:''}${prerequisiteControl}${controls}</div></section>`;
+          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条${ui.preview?'示例':''}任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
         }).join('');
         let demo=page.querySelector('.am-demo');if(!demo){demo=document.createElement('div');demo.className='am-demo action-row';page.querySelector('.cli-monitor-note').after(demo);}
         demo.style.display='block';demo.style.marginTop='20px';
@@ -19526,7 +19647,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const ui=connectionUi[app];++connectionAttempts[app];
         clearTimeout(ui.timer);ui.timer=null;
         const controller=ui.controller;ui.controller=null;controller?.abort();
-        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.needsSetup=false;ui.guideOpen=false;ui.approvals=false;
+        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.needsSetup=false;ui.approvals=false;
       }
       function cancelConnection(app){
         resetConnection(app);state.apps[app]='idle';syncPending.delete(app);render();
@@ -19715,7 +19836,6 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='pending-answer')submitRequest(b.dataset.request,b.dataset.value);
         if(a==='request-check')checkRequest(b.dataset.request);
         if(a==='source-open')openSource(id);
-        if(a==='setup-guide'&&Object.hasOwn(names,id)){connectionUi[id].guideOpen=!connectionUi[id].guideOpen;render();}
         if(a==='pending-demo')pendingDemo(b.dataset.scenario);
         if(a==='prerequisite-preview')previewPrerequisite(id,b.dataset.scenario);
         if(a==='monitor-preview'&&Object.hasOwn(names,id)&&['idle','connecting','active','error'].includes(b.dataset.status)){
