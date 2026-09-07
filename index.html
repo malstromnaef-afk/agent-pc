@@ -11597,7 +11597,7 @@ if (PROTOTYPE_SIZE === "small") {
     node.insertAdjacentHTML('beforeend', '<button class="hybrid-token-range" type="button" data-cloud-token-refresh title="刷新当前用量视图">刷新</button>');
   });
   $$('[data-cloud-token-dashboard] [data-token-agent-switch]').forEach((node) => {
-    node.insertAdjacentHTML('beforeend', [['Claude','claude.png'],['OpenCode','opencode.png'],['GLM','glm.svg'],['Antigravity','antigravity.png'],['Qoder','qoder.png'],['Grok','grok.jpg'],['Pi','pi.svg']].map(([name,icon]) => `<button type="button" data-token-agent-app="${name}" aria-pressed="false"><img class="token-agent-icon" src="assets/agent-official-icons/${icon}?v=20260907" alt=""><span>${name}</span></button>`).join(''));
+    node.insertAdjacentHTML('beforeend', [['Claude','claude.png'],['OpenCode','opencode.png'],['GLM','glm.svg'],['Antigravity','antigravity.png'],['Qoder','qoder.png'],['Grok','grok.jpg'],['Pi','pi.svg'],['X3','x3.png']].map(([name,icon]) => `<button type="button" data-token-agent-app="${name}" aria-pressed="false"><img class="token-agent-icon" src="assets/agent-official-icons/${icon}?v=20260907" alt=""><span>${name}</span></button>`).join(''));
   });
   $$('[data-cloud-token-grid], [data-cloud-detail-view="agent"]').forEach((node) => {
     node.insertAdjacentHTML('beforeend', '<p class="cloud-agent-empty" role="status">暂无用量数据</p>');
@@ -11666,6 +11666,11 @@ const HYBRID_AGENT_APP_DATA = {
       color: "#cfb3ff", composition: [17, 7, 70, 6], trend: [0, 0.06, 0.34, 0.59, 0.69, 1],
       models: [["Claude Sonnet 4", 54, 60], ["GPT-5", 30, 32], ["Gemini 2.5 Flash", 16, 8]],
       ranges: { "今日": ["3.8M", 3.8, "$4.18"], "7天": ["25M", 25, "$27.50"], "30天": ["109M", 109, "$119.90"], "总计": ["364M", 364, "$400.40"] }
+    },
+    X3: {
+      color: "#29c5d5", composition: [19, 8, 67, 6], trend: [0, 0.07, 0.25, 0.48, 0.82, 1],
+      models: [["GPT-5", 44, 52], ["Claude Sonnet 4", 32, 35], ["Qwen3-Coder", 24, 13]],
+      ranges: { "今日": ["2.4M", 2.4, "$2.16"], "7天": ["16M", 16, "$14.40"], "30天": ["72M", 72, "$64.80"], "总计": ["248M", 248, "$223.20"] }
     },
   } : {}),
 };
