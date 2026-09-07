@@ -19133,6 +19133,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-task-columns small{display:block;color:#939eab;font-size:13px;margin-bottom:7px}
       #monitor .am-task-columns strong{display:block;font-size:20px;line-height:1.4;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
       #monitor .am-task-columns em{display:block;font-size:13px;color:#a8b2bf;font-style:normal;margin-top:7px}
+      body.prototype-small #monitor .am-task-columns em,body.prototype-small #monitor .am-task-action{overflow-wrap:anywhere}
+      body.prototype-small #monitor .am-task-columns>span:first-child strong{white-space:normal}
       #monitor .am-task-action{display:block;border-top:1px solid #ffffff0d;margin-top:12px;padding-top:10px;color:#c7d1da;font-size:15px;line-height:1.5}
       #monitor .am-task-state[data-status="等待审批"]{color:#ffbe50}
       #monitor .am-task-state[data-status="任务完成"]{color:#29e694}
@@ -19209,14 +19211,14 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
        This adapter is prototype-only; it does not claim to connect to installed apps.
        State matrix: idle -> consent dialog -> connecting (optional official authorization) -> active/error;
        authorization cancel -> idle; missing connector -> error, never simulated success;
-       active -> interrupted -> reconnecting -> active/interrupted;
+       active -> error -> reconnecting -> active/error;
        stop -> idle (tasks retained), viewing/record tabs never change subscriptions. */
     (() => {
       if (PROTOTYPE_SIZE !== 'small') return; // X3 Cloud only; retain other products' original page.
       const page=document.querySelector('#monitor');
       const names={workbuddy:'WorkBuddy',codex:'Codex'};
       const state={view:'workbuddy',records:'workbuddy',apps:{workbuddy:'idle',codex:'idle'},tasks:[],demo:false,detail:null};
-      const labels={idle:'未监测',checking:'检查中',permission:'等待授权',connecting:'连接中',active:'监测中',missing:'未找到应用',error:'监测失败',interrupted:'监测中断',reconnecting:'重新连接中'};
+      const labels={idle:'未监测',checking:'检查中',permission:'等待授权',connecting:'连接中',active:'监测中',missing:'未找到应用',error:'监测失败',reconnecting:'连接中'};
       const e=escapeHtml;
       let dialog=null,lastFocus=null;
       const consoleRoot=page.querySelector('[data-subscreen-preview="monitor"] .agent-subscreen-console');
@@ -19229,17 +19231,28 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       const syncPending=new Set();
       const connectionAttempts={workbuddy:0,codex:0};
       const connectionUi=Object.fromEntries(Object.keys(names).map(app=>[app,{consented:false,phase:'',message:'',reopen:null,controller:null,timer:null,preview:false,prerequisite:'',opening:false}]));
+      const preferenceKey='x3MonitorPreferences.v1';
+      let savedMonitoring={};try{const saved=JSON.parse(window.localStorage?.getItem(preferenceKey)||'{}');if(saved&&typeof saved==='object')savedMonitoring=saved;}catch(error){}
+      function monitoringEnabled(app){return ['active','reconnecting'].includes(state.apps[app])||(state.apps[app]==='error'&&syncPending.has(app));}
+      Object.keys(names).forEach(app=>{connectionUi[app].consented=savedMonitoring[app]?.consented===true;if(savedMonitoring[app]?.enabled===true){state.apps[app]='error';previewStates[app]='connection-lost';syncPending.add(app);connectionUi[app].message='请重新监测以恢复最新任务状态。';}});
+      function persistMonitoring(){
+        // Save preferences only, never prompts, paths, approval payloads or credentials.
+        Object.keys(names).filter(app=>!connectionUi[app].preview).forEach(app=>{savedMonitoring[app]={consented:connectionUi[app].consented,enabled:monitoringEnabled(app)};});
+        try{window.localStorage?.setItem(preferenceKey,JSON.stringify(savedMonitoring));}catch(error){}
+      }
       let monitorPreviewApp='workbuddy';
       const pendingUi={current:null,open:false,empty:false};
+      const hookRounds=new Map(),seenHookEvents=new Set();
       let requestSequence=0;
       const pendingOverlay=page.querySelector('#agent-state-overlay');
       pendingOverlay.classList.add('am-pending-overlay');
       page.querySelector('#agent-state-overlay').hidden=true;
       page.querySelector('.agent-monitor-panel h3').textContent='Agent 监测管理';
+      page.querySelectorAll('[data-agent-preview-state="connection-lost"]').forEach(button=>button.textContent='监测失败');
       const prerequisites=document.createElement('p');
       prerequisites.className='am-note';
       prerequisites.style.cssText='margin:0 0 20px;line-height:1.7';
-      prerequisites.textContent='使用前提：请先在本机安装、登录并启动监测应用。';
+      prerequisites.textContent='使用前提：请先安装并正常使用对应应用；采用 Hooks 接入时，还需完成配置并确认事件接收服务可用。';
       page.querySelector('#cli-integration-grid').before(prerequisites);
       const prerequisitePreview=document.createElement('section');
       prerequisitePreview.setAttribute('aria-label','前置条件原型预览');
@@ -19252,8 +19265,25 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       function tabs(group,current,apps=Object.keys(names)){return `<div class="am-tabs" role="tablist" aria-label="${group==='view'?'当前任务':'任务记录'}应用">${apps.map(id=>`<button role="tab" aria-selected="${current===id}" data-am="${group}" data-app="${id}">${names[id]}</button>`).join('')}</div>`;}
       function stale(t){return !['任务完成','任务失败'].includes(t.status)&&(state.apps[t.app]!=='active'||syncPending.has(t.app));}
       function allRequests(){return state.tasks.flatMap(task=>(task.requests||[]).filter(request=>request.type==='permission').map(request=>({task,request}))).sort((a,b)=>a.request.sequence-b.request.sequence);}
-      function pendingRequests(){return allRequests().filter(({request})=>['pending','submitting','unknown'].includes(request.status));}
+      function pendingRequests(){return allRequests().filter(({task,request})=>monitoringEnabled(task.app)&&['pending','submitting','unknown'].includes(request.status));}
       function findRequest(id){return allRequests().find(({request})=>request.id===id);}
+      function canRespond(task,r){return r.mode!=='notice'&&Boolean(r.demo||(connectionUi[task.app].approvals===true&&r.sourceRequestId&&typeof window.x3MonitorConnector?.respond==='function'));}
+      function requestContextComplete(r){return Boolean(r.title&&r.details&&r.target);}
+      function taskStatus(t){
+        const requests=(t.requests||[]).filter(r=>r.type==='permission');
+        if(requests.some(r=>r.status==='unknown'&&r.mode!=='notice'))return '待确认';
+        if(['等待审批','待处理','待确认'].includes(t.status)&&requests.length&&requests.every(r=>['resolved','expired','cancelled'].includes(r.status)))return '等待更新';
+        if(['任务完成','任务失败'].includes(t.status)&&!t.preview&&t.statusSource!=='task')return '等待更新';
+        return t.status||'等待更新';
+      }
+      function taskContext(t){return [t.sessionId?`会话 ${t.sessionId}`:'',t.cwd?`工作目录 ${t.cwd}`:''].filter(Boolean).join(' · ')||'会话信息暂未提供';}
+      function receivedTime(t){return t.receivedAt?new Date(t.receivedAt).toLocaleTimeString('zh-CN',{hour12:false}):'暂未接收';}
+      function recentOperation(t){
+        if(!t.toolName)return '';
+        const target=t.toolInput?.file_path||t.toolInput?.command||t.toolInput?.pattern||t.toolInput?.query||'';
+        return `${t.toolName}${typeof target==='string'&&target?' · '+target:''}`;
+      }
+      function sourceAction(task){return typeof window.x3MonitorConnector?.openApplication==='function'?`<button data-am="source-open" data-app="${e(task.app)}">打开应用</button>`:'';}
       function requestBlocked(task,r){
         if(r.status==='submitting')return '正在提交，请等待回执';
         if(r.status==='unknown')return '提交结果待确认，请勿重复操作';
@@ -19261,22 +19291,25 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(r.status==='cancelled')return '该请求已取消';
         if(r.status==='resolved')return r.decision==='external'?'已在来源应用处理':`${r.decision==='allow'?'已允许本次':r.decision==='deny'?'已拒绝本次':'已提交'}`;
         if(state.apps[task.app]!=='active'||syncPending.has(task.app))return `${names[task.app]} 连接不可用或等待同步，暂不能处理`;
-        if(!r.title||!r.details||!r.target)return '请求信息不完整，暂不能处理';
-        if(!r.demo)return '尚未接入操作回传，暂不能处理';
+        if(!canRespond(task,r))return '请到来源应用处理';
+        if(!requestContextComplete(r))return '请求信息不完整，请到来源应用处理';
         return '';
       }
       function requestActions(task,r,inPopup=false){
+        if(!canRespond(task,r)||!requestContextComplete(r))return `<div class="am-request-actions">${sourceAction(task)}</div>`;
+        if(r.status==='unknown')return `<div class="am-request-actions">${r.demo||typeof window.x3MonitorConnector?.getRequestStatus==='function'?`<button data-am="request-check" data-request="${e(r.id)}" ${r.checking||state.apps[task.app]!=='active'||syncPending.has(task.app)?'disabled':''}>${r.checking?'核实中…':'核实结果'}</button>`:''}${sourceAction(task)}</div>`;
         const blocked=requestBlocked(task,r),disabled=blocked?'disabled':'';
         const pending=r.status==='pending';
         let controls='';
         if(pending||r.status==='submitting'){
-          if(r.type==='permission'&&(inPopup||r.details.length<=180))controls=`<button data-am="pending-answer" data-request="${e(r.id)}" data-value="deny" ${disabled}>拒绝本次</button><button class="am-allow" data-am="pending-answer" data-request="${e(r.id)}" data-value="allow" ${disabled}>允许本次</button>`;
+          if(r.type==='permission'&&(inPopup||(r.details||'').length<=180))controls=`<button data-am="pending-answer" data-request="${e(r.id)}" data-value="deny" ${disabled}>拒绝本次</button><button class="am-allow" data-am="pending-answer" data-request="${e(r.id)}" data-value="allow" ${disabled}>允许本次</button>`;
           else controls=`<button data-am="pending-open" data-request="${e(r.id)}" ${disabled}>查看授权内容</button>`;
         }
         return `<div class="am-request-actions">${controls}</div>`;
       }
       function requestMarkup(task,r,inPopup=false){
-        if(r.type!=='permission'||r.status==='resolved')return '';
+        if(r.type!=='permission'||['resolved','expired','cancelled'].includes(r.status))return '';
+        if(!canRespond(task,r))return `<section class="am-request" data-request-section="${e(r.id)}" tabindex="-1"><h4>${e(r.title||'来源应用有待处理请求')}</h4>${r.details?`<p>${e(r.details)}</p>`:''}<p>请到 ${e(names[task.app])} ${r.status==='unknown'?'确认是否仍需处理':'处理'}</p>${requestActions(task,r)}</section>`;
         const blocked=r.status==='submitting'?'':requestBlocked(task,r);
         const redundantDetails=r.title==='允许运行登录测试吗？'&&r.details==='运行指定文件中的登录测试。';
         const projectPrefix=task.session?task.session+' / ':'';
@@ -19288,7 +19321,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       function renderPending(){
         const item=findRequest(pendingUi.current);
         // Close immediately on submit; do not show intermediate or resolved-result dialogs.
-        if(['submitting','resolved'].includes(item?.request.status))pendingUi.open=false;
+        if(['submitting','resolved','expired','cancelled'].includes(item?.request.status)||item&&(!canRespond(item.task,item.request)||!requestContextComplete(item.request)||state.apps[item.task.app]!=='active'))pendingUi.open=false;
         pendingOverlay.hidden=!(pendingUi.open&&item);
         pendingOverlay.dataset.activeRequest=item?.request.id||'';
         pendingOverlay.setAttribute('aria-hidden',String(pendingOverlay.hidden));
@@ -19299,21 +19332,21 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         pendingOverlay.querySelector('.agent-state-dialog').setAttribute('aria-label','操作授权');
         pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4>操作授权</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
         const body=page.querySelector('#agent-state-fields');body.className='agent-state-fields am-pending-body';
-        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(task.window)} · ${e(task.session)}</p>${requestMarkup(task,r,true)}`;
+        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(taskContext(task))}</p>${requestMarkup(task,r,true)}`;
         page.querySelector('#agent-state-actions').innerHTML=`${requestActions(task,r,true)}${!pendingRequests().length?`<p class="am-request-meta" role="status">${r.status==='resolved'?'全部处理完成':'暂无待处理事项'}</p>`:''}`;
       }
       function receiveRequest(task,type='permission',autoOpen=true){
         if(type!=='permission')return;
         const sequence=++requestSequence;
-        const r={id:task.id+'-request-'+sequence,sequence,type,status:'pending',demo:true,title:'允许修改需求文档？',details:'仅修改该文档的需求条目，不删除文件，不访问其他目录。',target:'项目 B / requirements.md'};
-        (task.requests||=([])).push(r);task.status='等待审批';task.action='等待用户处理请求';
+        const r={id:task.id+'-request-'+sequence,sequence,type,status:'pending',demo:true,mode:connectionUi[task.app].approvalPreview==='notice'?'notice':'approval',title:'允许修改需求文档？',details:'仅修改该文档的需求条目，不删除文件，不访问其他目录。',target:'项目 B / requirements.md'};
+        (task.requests||=([])).push(r);task.status=r.mode==='notice'?'待处理':'等待审批';task.action='等待用户处理请求';
         r.target=(task.session||'当前项目')+' / requirements.md';
         // Structured demo data, not a summary inferred from task text or screenshots.
         if(type==='permission'){
           Object.assign(r,{operation:'修改',scope:'中的需求条目',...(task.permissionRequest||{})});
         }
         pendingUi.empty=false;
-        if(autoOpen&&!pendingUi.open){pendingUi.current=r.id;pendingUi.open=true;}
+        if(autoOpen&&!pendingUi.open&&canRespond(task,r)&&requestContextComplete(r)){pendingUi.current=r.id;pendingUi.open=true;}
         return r;
       }
       function locatePending(){
@@ -19330,12 +19363,25 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           node.focus({preventScroll:true});
         });
       }
-      function submitRequest(id,value){
+      async function submitRequest(id,value){
         const item=findRequest(id);if(!item)return;
         const {task,request:r}=item;if(r.status!=='pending'||requestBlocked(task,r))return;
         if(r.type!=='permission'||!['allow','deny'].includes(value))return;
         r.status='submitting';r.error='';const attempt=(r.attempt||0)+1;r.attempt=attempt;
-        const outcome=r.nextOutcome||'success';delete r.nextOutcome;render();
+        const outcome=r.nextOutcome||'success';delete r.nextOutcome;
+        const epoch=connectionAttempts[task.app];
+        r.operationId=`${id}-${Date.now()}-${attempt}`;render();
+        if(!r.demo){
+          try{
+            const result=await Promise.race([window.x3MonitorConnector.respond({app:task.app,requestId:r.sourceRequestId,decision:value,operationId:r.operationId}),new Promise(resolve=>setTimeout(()=>resolve(null),15000))]);
+            if(findRequest(id)?.request!==r||r.status!=='submitting'||r.attempt!==attempt||epoch!==connectionAttempts[task.app])return;
+            if(result?.requestId===r.sourceRequestId&&result.status==='resolved'){r.status='resolved';r.decision=result.decision||value;}
+            else if(result?.requestId===r.sourceRequestId&&['expired','cancelled'].includes(result.status)){r.status=result.status;}
+            else if(result?.requestId===r.sourceRequestId&&result.status==='not-applied'){r.status='pending';r.error='提交失败，未生效，请重试';}
+            else{r.status='unknown';r.error='请核实结果，或到来源应用确认';}
+          }catch(error){if(findRequest(id)?.request===r&&r.status==='submitting'&&epoch===connectionAttempts[task.app]){r.status='unknown';r.error='请核实结果，或到来源应用确认';}}
+          render();return;
+        }
         // Local demo acknowledgment only. Never sends approval to an installed Agent.
         setTimeout(()=>{
           if(findRequest(id)?.request!==r||r.status!=='submitting'||r.attempt!==attempt)return;
@@ -19344,6 +19390,23 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           else{r.status='resolved';r.decision=value;}
           render();
         },600);
+      }
+      async function checkRequest(id){
+        const item=findRequest(id);if(!item||item.request.status!=='unknown'||item.request.checking||state.apps[item.task.app]!=='active')return;
+        const {task,request:r}=item,epoch=connectionAttempts[task.app];r.checking=true;render();
+        try{
+          const result=r.demo?{requestId:r.sourceRequestId,status:'resolved',decision:'external'}:await Promise.race([window.x3MonitorConnector.getRequestStatus({app:task.app,requestId:r.sourceRequestId,operationId:r.operationId}),new Promise(resolve=>setTimeout(()=>resolve(null),10000))]);
+          if(findRequest(id)?.request!==r||r.status!=='unknown'||epoch!==connectionAttempts[task.app])return;
+          if(result?.requestId===r.sourceRequestId&&['resolved','expired','cancelled'].includes(result?.status)){r.status=result.status;r.decision=result.decision||'external';r.error='';}
+          else if(result?.requestId===r.sourceRequestId&&result?.status==='not-applied'){r.status='pending';r.error='已确认未生效，可以重试';}
+          else r.error='仍无法确认，请到来源应用核实';
+        }catch(error){r.error='未能核实结果，请到来源应用确认';}
+        finally{r.checking=false;render();}
+      }
+      async function openSource(app){
+        if(!Object.hasOwn(names,app)||typeof window.x3MonitorConnector?.openApplication!=='function')return;
+        try{await window.x3MonitorConnector.openApplication({app});}
+        catch(error){connectionUi[app].message='未能打开来源应用，请手动打开。';render();}
       }
       function pendingDemo(scenario){
         if(['single','multiple'].includes(scenario)){
@@ -19360,19 +19423,16 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         render();
       }
       function taskCard(t){
-        const terminal=['任务失败','任务完成'].includes(t.status);
-        // Approval acknowledgments do not imply that the application has resumed work.
-        // Keep the source state intact; only replace its now-obsolete approval display.
-        const permissions=(t.requests||[]).filter(r=>r.type==='permission');
-        const waitingForUpdate=t.status==='等待审批'&&permissions.length>0&&permissions.every(r=>r.status==='resolved');
-        const displayStatus=waitingForUpdate?'等待更新':t.status;
-        const copy=t.status==='等待审批'&&!(t.requests||[]).length?'暂未收到具体请求内容，不能授权。':terminal&&t.result?`${t.status==='任务失败'?'失败原因':'完成结果'}：${t.result}`:'';
-        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(displayStatus)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令</small><strong>${e(t.title)}</strong><em>${e(t.window)}／${e(t.session)}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(displayStatus)}">${e(displayStatus)}</strong></span><span><small>最后更新</small><strong>${e(t.updated||'--:--:--')}</strong></span></span>${!terminal&&!waitingForUpdate&&t.action?`<span class="am-task-action">${stale(t)?'最后收到的动作':'当前动作'}　${e(t.action)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">状态未更新，以上为最后收到的任务信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
+        const displayStatus=taskStatus(t),terminal=['任务失败','任务完成'].includes(displayStatus);
+        const operation=recentOperation(t);
+        const copy=terminal&&t.result&&t.resultSource==='task'?`${displayStatus==='任务失败'?'失败原因':'完成结果'}：${t.result}`:'';
+        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(displayStatus)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令${t.preview?' · 示例':''}</small><strong>${e(t.prompt||'暂未收到本轮指令')}</strong><em>${e(taskContext(t))}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(displayStatus)}">${e(displayStatus)}</strong></span><span><small>最近接收</small><strong>${e(receivedTime(t))}</strong></span></span>${!terminal&&displayStatus!=='等待更新'&&operation?`<span class="am-task-action">最近操作　${e(operation)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">连接不可用，以上为最后接收的信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
       }
       function render(){
+        persistMonitoring();
         const restore=captureAgentInteraction(host.closest('[data-subscreen-preview]'));
         // App visibility follows monitoring, not whether the app has received a task yet.
-        const visibleApps=Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])||state.tasks.some(t=>t.app===id&&!['disconnected','waiting'].includes(previewStates[id])));
+        const visibleApps=Object.keys(names).filter(id=>monitoringEnabled(id)||state.tasks.some(t=>t.app===id&&!['disconnected','waiting'].includes(previewStates[id])));
         if(visibleApps.length&&!visibleApps.includes(state.view))state.view=visibleApps[0];
         const viewState=previewStates[state.view];
         consoleRoot.dataset.view=state.view;
@@ -19387,42 +19447,43 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(!tasks.length){
           const initial=allIdle&&!hasAnyTasks;
           const waiting=state.apps[state.view]==='active'&&!syncPending.has(state.view);
-          taskList.innerHTML=`<div class="am-empty"><strong>${initial?'尚未开始监测':waiting?'去 Agent 应用提问':syncPending.has(state.view)?'等待任务状态同步':'暂未获取任务状态'}</strong>${waiting?'<span>监测已开启，任务开始后将在这里显示进度</span>':''}${initial?'<button data-am="manage">启用监测</button>':''}</div>`;
+          taskList.innerHTML=`<div class="am-empty"><strong>${initial?'尚未开始监测':waiting?'等待任务事件':syncPending.has(state.view)?'等待任务状态同步':'暂未获取任务状态'}</strong>${waiting?'<span>接收服务可用；应用产生工具操作后显示进度</span>':''}${initial?'<button data-am="manage">启用监测</button>':''}</div>`;
         }
         taskList.querySelectorAll('[data-task]').forEach(row=>row.setAttribute('data-state-target',String(row.dataset.task===selected[state.view])));
-        if(state.apps[state.view]==='interrupted'||state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='interrupted'?'监测中断':state.apps[state.view]==='reconnecting'?'重新连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
-        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>监测应用：<strong>${Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])).map(id=>names[id]).join('、')||'无'}</strong></span>`;
+        if(state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='error'?'监测失败':state.apps[state.view]==='reconnecting'?'连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
+        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>监测应用：<strong>${Object.keys(names).filter(id=>monitoringEnabled(id)).map(id=>names[id]).join('、')||'无'}</strong></span>`;
         page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>{
           const ui=connectionUi[id],status=state.apps[id],count=state.tasks.filter(t=>t.app===id).length;
           const authorizing=ui.phase==='authorization',busy=['connecting','reconnecting'].includes(status);
-          const copy=ui.message||(status==='idle'?'尚未开启监测':status==='error'?'未能连接应用。':status==='interrupted'?'与该应用的连接已断开':busy?'正在连接应用…':'已连接');
-          const controls=authorizing?`${ui.reopen?`<button class="soft-button" data-am="auth-reopen" data-app="${id}">重新打开</button>`:''}<button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:busy?`<button class="soft-button" disabled>${ui.phase==='prerequisites'?'检查中…':labels[status]}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:['active','interrupted'].includes(status)?`${status==='interrupted'?`<button class="primary-button" data-am="reconnect" data-app="${id}">重新连接</button>`:''}<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:`<button class="primary-button" data-am="start" data-app="${id}">${['error','missing'].includes(status)?'重试':'启用监测'}</button>`;
+          const copy=ui.message||(status==='idle'?'尚未开启监测':status==='error'?'未能连接应用。':busy?'正在连接应用…':'已连接');
+          const controls=authorizing?`${ui.reopen?`<button class="soft-button" data-am="auth-reopen" data-app="${id}">重新打开</button>`:''}<button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:busy?`<button class="soft-button" disabled>${ui.phase==='prerequisites'?'检查中…':labels[status]}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:['active','error'].includes(status)?`<button class="primary-button" data-am="remonitor" data-app="${id}">重新监测</button>${status==='active'||syncPending.has(id)?`<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:''}`:`<button class="primary-button" data-am="start" data-app="${id}">启用监测</button>`;
           const prerequisiteMethod=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpenPrerequisite=Boolean(ui.prerequisiteScenario)||typeof window.x3MonitorConnector?.[prerequisiteMethod]==='function';
           const prerequisiteControl=ui.prerequisite?`<button class="soft-button" data-am="prerequisite-open" data-app="${id}" ${ui.opening||!canOpenPrerequisite?'disabled':''}>${ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用'}</button>${!canOpenPrerequisite?`<span class="am-note">${ui.prerequisite==='installed'?'请自行从官方渠道安装后重试':'请手动打开应用'+(ui.prerequisite==='loggedIn'?'并登录':'')+'后重试'}</span>`:''}`:'';
-          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条${ui.preview?'示例':''}任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
+          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条${ui.preview?'示例':''}任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p>${ui.guideOpen?`<p class="am-note">${id==='workbuddy'?'采用 Hooks 时，先在来源应用完成配置并确认生效，再检查本机事件接收服务。':'按 Codex 实际接入方式配置连接，不沿用其他应用的授权步骤。'}完成后点击“重新监测”；具体配置入口以所用版本为准。</p>`:''}<div class="action-row" style="margin-top:auto;flex-wrap:wrap">${ui.needsSetup?`<button class="soft-button" data-am="setup-guide" data-app="${id}" aria-expanded="${Boolean(ui.guideOpen)}">${ui.guideOpen?'收起指引':'接入指引'}</button>`:''}${prerequisiteControl}${controls}</div></section>`;
         }).join('');
         let demo=page.querySelector('.am-demo');if(!demo){demo=document.createElement('div');demo.className='am-demo action-row';page.querySelector('.cli-monitor-note').after(demo);}
         demo.style.display='block';demo.style.marginTop='20px';
         const previewLocked=Object.values(connectionUi).some(ui=>ui.controller),previewApp=monitorPreviewApp;
         const ownershipOpen=demo.querySelector('[data-am-ownership]')?.open;
-        demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error','interrupted'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：监测管理页、允许监测与停止监测弹窗、授权跳转及返回处理、连接状态与失败提示。</p><p class="am-note">来源应用：官方登录与授权页面（如需）、访问权限、任务数据及审批回传接口。接入方式需分别确认，不在本页模拟官方授权。</p><p class="am-note">首次启用：允许监测 → 官方授权（如需）→ 连接中 → 监测中或显示失败原因。取消授权保持未监测；授权成功不等于连接成功。</p></details>`;
+        demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：接入配置提示、事件接收、字段展示及状态同步；支持审批回传时才开放操作按钮。</p><p class="am-note">来源应用：按实际产品版本提供事件和权限能力。Hooks 不等于官方 OAuth；WorkBuddy 与 Codex 分别对接。</p><p class="am-note">首次启用：允许监测 → 检查接入配置与接收服务 → 官方授权（仅接入要求时）→ 连接结果。没有事件不代表断连；工具结果不代表任务结果。</p></details>`;
         prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 10px">前置条件预览 · ${names[previewApp]}（仅演示）</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${[['installed','未安装'],['loggedIn','未登录'],['running','未启动'],['ready','条件满足']].map(([scenario,label])=>`<button class="${connectionUi[previewApp].prerequisiteScenario===scenario?'primary-button':'soft-button'}" data-am="prerequisite-preview" data-app="${previewApp}" data-scenario="${scenario}" aria-pressed="${connectionUi[previewApp].prerequisiteScenario===scenario}" ${previewLocked?'disabled':''}>${label}</button>`).join('')}</div>`;
         const rows=state.tasks.filter(t=>t.app===state.records);
-        records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>任务</th><th>窗口／会话</th><th>状态</th><th>开始时间</th><th>耗时</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.title)}</td><td>${e(t.window)}／${e(t.session)}</td><td>${e(t.status)}</td><td>${e(t.start)}</td><td>${e(t.duration||'暂未获取')}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
+        records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>本轮指令</th><th>会话／工作目录</th><th>状态</th><th>最近接收</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.prompt||'暂未收到本轮指令')}${t.preview?'（示例）':''}</td><td style="white-space:normal;overflow-wrap:anywhere">${e(taskContext(t))}</td><td>${e(taskStatus(t))}</td><td>${e(receivedTime(t))}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
         renderPending();
         restore();
         syncPhysicalScreenPreview(host.closest('[data-subscreen-preview]'));
       }
       function renderOriginalPanel(){
         const t=state.tasks.find(t=>t.id===selected[state.view]);
-        const key=state.apps[state.view]==='idle'?'disconnected':state.apps[state.view]==='interrupted'?'connection-lost':previewStates[state.view];
-        const status={disconnected:'未开始监测',waiting:'等待任务',running:'执行中',approval:'等待审批',failed:'任务失败',completed:'任务完成','connection-lost':'监测中断'}[key]||'等待任务';
+        const key=state.apps[state.view]==='idle'?'disconnected':state.apps[state.view]==='error'?'connection-lost':previewStates[state.view];
+        const status=t?taskStatus(t):({disconnected:'未开始监测',waiting:'等待任务','connection-lost':'监测失败'}[key]||'等待任务');
         const text=(id,value)=>{page.querySelector('#'+id).textContent=value;};
-        text('agent-progress-task',t?.title||(key==='disconnected'?'未获取本轮指令':'暂无本轮指令'));
-        text('agent-sub-monitor-object',names[state.view]+(t?' · '+t.window+'／'+t.session:''));
-        text('agent-progress-pill',status);text('agent-elapsed-time',t?.updated||'--:--:--');text('agent-update-source',t?'最近任务更新时间':'暂无事件时间');
-        const action=page.querySelector('#agent-current-action-wrap');action.hidden=!t?.action;text('agent-current-action',t?.action||'暂未获取');
+        text('agent-progress-task',t?.prompt||'暂未收到本轮指令');
+        text('agent-sub-monitor-object',names[state.view]+(t?' · '+taskContext(t):''));
+        text('agent-progress-pill',status);text('agent-elapsed-time',t?receivedTime(t):'暂未接收');text('agent-update-source','事件接收时间');
+        const operation=t?recentOperation(t):'';
+        const action=page.querySelector('#agent-current-action-wrap');action.hidden=!operation||status==='等待更新';text('agent-current-action',operation||'暂未获取');
         page.querySelector('#agent-steps-panel').hidden=true;
         page.querySelector('#agent-step-strip').innerHTML='';
         page.querySelector('#agent-monitor-empty-state').hidden=Boolean(t?.action);
@@ -19447,12 +19508,13 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           syncPending.clear();state.demo=true;state.detail=null;render();return;
         }
         syncPending.delete(state.view);state.demo=true;previewStates[state.view]=key;
-        state.apps[state.view]=key==='disconnected'?'idle':key==='connection-lost'?'interrupted':'active';
+        state.apps[state.view]=key==='disconnected'?'idle':key==='connection-lost'?'error':'active';
+        if(key==='connection-lost')syncPending.add(state.view);
         if(['running','approval','failed','completed'].includes(key)){
           const status={running:'执行中',approval:'等待审批',failed:'任务失败',completed:'任务完成'}[key];
           let t=state.tasks.find(t=>t.app===state.view&&t.id===selected[state.view])||state.tasks.find(t=>t.app===state.view);
           if(!t){t={id:state.view+'-preview-task',app:state.view,window:'窗口 1',session:'项目 A',title:'整理项目文件',start:'14:00'};state.tasks.push(t);}
-          Object.assign(t,{status,updated:'14:20',action:key==='running'?'正在处理当前任务':key==='approval'?'等待用户确认':'',result:key==='completed'?'项目文件已整理':key==='failed'?'文件写入失败':'',end:['failed','completed'].includes(key)?'14:20':'',duration:['failed','completed'].includes(key)?'20 分钟':''});selected[state.view]=t.id;
+          Object.assign(t,{status,preview:true,prompt:t.prompt||t.title||'整理项目文件',sessionId:t.sessionId||'demo-session-1',cwd:t.cwd||'/demo/project-a',receivedAt:Date.now(),toolName:'Bash',toolInput:{command:'npm test'},updated:'14:20',action:key==='running'?'正在处理当前任务':key==='approval'?'等待用户确认':'',result:key==='completed'?'项目文件已整理':key==='failed'?'文件写入失败':'',resultSource:'task',statusSource:'task',end:['failed','completed'].includes(key)?'14:20':'',duration:['failed','completed'].includes(key)?'20 分钟':''});selected[state.view]=t.id;
           if(key==='approval'){
             const existing=(t.requests||[]).find(r=>['pending','submitting','unknown'].includes(r.status));
             if(existing){pendingUi.current=existing.id;pendingUi.open=true;}else{receiveRequest(t);}
@@ -19464,14 +19526,61 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const ui=connectionUi[app];++connectionAttempts[app];
         clearTimeout(ui.timer);ui.timer=null;
         const controller=ui.controller;ui.controller=null;controller?.abort();
-        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';
+        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.needsSetup=false;ui.guideOpen=false;ui.approvals=false;
       }
       function cancelConnection(app){
         resetConnection(app);state.apps[app]='idle';syncPending.delete(app);render();
       }
+      function normalizeTask(app,t){
+        const requests=(Array.isArray(t.requests)?t.requests:[]).map(r=>({...r,id:`${app}:${t.id}:${r.id}`,sourceRequestId:r.sourceRequestId||r.id,sequence:++requestSequence,type:'permission',demo:false,mode:r.mode==='approval'?'approval':'notice',status:r.status||'pending'}));
+        return {...t,app,preview:false,prompt:typeof t.prompt==='string'?t.prompt:'',sessionId:t.session_id||t.sessionId||'',cwd:t.cwd||'',toolName:t.tool_name||t.toolName||'',toolInput:t.tool_input||t.toolInput||{},receivedAt:Date.now(),requests};
+      }
+      function replaceTasks(app,tasks){
+        if(!Array.isArray(tasks)||tasks.some(t=>!t||typeof t.id!=='string'))return false;
+        state.tasks=state.tasks.filter(t=>t.app!==app).concat(tasks.map(t=>normalizeTask(app,t)));
+        previewStates[app]=tasks.length?'running':'waiting';
+        selected[app]=state.tasks.find(t=>t.app===app&&t.id===selected[app])?.id||state.tasks.find(t=>t.app===app)?.id||null;
+        return true;
+      }
+      function receiveHook(app,event){
+        if(state.apps[app]!=='active'||connectionUi[app].preview||!event||typeof event.session_id!=='string')return;
+        // This optional id is supplied by our transport, not guaranteed by Hooks.
+        if(event.event_id){const key=app+':'+event.event_id;if(seenHookEvents.has(key))return;seenHookEvents.add(key);if(seenHookEvents.size>1000)seenHookEvents.delete(seenHookEvents.values().next().value);}
+        const key=app+':'+event.session_id,name=event.hook_event_name;
+        let round=hookRounds.get(key);
+        if(name==='UserPromptSubmit'){hookRounds.set(key,{prompt:typeof event.prompt==='string'?event.prompt:'',id:null});return;}
+        if(!round){round={prompt:'',id:null};hookRounds.set(key,round);}
+        let task=state.tasks.find(t=>t.app===app&&t.id===round.id);
+        const toolEvent=['PreToolUse','PostToolUse','PostToolUseFailure'].includes(name);
+        const notice=name==='Notification'&&event.notification_type==='permission_prompt';
+        if(!task&&(toolEvent||notice)){
+          task={id:`${app}:${event.session_id}:local-${++requestSequence}`,app,sessionId:event.session_id,cwd:event.cwd||'',prompt:round.prompt,requests:[],status:'等待更新'};
+          round.id=task.id;state.tasks.push(task);selected[app]=task.id;
+        }
+        if(!task)return; // Ordinary prompts / lifecycle events do not create tasks.
+        if(event.cwd)task.cwd=event.cwd;
+        task.receivedAt=Date.now();
+        if(toolEvent){
+          task.toolName=typeof event.tool_name==='string'?event.tool_name:'';task.toolInput=event.tool_input||{};
+          task.status={PreToolUse:'准备执行',PostToolUse:'操作完成',PostToolUseFailure:'操作失败'}[name];
+          // tool_response is tool-level output, never a task completion summary.
+          delete task.result;delete task.resultSource;
+        }else if(notice){
+          const existing=task.requests.find(r=>r.mode==='notice'&&r.status==='pending'&&r.details===event.message);
+          if(!existing)task.requests.push({id:`${task.id}:notice-${++requestSequence}`,sequence:requestSequence,type:'permission',mode:'notice',status:'pending',title:'来源应用需要确认',details:typeof event.message==='string'?event.message:'',demo:false});
+          task.status='待处理';
+        }else if(name==='Stop')task.status='本轮响应结束';
+        else if(name==='SessionEnd')task.status='会话结束';
+        else return;
+        if(['Stop','SessionEnd'].includes(name))task.requests.filter(r=>r.mode==='notice'&&r.status==='pending').forEach(r=>r.status='unknown');
+        // Notifications have no request correlation guarantee. Do not resolve them
+        // merely because another tool event or a Stop event was received.
+        previewStates[app]='running';render();
+      }
       // Optional trusted host contract, NOT an implemented WorkBuddy/Codex integration.
       // checkPrerequisites({app,signal}) -> {installed,loggedIn,running}.
-      // Each value must be true/false; null or missing means unknown, never pass.
+      // Optional diagnostics: false identifies a known unmet prerequisite; unknown
+      // is not a login failure and does not replace an integration readiness check.
       // The host checks the local install/process and the application's supported
       // login signal. A running process does not prove login. No browser heuristics.
       // Optional openInstallation({app}) / openApplication({app}) open the official
@@ -19482,48 +19591,83 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       // Resolve {connected:true,subscribed:true,tasks:[structured snapshot]} only after
       // acknowledgment; {cancelled:true} on user denial. Abort must detach the subscription.
       // Credentials and official authorization URLs belong in the host, never in this HTML.
+      // inspectIntegration({app,signal}) -> {mode:'hooks'|'connector',configured,
+      // receiverReady,supportsApproval}. These are OUR adapter contracts, not vendor APIs.
+      // connect also accepts onHook(rawHook), onTasks(normalizedSnapshot), and
+      // onDisconnected() from transport health; inactivity alone is not disconnect.
+      // Snapshot task fields: id,prompt,session_id,cwd,tool_name,tool_input,status.
+      // statusSource:'task' / resultSource:'task' require verified task-level evidence.
+      // requests: id, mode:'approval'|'notice', title,details,target,status.
+      // respond/getRequestStatus return {requestId,status:'resolved'|'not-applied'|
+      // 'unknown'|'expired'|'cancelled',decision?}. A resolved receipt is NOT task success.
       async function beginConnection(app){
         if(!Object.hasOwn(names,app)||['connecting','reconnecting'].includes(state.apps[app]))return;
-        const recovering=state.apps[app]==='interrupted'||syncPending.has(app);
+        const recovering=state.apps[app]==='active'||syncPending.has(app);
+        if(recovering)syncPending.add(app);
         resetConnection(app);
         const ui=connectionUi[app];ui.preview=false;
         state.tasks=state.tasks.filter(t=>t.app!==app||!t.preview);
         pendingUi.open=false;previewStates[app]=recovering?'connection-lost':'disconnected';
         const connector=window.x3MonitorConnector;
-        if(typeof connector?.checkPrerequisites!=='function'){
-          state.apps[app]=recovering?'interrupted':'error';ui.message='无法确认应用的安装、登录和启动状态：尚未接入本机检查服务。';render();return;
+        if(typeof connector?.inspectIntegration!=='function'){
+          state.apps[app]='error';ui.message='尚未接入本机事件接收服务，请先完成接入配置。';ui.needsSetup=true;render();return;
         }
         const attempt=++connectionAttempts[app];
         const current=()=>connectionAttempts[app]===attempt;
-        ui.controller=new AbortController();ui.phase='prerequisites';ui.message='正在检查应用的安装、登录和启动状态…';
-        const fail=message=>{if(!current())return;resetConnection(app);state.apps[app]=recovering?'interrupted':'error';ui.message=message;render();};
+        ui.controller=new AbortController();ui.phase='prerequisites';ui.message='正在检查接入配置和事件接收服务…';
+        const fail=message=>{if(!current())return;resetConnection(app);state.apps[app]='error';ui.message=message;render();};
         const deadline=ms=>{clearTimeout(ui.timer);ui.timer=setTimeout(()=>fail(ui.phase==='prerequisites'?'前置检查超时，无法确认应用状态，请重试。':ui.phase==='authorization'?'授权超时，请重试。':'连接超时，请重试。'),ms);};
         state.apps[app]=recovering?'reconnecting':'connecting';deadline(30000);render();
         try{
-          const checks=await connector.checkPrerequisites({app,signal:ui.controller.signal});
+          const checks=typeof connector.checkPrerequisites==='function'?await connector.checkPrerequisites({app,signal:ui.controller.signal}):null;
           if(!current())return;
           const requirements=[['installed',`未安装 ${names[app]}，请先安装。`],['loggedIn',`请先登录 ${names[app]}，并确认登录有效。`],['running',`请先启动 ${names[app]}。`]];
           const unmet=requirements.find(([key])=>checks?.[key]===false);
           if(unmet){fail(unmet[1]);ui.prerequisite=unmet[0];render();return;}
-          const unknown=requirements.filter(([key])=>checks?.[key]!==true).map(([key])=>({installed:'安装',loggedIn:'登录',running:'启动'}[key]));
-          if(unknown.length){fail(`无法确认 ${names[app]} 的${unknown.join('、')}状态，请重试。`);return;}
+          // Login/process checks are optional diagnostics, not Hooks capabilities.
+          // Unknown diagnostics are not converted to "not logged in" or a hard gate.
+          const integration=await connector.inspectIntegration({app,signal:ui.controller.signal});
+          if(!current())return;
+          if(!['hooks','connector'].includes(integration?.mode)){fail('无法确认接入方式，请检查本机接入配置。');ui.needsSetup=true;render();return;}
+          ui.mode=integration.mode;
+          if(integration.configured!==true){const mode=ui.mode;fail(mode==='hooks'?'请先配置 Hooks，并在来源应用确认配置已生效。':'请先完成该应用的接入配置。');ui.mode=mode;ui.needsSetup=true;render();return;}
+          if(integration.receiverReady!==true){fail('事件接收服务暂不可用，请检查服务后重试。');ui.needsSetup=true;render();return;}
+          ui.approvals=integration.supportsApproval===true;
           if(typeof connector.connect!=='function'){fail(`尚未配置 ${names[app]} 官方接入，暂不能启用监测。`);return;}
           ui.phase='connecting';ui.message='正在连接应用…';deadline(30000);render();
+          const queuedHooks=[];
           const result=await connector.connect({app,signal:ui.controller.signal,
             onAuthorizationRequired(reopen){if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;ui.phase='authorization';ui.reopen=typeof reopen==='function'?reopen:null;ui.message='请在打开的官方页面完成授权';deadline(120000);render();},
-            onAuthorized(){if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;ui.phase='connecting';ui.reopen=null;ui.message='授权已完成，正在连接应用…';deadline(30000);render();}
+            onAuthorized(){if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;ui.phase='connecting';ui.reopen=null;ui.message='授权已完成，正在连接应用…';deadline(30000);render();},
+            onHook(event){if(!current())return;if(state.apps[app]==='active')receiveHook(app,event);else if(['connecting','reconnecting'].includes(state.apps[app])&&queuedHooks.length<100)queuedHooks.push(event);},
+            onTasks(tasks){if(!current()||state.apps[app]!=='active')return;if(replaceTasks(app,tasks)){syncPending.delete(app);render();}},
+            onDisconnected(){if(!current())return;if(['connecting','reconnecting'].includes(state.apps[app])){fail('连接已断开，请重新监测。');return;}state.apps[app]='error';syncPending.add(app);ui.message='事件接收连接已断开，请重新监测以同步最新状态。';render();}
           });
           if(!current())return;
           if(result?.cancelled){cancelConnection(app);return;}
           if(result?.connected!==true||result?.subscribed!==true||!Array.isArray(result.tasks))throw new Error('尚未确认任务数据连接，请重试。');
-          if(result.tasks.some(t=>!t||typeof t.id!=='string'||typeof t.title!=='string'||typeof t.status!=='string'))throw new Error('任务同步数据不完整，请重试。');
+          if(result.tasks.some(t=>!t||typeof t.id!=='string'))throw new Error('任务同步数据不完整，请重试。');
           clearTimeout(ui.timer);ui.timer=null;ui.phase='';ui.message='';ui.reopen=null;
-          state.tasks=state.tasks.filter(t=>t.app!==app).concat(result.tasks.map(t=>({...t,app,preview:false,requests:(t.requests||[]).map(r=>({...r,demo:false}))})));
+          replaceTasks(app,result.tasks);
           state.apps[app]='active';syncPending.delete(app);
           const task=state.tasks.find(t=>t.app===app&&t.id===selected[app])||state.tasks.find(t=>t.app===app);
           previewStates[app]=task?({'执行中':'running','等待审批':'approval','任务失败':'failed','任务完成':'completed'}[task.status]||'running'):'waiting';
-          render();
+          queuedHooks.forEach(event=>receiveHook(app,event));render();
         }catch(error){fail(typeof error?.message==='string'?error.message:ui.phase==='prerequisites'?'前置检查失败，无法确认应用状态，请重试。':'连接失败，请重试。');}
+      }
+      function remonitor(app){
+        const ui=connectionUi[app];if(!['active','error'].includes(state.apps[app]))return;
+        if(ui.preview){
+          if(ui.prerequisiteScenario){previewPrerequisite(app,ui.prerequisiteScenario);return;}
+          // Explicit prototype interaction only; never invoke a real host here.
+          resetConnection(app);const attempt=connectionAttempts[app];
+          ui.preview=true;ui.message='演示：正在重新建立监测连接…';
+          state.apps[app]='connecting';syncPending.delete(app);render();
+          ui.timer=setTimeout(()=>{if(connectionAttempts[app]!==attempt||!ui.preview||state.apps[app]!=='connecting')return;ui.timer=null;ui.message='已连接（示例）';state.apps[app]='active';seedPreviewTasks(app);previewStates[app]='running';render();},600);
+          return;
+        }
+        if(!ui.consented){show(app,'permission');return;}
+        beginConnection(app);
       }
       function previewPrerequisite(app,scenario){
         if(!Object.hasOwn(names,app)||!['installed','loggedIn','running','ready'].includes(scenario)||Object.values(connectionUi).some(ui=>ui.controller))return;
@@ -19532,13 +19676,13 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;
         const ui=connectionUi[app];ui.preview=true;ui.prerequisiteScenario=scenario;
         ui.prerequisite=scenario==='ready'?'':scenario;
-        ui.message={installed:`未安装 ${names[app]}，请先安装。`,loggedIn:`请先登录 ${names[app]}，并确认登录有效。`,running:`请先启动 ${names[app]}。`,ready:'安装、登录和启动条件均满足，正在连接应用…'}[scenario];
+        ui.message={installed:`未安装 ${names[app]}，请先安装。`,loggedIn:`请先登录 ${names[app]}，并确认登录有效。`,running:`请先启动 ${names[app]}。`,ready:'示例：应用条件满足，正在检查接入配置与事件接收服务。'}[scenario];
         state.apps[app]=scenario==='ready'?'connecting':'error';
         previewStates[app]='disconnected';syncPending.delete(app);render();
       }
       async function openPrerequisite(app){
         const ui=connectionUi[app];if(!ui?.prerequisite||ui.opening)return;
-        if(ui.prerequisiteScenario){ui.message=ui.prerequisite==='installed'?'演示：将打开官方安装页面，安装后点击重试。':ui.prerequisite==='loggedIn'?'演示：将打开应用，请登录后点击重试。':'演示：将打开应用，启动后点击重试。';render();return;}
+        if(ui.prerequisiteScenario){ui.message=ui.prerequisite==='installed'?'演示：将打开官方安装页面，安装后点击“重新监测”。':ui.prerequisite==='loggedIn'?'演示：将打开应用，请登录后点击“重新监测”。':'演示：将打开应用，启动后点击“重新监测”。';render();return;}
         const connector=window.x3MonitorConnector,method=ui.prerequisite==='installed'?'openInstallation':'openApplication';
         if(typeof connector?.[method]!=='function')return;
         const attempt=connectionAttempts[app];ui.opening=true;render();
@@ -19550,8 +19694,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(!Object.hasOwn(names,app)||!['permission','stop'].includes(stage))return;
         dialog={app,stage};if(modal.hidden)lastFocus=document.activeElement;modal.hidden=false;
         const title=stage==='permission'?'允许监测':'停止监测';
-        const copy=stage==='permission'?'开启后，将接收该应用提供的任务指令、所属窗口／会话标识、任务状态、当前动作、更新时间、执行结果及待审批操作，用于展示任务进度，并在小屏确认或拒绝待审批操作。':`停止后，将不再接收 ${names[app]} 各窗口／会话的任务更新。`;
-        const buttons=stage==='permission'?[['cancel','取消'],['connect','允许监测']]:[['confirm-stop','停止监测'],['close','取消']];
+        const copy=stage==='permission'?`开启后，将接收 ${names[app]} 提供的指令、会话与工作目录、工具操作及通知，用于展示任务活动和待处理提醒。`:`停止后，将不再接收 ${names[app]} 的更新，本页不再处理该应用的授权请求；不会终止应用里的任务。`;
+        const buttons=stage==='permission'?[['cancel','取消'],['connect','允许监测']]:[['close','取消'],['confirm-stop','停止监测']];
         modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="${e(title)}" tabindex="-1"><h3>${e(title)}</h3><p>${e(copy)}</p><div class="action-row">${buttons.map(([action,label])=>`<button class="soft-button" data-am="dialog" data-stage="${action}">${label}</button>`).join('')}</div></section>`;render();modal.querySelector('button')?.focus();
       }
       function close(){modal.hidden=true;modal.innerHTML='';dialog=null;render();lastFocus?.isConnected&&lastFocus.focus();}
@@ -19569,15 +19713,18 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='pending-close'){pendingUi.open=false;render();}
         if(a==='pending-open'&&findRequest(b.dataset.request)){pendingUi.current=b.dataset.request;pendingUi.open=true;render();}
         if(a==='pending-answer')submitRequest(b.dataset.request,b.dataset.value);
+        if(a==='request-check')checkRequest(b.dataset.request);
+        if(a==='source-open')openSource(id);
+        if(a==='setup-guide'&&Object.hasOwn(names,id)){connectionUi[id].guideOpen=!connectionUi[id].guideOpen;render();}
         if(a==='pending-demo')pendingDemo(b.dataset.scenario);
         if(a==='prerequisite-preview')previewPrerequisite(id,b.dataset.scenario);
-        if(a==='monitor-preview'&&Object.hasOwn(names,id)&&['idle','connecting','active','error','interrupted'].includes(b.dataset.status)){
+        if(a==='monitor-preview'&&Object.hasOwn(names,id)&&['idle','connecting','active','error'].includes(b.dataset.status)){
           if(Object.values(connectionUi).some(ui=>ui.controller))return;
           monitorPreviewApp=id;
           // Review-only connection fixtures; preserve task data and per-request decisions.
           modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;syncPending.delete(id);resetConnection(id);
           connectionUi[id].preview=true;
-          if(['active','interrupted'].includes(b.dataset.status)){seedPreviewTasks(id);previewStates[id]=b.dataset.status==='active'?'running':'connection-lost';}else previewStates[id]='disconnected';
+          if(b.dataset.status==='active'){seedPreviewTasks(id);previewStates[id]='running';}else previewStates[id]='disconnected';
           state.apps[id]=b.dataset.status;
           render();
         }
@@ -19587,12 +19734,12 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='auth-cancel'&&Object.hasOwn(names,id))cancelConnection(id);
         if(a==='prerequisite-open'&&Object.hasOwn(names,id))openPrerequisite(id);
         if(a==='auth-reopen'&&connectionUi[id]?.phase==='authorization'){try{connectionUi[id].reopen?.();}catch(error){connectionUi[id].message='未能打开官方授权页，请取消后重试。';render();}}
-        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(connectionUi[id].prerequisiteScenario)previewPrerequisite(id,connectionUi[id].prerequisiteScenario);else if(!connectionUi[id].consented||state.apps[id]==='idle')show(id,'permission');else beginConnection(id);}
-        if(a==='reconnect'&&state.apps[id]==='interrupted')beginConnection(id);
+        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(connectionUi[id].prerequisiteScenario)previewPrerequisite(id,connectionUi[id].prerequisiteScenario);else if(!connectionUi[id].consented)show(id,'permission');else beginConnection(id);}
+        if(a==='remonitor'&&Object.hasOwn(names,id))remonitor(id);
         if(a==='stop')show(id,'stop');
-        if(a==='interrupt'){state.apps[id]='interrupted';previewStates[id]='connection-lost';render();}
+        if(a==='interrupt'&&Object.hasOwn(names,id)){state.apps[id]='error';previewStates[id]='connection-lost';syncPending.add(id);render();}
         if(a==='demo'){state.demo=!state.demo;state.tasks=state.demo?Object.keys(names).flatMap(app=>['执行中','等待审批','任务完成','任务失败'].map((status,i)=>({id:app+'-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','资料整理','测试验证'][i],title:['修复登录问题','更新项目文件','整理需求文档','运行测试'][i],status,start:'14:0'+i,updated:'14:20',end:i>1?'14:18':'',duration:i>1?'15 分钟':'',action:['检查相关代码','等待用户确认','已整理文档','测试返回错误'][i],result:i===2?'需求文档已整理':i===3?'测试断言未通过':''}))):[];state.detail=null;pendingUi.open=false;pendingUi.current=null;pendingUi.empty=false;if(state.demo){state.tasks.filter(t=>t.status==='等待审批').forEach(t=>receiveRequest(t,'permission',false));Object.keys(names).forEach(app=>{state.apps[app]='active';previewStates[app]='running';});syncPending.clear();}render();}
-        if(a==='dialog'&&dialog){const app=dialog.app,s=b.dataset.stage;if(s==='close'||s==='cancel')close();else if(s==='confirm-stop'&&dialog.stage==='stop'){resetConnection(app);state.apps[app]='idle';syncPending.delete(app);close();}else if(s==='connect'&&dialog.stage==='permission'){connectionUi[app].consented=true;close();beginConnection(app);}}
+        if(a==='dialog'&&dialog){const app=dialog.app,s=b.dataset.stage;if(s==='close'||s==='cancel')close();else if(s==='confirm-stop'&&dialog.stage==='stop'){resetConnection(app);state.apps[app]='idle';previewStates[app]='disconnected';syncPending.delete(app);state.tasks.filter(t=>t.app===app).forEach(t=>(t.requests||[]).filter(r=>['pending','submitting','unknown'].includes(r.status)).forEach(r=>{r.status='cancelled';}));for(const key of hookRounds.keys())if(key.startsWith(app+':'))hookRounds.delete(key);if(findRequest(pendingUi.current)?.task.app===app){pendingUi.open=false;pendingUi.current=null;}close();}else if(s==='connect'&&dialog.stage==='permission'){connectionUi[app].consented=true;close();beginConnection(app);}}
       });
       modal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close(true);}if(event.key==='Tab'){const buttons=[...modal.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
       // Examples are created only by explicit preview controls, never on first use.
@@ -19603,6 +19750,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         preview:true,
         id:app+'-review-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','项目 C'][i],
         title:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],status,
+        prompt:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],sessionId:'demo-session-'+(i+1),cwd:['/demo/project-a','/demo/project-b','/demo/project-c'][i],receivedAt:Date.now()-i*120000,
+        toolName:['Bash','Edit','Write'][i],toolInput:i===0?{command:'npm test -- tests/login.test.js'}:{file_path:i===1?'/demo/project-b/requirements.md':'/demo/project-c/styles.css'},statusSource:'task',resultSource:'task',
         permissionRequest:i===0?{title:'允许运行登录测试吗？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:undefined,
         start:['14:00','14:02','14:05'][i],updated:['14:20','14:18','14:16'][i],
         end:i===2?'14:16':'',duration:i===2?'11 分钟':'',
