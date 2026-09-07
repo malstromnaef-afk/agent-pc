@@ -19197,6 +19197,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-pending-body .am-request{margin:0;border:0;padding:0;background:none}
       #monitor .am-pending-body .am-request p{font-size:16px}
       #monitor .am-pending-overlay .agent-state-actions{display:block;margin:0;flex:none}
+      body.prototype-small #monitor .am-pending-overlay{grid-template-columns:minmax(0,1fr)}
+      body.prototype-small #monitor .am-pending-overlay .agent-state-dialog{width:min(520px,100%);min-width:0;box-sizing:border-box}
+      body.prototype-small #monitor .am-pending-overlay .am-request-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:100%;gap:12px}
+      body.prototype-small #monitor .am-pending-overlay .am-request-actions button{width:100%;min-width:0;margin:0;padding:10px 8px;white-space:nowrap}
       #monitor .am-pending-empty{margin:0 0 12px;color:#b9cbd0;font-size:14px}
       @media(max-width:760px){#monitor .am-tasks{grid-template-columns:1fr}#monitor .am-console{padding:14px}}
     </style>
@@ -19235,7 +19239,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       const prerequisites=document.createElement('p');
       prerequisites.className='am-note';
       prerequisites.style.cssText='margin:0 0 20px;line-height:1.7';
-      prerequisites.textContent='使用前提：已在本机安装对应应用，已登录且能够正常使用，并已打开该应用。';
+      prerequisites.textContent='使用前提：请先在本机安装、登录并启动监测应用。';
       page.querySelector('#cli-integration-grid').before(prerequisites);
       page.querySelector('.cli-monitor-note').textContent='';
       page.querySelector('.cli-monitor-note').hidden=true;
@@ -19270,8 +19274,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       function requestMarkup(task,r,inPopup=false){
         if(r.type!=='permission'||r.status==='resolved')return '';
         const blocked=r.status==='submitting'?'':requestBlocked(task,r);
-        const compact=inPopup&&r.type==='permission'&&r.operation&&r.scope&&r.target;
-        const description=compact?`<h4>允许${e(r.operation)} ${e(r.target)}${e(r.scope)}？</h4>`:`<h4>${e(r.title)}</h4><p>${e(r.details)}</p><p>操作对象：${e(r.target)}</p>`;
+        const redundantDetails=r.title==='允许运行登录测试吗？'&&r.details==='运行指定文件中的登录测试。';
+        const projectPrefix=task.session?task.session+' / ':'';
+        const target=inPopup&&projectPrefix&&r.target?.startsWith(projectPrefix)&&r.target.length>projectPrefix.length?r.target.slice(projectPrefix.length):r.target;
+        const description=`<h4>${e(r.title)}</h4>${r.details&&!redundantDetails?`<p>${e(r.details)}</p>`:''}<p>${inPopup?'':'操作对象：'}${e(target)}</p>`;
         return `<section class="am-request" data-request-section="${e(r.id)}" data-current="${pendingUi.current===r.id}" tabindex="-1">${description}${r.warning?`<p class="am-request-warning">${e(r.warning)}</p>`:''}${blocked||r.error?`<p class="am-request-feedback" role="status">${e(blocked||r.error)}</p>`:''}${inPopup?'':requestActions(task,r)}</section>`;
       }
       function speaker(){const n=pendingRequests().length;return `<button class="am-pending-entry" data-am="pending-locate" aria-label="待处理事项，${n} 项" title="待处理事项"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 9h4l6-5v16l-6-5H4z"/><path d="M17 8a7 7 0 0 1 0 8m3-11a11 11 0 0 1 0 14"/></svg>${n?`<span class="am-pending-count" aria-hidden="true">${n}</span>`:''}</button>`;}
@@ -19286,10 +19292,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         consoleRoot.inert=!pendingOverlay.hidden;
         if(pendingOverlay.hidden)return;
         const {task,request:r}=item;
-        pendingOverlay.querySelector('.agent-state-dialog').setAttribute('aria-label','待处理事项');
-        pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4>待处理事项</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
+        pendingOverlay.querySelector('.agent-state-dialog').setAttribute('aria-label','操作授权');
+        pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4>操作授权</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
         const body=page.querySelector('#agent-state-fields');body.className='agent-state-fields am-pending-body';
-        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(task.window)} · ${e(task.session)}<br>${e(task.title)}</p>${requestMarkup(task,r,true)}`;
+        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(task.window)} · ${e(task.session)}</p>${requestMarkup(task,r,true)}`;
         page.querySelector('#agent-state-actions').innerHTML=`${requestActions(task,r,true)}${!pendingRequests().length?`<p class="am-request-meta" role="status">${r.status==='resolved'?'全部处理完成':'暂无待处理事项'}</p>`:''}`;
       }
       function receiveRequest(task,type='permission',autoOpen=true){
@@ -19351,8 +19357,13 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       }
       function taskCard(t){
         const terminal=['任务失败','任务完成'].includes(t.status);
+        // Approval acknowledgments do not imply that the application has resumed work.
+        // Keep the source state intact; only replace its now-obsolete approval display.
+        const permissions=(t.requests||[]).filter(r=>r.type==='permission');
+        const waitingForUpdate=t.status==='等待审批'&&permissions.length>0&&permissions.every(r=>r.status==='resolved');
+        const displayStatus=waitingForUpdate?'等待更新':t.status;
         const copy=t.status==='等待审批'&&!(t.requests||[]).length?'暂未收到具体请求内容，不能授权。':terminal&&t.result?`${t.status==='任务失败'?'失败原因':'完成结果'}：${t.result}`:'';
-        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(t.status)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令</small><strong>${e(t.title)}</strong><em>${e(t.window)}／${e(t.session)}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(t.status)}">${e(t.status)}</strong></span><span><small>最后更新</small><strong>${e(t.updated||'--:--:--')}</strong></span></span>${!terminal&&t.action?`<span class="am-task-action">${stale(t)?'最后收到的动作':'当前动作'}　${e(t.action)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">状态未更新，以上为最后收到的任务信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
+        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(displayStatus)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令</small><strong>${e(t.title)}</strong><em>${e(t.window)}／${e(t.session)}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(displayStatus)}">${e(displayStatus)}</strong></span><span><small>最后更新</small><strong>${e(t.updated||'--:--:--')}</strong></span></span>${!terminal&&!waitingForUpdate&&t.action?`<span class="am-task-action">${stale(t)?'最后收到的动作':'当前动作'}　${e(t.action)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">状态未更新，以上为最后收到的任务信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
       }
       function render(){
         const restore=captureAgentInteraction(host.closest('[data-subscreen-preview]'));
@@ -19376,7 +19387,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         }
         taskList.querySelectorAll('[data-task]').forEach(row=>row.setAttribute('data-state-target',String(row.dataset.task===selected[state.view])));
         if(state.apps[state.view]==='interrupted'||state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='interrupted'?'监测中断':state.apps[state.view]==='reconnecting'?'重新连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
-        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>已开启监测的应用：<strong>${Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])).map(id=>names[id]).join('、')||'无'}</strong></span>`;
+        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>监测应用：<strong>${Object.keys(names).filter(id=>['active','interrupted','reconnecting'].includes(state.apps[id])).map(id=>names[id]).join('、')||'无'}</strong></span>`;
         page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>{
           const ui=connectionUi[id],status=state.apps[id],count=state.tasks.filter(t=>t.app===id).length;
           const authorizing=ui.phase==='authorization',busy=['connecting','reconnecting'].includes(status);
@@ -19494,7 +19505,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(!Object.hasOwn(names,app)||!['permission','stop'].includes(stage))return;
         dialog={app,stage};if(modal.hidden)lastFocus=document.activeElement;modal.hidden=false;
         const title=stage==='permission'?'允许监测':'停止监测';
-        const copy=stage==='permission'?'开启后，将接收该应用的任务指令、窗口／会话信息、任务状态、当前动作、更新时间、执行结果及待处理请求，用于展示任务进度，并在小屏处理请求。':`停止后，将不再接收 ${names[app]} 各窗口／会话的任务更新。`;
+        const copy=stage==='permission'?'开启后，将接收该应用提供的任务指令、所属窗口／会话标识、任务状态、当前动作、更新时间、执行结果及待审批操作，用于展示任务进度，并在小屏确认或拒绝待审批操作。':`停止后，将不再接收 ${names[app]} 各窗口／会话的任务更新。`;
         const buttons=stage==='permission'?[['cancel','取消'],['connect','允许监测']]:[['confirm-stop','停止监测'],['close','取消']];
         modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="${e(title)}" tabindex="-1"><h3>${e(title)}</h3><p>${e(copy)}</p><div class="action-row">${buttons.map(([action,label])=>`<button class="soft-button" data-am="dialog" data-stage="${action}">${label}</button>`).join('')}</div></section>`;render();modal.querySelector('button')?.focus();
       }
@@ -19545,7 +19556,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         preview:true,
         id:app+'-review-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','项目 C'][i],
         title:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],status,
-        permissionRequest:i===0?{title:'允许运行登录测试？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:undefined,
+        permissionRequest:i===0?{title:'允许运行登录测试吗？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:undefined,
         start:['14:00','14:02','14:05'][i],updated:['14:20','14:18','14:16'][i],
         end:i===2?'14:16':'',duration:i===2?'11 分钟':'',
         action:['正在运行登录模块测试','等待确认文件修改',''][i],result:i===2?'页面样式已更新':''
