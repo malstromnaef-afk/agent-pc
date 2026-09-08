@@ -19319,6 +19319,19 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-dialog-close:focus-visible{outline:2px solid #19dce3;outline-offset:2px;border-radius:6px}
       #monitor .am-dialog p{line-height:1.8;color:#b5bfc7}
       #monitor .am-dialog .action-row{margin-top:24px;flex-wrap:wrap}
+      #monitor .am-dialog .am-activation-dialog{background:#181c25;border-color:#303946;border-radius:16px}
+      #monitor .am-activation-dialog .am-dialog-head h3{font-size:24px}
+      #monitor .am-activation-app{margin:8px 0 20px;font-size:16px;color:#aeb9c6}
+      #monitor .am-activation-status{padding:20px;border:1px solid #34434c;border-radius:12px;background:#ffffff04}
+      #monitor .am-activation-status h4{margin:0;color:#edf3f7;font-size:21px;line-height:1.5}
+      #monitor .am-activation-status p{margin:10px 0 0;font-size:16px;line-height:1.7;overflow-wrap:anywhere}
+      #monitor .am-activation-status[data-kind="success"]{border-color:#2fe08e66;background:#2fe08e09}
+      #monitor .am-activation-status[data-kind="success"] h4{color:#53eaa3}
+      #monitor .am-activation-status[data-kind="blocked"] h4,#monitor .am-activation-status[data-kind="error"] h4{color:#ffc16a}
+      #monitor .am-activation-dialog .am-activation-note{font-size:13px;line-height:1.6;margin:14px 0 0;color:#96a4b4}
+      #monitor .am-activation-dialog .action-row{justify-content:flex-end;gap:12px}
+      #monitor .am-activation-dialog button{min-height:44px}
+      #monitor .am-activation-dialog button:disabled{opacity:.55;cursor:not-allowed}
       #monitor .am-toolbar{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:16px}
       #monitor .am-toolbar .am-tabs{margin:0;overflow-x:auto;min-width:0}
       #monitor .am-pending-entry{position:relative;flex:none;width:48px;height:48px;border:1px solid #526168;border-radius:14px;background:#263338;color:#c9eeee;display:grid;place-items:center;cursor:pointer}
@@ -19612,22 +19625,24 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         page.querySelector('#cli-monitor-summary').innerHTML=`<span>监测应用：<strong>${Object.keys(names).filter(id=>monitoringEnabled(id)).map(id=>names[id]).join('、')||'无'}</strong></span>`;
         page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>{
           const ui=connectionUi[id],status=state.apps[id],count=state.tasks.filter(t=>t.app===id).length;
+          const cardStatus=ui.phase==='prerequisites'?'检查中':ui.prerequisite?{installed:'未安装',running:'未启动',loggedIn:'未登录'}[ui.prerequisite]:labels[status];
           const authorizing=ui.phase==='authorization',busy=['connecting','reconnecting'].includes(status);
           const copy=ui.message||(status==='idle'?'尚未开启监测':status==='error'?'未能连接应用。':busy?'正在连接应用…':'已连接');
           const controls=authorizing?`${ui.reopen?`<button class="soft-button" data-am="auth-reopen" data-app="${id}">重新打开</button>`:''}<button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:busy?`<button class="soft-button" disabled>${ui.phase==='prerequisites'?'检查中…':labels[status]}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:['active','error'].includes(status)?`<button class="primary-button" data-am="remonitor" data-app="${id}">重新监测</button>${status==='active'||syncPending.has(id)?`<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:''}`:`<button class="primary-button" data-am="start" data-app="${id}">启用监测</button>`;
           const prerequisiteMethod=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpenPrerequisite=Boolean(ui.prerequisiteScenario)||typeof window.x3MonitorConnector?.[prerequisiteMethod]==='function';
           const prerequisiteControl=ui.prerequisite?`<button class="soft-button" data-am="prerequisite-open" data-app="${id}" ${ui.opening||!canOpenPrerequisite?'disabled':''}>${ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用'}</button>${!canOpenPrerequisite?`<span class="am-note">${ui.prerequisite==='installed'?'请自行从官方渠道安装后重试':'请手动打开应用'+(ui.prerequisite==='loggedIn'?'并登录':'')+'后重试'}</span>`:''}`:'';
-          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
+          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${cardStatus}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
         }).join('');
         let demo=page.querySelector('.am-demo');if(!demo){demo=document.createElement('div');demo.className='am-demo action-row';page.querySelector('.cli-monitor-note').after(demo);}
         demo.style.display='block';demo.style.marginTop='20px';
         const previewLocked=Object.values(connectionUi).some(ui=>ui.controller),previewApp=monitorPreviewApp;
         const ownershipOpen=demo.querySelector('[data-am-ownership]')?.open;
         demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：接入配置提示、事件接收、字段展示及状态同步；支持审批回传时才开放操作按钮。</p><p class="am-note">来源应用：按实际产品版本提供事件和权限能力。Hooks 不等于官方 OAuth；WorkBuddy 与 Codex 分别对接。</p><p class="am-note">首次启用：允许监测 → 检查接入配置与接收服务 → 官方授权（仅接入要求时）→ 连接结果。没有事件不代表断连；工具结果不代表任务结果。</p></details>`;
-        prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 10px">前置条件预览 · ${names[previewApp]}（仅演示）</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${[['installed','未安装'],['loggedIn','未登录'],['running','未启动'],['ready','条件满足']].map(([scenario,label])=>`<button class="${connectionUi[previewApp].prerequisiteScenario===scenario?'primary-button':'soft-button'}" data-am="prerequisite-preview" data-app="${previewApp}" data-scenario="${scenario}" aria-pressed="${connectionUi[previewApp].prerequisiteScenario===scenario}" ${previewLocked?'disabled':''}>${label}</button>`).join('')}</div>`;
+        prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 10px">前置条件预览 · ${names[previewApp]}（仅演示）</p><p class="am-note" style="margin:0 0 12px">选择检查场景后，点击下方应用的“启用监测”体验完整流程。</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${[['installed','未安装'],['loggedIn','未登录'],['running','未启动'],['ready','条件满足']].map(([scenario,label])=>`<button class="${connectionUi[previewApp].prerequisiteScenario===scenario?'primary-button':'soft-button'}" data-am="prerequisite-preview" data-app="${previewApp}" data-scenario="${scenario}" aria-pressed="${connectionUi[previewApp].prerequisiteScenario===scenario}" ${previewLocked?'disabled':''}>${label}</button>`).join('')}</div>`;
         const rows=state.tasks.filter(t=>t.app===state.records);
         records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>当前任务</th><th>会话／工作目录</th><th>状态</th><th>最近同步</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.prompt||'暂未收到本轮指令')}</td><td style="white-space:normal;overflow-wrap:anywhere">${e(taskContext(t))}</td><td>${e(taskStatus(t))}</td><td>${e(receivedTime(t))}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
+        renderConnectionDialog();
         renderPending();
         restore();
         syncPhysicalScreenPreview(host.closest('[data-subscreen-preview]'));
@@ -19684,10 +19699,13 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const ui=connectionUi[app];++connectionAttempts[app];
         clearTimeout(ui.timer);ui.timer=null;
         const controller=ui.controller;ui.controller=null;controller?.abort();
-        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.needsSetup=false;ui.approvals=false;
+        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.previewPrerequisiteHandled=false;ui.previewNotice='';ui.needsSetup=false;ui.approvals=false;
       }
       function cancelConnection(app){
-        resetConnection(app);state.apps[app]='idle';syncPending.delete(app);render();
+        const ui=connectionUi[app],scenario=ui.prerequisiteScenario,handled=ui.previewPrerequisiteHandled;
+        resetConnection(app);
+        if(scenario){ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;}
+        state.apps[app]='idle';syncPending.delete(app);render();
       }
       function normalizeTask(app,t){
         const requests=(Array.isArray(t.requests)?t.requests:[]).map(r=>({...r,id:`${app}:${t.id}:${r.id}`,sourceRequestId:r.sourceRequestId||r.id,sequence:++requestSequence,type:'permission',demo:false,mode:r.mode==='approval'?'approval':'notice',status:r.status||'pending'}));
@@ -19779,7 +19797,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         try{
           const checks=typeof connector.checkPrerequisites==='function'?await connector.checkPrerequisites({app,signal:ui.controller.signal}):null;
           if(!current())return;
-          const requirements=[['installed',`未安装 ${names[app]}，请先安装。`],['loggedIn',`请先登录 ${names[app]}，并确认登录有效。`],['running',`请先启动 ${names[app]}。`]];
+          const requirements=[['installed',`未安装 ${names[app]}，请先安装。`],['running',`请先启动 ${names[app]}。`],['loggedIn',`请先登录 ${names[app]}，并确认登录有效。`]];
           const unmet=requirements.find(([key])=>checks?.[key]===false);
           if(unmet){fail(unmet[1]);ui.prerequisite=unmet[0];render();return;}
           // Login/process checks are optional diagnostics, not Hooks capabilities.
@@ -19816,7 +19834,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       function remonitor(app){
         const ui=connectionUi[app];if(!['active','error'].includes(state.apps[app]))return;
         if(ui.preview){
-          if(ui.prerequisiteScenario){previewPrerequisite(app,ui.prerequisiteScenario);return;}
+          if(ui.prerequisiteScenario){show(app,'permission');return;}
           // Explicit prototype interaction only; never invoke a real host here.
           resetConnection(app);const attempt=connectionAttempts[app];
           ui.preview=true;ui.message='演示：正在重新建立监测连接…';
@@ -19825,22 +19843,50 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           return;
         }
         if(!ui.consented){show(app,'permission');return;}
-        beginConnection(app);
+        openConnectionDialog(app);
+      }
+      // Review scenarios only run after the user selects one in the prototype controls.
+      // They do not call the host, persist real monitoring preferences or create tasks.
+      function beginPreviewConnection(app){
+        const ui=connectionUi[app];
+        if(!ui?.prerequisiteScenario||['connecting','reconnecting'].includes(state.apps[app]))return;
+        const scenario=ui.prerequisiteScenario,handled=ui.previewPrerequisiteHandled===true;
+        resetConnection(app);
+        const attempt=connectionAttempts[app],current=()=>connectionAttempts[app]===attempt&&ui.preview;
+        ui.preview=true;ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;
+        state.demo=true;state.apps[app]='connecting';ui.phase='prerequisites';ui.message='正在检查应用状态…';
+        previewStates[app]='disconnected';syncPending.delete(app);render();
+        ui.timer=setTimeout(()=>{
+          if(!current())return;ui.timer=null;
+          if(scenario!=='ready'&&!handled){
+            ui.phase='';ui.prerequisite=scenario;state.apps[app]='error';
+            ui.message={installed:`未安装 ${names[app]}，请先安装。`,running:`请先启动 ${names[app]}。`,loggedIn:`请先登录 ${names[app]}。`}[scenario];
+            render();return;
+          }
+          ui.phase='connecting';ui.message='正在连接应用…';render();
+          ui.timer=setTimeout(()=>{
+            if(!current())return;ui.timer=null;ui.phase='';ui.message='监测已开启';
+            state.apps[app]='active';state.view=app;previewStates[app]='waiting';syncPending.delete(app);render();
+          },650);
+        },650);
       }
       function previewPrerequisite(app,scenario){
         if(!Object.hasOwn(names,app)||!['installed','loggedIn','running','ready'].includes(scenario)||Object.values(connectionUi).some(ui=>ui.controller))return;
-        // Explicit review fixture: never call the host or alter task/request data.
+        // Select an initial check result; the application card remains the entry point.
         resetConnection(app);monitorPreviewApp=app;
         modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;
         const ui=connectionUi[app];ui.preview=true;ui.prerequisiteScenario=scenario;
-        ui.prerequisite=scenario==='ready'?'':scenario;
-        ui.message={installed:`未安装 ${names[app]}，请先安装。`,loggedIn:`请先登录 ${names[app]}，并确认登录有效。`,running:`请先启动 ${names[app]}。`,ready:'应用条件满足，正在检查接入配置与事件接收服务。'}[scenario];
-        state.apps[app]=scenario==='ready'?'connecting':'error';
+        ui.prerequisite='';ui.message='尚未开启监测';
+        state.apps[app]='idle';
         previewStates[app]='disconnected';syncPending.delete(app);render();
       }
       async function openPrerequisite(app){
         const ui=connectionUi[app];if(!ui?.prerequisite||ui.opening)return;
-        if(ui.prerequisiteScenario){ui.message=ui.prerequisite==='installed'?'演示：将打开官方安装页面，安装后点击“重新监测”。':ui.prerequisite==='loggedIn'?'演示：将打开应用，请登录后点击“重新监测”。':'演示：将打开应用，启动后点击“重新监测”。';render();return;}
+        if(ui.prerequisiteScenario){
+          ui.previewPrerequisiteHandled=true;
+          ui.previewNotice=ui.prerequisite==='installed'?'已模拟打开安装页面。点击“重新检查”可预览安装完成后的流程。':ui.prerequisite==='loggedIn'?'已模拟打开应用。点击“重新检查”可预览登录完成后的流程。':'已模拟打开应用。点击“重新检查”可预览启动完成后的流程。';
+          render();return;
+        }
         const connector=window.x3MonitorConnector,method=ui.prerequisite==='installed'?'openInstallation':'openApplication';
         if(typeof connector?.[method]!=='function')return;
         const attempt=connectionAttempts[app];ui.opening=true;render();
@@ -19850,13 +19896,64 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       }
       function show(app,stage){
         if(!Object.hasOwn(names,app)||!['permission','stop'].includes(stage))return;
-        dialog={app,stage};if(modal.hidden)lastFocus=document.activeElement;modal.hidden=false;
-        const title=stage==='permission'?'允许监测':'停止监测';
-        const copy=stage==='permission'?`开启后，将接收 ${names[app]} 提供的指令、会话与工作目录、工具操作及通知，用于展示任务活动和待处理提醒。`:`停止后，将不再接收 ${names[app]} 的更新，本页不再处理该应用的授权请求；不会终止应用里的任务。`;
-        const buttons=stage==='permission'?[['cancel','取消'],['connect','允许监测']]:[['close','取消'],['confirm-stop','停止监测']];
-        modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="${e(title)}" tabindex="-1"><h3>${e(title)}</h3><p>${e(copy)}</p><div class="action-row">${buttons.map(([action,label])=>`<button class="soft-button" data-am="dialog" data-stage="${action}">${label}</button>`).join('')}</div></section>`;render();modal.querySelector('button')?.focus();
+        monitorPreviewApp=app;
+        if(modal.hidden)lastFocus=document.activeElement;
+        dialog={app,stage};modal.hidden=false;pendingUi.open=false;
+        if(stage==='permission'){render();modal.querySelector('button')?.focus();return;}
+        const copy=`停止后，将不再接收 ${names[app]} 的更新，本页不再处理该应用的授权请求；不会终止应用里的任务。`;
+        modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="停止监测" tabindex="-1"><h3>停止监测</h3><p>${e(copy)}</p><div class="action-row"><button class="soft-button" data-am="dialog" data-stage="close">取消</button><button class="soft-button" data-am="dialog" data-stage="confirm-stop">停止监测</button></div></section>`;render();modal.querySelector('button')?.focus();
       }
-      function close(){modal.hidden=true;modal.innerHTML='';dialog=null;render();lastFocus?.isConnected&&lastFocus.focus();}
+      function openConnectionDialog(app){
+        if(!Object.hasOwn(names,app)||['connecting','reconnecting'].includes(state.apps[app]))return;
+        if(modal.hidden)lastFocus=document.activeElement;
+        dialog={app,stage:'connection'};modal.hidden=false;pendingUi.open=false;
+        if(connectionUi[app].prerequisiteScenario)beginPreviewConnection(app);else beginConnection(app);
+        modal.querySelector('button')?.focus();
+      }
+      function renderConnectionDialog(){
+        if(!dialog||!['permission','connection'].includes(dialog.stage))return;
+        const {app,stage}=dialog,ui=connectionUi[app],status=state.apps[app],demo=Boolean(ui.prerequisiteScenario);
+        let title='',copy='',kind='checking',buttons='';
+        const button=(action,label,primary=false,disabled=false)=>`<button class="${primary?'primary-button':'soft-button'}" data-am="dialog" data-stage="${action}" ${disabled?'disabled':''}>${label}</button>`;
+        const cancel=button('cancel','取消');
+        if(stage==='permission'){
+          kind='permission';title=`开启 ${names[app]} 的任务监测？`;
+          copy='开启后，可在这里查看任务进度，并接收需要你处理的提醒。';
+          buttons=cancel+button('connect','确认开启',true);
+        }else if(ui.prerequisite){
+          kind='blocked';
+          title={installed:`尚未安装 ${names[app]}`,running:`${names[app]} 尚未启动`,loggedIn:`请先登录 ${names[app]}`}[ui.prerequisite];
+          copy={installed:'安装完成后，点击“重新检查”继续。',running:'启动应用后，点击“重新检查”继续。',loggedIn:'在应用中完成登录后，点击“重新检查”继续。'}[ui.prerequisite];
+          const method=ui.prerequisite==='installed'?'openInstallation':'openApplication';
+          const canOpen=demo||typeof window.x3MonitorConnector?.[method]==='function';
+          buttons=button('prerequisite',ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用',false,ui.opening||!canOpen)+button('recheck','重新检查',true,ui.opening);
+          if(!canOpen)copy+=ui.prerequisite==='installed'?'请自行下载并安装该应用。':'请手动打开应用。';
+        }else if(ui.phase==='authorization'){
+          title=`请完成 ${names[app]} 授权`;copy=ui.message||'请在打开的授权页面完成操作，授权后将继续连接。';
+          buttons=cancel+(ui.reopen?button('reopen','重新打开',true):'');
+        }else if(['connecting','reconnecting'].includes(status)){
+          title=ui.phase==='prerequisites'?'正在检查应用状态…':`正在连接 ${names[app]}…`;
+          copy=ui.phase==='prerequisites'?'正在检查应用及监测连接是否可用，请稍候。':'正在建立任务进度连接，请稍候。';buttons=cancel;
+        }else if(status==='active'){
+          kind='success';title='监测已开启';copy=`${names[app]} 开始执行任务后，这里会显示进度。`;
+          buttons=button('complete','完成',true);
+        }else if(status==='idle'){
+          kind='cancelled';title='已取消开启监测';copy='你可以稍后重新开启。';buttons=button('close','关闭');
+        }else{
+          kind='error';title='暂时无法开启监测';copy=ui.message||'连接未成功，请检查后重试。';buttons=cancel+button('recheck','重新检查',true);
+        }
+        const active=modal.contains(document.activeElement)?document.activeElement.dataset.stage:null;
+        const focusedInside=modal.contains(document.activeElement),scrollTop=modal.querySelector('section')?.scrollTop||0;
+        modal.innerHTML=`<section class="am-activation-dialog" role="dialog" aria-modal="true" aria-label="启用监测" tabindex="-1"><div class="am-dialog-head"><h3>启用监测</h3><button class="am-dialog-close" data-am="dialog" data-stage="close" aria-label="关闭启用监测弹窗">×</button></div><p class="am-activation-app">${e(names[app])}</p><div class="am-activation-status" data-kind="${kind}" role="status" aria-live="polite"><h4>${e(title)}</h4><p>${e(copy)}</p></div>${stage==='permission'?'<p class="am-activation-note">监测内容包括任务指令、会话与工作目录、工具操作及通知。</p>':''}${demo?`<p class="am-activation-note">原型流程演示，不会连接或操作真实应用。${e(ui.previewNotice||'')}</p>`:''}<div class="action-row">${buttons}</div></section>`;
+        modal.querySelector('section').scrollTop=scrollTop;
+        if(focusedInside)([...modal.querySelectorAll('button:not(:disabled)')].find(b=>b.dataset.stage===active)||modal.querySelector('button'))?.focus({preventScroll:true});
+      }
+      function close(){
+        const app=dialog?.app,cancelConnecting=dialog?.stage==='connection'&&['connecting','reconnecting'].includes(state.apps[app]);
+        modal.hidden=true;modal.innerHTML='';dialog=null;
+        if(cancelConnecting)cancelConnection(app);else render();
+        lastFocus?.isConnected&&lastFocus.focus();
+      }
       page.addEventListener('keydown',event=>{
         const overlay=event.target.closest?.('.am-pending-overlay');if(!overlay||!pendingUi.open)return;
         if(event.key==='Escape'){event.preventDefault();event.stopPropagation();pendingUi.open=false;render();return;}
@@ -19891,14 +19988,22 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='auth-cancel'&&Object.hasOwn(names,id))cancelConnection(id);
         if(a==='prerequisite-open'&&Object.hasOwn(names,id))openPrerequisite(id);
         if(a==='auth-reopen'&&connectionUi[id]?.phase==='authorization'){try{connectionUi[id].reopen?.();}catch(error){connectionUi[id].message='未能打开官方授权页，请取消后重试。';render();}}
-        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(connectionUi[id].prerequisiteScenario)previewPrerequisite(id,connectionUi[id].prerequisiteScenario);else if(!connectionUi[id].consented)show(id,'permission');else beginConnection(id);}
+        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(connectionUi[id].prerequisiteScenario||!connectionUi[id].consented)show(id,'permission');else openConnectionDialog(id);}
         if(a==='remonitor'&&Object.hasOwn(names,id))remonitor(id);
         if(a==='stop')show(id,'stop');
         if(a==='interrupt'&&Object.hasOwn(names,id)){state.apps[id]='error';previewStates[id]='connection-lost';syncPending.add(id);render();}
         if(a==='demo'){state.demo=!state.demo;state.tasks=state.demo?Object.keys(names).flatMap(app=>['执行中','等待审批','任务完成','任务失败'].map((status,i)=>({id:app+'-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','资料整理','测试验证'][i],title:['修复登录问题','更新项目文件','整理需求文档','运行测试'][i],status,start:'14:0'+i,updated:'14:20',end:i>1?'14:18':'',duration:i>1?'15 分钟':'',action:['检查相关代码','等待用户确认','已整理文档','测试返回错误'][i],result:i===2?'需求文档已整理':i===3?'测试断言未通过':''}))):[];state.detail=null;pendingUi.open=false;pendingUi.current=null;pendingUi.empty=false;if(state.demo){state.tasks.filter(t=>t.status==='等待审批').forEach(t=>receiveRequest(t,'permission',false));Object.keys(names).forEach(app=>{state.apps[app]='active';previewStates[app]='running';});syncPending.clear();}render();}
-        if(a==='dialog'&&dialog){const app=dialog.app,s=b.dataset.stage;if(s==='close'||s==='cancel')close();else if(s==='confirm-stop'&&dialog.stage==='stop'){resetConnection(app);state.apps[app]='idle';previewStates[app]='disconnected';syncPending.delete(app);state.tasks.filter(t=>t.app===app).forEach(t=>(t.requests||[]).filter(r=>['pending','submitting','unknown'].includes(r.status)).forEach(r=>{r.status='cancelled';}));for(const key of hookRounds.keys())if(key.startsWith(app+':'))hookRounds.delete(key);if(findRequest(pendingUi.current)?.task.app===app){pendingUi.open=false;pendingUi.current=null;}close();}else if(s==='connect'&&dialog.stage==='permission'){connectionUi[app].consented=true;close();beginConnection(app);}}
+        if(a==='dialog'&&dialog){
+          const app=dialog.app,s=b.dataset.stage;
+          if(['close','cancel','complete'].includes(s))close();
+          else if(s==='confirm-stop'&&dialog.stage==='stop'){resetConnection(app);state.apps[app]='idle';previewStates[app]='disconnected';syncPending.delete(app);state.tasks.filter(t=>t.app===app).forEach(t=>(t.requests||[]).filter(r=>['pending','submitting','unknown'].includes(r.status)).forEach(r=>{r.status='cancelled';}));for(const key of hookRounds.keys())if(key.startsWith(app+':'))hookRounds.delete(key);if(findRequest(pendingUi.current)?.task.app===app){pendingUi.open=false;pendingUi.current=null;}close();}
+          else if(s==='connect'&&dialog.stage==='permission'){connectionUi[app].consented=true;openConnectionDialog(app);}
+          else if(s==='recheck'&&dialog.stage==='connection')openConnectionDialog(app);
+          else if(s==='prerequisite'&&dialog.stage==='connection')openPrerequisite(app);
+          else if(s==='reopen'&&dialog.stage==='connection'&&typeof connectionUi[app].reopen==='function'){try{connectionUi[app].reopen();}catch(error){connectionUi[app].message='未能打开授权页面，请重试。';render();}}
+        }
       });
-      modal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close(true);}if(event.key==='Tab'){const buttons=[...modal.querySelectorAll('button')],first=buttons[0],last=buttons.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first.focus();}}});
+      modal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close();}if(event.key==='Tab'){const buttons=[...modal.querySelectorAll('button:not(:disabled)')],first=buttons[0],last=buttons.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}});
       // Examples are created only by explicit preview controls, never on first use.
       function seedPreviewTasks(app){
       if(state.tasks.some(t=>t.app===app))return;
