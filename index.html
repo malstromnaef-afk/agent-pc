@@ -19396,7 +19396,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       const prerequisites=document.createElement('p');
       prerequisites.className='am-note';
       prerequisites.style.cssText='margin:0 0 20px;line-height:1.7';
-      prerequisites.textContent='使用前提：请先安装并正常使用对应应用；采用 Hooks 接入时，还需完成配置并确认事件接收服务可用。';
+      prerequisites.textContent='使用前提：请先安装并正常使用对应应用。';
       page.querySelector('#cli-integration-grid').before(prerequisites);
       const prerequisitePreview=document.createElement('section');
       prerequisitePreview.setAttribute('aria-label','前置条件原型预览');
@@ -19595,7 +19595,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         }
         taskList.querySelectorAll('[data-task]').forEach(row=>row.setAttribute('data-state-target',String(row.dataset.task===selected[state.view])));
         if(state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='error'?'监测失败':state.apps[state.view]==='reconnecting'?'连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
-        page.querySelector('#cli-monitor-summary').innerHTML=`<span>当前设备：<strong>本机</strong></span><span>监测应用：<strong>${Object.keys(names).filter(id=>monitoringEnabled(id)).map(id=>names[id]).join('、')||'无'}</strong></span>`;
+        page.querySelector('#cli-monitor-summary').innerHTML=`<span>监测应用：<strong>${Object.keys(names).filter(id=>monitoringEnabled(id)).map(id=>names[id]).join('、')||'无'}</strong></span>`;
         page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>{
           const ui=connectionUi[id],status=state.apps[id],count=state.tasks.filter(t=>t.app===id).length;
           const authorizing=ui.phase==='authorization',busy=['connecting','reconnecting'].includes(status);
