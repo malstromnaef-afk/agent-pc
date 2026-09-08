@@ -19334,14 +19334,21 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-request-actions .am-allow{background:#16d5bd;color:#072522;border-color:#16d5bd;font-weight:700}
       #monitor .am-request-actions button:disabled{opacity:.45;cursor:not-allowed}
       #monitor .am-request-actions button:focus-visible,#monitor .am-pending-entry:focus-visible,#monitor .am-pending-close:focus-visible{outline:2px solid #4de9f0;outline-offset:3px}
-      #monitor .am-pending-overlay{background:#091114a8;display:grid;place-items:center;padding:20px;pointer-events:auto}
+      #monitor .am-pending-overlay{background:#000b;display:grid;place-items:center;margin:0;padding:16px;pointer-events:auto}
       #monitor .am-pending-overlay[hidden]{display:none!important}
-      #monitor .am-pending-overlay .agent-state-dialog{display:flex;flex-direction:column;gap:0;width:min(680px,96%);max-height:100%;overflow:hidden;padding:22px;background:#202b30;border:1px solid #577077;border-radius:20px}
-      #monitor .am-pending-overlay .agent-state-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;margin-bottom:12px}
+      #monitor .am-pending-overlay .agent-state-dialog{display:flex;flex-direction:column;gap:0;width:min(680px,96%);max-height:100%;overflow:hidden;padding:22px;background:#181c25;border:1px solid #2d3542;border-radius:14px;box-shadow:0 18px 54px #0006}
+      #monitor .am-pending-overlay .agent-state-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:none;margin-bottom:8px}
       #monitor .am-pending-overlay .agent-state-head h4{font-size:22px;margin:0}
-      #monitor .am-pending-body{display:block;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 4px}
+      #monitor .am-pending-body{display:block;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:0 4px 0 0;margin:0;scrollbar-gutter:stable}
       #monitor .am-pending-body .am-request{margin:0;border:0;padding:0;background:none}
-      #monitor .am-pending-body .am-request p{font-size:16px}
+      #monitor .am-pending-body .am-request h4{font-size:20px;line-height:1.4;margin:0 0 10px}
+      #monitor .am-pending-body .am-request p{font-size:16px;line-height:1.5;margin:8px 0;color:#a1abba}
+      #monitor .am-pending-body .am-request .am-request-target{color:#f0f3f8}
+      #monitor .am-pending-body .am-request h5{font-size:16px;line-height:1.5;margin:12px 0 6px;color:#f0f3f8}
+      #monitor .am-pending-body .am-request ol{margin:0;padding-left:22px;font-size:16px;line-height:1.5;color:#a1abba;overflow-wrap:anywhere}
+      #monitor .am-pending-overlay .am-pending-close{padding:0;border:0;background:transparent;color:#9da8b8;font-size:26px}
+      #monitor .am-pending-overlay .am-request-actions button{background:#181c25;border-color:#2d3542;color:#f0f3f8;font-weight:700}
+      #monitor .am-pending-overlay .am-request-actions .am-allow{background:#32e0f0;border-color:#32e0f0;color:#07171b}
       #monitor .am-pending-overlay .agent-state-actions{display:block;margin:0;flex:none}
       body.prototype-small #monitor .am-pending-overlay{grid-template-columns:minmax(0,1fr)}
       body.prototype-small #monitor .am-pending-overlay .agent-state-dialog{width:min(520px,100%);min-width:0;box-sizing:border-box}
@@ -19413,6 +19420,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       function findRequest(id){return allRequests().find(({request})=>request.id===id);}
       function canRespond(task,r){return r.mode!=='notice'&&Boolean(r.demo||(connectionUi[task.app].approvals===true&&r.sourceRequestId&&typeof window.x3MonitorConnector?.respond==='function'));}
       function requestContextComplete(r){return Boolean(r.title&&r.details&&r.target);}
+      function requestPlan(r){return Array.isArray(r.plannedOperations)?r.plannedOperations.filter(step=>typeof step==='string'&&step.trim()):[];}
       function taskStatus(t){
         const requests=(t.requests||[]).filter(r=>r.type==='permission');
         if(requests.some(r=>r.status==='unknown'&&r.mode!=='notice'))return '待确认';
@@ -19446,7 +19454,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const pending=r.status==='pending';
         let controls='';
         if(pending||r.status==='submitting'){
-          if(r.type==='permission'&&(inPopup||(r.details||'').length<=180))controls=`<button data-am="pending-answer" data-request="${e(r.id)}" data-value="deny" ${disabled}>拒绝本次</button><button class="am-allow" data-am="pending-answer" data-request="${e(r.id)}" data-value="allow" ${disabled}>允许本次</button>`;
+          if(r.type==='permission'&&(inPopup||((r.details||'').length<=180&&!requestPlan(r).length)))controls=`<button data-am="pending-answer" data-request="${e(r.id)}" data-value="deny" ${disabled}>拒绝本次</button><button class="am-allow" data-am="pending-answer" data-request="${e(r.id)}" data-value="allow" ${disabled}>允许本次</button>`;
           else controls=`<button data-am="pending-open" data-request="${e(r.id)}" ${disabled}>查看授权内容</button>`;
         }
         return `<div class="am-request-actions">${controls}</div>`;
@@ -19458,6 +19466,12 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const redundantDetails=r.title==='允许运行登录测试吗？'&&r.details==='运行指定文件中的登录测试。';
         const projectPrefix=task.session?task.session+' / ':'';
         const target=inPopup&&projectPrefix&&r.target?.startsWith(projectPrefix)&&r.target.length>projectPrefix.length?r.target.slice(projectPrefix.length):r.target;
+        if(inPopup){
+          // Render source-provided context only; a task prompt is not its conversation title.
+          const conversation=[task.conversationTitle,task.sessionTitle,task.conversation_title,task.session_title].find(value=>typeof value==='string'&&value.trim());
+          const plan=requestPlan(r);
+          return `<section class="am-request" data-request-section="${e(r.id)}" tabindex="-1"><h4>${e(r.title)}</h4><p class="am-request-meta">${e(names[task.app])} · ${e(conversation||'会话名称暂未提供')}</p><p class="am-request-target">${r.operation==='修改'?'修改文件':'操作对象'}：${e(target)}</p>${r.details&&!redundantDetails?`<p>${e(r.details)}</p>`:''}${plan.length?`<h5>本次修改内容</h5><ol>${plan.map(step=>`<li>${e(step)}</li>`).join('')}</ol>`:''}${r.warning?`<p class="am-request-warning">${e(r.warning)}</p>`:''}${blocked||r.error?`<p class="am-request-feedback" role="status">${e(blocked||r.error)}</p>`:''}</section>`;
+        }
         const description=`<h4>${e(r.title)}</h4>${r.details&&!redundantDetails?`<p>${e(r.details)}</p>`:''}<p>${inPopup?'':'操作对象：'}${e(target)}</p>`;
         return `<section class="am-request" data-request-section="${e(r.id)}" data-current="${pendingUi.current===r.id}" tabindex="-1">${description}${r.warning?`<p class="am-request-warning">${e(r.warning)}</p>`:''}${blocked||r.error?`<p class="am-request-feedback" role="status">${e(blocked||r.error)}</p>`:''}${inPopup?'':requestActions(task,r)}</section>`;
       }
@@ -19474,15 +19488,15 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(pendingOverlay.hidden)return;
         const {task,request:r}=item;
         pendingOverlay.querySelector('.agent-state-dialog').setAttribute('aria-label','操作授权');
-        pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4>操作授权</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
+        pendingOverlay.querySelector('.agent-state-head').innerHTML=`<h4 id="agent-state-title">操作授权</h4><button class="am-pending-close" data-am="pending-close" aria-label="关闭操作弹框">×</button>`;
         const body=page.querySelector('#agent-state-fields');body.className='agent-state-fields am-pending-body';
-        body.innerHTML=`<p class="am-request-meta">${e(names[task.app])} · ${e(taskContext(task))}</p>${requestMarkup(task,r,true)}`;
+        body.innerHTML=requestMarkup(task,r,true);
         page.querySelector('#agent-state-actions').innerHTML=`${requestActions(task,r,true)}${!pendingRequests().length?`<p class="am-request-meta" role="status">${r.status==='resolved'?'全部处理完成':'暂无待处理事项'}</p>`:''}`;
       }
       function receiveRequest(task,type='permission',autoOpen=true){
         if(type!=='permission')return;
         const sequence=++requestSequence;
-        const r={id:task.id+'-request-'+sequence,sequence,type,status:'pending',demo:true,mode:connectionUi[task.app].approvalPreview==='notice'?'notice':'approval',title:'允许修改需求文档？',details:'仅修改该文档的需求条目，不删除文件，不访问其他目录。',target:'项目 B / requirements.md'};
+        const r={id:task.id+'-request-'+sequence,sequence,type,status:'pending',demo:true,mode:connectionUi[task.app].approvalPreview==='notice'?'notice':'approval',title:'允许修改需求文档吗？',details:'仅修改需求条目，不删除文件，不访问其他文件夹。',target:'项目 B / requirements.md'};
         (task.requests||=([])).push(r);task.status=r.mode==='notice'?'待处理':'等待审批';task.action='等待用户处理请求';
         r.target=(task.session||'当前项目')+' / requirements.md';
         // Structured demo data, not a summary inferred from task text or screenshots.
@@ -19570,7 +19584,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const displayStatus=taskStatus(t),terminal=['任务失败','任务完成'].includes(displayStatus);
         const operation=recentOperation(t);
         const copy=terminal&&t.result&&t.resultSource==='task'?`${displayStatus==='任务失败'?'失败原因':'完成结果'}：${t.result}`:'';
-        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(displayStatus)}"><div class="am-task-open"><span class="am-task-columns"><span><small>本轮指令${t.preview?' · 示例':''}</small><strong>${e(t.prompt||'暂未收到本轮指令')}</strong><em>${e(taskContext(t))}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(displayStatus)}">${e(displayStatus)}</strong></span><span><small>最近接收</small><strong>${e(receivedTime(t))}</strong></span></span>${!terminal&&displayStatus!=='等待更新'&&operation?`<span class="am-task-action">最近操作　${e(operation)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">连接不可用，以上为最后接收的信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
+        return `<article class="am-task-row" data-task="${e(t.id)}" data-status="${e(displayStatus)}"><div class="am-task-open"><span class="am-task-columns"><span><small>当前任务</small><strong>${e(t.prompt||'暂未收到本轮指令')}</strong><em>${e(taskContext(t))}</em></span><span><small>任务状态</small><strong class="am-task-state" data-status="${e(displayStatus)}">${e(displayStatus)}</strong></span><span><small>最近同步</small><strong>${e(receivedTime(t))}</strong></span></span>${!terminal&&displayStatus!=='等待更新'&&operation?`<span class="am-task-action">最近操作　${e(operation)}</span>`:''}</div>${copy?`<p class="am-task-result">${e(copy)}</p>`:''}${stale(t)?'<p class="am-task-result">连接不可用，以上为最后接收的信息</p>':''}${(t.requests||[]).map(r=>requestMarkup(t,r)).join('')}</article>`;
       }
       function render(){
         persistMonitoring();
@@ -19604,7 +19618,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           const prerequisiteMethod=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpenPrerequisite=Boolean(ui.prerequisiteScenario)||typeof window.x3MonitorConnector?.[prerequisiteMethod]==='function';
           const prerequisiteControl=ui.prerequisite?`<button class="soft-button" data-am="prerequisite-open" data-app="${id}" ${ui.opening||!canOpenPrerequisite?'disabled':''}>${ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用'}</button>${!canOpenPrerequisite?`<span class="am-note">${ui.prerequisite==='installed'?'请自行从官方渠道安装后重试':'请手动打开应用'+(ui.prerequisite==='loggedIn'?'并登录':'')+'后重试'}</span>`:''}`:'';
-          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条${ui.preview?'示例':''}任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
+          return `<section data-monitor-app="${id}" class="cli-integration-card ${status==='active'?'active':''}" style="display:flex;flex-direction:column;gap:12px"><div class="cli-integration-card-head"><h4>${names[id]}</h4><span class="tag ${status==='active'?'green':'cyan'}">${labels[status]}</span></div>${count?`<p class="am-note" style="margin:0">${count} 条任务记录</p>`:''}<p class="am-note" role="status" style="margin:0;overflow-wrap:anywhere">${e(copy)}</p><div class="action-row" style="margin-top:auto;flex-wrap:wrap">${prerequisiteControl}${controls}</div></section>`;
         }).join('');
         let demo=page.querySelector('.am-demo');if(!demo){demo=document.createElement('div');demo.className='am-demo action-row';page.querySelector('.cli-monitor-note').after(demo);}
         demo.style.display='block';demo.style.marginTop='20px';
@@ -19613,7 +19627,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：接入配置提示、事件接收、字段展示及状态同步；支持审批回传时才开放操作按钮。</p><p class="am-note">来源应用：按实际产品版本提供事件和权限能力。Hooks 不等于官方 OAuth；WorkBuddy 与 Codex 分别对接。</p><p class="am-note">首次启用：允许监测 → 检查接入配置与接收服务 → 官方授权（仅接入要求时）→ 连接结果。没有事件不代表断连；工具结果不代表任务结果。</p></details>`;
         prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 10px">前置条件预览 · ${names[previewApp]}（仅演示）</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${[['installed','未安装'],['loggedIn','未登录'],['running','未启动'],['ready','条件满足']].map(([scenario,label])=>`<button class="${connectionUi[previewApp].prerequisiteScenario===scenario?'primary-button':'soft-button'}" data-am="prerequisite-preview" data-app="${previewApp}" data-scenario="${scenario}" aria-pressed="${connectionUi[previewApp].prerequisiteScenario===scenario}" ${previewLocked?'disabled':''}>${label}</button>`).join('')}</div>`;
         const rows=state.tasks.filter(t=>t.app===state.records);
-        records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>本轮指令</th><th>会话／工作目录</th><th>状态</th><th>最近接收</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.prompt||'暂未收到本轮指令')}${t.preview?'（示例）':''}</td><td style="white-space:normal;overflow-wrap:anywhere">${e(taskContext(t))}</td><td>${e(taskStatus(t))}</td><td>${e(receivedTime(t))}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
+        records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>当前任务</th><th>会话／工作目录</th><th>状态</th><th>最近同步</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.prompt||'暂未收到本轮指令')}</td><td style="white-space:normal;overflow-wrap:anywhere">${e(taskContext(t))}</td><td>${e(taskStatus(t))}</td><td>${e(receivedTime(t))}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
         renderPending();
         restore();
         syncPhysicalScreenPreview(host.closest('[data-subscreen-preview]'));
@@ -19807,7 +19821,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           resetConnection(app);const attempt=connectionAttempts[app];
           ui.preview=true;ui.message='演示：正在重新建立监测连接…';
           state.apps[app]='connecting';syncPending.delete(app);render();
-          ui.timer=setTimeout(()=>{if(connectionAttempts[app]!==attempt||!ui.preview||state.apps[app]!=='connecting')return;ui.timer=null;ui.message='已连接（示例）';state.apps[app]='active';seedPreviewTasks(app);previewStates[app]='running';render();},600);
+          ui.timer=setTimeout(()=>{if(connectionAttempts[app]!==attempt||!ui.preview||state.apps[app]!=='connecting')return;ui.timer=null;ui.message='已连接';state.apps[app]='active';seedPreviewTasks(app);previewStates[app]='running';render();},600);
           return;
         }
         if(!ui.consented){show(app,'permission');return;}
@@ -19820,7 +19834,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;
         const ui=connectionUi[app];ui.preview=true;ui.prerequisiteScenario=scenario;
         ui.prerequisite=scenario==='ready'?'':scenario;
-        ui.message={installed:`未安装 ${names[app]}，请先安装。`,loggedIn:`请先登录 ${names[app]}，并确认登录有效。`,running:`请先启动 ${names[app]}。`,ready:'示例：应用条件满足，正在检查接入配置与事件接收服务。'}[scenario];
+        ui.message={installed:`未安装 ${names[app]}，请先安装。`,loggedIn:`请先登录 ${names[app]}，并确认登录有效。`,running:`请先启动 ${names[app]}。`,ready:'应用条件满足，正在检查接入配置与事件接收服务。'}[scenario];
         state.apps[app]=scenario==='ready'?'connecting':'error';
         previewStates[app]='disconnected';syncPending.delete(app);render();
       }
@@ -19893,9 +19907,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         preview:true,
         id:app+'-review-session-'+i+'-task-1',app,window:'窗口 '+(i+1),session:['项目 A','项目 B','项目 C'][i],
         title:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],status,
+        conversationTitle:['登录问题修复','需求文档整理','页面样式更新'][i],
         prompt:['修复登录接口并运行测试','整理产品需求文档','更新页面样式'][i],sessionId:'demo-session-'+(i+1),cwd:['/demo/project-a','/demo/project-b','/demo/project-c'][i],receivedAt:Date.now()-i*120000,
         toolName:['Bash','Edit','Write'][i],toolInput:i===0?{command:'npm test -- tests/login.test.js'}:{file_path:i===1?'/demo/project-b/requirements.md':'/demo/project-c/styles.css'},statusSource:'task',resultSource:'task',
-        permissionRequest:i===0?{title:'允许运行登录测试吗？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:undefined,
+        permissionRequest:i===0?{title:'允许运行登录测试吗？',operation:'运行',target:'项目 A / tests/login.test.js',scope:'中的登录测试',details:'运行指定文件中的登录测试。'}:i===1?{plannedOperations:['根据已确认需求更新监测管理章节。','补充连接中、监测失败与重新监测的处理说明。','保留当前文档中的其他章节。']}:undefined,
         start:['14:00','14:02','14:05'][i],updated:['14:20','14:18','14:16'][i],
         end:i===2?'14:16':'',duration:i===2?'11 分钟':'',
         action:['正在运行登录模块测试','等待确认文件修改',''][i],result:i===2?'页面样式已更新':''
