@@ -9756,7 +9756,9 @@ body.prototype-small .token-preview-canvas>.token-bottom-grid{display:none!impor
 .cloud-token-toolbar>.hybrid-token-tabs{grid-column:1}
 .cloud-token-toolbar .token-agent-switch{grid-column:2;justify-self:center}
 .cloud-token-toolbar .hybrid-token-ranges{grid-column:3;justify-self:end}
-body.prototype-small .cloud-token-toolbar{grid-template-columns:minmax(0,1fr) auto}
+body.prototype-small .cloud-token-toolbar{grid-template-columns:minmax(0,1fr)}
+body.prototype-small .cloud-token-header-ranges{align-items:center;flex:0 0 auto;pointer-events:auto}
+body.prototype-small .cloud-token-header-ranges .hybrid-token-range{min-width:44px;min-height:44px;border-radius:8px;padding:0 14px;font-size:11px;pointer-events:auto}
 body.prototype-small .cloud-token-toolbar .token-agent-switch{grid-column:1;justify-self:stretch;justify-content:flex-start;min-width:0;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;padding-bottom:5px}
 body.prototype-small .cloud-token-toolbar .token-agent-switch button{flex:0 0 44px;width:44px;justify-content:center;gap:0;padding:0;white-space:nowrap;min-height:44px}
 body.prototype-small .cloud-token-toolbar .token-agent-switch button>span:not(.token-agent-icon){display:none}
@@ -17901,6 +17903,9 @@ function renderSubscreenSettings() {
           <span class="subscreen-global-ai-ball" aria-hidden="true"></span>
           <span>AI 智能问答</span>
         </button>`;
+    const cloudTokenRanges = PROTOTYPE_SIZE === "small" && page === "usage"
+      ? preview.querySelector(".hybrid-token-ranges")
+      : null;
     chrome.innerHTML = `
       <span class="subscreen-preview-heading">
         ${page === "voice" ? `<span class="voice-orb ${APP_STATE.voice.phase === "ready" ? "listening" : APP_STATE.voice.phase === "processing" ? "processing" : APP_STATE.voice.phase === "result" ? "answered" : ""}" id="voice-orb" aria-hidden="true"></span>` : ""}
@@ -17914,6 +17919,10 @@ function renderSubscreenSettings() {
         ${globalVoiceEntry}
       </span>
     `;
+    if (cloudTokenRanges) {
+      cloudTokenRanges.classList.add("cloud-token-header-ranges");
+      chrome.querySelector(".subscreen-preview-heading").replaceWith(cloudTokenRanges);
+    }
     if (page === "voice") {
       chrome.querySelectorAll("[data-agent-team]").forEach((button) => {
         button.addEventListener("click", () => {
