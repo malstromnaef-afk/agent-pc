@@ -19300,7 +19300,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-empty{padding:40px 20px;color:#a4b0ba;grid-column:1/-1;text-align:center}
       #monitor .am-task-list > .am-empty{min-height:360px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px}
       #monitor .am-empty > strong{font-size:24px;color:#e7edf2}
-      #monitor .am-empty [data-am="manage"]{min-height:48px;padding:12px 30px;border:0;border-radius:10px;background:linear-gradient(100deg,#55b9c1,#00abd1);color:white;font:inherit;cursor:pointer}
+      #monitor .am-empty [data-am="start"]{min-height:48px;padding:12px 30px;border:0;border-radius:10px;background:linear-gradient(100deg,#55b9c1,#00abd1);color:white;font:inherit;cursor:pointer}
       #monitor .am-console{padding:24px;width:100%;min-height:360px}
       #monitor .am-console header{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
       #monitor .am-console small,#monitor .am-note{color:#9ca8b4;line-height:1.6}
@@ -19321,13 +19321,30 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       #monitor .am-dialog .action-row{margin-top:24px;flex-wrap:wrap}
       #monitor .am-dialog .am-activation-dialog{background:#181c25;border-color:#303946;border-radius:16px}
       #monitor .am-activation-dialog .am-dialog-head h3{font-size:24px}
-      #monitor .am-activation-app{margin:8px 0 20px;font-size:16px;color:#aeb9c6}
+      #monitor .am-activation-dialog .am-dialog-head{margin-bottom:24px}
       #monitor .am-activation-status{padding:20px;border:1px solid #34434c;border-radius:12px;background:#ffffff04}
       #monitor .am-activation-status h4{margin:0;color:#edf3f7;font-size:21px;line-height:1.5}
       #monitor .am-activation-status p{margin:10px 0 0;font-size:16px;line-height:1.7;overflow-wrap:anywhere}
+      #monitor .am-authorization-details{display:grid;gap:14px;margin:18px 0 0;padding-top:16px;border-top:1px solid #34434c;font-size:15px;line-height:1.65}
+      #monitor .am-authorization-details dt{margin-bottom:4px;color:#edf3f7;font-weight:600}
+      #monitor .am-authorization-details dd{margin:0;color:#b5bfc7;overflow-wrap:anywhere}
+      #monitor .am-authorization-details ul{margin:0;padding-left:20px;display:grid;gap:6px}
+      #monitor .am-activation-status .am-authorization-error{color:#ffc16a;font-size:14px}
       #monitor .am-activation-status[data-kind="success"]{border-color:#2fe08e66;background:#2fe08e09}
       #monitor .am-activation-status[data-kind="success"] h4{color:#53eaa3}
       #monitor .am-activation-status[data-kind="blocked"] h4,#monitor .am-activation-status[data-kind="error"] h4{color:#ffc16a}
+      #monitor .am-activation-status[data-kind="connecting"] h4{display:flex;align-items:center;gap:12px}
+      #monitor .am-activation-status[data-kind="connecting"] h4::before{content:"";width:18px;height:18px;flex:none;border:2px solid #657583;border-top-color:#19dce3;border-radius:50%;animation:am-check-spin 1s linear infinite}
+      #monitor .am-activation-checks{list-style:none;margin:0 0 20px;padding:0;display:grid;gap:14px;color:#aeb9c6;font-size:18px;line-height:1.5}
+      #monitor .am-activation-checks li{display:flex;align-items:center;gap:12px}
+      #monitor .am-activation-checks li[data-state="passed"]{color:#edf3f7}
+      #monitor .am-activation-checks li[data-state="failed"]{color:#ffc16a}
+      #monitor .am-activation-checks li[data-state="checking"]{color:#edf3f7}
+      #monitor .am-check-icon{width:22px;height:22px;flex:none;display:inline-flex;align-items:center;justify-content:center}
+      #monitor [data-state="passed"] .am-check-icon{color:#53eaa3}
+      #monitor [data-state="checking"] .am-check-icon::before{content:"";width:16px;height:16px;border:2px solid #657583;border-top-color:#19dce3;border-radius:50%;animation:am-check-spin 1s linear infinite}
+      @keyframes am-check-spin{to{transform:rotate(360deg)}}
+      @media(prefers-reduced-motion:reduce){#monitor [data-state="checking"] .am-check-icon::before,#monitor .am-activation-status[data-kind="connecting"] h4::before{animation:none}}
       #monitor .am-activation-dialog .am-activation-note{font-size:13px;line-height:1.6;margin:14px 0 0;color:#96a4b4}
       #monitor .am-activation-dialog .action-row{justify-content:flex-end;gap:12px}
       #monitor .am-activation-dialog button{min-height:44px}
@@ -19373,8 +19390,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     <script>
     /* Agent progress v2: independent application subscriptions, stable per-task keys.
        This adapter is prototype-only; it does not claim to connect to installed apps.
-       State matrix: idle -> consent dialog -> connecting (optional official authorization) -> active/error;
-       authorization cancel -> idle; missing connector -> error, never simulated success;
+       State matrix: idle -> checklist dialog -> connecting (optional official authorization) -> active/error;
+       Standalone HTML starts the labelled checklist demo directly from either app card.
+       Supplied host connectors always use real checks; failures never fall back to a demo.
+       authorization cancel -> idle;
        active -> error -> reconnecting -> active/error;
        stop -> idle (tasks retained), viewing/record tabs never change subscriptions. */
     (() => {
@@ -19405,6 +19424,15 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         try{window.localStorage?.setItem(preferenceKey,JSON.stringify(savedMonitoring));}catch(error){}
       }
       let monitorPreviewApp='workbuddy';
+      const activationScenarios={
+        normal:{label:'正常开启',prerequisite:'ready',connection:'direct'},
+        installed:{label:'未安装',prerequisite:'installed',connection:'direct'},
+        running:{label:'未启动',prerequisite:'running',connection:'direct'},
+        loggedIn:{label:'未登录',prerequisite:'loggedIn',connection:'direct'},
+        authorization:{label:'需要授权',prerequisite:'ready',connection:'authorization'},
+        failure:{label:'连接失败',prerequisite:'ready',connection:'failure'}
+      };
+      let activationScenario=null;
       const pendingUi={current:null,open:false,empty:false};
       const hookRounds=new Map(),seenHookEvents=new Set();
       let requestSequence=0;
@@ -19419,7 +19447,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       prerequisites.textContent='使用前提：请先安装并正常使用对应应用。';
       page.querySelector('#cli-integration-grid').before(prerequisites);
       const prerequisitePreview=document.createElement('section');
-      prerequisitePreview.setAttribute('aria-label','前置条件原型预览');
+      prerequisitePreview.setAttribute('aria-label','启用监测场景');
       prerequisitePreview.style.cssText='margin:0 0 24px';
       prerequisites.after(prerequisitePreview);
       page.querySelector('.cli-monitor-note').textContent='';
@@ -19618,17 +19646,17 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(!tasks.length){
           const initial=allIdle&&!hasAnyTasks;
           const waiting=state.apps[state.view]==='active'&&!syncPending.has(state.view);
-          taskList.innerHTML=`<div class="am-empty"><strong>${initial?'尚未开始监测':waiting?'等待任务事件':syncPending.has(state.view)?'等待任务状态同步':'暂未获取任务状态'}</strong>${waiting?'<span>接收服务可用；应用产生工具操作后显示进度</span>':''}${initial?'<button data-am="manage">启用监测</button>':''}</div>`;
+          taskList.innerHTML=`<div class="am-empty"><strong>${initial?'尚未开始监测':waiting?'等待任务事件':syncPending.has(state.view)?'等待任务状态同步':'暂未获取任务状态'}</strong>${waiting?'<span>接收服务可用；应用产生工具操作后显示进度</span>':''}${initial?`<button data-am="start" data-app="${state.view}" aria-haspopup="dialog">启用监测</button>`:''}</div>`;
         }
         taskList.querySelectorAll('[data-task]').forEach(row=>row.setAttribute('data-state-target',String(row.dataset.task===selected[state.view])));
         if(state.apps[state.view]==='reconnecting'||syncPending.has(state.view))taskList.insertAdjacentHTML('afterbegin',`<section class="am-connection-note" role="status"><strong>${e(names[state.view])} · ${state.apps[state.view]==='error'?'监测失败':state.apps[state.view]==='reconnecting'?'连接中':'连接已恢复，等待任务状态同步'}</strong><p>${tasks.length?'以下为最后收到的任务状态，当前状态可能已变化。':'暂时无法确认任务状态。'}其他应用的监测不受影响。</p><button data-am="manage" data-app="${state.view}">主屏检查连接</button></section>`);
         page.querySelector('#cli-monitor-summary').innerHTML=`<span>监测应用：<strong>${Object.keys(names).filter(id=>monitoringEnabled(id)).map(id=>names[id]).join('、')||'无'}</strong></span>`;
         page.querySelector('#cli-integration-grid').innerHTML=Object.keys(names).map(id=>{
           const ui=connectionUi[id],status=state.apps[id],count=state.tasks.filter(t=>t.app===id).length;
-          const cardStatus=ui.phase==='prerequisites'?'检查中':ui.prerequisite?{installed:'未安装',running:'未启动',loggedIn:'未登录'}[ui.prerequisite]:labels[status];
+          const cardStatus=ui.phase==='prerequisites'?'检查中':ui.phase==='authorization'?'等待授权':ui.prerequisite?{installed:'未安装',running:'未启动',loggedIn:'未登录'}[ui.prerequisite]:labels[status];
           const authorizing=ui.phase==='authorization',busy=['connecting','reconnecting'].includes(status);
           const copy=ui.message||(status==='idle'?'尚未开启监测':status==='error'?'未能连接应用。':busy?'正在连接应用…':'已连接');
-          const controls=authorizing?`${ui.reopen?`<button class="soft-button" data-am="auth-reopen" data-app="${id}">重新打开</button>`:''}<button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:busy?`<button class="soft-button" disabled>${ui.phase==='prerequisites'?'检查中…':labels[status]}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:['active','error'].includes(status)?`<button class="primary-button" data-am="remonitor" data-app="${id}">重新监测</button>${status==='active'||syncPending.has(id)?`<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:''}`:`<button class="primary-button" data-am="start" data-app="${id}">启用监测</button>`;
+          const controls=authorizing?`<button class="soft-button" data-am="auth-reopen" data-app="${id}" ${ui.preview||!authorizationReady(ui.authorization)||ui.authorization?.opening?'disabled':''}>${ui.authorization?.opening?'正在打开…':ui.authorization?.opened?'重新打开':'前往授权'}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:busy?`<button class="soft-button" disabled>${ui.phase==='prerequisites'?'检查中…':labels[status]}</button><button class="soft-button" data-am="auth-cancel" data-app="${id}">取消</button>`:['active','error'].includes(status)?`<button class="primary-button" data-am="remonitor" data-app="${id}">重新监测</button>${status==='active'||syncPending.has(id)?`<button class="soft-button" data-am="stop" data-app="${id}">停止监测</button>`:''}`:`<button class="primary-button" data-am="start" data-app="${id}">启用监测</button>`;
           const prerequisiteMethod=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpenPrerequisite=Boolean(ui.prerequisiteScenario)||typeof window.x3MonitorConnector?.[prerequisiteMethod]==='function';
           const prerequisiteControl=ui.prerequisite?`<button class="soft-button" data-am="prerequisite-open" data-app="${id}" ${ui.opening||!canOpenPrerequisite?'disabled':''}>${ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用'}</button>${!canOpenPrerequisite?`<span class="am-note">${ui.prerequisite==='installed'?'请自行从官方渠道安装后重试':'请手动打开应用'+(ui.prerequisite==='loggedIn'?'并登录':'')+'后重试'}</span>`:''}`:'';
@@ -19638,8 +19666,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         demo.style.display='block';demo.style.marginTop='20px';
         const previewLocked=Object.values(connectionUi).some(ui=>ui.controller),previewApp=monitorPreviewApp;
         const ownershipOpen=demo.querySelector('[data-am-ownership]')?.open;
-        demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：接入配置提示、事件接收、字段展示及状态同步；支持审批回传时才开放操作按钮。</p><p class="am-note">来源应用：按实际产品版本提供事件和权限能力。Hooks 不等于官方 OAuth；WorkBuddy 与 Codex 分别对接。</p><p class="am-note">首次启用：允许监测 → 检查接入配置与接收服务 → 官方授权（仅接入要求时）→ 连接结果。没有事件不代表断连；工具结果不代表任务结果。</p></details>`;
-        prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 10px">前置条件预览 · ${names[previewApp]}（仅演示）</p><p class="am-note" style="margin:0 0 12px">选择检查场景后，点击下方应用的“启用监测”体验完整流程。</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${[['installed','未安装'],['loggedIn','未登录'],['running','未启动'],['ready','条件满足']].map(([scenario,label])=>`<button class="${connectionUi[previewApp].prerequisiteScenario===scenario?'primary-button':'soft-button'}" data-am="prerequisite-preview" data-app="${previewApp}" data-scenario="${scenario}" aria-pressed="${connectionUi[previewApp].prerequisiteScenario===scenario}" ${previewLocked?'disabled':''}>${label}</button>`).join('')}</div>`;
+        demo.innerHTML=`<div class="action-row" style="gap:12px;flex-wrap:wrap">${['idle','connecting','active','error'].map(status=>`<button class="${connectionUi[previewApp].preview&&state.apps[previewApp]===status?'primary-button':'soft-button'}" data-am="monitor-preview" data-app="${previewApp}" data-status="${status}" aria-pressed="${connectionUi[previewApp].preview&&state.apps[previewApp]===status}" ${previewLocked?'disabled':''}>${labels[status]}</button>`).join('')}</div><details data-am-ownership style="margin-top:16px" ${ownershipOpen?'open':''}><summary class="am-note" style="cursor:pointer;min-height:44px;align-content:center">接入分工说明</summary><p class="am-note">Agent PC：接入配置提示、事件接收、字段展示及状态同步；支持审批回传时才开放操作按钮。</p><p class="am-note">来源应用：按实际产品版本提供事件和权限能力。Hooks 不等于官方 OAuth；WorkBuddy 与 Codex 分别对接。</p><p class="am-note">首次启用：检查安装、打开与登录状态 → 建立监测连接 → 官方授权（仅接入要求时）→ 连接结果。没有事件不代表断连；工具结果不代表任务结果。</p></details>`;
+        prerequisitePreview.innerHTML=`<p class="am-note" style="margin:0 0 12px">启用监测场景</p><div class="action-row" style="gap:12px;flex-wrap:wrap">${Object.entries(activationScenarios).map(([scenario,config])=>`<button class="${(activationScenario||'normal')===scenario?'primary-button':'soft-button'}" data-am="activation-scenario" data-scenario="${scenario}" aria-pressed="${(activationScenario||'normal')===scenario}" ${previewLocked?'disabled':''}>${config.label}</button>`).join('')}</div>`;
         const rows=state.tasks.filter(t=>t.app===state.records);
         records.innerHTML=`${tabs('records',state.records)}${rows.length?`<table><thead><tr><th>当前任务</th><th>会话／工作目录</th><th>状态</th><th>最近同步</th></tr></thead><tbody>${rows.map(t=>`<tr><td style="white-space:normal;overflow-wrap:anywhere">${e(t.prompt||'暂未收到本轮指令')}</td><td style="white-space:normal;overflow-wrap:anywhere">${e(taskContext(t))}</td><td>${e(taskStatus(t))}</td><td>${e(receivedTime(t))}</td></tr>`).join('')}</tbody></table>`:`<p class="am-empty">暂无 ${names[state.records]} 任务记录</p>`}`;
         renderConnectionDialog();
@@ -19699,12 +19727,12 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         const ui=connectionUi[app];++connectionAttempts[app];
         clearTimeout(ui.timer);ui.timer=null;
         const controller=ui.controller;ui.controller=null;controller?.abort();
-        ui.phase='';ui.message='';ui.reopen=null;ui.prerequisite='';ui.opening=false;ui.prerequisiteScenario='';ui.previewPrerequisiteHandled=false;ui.previewNotice='';ui.needsSetup=false;ui.approvals=false;
+        ui.phase='';ui.message='';ui.reopen=null;ui.authorization=null;ui.prerequisite='';ui.opening=false;ui.openError='';ui.prerequisiteScenario='';ui.previewPrerequisiteHandled=false;ui.previewNotice='';ui.previewConnectionScenario='direct';ui.needsSetup=false;ui.approvals=false;ui.checks=null;
       }
       function cancelConnection(app){
-        const ui=connectionUi[app],scenario=ui.prerequisiteScenario,handled=ui.previewPrerequisiteHandled;
+        const ui=connectionUi[app],scenario=ui.prerequisiteScenario,handled=ui.previewPrerequisiteHandled,connectionScenario=ui.previewConnectionScenario;
         resetConnection(app);
-        if(scenario){ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;}
+        if(scenario){ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;ui.previewConnectionScenario=connectionScenario||'direct';}
         state.apps[app]='idle';syncPending.delete(app);render();
       }
       function normalizeTask(app,t){
@@ -19762,8 +19790,15 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       // Optional openInstallation({app}) / openApplication({app}) open the official
       // installer page or local app. They must reject on failure, and never install,
       // log in or approve anything silently. Opening alone does not pass the check.
-      // connect({app,signal,onAuthorizationRequired(reopen),onAuthorized}) must open
-      // the provider's official flow, verify its callback/state, and subscribe to data.
+      // connect calls onAuthorizationRequired({open,purpose,permissions:string[]})
+      // when provider authorization is needed. The UI explains the actual permission
+      // scope before the user invokes open(). Only the host may open the provider's
+      // registered URL in the system browser; it must not open it before user action.
+      // The host verifies the callback/state and exchanges credentials before calling
+      // onAuthorized({verified:true}); opening or returning focus is not authorization.
+      // onAuthorizationFailed({reason:'denied'|'cancelled'|'expired'}) reports failure.
+      // One authorization request is allowed per connection attempt. A replacement
+      // requires a fresh attempt so an old result cannot authorize a new request.
       // Resolve {connected:true,subscribed:true,tasks:[structured snapshot]} only after
       // acknowledgment; {cancelled:true} on user denial. Abort must detach the subscription.
       // Credentials and official authorization URLs belong in the host, never in this HTML.
@@ -19790,14 +19825,17 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         }
         const attempt=++connectionAttempts[app];
         const current=()=>connectionAttempts[app]===attempt;
-        ui.controller=new AbortController();ui.phase='prerequisites';ui.message='正在检查接入配置和事件接收服务…';
-        const fail=message=>{if(!current())return;resetConnection(app);state.apps[app]='error';ui.message=message;render();};
+        ui.controller=new AbortController();ui.phase='prerequisites';ui.message='正在检查应用状态…';
+        ui.checks={installed:'checking',running:'pending',loggedIn:'pending'};
+        const fail=message=>{if(!current())return;const checks=ui.checks;resetConnection(app);ui.checks=checks&&Object.fromEntries(Object.entries(checks).map(([key,value])=>[key,value==='checking'?'unknown':value]));state.apps[app]='error';ui.message=message;render();};
         const deadline=ms=>{clearTimeout(ui.timer);ui.timer=setTimeout(()=>fail(ui.phase==='prerequisites'?'前置检查超时，无法确认应用状态，请重试。':ui.phase==='authorization'?'授权超时，请重试。':'连接超时，请重试。'),ms);};
         state.apps[app]=recovering?'reconnecting':'connecting';deadline(30000);render();
         try{
           const checks=typeof connector.checkPrerequisites==='function'?await connector.checkPrerequisites({app,signal:ui.controller.signal}):null;
           if(!current())return;
-          const requirements=[['installed',`未安装 ${names[app]}，请先安装。`],['running',`请先启动 ${names[app]}。`],['loggedIn',`请先登录 ${names[app]}，并确认登录有效。`]];
+          ui.checks=Object.fromEntries(['installed','running','loggedIn'].map(key=>[key,checks?.[key]===true?'passed':checks?.[key]===false?'failed':'unknown']));
+          ui.message='正在检查监测连接…';render();
+          const requirements=[['installed','应用未安装，请先安装应用。'],['running','应用未打开，请先打开应用。'],['loggedIn','应用未登录，请先登录应用。']];
           const unmet=requirements.find(([key])=>checks?.[key]===false);
           if(unmet){fail(unmet[1]);ui.prerequisite=unmet[0];render();return;}
           // Login/process checks are optional diagnostics, not Hooks capabilities.
@@ -19809,18 +19847,34 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           if(integration.configured!==true){const mode=ui.mode;fail(mode==='hooks'?'请先配置 Hooks，并在来源应用确认配置已生效。':'请先完成该应用的接入配置。');ui.mode=mode;ui.needsSetup=true;render();return;}
           if(integration.receiverReady!==true){fail('事件接收服务暂不可用，请检查服务后重试。');ui.needsSetup=true;render();return;}
           ui.approvals=integration.supportsApproval===true;
-          if(typeof connector.connect!=='function'){fail(`尚未配置 ${names[app]} 官方接入，暂不能启用监测。`);return;}
-          ui.phase='connecting';ui.message='正在连接应用…';deadline(30000);render();
+          if(typeof connector.connect!=='function'){fail('尚未完成应用接入配置，暂时无法开启监测。');return;}
+          ui.phase='connecting';ui.message='正在连接…';deadline(30000);render();
           const queuedHooks=[];
           const result=await connector.connect({app,signal:ui.controller.signal,
-            onAuthorizationRequired(reopen){if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;ui.phase='authorization';ui.reopen=typeof reopen==='function'?reopen:null;ui.message='请在打开的官方页面完成授权';deadline(120000);render();},
-            onAuthorized(){if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;ui.phase='connecting';ui.reopen=null;ui.message='授权已完成，正在连接应用…';deadline(30000);render();},
+            onAuthorizationRequired(request){
+              if(!current()||!['connecting','reconnecting'].includes(state.apps[app]))return;
+              if(ui.authorization?.required){fail('授权请求已变化，请重新检查。');return;}
+              ui.authorization=authorizationDetails(request);ui.reopen=ui.authorization.open;
+              ui.phase='authorization';ui.message=authorizationReady(ui.authorization)?'请前往来源平台完成授权。':'授权接入尚未配置，暂时无法前往授权。';
+              deadline(120000);render();
+            },
+            onAuthorized(receipt){
+              if(!current()||ui.phase!=='authorization'||!ui.authorization?.required)return;
+              if(receipt?.verified!==true){fail('未能确认授权结果，请重新检查。');return;}
+              ui.authorization.verified=true;ui.authorization.opening=false;
+              ui.phase='connecting';ui.reopen=null;ui.message='授权已完成，正在连接…';deadline(30000);render();
+            },
+            onAuthorizationFailed(result){
+              if(!current()||ui.phase!=='authorization')return;
+              fail({denied:'授权已被拒绝，本次未开启监测。',cancelled:'授权已取消，本次未开启监测。',expired:'授权超时，请重新检查。'}[result?.reason]||'授权未完成，请重新检查。');
+            },
             onHook(event){if(!current())return;if(state.apps[app]==='active')receiveHook(app,event);else if(['connecting','reconnecting'].includes(state.apps[app])&&queuedHooks.length<100)queuedHooks.push(event);},
             onTasks(tasks){if(!current()||state.apps[app]!=='active')return;if(replaceTasks(app,tasks)){syncPending.delete(app);render();}},
             onDisconnected(){if(!current())return;if(['connecting','reconnecting'].includes(state.apps[app])){fail('连接已断开，请重新监测。');return;}state.apps[app]='error';syncPending.add(app);ui.message='事件接收连接已断开，请重新监测以同步最新状态。';render();}
           });
           if(!current())return;
-          if(result?.cancelled){cancelConnection(app);return;}
+          if(result?.cancelled){if(ui.authorization?.required)fail('授权已取消，本次未开启监测。');else cancelConnection(app);return;}
+          if(ui.authorization?.required&&ui.authorization.verified!==true)throw new Error('尚未收到有效授权结果，请重新检查。');
           if(result?.connected!==true||result?.subscribed!==true||!Array.isArray(result.tasks))throw new Error('尚未确认任务数据连接，请重试。');
           if(result.tasks.some(t=>!t||typeof t.id!=='string'))throw new Error('任务同步数据不完整，请重试。');
           clearTimeout(ui.timer);ui.timer=null;ui.phase='';ui.message='';ui.reopen=null;
@@ -19832,53 +19886,83 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         }catch(error){fail(typeof error?.message==='string'?error.message:ui.phase==='prerequisites'?'前置检查失败，无法确认应用状态，请重试。':'连接失败，请重试。');}
       }
       function remonitor(app){
-        const ui=connectionUi[app];if(!['active','error'].includes(state.apps[app]))return;
-        if(ui.preview){
-          if(ui.prerequisiteScenario){show(app,'permission');return;}
-          // Explicit prototype interaction only; never invoke a real host here.
-          resetConnection(app);const attempt=connectionAttempts[app];
-          ui.preview=true;ui.message='演示：正在重新建立监测连接…';
-          state.apps[app]='connecting';syncPending.delete(app);render();
-          ui.timer=setTimeout(()=>{if(connectionAttempts[app]!==attempt||!ui.preview||state.apps[app]!=='connecting')return;ui.timer=null;ui.message='已连接';state.apps[app]='active';seedPreviewTasks(app);previewStates[app]='running';render();},600);
-          return;
-        }
-        if(!ui.consented){show(app,'permission');return;}
+        if(!Object.hasOwn(names,app)||!['active','error'].includes(state.apps[app]))return;
         openConnectionDialog(app);
       }
-      // Review scenarios only run after the user selects one in the prototype controls.
+      // Standalone HTML defaults to the labelled ready scenario from either app card.
+      // Explicit scenario controls remain available for reviewing missing prerequisites.
       // They do not call the host, persist real monitoring preferences or create tasks.
-      function beginPreviewConnection(app){
+      function beginPreviewConnection(app,recheck=false){
         const ui=connectionUi[app];
-        if(!ui?.prerequisiteScenario||['connecting','reconnecting'].includes(state.apps[app]))return;
-        const scenario=ui.prerequisiteScenario,handled=ui.previewPrerequisiteHandled===true;
+        if(!ui||(!activationScenario&&!ui.preview&&!ui.prerequisiteScenario)||['connecting','reconnecting'].includes(state.apps[app]))return;
+        // Capture the chosen scene only when an application starts a new flow.
+        // A recheck belongs to that flow, even if the next-scene selection changes.
+        const preset=activationScenarios[activationScenario||'normal'];
+        const retry=recheck&&Boolean(ui.prerequisiteScenario);
+        const scenario=retry?ui.prerequisiteScenario:preset.prerequisite;
+        const handled=retry&&ui.previewPrerequisiteHandled===true;
+        const connectionScenario=retry?ui.previewConnectionScenario||'direct':preset.connection;
         resetConnection(app);
         const attempt=connectionAttempts[app],current=()=>connectionAttempts[app]===attempt&&ui.preview;
-        ui.preview=true;ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;
+        ui.preview=true;ui.prerequisiteScenario=scenario;ui.previewPrerequisiteHandled=handled;ui.previewConnectionScenario=connectionScenario;
         state.demo=true;state.apps[app]='connecting';ui.phase='prerequisites';ui.message='正在检查应用状态…';
+        const steps=['installed','running','loggedIn'];
+        ui.checks={installed:'checking',running:'pending',loggedIn:'pending'};
         previewStates[app]='disconnected';syncPending.delete(app);render();
-        ui.timer=setTimeout(()=>{
+        const checkStep=index=>{ui.timer=setTimeout(()=>{
           if(!current())return;ui.timer=null;
-          if(scenario!=='ready'&&!handled){
+          const key=steps[index];
+          if(scenario===key&&!handled){
+            ui.checks[key]='failed';
             ui.phase='';ui.prerequisite=scenario;state.apps[app]='error';
-            ui.message={installed:`未安装 ${names[app]}，请先安装。`,running:`请先启动 ${names[app]}。`,loggedIn:`请先登录 ${names[app]}。`}[scenario];
+            ui.message={installed:'应用未安装，请先安装应用。',running:'应用未打开，请先打开应用。',loggedIn:'应用未登录，请先登录应用。'}[scenario];
             render();return;
           }
-          ui.phase='connecting';ui.message='正在连接应用…';render();
+          ui.checks[key]='passed';
+          if(index<steps.length-1){ui.checks[steps[index+1]]='checking';render();checkStep(index+1);return;}
+          ui.phase='connecting';ui.message='正在连接…';render();
           ui.timer=setTimeout(()=>{
-            if(!current())return;ui.timer=null;ui.phase='';ui.message='监测已开启';
+            if(!current())return;ui.timer=null;
+            if(connectionScenario==='authorization'){
+              ui.authorization=authorizationDetails();
+              ui.phase='authorization';ui.message='授权接入尚未配置，暂时无法前往授权。';render();return;
+            }
+            if(connectionScenario==='failure'){
+              ui.phase='';ui.message='连接超时。请确认应用正常运行，然后重新检查。';
+              state.apps[app]='error';render();return;
+            }
+            ui.phase='';ui.message='监测已开启';
             state.apps[app]='active';state.view=app;previewStates[app]='waiting';syncPending.delete(app);render();
-          },650);
-        },650);
+          },1500);
+        },900);};
+        checkStep(0);
       }
-      function previewPrerequisite(app,scenario){
-        if(!Object.hasOwn(names,app)||!['installed','loggedIn','running','ready'].includes(scenario)||Object.values(connectionUi).some(ui=>ui.controller))return;
-        // Select an initial check result; the application card remains the entry point.
-        resetConnection(app);monitorPreviewApp=app;
-        modal.hidden=true;modal.innerHTML='';dialog=null;pendingUi.open=false;
-        const ui=connectionUi[app];ui.preview=true;ui.prerequisiteScenario=scenario;
-        ui.prerequisite='';ui.message='尚未开启监测';
-        state.apps[app]='idle';
-        previewStates[app]='disconnected';syncPending.delete(app);render();
+      function selectActivationScenario(scenario){
+        if(!Object.hasOwn(activationScenarios,scenario)||Object.values(connectionUi).some(ui=>ui.controller))return;
+        activationScenario=scenario;render();
+      }
+      function authorizationDetails(request){
+        const details=request&&typeof request==='object'?request:{};
+        return {required:true,verified:false,opened:false,opening:false,error:'',
+          open:typeof details.open==='function'?details.open:typeof request==='function'?request:null,
+          purpose:typeof details.purpose==='string'?details.purpose.trim():'',
+          permissions:Array.isArray(details.permissions)?details.permissions.filter(value=>typeof value==='string'&&value.trim()).map(value=>value.trim()):[]};
+      }
+      function authorizationReady(auth){
+        return Boolean(auth&&typeof auth.open==='function'&&auth.purpose&&auth.permissions.length);
+      }
+      async function openAuthorization(app){
+        const ui=connectionUi[app],auth=ui?.authorization;
+        if(!ui||ui.preview||ui.phase!=='authorization'||!authorizationReady(auth)||auth.opening)return;
+        const attempt=connectionAttempts[app],current=()=>connectionAttempts[app]===attempt&&ui.authorization===auth&&ui.phase==='authorization';
+        auth.opening=true;auth.error='';render();
+        try{
+          const result=await auth.open();
+          if(!current())return;
+          if(result===false||result?.opened===false)throw new Error('Authorization page did not open');
+          auth.opened=true;ui.message='请在浏览器中完成授权，返回后将自动检查结果。';
+        }catch(error){if(current())auth.error='未能打开授权页面，请重试。';}
+        finally{if(current()){auth.opening=false;render();}}
       }
       async function openPrerequisite(app){
         const ui=connectionUi[app];if(!ui?.prerequisite||ui.opening)return;
@@ -19889,67 +19973,75 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         }
         const connector=window.x3MonitorConnector,method=ui.prerequisite==='installed'?'openInstallation':'openApplication';
         if(typeof connector?.[method]!=='function')return;
-        const attempt=connectionAttempts[app];ui.opening=true;render();
+        const attempt=connectionAttempts[app];ui.opening=true;ui.openError='';render();
         try{await connector[method]({app});}
-        catch(error){if(attempt===connectionAttempts[app])ui.message=ui.prerequisite==='installed'?'未能打开安装页面，请自行从官方渠道安装后重试。':'未能打开应用，请手动启动并登录后重试。';}
+        catch(error){if(attempt===connectionAttempts[app])ui.openError=ui.message=ui.prerequisite==='installed'?'未能打开安装页面，请自行从官方渠道安装后重试。':'未能打开应用，请手动启动并登录后重试。';}
         finally{if(attempt===connectionAttempts[app]){ui.opening=false;render();}}
       }
       function show(app,stage){
-        if(!Object.hasOwn(names,app)||!['permission','stop'].includes(stage))return;
+        if(!Object.hasOwn(names,app)||stage!=='stop')return;
         monitorPreviewApp=app;
         if(modal.hidden)lastFocus=document.activeElement;
         dialog={app,stage};modal.hidden=false;pendingUi.open=false;
-        if(stage==='permission'){render();modal.querySelector('button')?.focus();return;}
         const copy=`停止后，将不再接收 ${names[app]} 的更新，本页不再处理该应用的授权请求；不会终止应用里的任务。`;
         modal.innerHTML=`<section role="dialog" aria-modal="true" aria-label="停止监测" tabindex="-1"><h3>停止监测</h3><p>${e(copy)}</p><div class="action-row"><button class="soft-button" data-am="dialog" data-stage="close">取消</button><button class="soft-button" data-am="dialog" data-stage="confirm-stop">停止监测</button></div></section>`;render();modal.querySelector('button')?.focus();
       }
-      function openConnectionDialog(app){
+      function openConnectionDialog(app,recheck=false){
         if(!Object.hasOwn(names,app)||['connecting','reconnecting'].includes(state.apps[app]))return;
+        monitorPreviewApp=app;connectionUi[app].consented=true;
+        // A standalone prototype must demonstrate the requested flow on the first click.
+        // A supplied connector stays real unless a scene was explicitly selected.
+        const preview=activationScenario!==null||connectionUi[app].preview===true||window.x3MonitorConnector==null;
         if(modal.hidden)lastFocus=document.activeElement;
         dialog={app,stage:'connection'};modal.hidden=false;pendingUi.open=false;
-        if(connectionUi[app].prerequisiteScenario)beginPreviewConnection(app);else beginConnection(app);
+        if(preview){connectionUi[app].preview=true;beginPreviewConnection(app,recheck);}else beginConnection(app);
         modal.querySelector('button')?.focus();
       }
       function renderConnectionDialog(){
-        if(!dialog||!['permission','connection'].includes(dialog.stage))return;
-        const {app,stage}=dialog,ui=connectionUi[app],status=state.apps[app],demo=Boolean(ui.prerequisiteScenario);
-        let title='',copy='',kind='checking',buttons='';
-        const button=(action,label,primary=false,disabled=false)=>`<button class="${primary?'primary-button':'soft-button'}" data-am="dialog" data-stage="${action}" ${disabled?'disabled':''}>${label}</button>`;
+        if(!dialog||dialog.stage!=='connection')return;
+        const {app}=dialog,ui=connectionUi[app],status=state.apps[app],demo=Boolean(ui.prerequisiteScenario);
+        const message=String(ui.message||'').replace(/\s*\b(?:WorkBuddy|Codex)\b\s*/gi,'应用');
+        let title='',copy='',kind='checking',buttons='',authorizationContent='';
+        const button=(action,label,primary=false,disabled=false)=>`<button class="${primary?'primary-button':'soft-button'}" data-am="dialog" data-stage="${action}" data-attempt="${connectionAttempts[app]}" ${disabled?'disabled':''}>${label}</button>`;
         const cancel=button('cancel','取消');
-        if(stage==='permission'){
-          kind='permission';title=`开启 ${names[app]} 的任务监测？`;
-          copy='开启后，可在这里查看任务进度，并接收需要你处理的提醒。';
-          buttons=cancel+button('connect','确认开启',true);
-        }else if(ui.prerequisite){
+        if(ui.prerequisite){
           kind='blocked';
-          title={installed:`尚未安装 ${names[app]}`,running:`${names[app]} 尚未启动`,loggedIn:`请先登录 ${names[app]}`}[ui.prerequisite];
-          copy={installed:'安装完成后，点击“重新检查”继续。',running:'启动应用后，点击“重新检查”继续。',loggedIn:'在应用中完成登录后，点击“重新检查”继续。'}[ui.prerequisite];
+          title={installed:'应用未安装',running:'应用未打开',loggedIn:'应用未登录'}[ui.prerequisite];
+          copy={installed:'请先安装应用，完成后重新检查。',running:'请先打开应用，然后重新检查。',loggedIn:'请先登录应用，然后重新检查。'}[ui.prerequisite];
           const method=ui.prerequisite==='installed'?'openInstallation':'openApplication';
           const canOpen=demo||typeof window.x3MonitorConnector?.[method]==='function';
-          buttons=button('prerequisite',ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':'打开应用',false,ui.opening||!canOpen)+button('recheck','重新检查',true,ui.opening);
+          buttons=cancel+button('prerequisite',ui.opening?'正在打开…':ui.prerequisite==='installed'?'前往安装':ui.prerequisite==='loggedIn'?'前往登录':'打开应用',false,ui.opening||!canOpen)+button('recheck','重新检查',true,ui.opening);
           if(!canOpen)copy+=ui.prerequisite==='installed'?'请自行下载并安装该应用。':'请手动打开应用。';
+          if(ui.openError)copy+=' '+ui.openError;
         }else if(ui.phase==='authorization'){
-          title=`请完成 ${names[app]} 授权`;copy=ui.message||'请在打开的授权页面完成操作，授权后将继续连接。';
-          buttons=cancel+(ui.reopen?button('reopen','重新打开',true):'');
+          const auth=ui.authorization,canOpen=!demo&&authorizationReady(auth);
+          kind='authorization';title=auth?.opened?'等待授权':'需要授权';
+          copy=canOpen?(auth.opened?'请在浏览器中完成授权，返回后将自动检查结果。':'确认以下用途和数据范围后，前往来源平台完成授权。'):'授权接入尚未配置，暂时无法前往授权。';
+          authorizationContent=`<dl class="am-authorization-details"><div><dt>监测用途</dt><dd>${e(auth?.purpose||'在 Agent PC 中查看任务状态与进度。')}</dd></div><div><dt>数据范围</dt><dd>${auth?.permissions?.length?`<ul>${auth.permissions.map(permission=>`<li>${e(permission)}</li>`).join('')}</ul>`:'尚未提供授权权限信息。'}</dd></div></dl>${auth?.error?`<p class="am-authorization-error" role="alert">${e(auth.error)}</p>`:''}`;
+          buttons=cancel+button('reopen',auth?.opening?'正在打开…':auth?.opened?'重新打开':'前往授权',true,!canOpen||auth?.opening);
         }else if(['connecting','reconnecting'].includes(status)){
-          title=ui.phase==='prerequisites'?'正在检查应用状态…':`正在连接 ${names[app]}…`;
-          copy=ui.phase==='prerequisites'?'正在检查应用及监测连接是否可用，请稍候。':'正在建立任务进度连接，请稍候。';buttons=cancel;
+          kind=ui.phase==='prerequisites'?'checking':'connecting';title=ui.phase==='prerequisites'?'正在检查应用状态…':'正在连接…';
+          copy='';buttons=cancel;
         }else if(status==='active'){
-          kind='success';title='监测已开启';copy=`${names[app]} 开始执行任务后，这里会显示进度。`;
+          kind='success';title='监测已开启';copy='任务开始后，可在此查看进度。';
           buttons=button('complete','完成',true);
         }else if(status==='idle'){
           kind='cancelled';title='已取消开启监测';copy='你可以稍后重新开启。';buttons=button('close','关闭');
         }else{
-          kind='error';title='暂时无法开启监测';copy=ui.message||'连接未成功，请检查后重试。';buttons=cancel+button('recheck','重新检查',true);
+          kind='error';title='开启失败';copy=message||'连接未成功，请检查后重试。';buttons=cancel+button('recheck','重新检查',true);
         }
         const active=modal.contains(document.activeElement)?document.activeElement.dataset.stage:null;
         const focusedInside=modal.contains(document.activeElement),scrollTop=modal.querySelector('section')?.scrollTop||0;
-        modal.innerHTML=`<section class="am-activation-dialog" role="dialog" aria-modal="true" aria-label="启用监测" tabindex="-1"><div class="am-dialog-head"><h3>启用监测</h3><button class="am-dialog-close" data-am="dialog" data-stage="close" aria-label="关闭启用监测弹窗">×</button></div><p class="am-activation-app">${e(names[app])}</p><div class="am-activation-status" data-kind="${kind}" role="status" aria-live="polite"><h4>${e(title)}</h4><p>${e(copy)}</p></div>${stage==='permission'?'<p class="am-activation-note">监测内容包括任务指令、会话与工作目录、工具操作及通知。</p>':''}${demo?`<p class="am-activation-note">原型流程演示，不会连接或操作真实应用。${e(ui.previewNotice||'')}</p>`:''}<div class="action-row">${buttons}</div></section>`;
+        const labels={installed:{passed:'应用已安装',checking:'正在检查安装状态…',failed:'应用未安装',pending:'等待检查安装状态',unknown:'暂无法确认安装状态'},running:{passed:'应用已打开',checking:'正在检查打开状态…',failed:'应用未打开',pending:'等待检查打开状态',unknown:'暂无法确认打开状态'},loggedIn:{passed:'应用已登录',checking:'正在检查登录状态…',failed:'应用未登录',pending:'等待检查登录状态',unknown:'暂无法确认登录状态'}};
+        const checks=ui.checks?`<ul class="am-activation-checks">${Object.entries(labels).map(([key,text])=>{const value=ui.checks[key]||'pending';return `<li data-state="${value}"><span class="am-check-icon" aria-hidden="true">${{passed:'✓',failed:'!',pending:'·',unknown:'?'}[value]||''}</span><span>${text[value]}</span></li>`;}).join('')}</ul>`:'';
+        const checking=ui.phase==='prerequisites'&&Object.values(ui.checks||{}).includes('checking');
+        const feedback=checking?'':`<div class="am-activation-status" data-kind="${kind}"><h4>${e(ui.phase==='prerequisites'?message:title)}</h4>${ui.phase==='prerequisites'||!copy?'':`<p>${e(copy)}</p>`}${authorizationContent}</div>`;
+        modal.innerHTML=`<section class="am-activation-dialog" role="dialog" aria-modal="true" aria-label="启用监测" tabindex="-1"><div class="am-dialog-head"><h3>启用监测</h3><button class="am-dialog-close" data-am="dialog" data-stage="close" aria-label="关闭启用监测弹窗">×</button></div><div role="status" aria-live="polite">${checks}${feedback}</div><div class="action-row">${buttons}</div></section>`;
         modal.querySelector('section').scrollTop=scrollTop;
         if(focusedInside)([...modal.querySelectorAll('button:not(:disabled)')].find(b=>b.dataset.stage===active)||modal.querySelector('button'))?.focus({preventScroll:true});
       }
       function close(){
-        const app=dialog?.app,cancelConnecting=dialog?.stage==='connection'&&['connecting','reconnecting'].includes(state.apps[app]);
+        const app=dialog?.app,cancelConnecting=dialog?.stage==='connection'&&state.apps[app]!=='active';
         modal.hidden=true;modal.innerHTML='';dialog=null;
         if(cancelConnecting)cancelConnection(app);else render();
         lastFocus?.isConnected&&lastFocus.focus();
@@ -19971,7 +20063,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='request-check')checkRequest(b.dataset.request);
         if(a==='source-open')openSource(id);
         if(a==='pending-demo')pendingDemo(b.dataset.scenario);
-        if(a==='prerequisite-preview')previewPrerequisite(id,b.dataset.scenario);
+        if(a==='activation-scenario')selectActivationScenario(b.dataset.scenario);
         if(a==='monitor-preview'&&Object.hasOwn(names,id)&&['idle','connecting','active','error'].includes(b.dataset.status)){
           if(Object.values(connectionUi).some(ui=>ui.controller))return;
           monitorPreviewApp=id;
@@ -19987,8 +20079,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
         if(a==='manage'){const panel=id?page.querySelector(`[data-monitor-app="${id}"]`):page.querySelector('.agent-monitor-panel');panel?.scrollIntoView({behavior:'smooth',block:'start'});panel?.setAttribute('tabindex','-1');panel?.focus({preventScroll:true});}
         if(a==='auth-cancel'&&Object.hasOwn(names,id))cancelConnection(id);
         if(a==='prerequisite-open'&&Object.hasOwn(names,id))openPrerequisite(id);
-        if(a==='auth-reopen'&&connectionUi[id]?.phase==='authorization'){try{connectionUi[id].reopen?.();}catch(error){connectionUi[id].message='未能打开官方授权页，请取消后重试。';render();}}
-        if(a==='start'&&['idle','error','missing'].includes(state.apps[id])){if(connectionUi[id].prerequisiteScenario||!connectionUi[id].consented)show(id,'permission');else openConnectionDialog(id);}
+        if(a==='auth-reopen')openAuthorization(id);
+        if(a==='start'&&['idle','error','missing'].includes(state.apps[id]))openConnectionDialog(id);
         if(a==='remonitor'&&Object.hasOwn(names,id))remonitor(id);
         if(a==='stop')show(id,'stop');
         if(a==='interrupt'&&Object.hasOwn(names,id)){state.apps[id]='error';previewStates[id]='connection-lost';syncPending.add(id);render();}
@@ -19997,10 +20089,9 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
           const app=dialog.app,s=b.dataset.stage;
           if(['close','cancel','complete'].includes(s))close();
           else if(s==='confirm-stop'&&dialog.stage==='stop'){resetConnection(app);state.apps[app]='idle';previewStates[app]='disconnected';syncPending.delete(app);state.tasks.filter(t=>t.app===app).forEach(t=>(t.requests||[]).filter(r=>['pending','submitting','unknown'].includes(r.status)).forEach(r=>{r.status='cancelled';}));for(const key of hookRounds.keys())if(key.startsWith(app+':'))hookRounds.delete(key);if(findRequest(pendingUi.current)?.task.app===app){pendingUi.open=false;pendingUi.current=null;}close();}
-          else if(s==='connect'&&dialog.stage==='permission'){connectionUi[app].consented=true;openConnectionDialog(app);}
-          else if(s==='recheck'&&dialog.stage==='connection')openConnectionDialog(app);
+          else if(s==='recheck'&&dialog.stage==='connection')openConnectionDialog(app,true);
           else if(s==='prerequisite'&&dialog.stage==='connection')openPrerequisite(app);
-          else if(s==='reopen'&&dialog.stage==='connection'&&typeof connectionUi[app].reopen==='function'){try{connectionUi[app].reopen();}catch(error){connectionUi[app].message='未能打开授权页面，请重试。';render();}}
+          else if(s==='reopen'&&dialog.stage==='connection')openAuthorization(app);
         }
       });
       modal.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();close();}if(event.key==='Tab'){const buttons=[...modal.querySelectorAll('button:not(:disabled)')],first=buttons[0],last=buttons.at(-1);if(event.shiftKey&&document.activeElement===first){event.preventDefault();last?.focus();}else if(!event.shiftKey&&document.activeElement===last){event.preventDefault();first?.focus();}}});
