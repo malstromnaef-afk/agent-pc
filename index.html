@@ -8820,9 +8820,12 @@ body.api-dialog-open { overflow:hidden; }
         padding: 0; border: 0;
       }
       .voice-mode-toggle {
+        display: inline-flex; align-items: center; justify-content: center; gap: 6px;
         min-height: 34px; border: 1px solid transparent; border-radius: 999px; padding: 0 14px;
-        background: transparent; color: rgba(202,218,222,.58); font-size: 11px; font-weight: 850; cursor: pointer;
+        background: transparent; color: rgba(202,218,222,.58); font-size: 11px; font-weight: 850; white-space: nowrap; cursor: pointer;
       }
+      .voice-mode-toggle svg { width: 18px; height: 18px; flex: 0 0 auto; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+      .voice-assistant-title .voice-mode-label { display: inline; }
       .voice-dialog-mode-switch {
         display: inline-flex; align-items: center; gap: 3px; padding: 3px;
         border: 1px solid rgba(70,235,222,.3); border-radius: 999px; background: rgba(7,12,16,.72);
@@ -10644,9 +10647,15 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                       <div class="qa-session-actions">
                         <button type="button" class="qa-session-icon" id="qa-session-toggle" aria-expanded="false" aria-label="打开会话列表" title="会话">☰</button>
                       </div>
-                      <div class="voice-dialog-mode-switch" role="group" aria-label="对话模式切换">
-                        <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true">语音</button>
-                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false">问答</button>
+                      <div class="voice-dialog-mode-switch" role="group" aria-label="AI 智能问答模式切换">
+                        <button type="button" class="voice-mode-toggle active" data-voice-input-mode="voice" aria-pressed="true" aria-label="语音通话模式" title="语音通话模式">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.69 2.79a2 2 0 0 1-.45 2.11L8.09 9.89a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.89.33 1.83.56 2.79.69A2 2 0 0 1 22 16.92Z"></path></svg>
+                          <span class="voice-mode-label">语音通话</span>
+                        </button>
+                        <button type="button" class="voice-mode-toggle" data-voice-input-mode="text" aria-pressed="false" aria-label="文字聊天模式" title="文字聊天模式">
+                          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5Z"></path></svg>
+                          <span class="voice-mode-label">文字聊天</span>
+                        </button>
                       </div>
                     </div>
                     <aside class="qa-session-drawer" id="qa-session-drawer" aria-hidden="true">
