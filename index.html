@@ -9897,13 +9897,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
             <div class="display-state-title"><strong>连接多台外接显示器</strong><span>完整主界面跟随 Windows 指定的外接主显示器，自带小屏继续显示小屏功能</span></div>
             <div class="display-layout-visual multiple">
               <div class="display-screen"><strong>外接显示器 B</strong><small>Windows 桌面 / 其他应用</small></div>
-              <div class="display-screen is-primary has-settings">
-                <header class="display-screen-toolbar" aria-label="App 主界面右上角">
-                  <a class="app-display-settings-button" href="ms-settings:display" data-display-open-settings title="如需更换主界面，请前往 Windows 显示设置">显示设置</a>
-                </header>
-                <div class="display-screen-main"><strong>外接显示器 A</strong><small>App 完整主界面</small></div>
-                <p class="display-settings-feedback" data-display-settings-feedback role="status" aria-live="polite" hidden></p>
-              </div>
+              <div class="display-screen is-primary"><p class="display-screen-hint">主屏设置：Windows 设置 → 系统 → 屏幕</p><strong>外接显示器 A</strong><small>App 完整主界面</small></div>
               <div class="display-screen small built-in"><strong>小屏功能界面</strong><small>自动识别，业务状态不变</small></div>
             </div>
           </article>
@@ -10066,10 +10060,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
       </aside>
 
       <main class="main">
-        <header class="app-display-toolbar" data-app-display-toolbar hidden aria-label="主界面显示设置">
-          <a class="app-display-settings-button" href="ms-settings:display" data-display-open-settings title="如需更换主界面，请前往 Windows 显示设置">显示设置</a>
-          <p class="display-settings-feedback" data-display-settings-feedback role="status" aria-live="polite" hidden></p>
-        </header>
+        <p class="app-display-hint" data-app-display-hint hidden>主屏设置：Windows 设置 → 系统 → 屏幕</p>
         <section class="view active" id="monitor">
           <div class="monitor-page">
             <section class="panel main-panel">
