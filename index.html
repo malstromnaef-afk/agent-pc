@@ -9848,6 +9848,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .physical-screen-mirror-source.token-preview-canvas [data-cloud-token-tab],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-range],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-refresh]{pointer-events:auto!important;min-height:44px}
 @media(max-width:1150px){.hybrid-token-dashboard-grid{grid-template-columns:1fr}.hybrid-token-card{min-height:200px}.hybrid-token-total strong{font-size:44px}}
 </style>
+    <link rel="stylesheet" href="assets/display-demo.css">
+    <script src="assets/display-demo.js" defer></script>
 </head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
@@ -9876,44 +9878,39 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 
     <main class="system-prototype-page" id="display-demo-page" aria-label="双屏自动识别与窗口分配演示">
       <div class="system-demo-shell">
-        <header class="system-demo-head"><div><h1>双屏自动识别与窗口分配</h1><p>仅展示用户可见状态，不展示后台检测过程</p></div><a class="system-demo-back" href="index.html">← 返回原型入口</a></header>
+        <header class="system-demo-head"><div><h1>双屏自动识别与窗口分配</h1></div><a class="system-demo-back" href="index.html">← 返回原型入口</a></header>
         <div class="display-demo-controls" role="tablist" aria-label="选择显示器状态">
-          <button class="active" data-display-demo-state="single">正常单屏</button>
-          <button data-display-demo-state="dual">正常双屏</button>
-          <button data-display-demo-state="unrecognized">副屏识别失败</button>
-          <button data-display-demo-state="candidates">多个候选副屏</button>
-          <button data-display-demo-state="saved-invalid">已保存显示器失效</button>
+          <button class="active" id="display-tab-single" role="tab" aria-selected="true" aria-controls="display-panel-single" data-display-demo-state="single">无外接显示器</button>
+          <button id="display-tab-dual" role="tab" aria-selected="false" aria-controls="display-panel-dual" data-display-demo-state="dual">一台外接显示器</button>
+          <button id="display-tab-multiple" role="tab" aria-selected="false" aria-controls="display-panel-multiple" data-display-demo-state="multiple">多台外接显示器</button>
         </div>
         <section class="display-demo-stage">
-          <article class="display-state active" data-display-state-panel="single">
-            <div class="display-state-title"><strong>正常单屏模式</strong><span>未检测到外接显示器，完整主界面显示在Agent PC自带副屏</span></div>
-            <div class="display-layout-visual"><div class="display-screen small">完整主界面</div></div>
-            <div class="display-mode-note"><span>不创建独立副屏窗口</span><span>当前业务状态继续保留</span></div>
+          <article class="display-state active" id="display-panel-single" role="tabpanel" aria-labelledby="display-tab-single" data-display-state-panel="single">
+            <div class="display-state-title"><strong>无外接显示器</strong><span>完整主界面显示在 Agent PC 自带小屏</span></div>
+            <div class="display-layout-visual"><div class="display-screen small built-in"><strong>App 完整主界面</strong><small>当前只有这一块可用屏幕</small></div></div>
           </article>
-          <article class="display-state" data-display-state-panel="dual">
-            <div class="display-state-title"><strong>正常双屏模式</strong><span>外接显示器显示完整主界面，自带副屏显示副屏界面</span></div>
-            <div class="display-layout-visual"><div class="display-screen">外接屏 · 完整主界面</div><div class="display-screen small">自带副屏 · 副屏界面</div></div>
-            <div class="display-mode-note"><span>主副窗口共享同一业务状态</span><span>外接屏断开后自动回到单屏</span></div>
+          <article class="display-state" id="display-panel-dual" role="tabpanel" aria-labelledby="display-tab-dual" data-display-state-panel="dual" hidden>
+            <div class="display-state-title"><strong>连接一台外接显示器</strong><span>App 自动分配两个窗口，当前页面、任务与配置继续保留</span></div>
+            <div class="display-layout-visual"><div class="display-screen is-primary"><strong>App 完整主界面</strong><small>配置、管理与完整内容</small></div><div class="display-screen small built-in"><strong>小屏功能界面</strong><small>与主界面共享业务状态</small></div></div>
           </article>
-          <article class="display-state" data-display-state-panel="unrecognized">
-            <div class="display-state-title"><strong>自带副屏识别失败</strong><span>主界面继续在Windows当前可用主显示器内展示</span></div>
-            <div class="display-layout-visual"><div class="display-screen">当前主显示器 · 完整主界面</div><div class="display-screen small offline">未识别到自带副屏</div></div>
-            <div class="display-inline-alert"><div><strong>未识别到Agent PC自带副屏</strong><p>副屏窗口未创建，当前页面和业务状态不受影响。</p></div><div class="display-alert-actions"><button data-display-retry>重新检测</button><button class="primary" data-display-manual>手动选择</button></div></div>
-          </article>
-          <article class="display-state" data-display-state-panel="candidates">
-            <div class="display-candidate-dialog" role="dialog" aria-modal="false" aria-labelledby="candidate-title"><h3 id="candidate-title">选择Agent PC自带副屏</h3><p>检测到多个候选显示器，请选择设备自带副屏。选择结果将在后续启动时优先使用。</p><div class="display-candidate-list">
-              <label class="display-candidate"><input type="radio" name="candidate-display" value="internal" checked><span><strong>Agent Display 8.8</strong><small>960×480 逻辑画布 · 内置连接 · 触控可用</small></span><em>候选副屏</em></label>
-              <label class="display-candidate"><input type="radio" name="candidate-display" value="external"><span><strong>DELL U2723QE</strong><small>3840×2160 · DisplayPort · 非触控</small></span><em>当前主屏</em></label>
-            </div><div class="display-dialog-actions"><button data-display-cancel>取消</button><button class="primary" data-display-confirm>确认选择</button></div></div>
-          </article>
-          <article class="display-state" data-display-state-panel="saved-invalid">
-            <div class="display-state-title"><strong>已保存显示器失效</strong><span>此前保存的设备当前不存在，窗口已安全回退至可用屏幕</span></div>
-            <div class="display-layout-visual"><div class="display-screen">当前可用屏幕 · 完整主界面</div><div class="display-screen small offline">原自带副屏不可用</div></div>
-            <div class="display-inline-alert"><div><strong>原显示器不可用，已自动回退</strong><p>所有窗口保持在当前可用屏幕范围内，当前业务状态不会丢失。</p></div><div class="display-alert-actions"><button data-display-retry>重新检测</button><button class="primary" data-display-manual>重新选择</button></div></div>
+          <article class="display-state" id="display-panel-multiple" role="tabpanel" aria-labelledby="display-tab-multiple" data-display-state-panel="multiple" hidden>
+            <div class="display-state-title"><strong>连接多台外接显示器</strong><span>完整主界面跟随 Windows 指定的外接主显示器，自带小屏继续显示小屏功能</span></div>
+            <div class="display-layout-visual multiple">
+              <div class="display-screen"><strong>外接显示器 B</strong><small>Windows 桌面 / 其他应用</small></div>
+              <div class="display-screen is-primary has-settings">
+                <header class="display-screen-toolbar" aria-label="App 主界面右上角">
+                  <a class="app-display-settings-button" href="ms-settings:display" data-display-open-settings title="如需更换主界面，请前往 Windows 显示设置">显示设置</a>
+                </header>
+                <div class="display-screen-main"><strong>外接显示器 A</strong><small>App 完整主界面</small></div>
+                <p class="display-settings-feedback" data-display-settings-feedback role="status" aria-live="polite" hidden></p>
+              </div>
+              <div class="display-screen small built-in"><strong>小屏功能界面</strong><small>自动识别，业务状态不变</small></div>
+            </div>
           </article>
         </section>
       </div>
     </main>
+
 
     <main class="system-prototype-page" id="system-control-page" aria-label="副屏系统快捷控制插件演示">
       <div class="system-demo-shell">
@@ -9954,33 +9951,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     </script>
     <script>
       (() => {
-        const displayButtons = [...document.querySelectorAll("[data-display-demo-state]")];
-        const displayPanels = [...document.querySelectorAll("[data-display-state-panel]")];
-        let currentDisplayState = "single";
-        let candidateReturnState = "unrecognized";
-        const showDisplayState = (state) => {
-          currentDisplayState = state;
-          displayButtons.forEach((button) => button.classList.toggle("active", button.dataset.displayDemoState === state));
-          displayPanels.forEach((panel) => panel.classList.toggle("active", panel.dataset.displayStatePanel === state));
-        };
-        displayButtons.forEach((button) => button.addEventListener("click", () => {
-          const nextState = button.dataset.displayDemoState;
-          if (nextState === "candidates") candidateReturnState = currentDisplayState === "candidates" ? "unrecognized" : currentDisplayState;
-          showDisplayState(nextState);
-        }));
-        document.querySelectorAll("[data-display-manual]").forEach((button) => button.addEventListener("click", () => {
-          candidateReturnState = currentDisplayState;
-          showDisplayState("candidates");
-        }));
-        document.querySelectorAll("[data-display-retry]").forEach((button) => button.addEventListener("click", () => {
-          const original = button.textContent;
-          button.textContent = "检测中…";
-          button.disabled = true;
-          setTimeout(() => { button.textContent = original; button.disabled = false; showDisplayState("dual"); }, 700);
-        }));
-        document.querySelector("[data-display-cancel]")?.addEventListener("click", () => showDisplayState(candidateReturnState));
-        document.querySelector("[data-display-confirm]")?.addEventListener("click", () => showDisplayState("dual"));
-
         const trigger = document.querySelector("#system-control-trigger");
         const popover = document.querySelector("#system-control-popover");
         const setPopover = (open) => {
@@ -10096,6 +10066,10 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
       </aside>
 
       <main class="main">
+        <header class="app-display-toolbar" data-app-display-toolbar hidden aria-label="主界面显示设置">
+          <a class="app-display-settings-button" href="ms-settings:display" data-display-open-settings title="如需更换主界面，请前往 Windows 显示设置">显示设置</a>
+          <p class="display-settings-feedback" data-display-settings-feedback role="status" aria-live="polite" hidden></p>
+        </header>
         <section class="view active" id="monitor">
           <div class="monitor-page">
             <section class="panel main-panel">
