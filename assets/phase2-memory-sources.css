@@ -1,0 +1,20 @@
+.pms-dialog{box-sizing:border-box;width:min(560px,calc(100vw - 32px));max-height:calc(100dvh - 40px);margin:auto;padding:0;overflow:hidden;border:1px solid #344249;border-radius:16px;background:#192126;color:#f5f7fa;box-shadow:0 24px 90px #0009;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
+.pms-dialog::backdrop{background:#05080ac2;backdrop-filter:none}
+.pms-dialog *{box-sizing:border-box}
+.pms-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 16px 12px 24px;border-bottom:1px solid #344249}
+.pms-header h2{margin:0;font-size:18px;font-weight:700;line-height:1.45;outline:none}
+.pms-close{display:grid;place-items:center;width:44px;min-width:44px;height:44px;border:0;border-radius:8px;background:transparent;color:#a8b5c3;font:inherit;font-size:26px;cursor:pointer}
+.pms-close:hover{background:#ffffff08;color:#f5f7fa}
+.pms-tabs{display:flex;gap:4px;margin:16px 20px 0;padding:0 0 12px;overflow-x:auto;border-bottom:1px solid #344249;scrollbar-width:thin;scrollbar-color:#40515b transparent}
+.pms-tabs button{flex:1;min-width:max-content;min-height:44px;padding:0 10px;border:1px solid transparent;border-radius:8px;background:transparent;color:#a8b5c3;font:inherit;font-size:16px;cursor:pointer}
+.pms-tabs button[aria-selected='true']{border-color:#00dce750;background:#00dce710;color:#00dce7}
+.pms-dialog button:focus-visible,.pms-list:focus-visible{outline:2px solid #00dce7;outline-offset:-3px}
+.pms-list{max-height:min(360px,calc(100dvh - 205px));min-height:120px;margin:0 20px 20px;padding:0 4px;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;scrollbar-color:#40515b transparent}
+.pms-list::-webkit-scrollbar,.pms-tabs::-webkit-scrollbar{width:5px;height:4px}
+.pms-list::-webkit-scrollbar-thumb,.pms-tabs::-webkit-scrollbar-thumb{border-radius:5px;background:#40515b}
+.pms-row{min-height:72px;padding:14px 0;border-bottom:1px solid #344249}
+.pms-row:last-child{border-bottom:0}
+.pms-row h3{overflow:hidden;margin:0;color:#f5f7fa;font-size:16px;font-weight:500;line-height:1.5;white-space:nowrap;text-overflow:ellipsis}
+.pms-row p{overflow:hidden;margin:4px 0 0;color:#a8b5c3;font-size:12px;line-height:1.5;white-space:nowrap;text-overflow:ellipsis}
+.pms-empty{margin:0;padding:40px 12px;color:#a8b5c3;font-size:13px;line-height:1.5;text-align:center}
+@media(max-width:480px){.pms-header{padding-left:16px}.pms-tabs{margin-left:12px;margin-right:12px}.pms-list{margin-left:12px;margin-right:12px}.pms-tabs button{padding:0 8px}.pms-row h3{font-size:15px}}
