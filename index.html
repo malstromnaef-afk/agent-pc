@@ -9847,6 +9847,13 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .cloud-token-details{display:grid;gap:12px}.cloud-token-detail-head{display:flex;align-items:center;justify-content:flex-start}.cloud-token-detail-head .hybrid-token-tab{min-height:38px;padding:0 18px}.cloud-token-details>[data-cloud-detail-view]{overflow:hidden;border:1px solid rgba(91,124,145,.27);border-radius:12px;background:rgba(255,255,255,.018)}
 .physical-screen-mirror-source.token-preview-canvas [data-cloud-token-tab],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-range],.physical-screen-mirror-source.token-preview-canvas [data-cloud-token-refresh]{pointer-events:auto!important;min-height:44px}
 @media(max-width:1150px){.hybrid-token-dashboard-grid{grid-template-columns:1fr}.hybrid-token-card{min-height:200px}.hybrid-token-total strong{font-size:44px}}
+
+/* 2026-10-09: independent phase-one and phase-two entrances. */
+.prototype-link-grid { grid-template-columns:repeat(2,minmax(0,1fr)); width:min(100%,1040px); margin-inline:auto; }
+.prototype-size-link strong { font-size:clamp(24px,3vw,42px); white-space:nowrap; }
+.brand-copy { flex-wrap:wrap; row-gap:8px; }
+.brand-copy > span { flex-basis:100%; font-size:16px; }
+@media(max-width:900px){.prototype-link-grid{grid-template-columns:1fr;max-width:480px;}}
 </style>
     <link rel="stylesheet" href="assets/display-demo.css">
     <script src="assets/display-demo.js" defer></script>
@@ -9855,18 +9862,14 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
       <div class="prototype-launcher-inner">
         <h1>Agent X3</h1>
-        <nav class="prototype-link-grid" aria-label="选择 Agent X3 款型">
+        <nav class="prototype-link-grid" aria-label="选择 Agent pc X3 版本">
           <a class="prototype-size-link" data-prototype-size="small" href="?prototype=small">
             <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>X3 Cloud</strong>
+            <strong>Agent pc X3一期</strong>
           </a>
-          <a class="prototype-size-link" data-prototype-size="medium" href="?prototype=medium">
+          <a class="prototype-size-link" data-prototype-phase="second" href="agent-pc-x3-phase2.html?prototype=small">
             <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>X3 Hybrid</strong>
-          </a>
-          <a class="prototype-size-link" data-prototype-size="large" href="?prototype=large">
-            <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>X3 Local</strong>
+            <strong>Agent pc X3二期</strong>
           </a>
         </nav>
         <nav class="prototype-system-links" aria-label="系统级原型演示">
@@ -11501,7 +11504,7 @@ $$('[data-agent-preview-state]').forEach((link) => {
   link.href = `?prototype=${PROTOTYPE_SIZE}&agentState=${agentState}`;
 });
 const PROTOTYPE_WORKBENCH_TITLES = {
-  small: "X3 Cloud",
+  small: "Agent pc X3一期",
   medium: "X3 Hybrid",
   large: "X3 Local",
 };
