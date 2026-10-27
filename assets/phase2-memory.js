@@ -58,10 +58,8 @@
   const row = (m) => `<div class="pm-memory-row ${state.selected===m.id?'active':''}"><div class="pm-row-heading"><button type="button" class="pm-row-title" data-pm-select="${esc(m.id)}" aria-label="选择记忆：${esc(m.title)}" aria-pressed="${state.selected===m.id}" title="${esc(m.title)}"><strong>${esc(m.title)}</strong></button><div class="pm-row-actions">${[['edit','修改'],['delete','删除']].map(([action,label])=>`<button type="button" class="pm-row-icon ${action==='delete'?'pm-row-delete':''}" data-pm-action="${action}" data-memory-id="${esc(m.id)}" aria-label="${label}：${esc(m.title)}" title="${label}">${icons[action]}</button>`).join('')}</div></div><p>${esc(m.content)}</p><small>${esc(categories[m.category])} · ${esc(m.updated)}</small></div>`;
   function renderPreview() {
     const preview=$m('.pm-preview[data-subscreen-preview="memory"]');
-    const button=$m('[data-pm-action="toggle-preview"]');
-    button.classList.toggle('off',!state.preview);button.setAttribute('aria-pressed',String(state.preview));
-    button.setAttribute('aria-label',state.preview?'\u5c0f\u5c4f\u5c55\u793a\u6548\u679c\u5df2\u6253\u5f00':'\u5c0f\u5c4f\u5c55\u793a\u6548\u679c\u5df2\u5173\u95ed');
-    $m('[data-pm-toggle-label]').textContent=state.preview?'\u6253\u5f00':'\u5173\u95ed';
+    // Phase 2 keeps the content visible without a small-screen preview switch.
+    state.preview=true;
     APP_STATE.previewEnabled.memory=state.preview;
     preview.classList.toggle('pm-display-off',!state.preview);
     preview.querySelector('.pm-preview-off').hidden=state.preview;
