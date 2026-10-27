@@ -9865,7 +9865,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <link rel="stylesheet" href="assets/phase2-memory.css?v=20261010-list">
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
-    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261022-shortcut-hit-area-fix">
+    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261027-even-scale">
+    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261027-always-visible-help">
     <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261020-compact-consent">
     <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261022-no-region-toolbar">
     <script src="assets/display-demo.js" defer></script>
@@ -11277,7 +11278,9 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
               <div class="p2-settings-tabs" role="tablist" aria-label="设置分类">
                 <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="api" aria-controls="p2-settings-api" aria-selected="false">API 设置</button>
                 <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="system" aria-controls="p2-settings-system" aria-selected="false">系统设置</button>
+                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="proactive" aria-controls="p2-settings-proactive" aria-selected="false">主动辅助</button>
                 <button type="button" role="tab" class="p2-settings-tab" id="p2-setting-tab-memory" data-phase2-setting-tab="memory" aria-controls="p2-settings-memory" aria-selected="false">本地记忆</button>
+                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="browser" aria-controls="p2-settings-browser" aria-selected="false">浏览器插件</button>
               </div>
 <section class="inner-card device-preview-panel config-section-panel" data-config-panel="device">
                 <div class="device-settings-grid">
@@ -11463,7 +11466,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   </div>
                   <div class="p2-local-model-controls">
                     <div class="p2-system-toggle"><span>优先使用内置模型</span><button type="button" class="toggle" id="p2-local-model-toggle" aria-label="关闭优先使用内置模型" aria-pressed="true"><img class="p2-toggle-on" src="assets/settings-figma/889f2.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                    <select id="p2-local-model-select" aria-label="内置模型" title="设备内置模型：gemma3:12b（原型示例）"><option value="gemma3:12b">设备内置(gemma)</option></select>
+                    <span id="p2-local-model-select" aria-label="内置模型">Gemma 3 12B</span>
                   </div>
                 </section>
                 <p id="p2-system-feedback" role="status" aria-live="polite" hidden></p>
@@ -11474,7 +11477,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                 <section class="inner-card p2-system-card p2-memory-path-card" aria-label="记忆存储位置">
                   <div class="p2-system-line">
                     <div class="p2-folder-copy"><strong>记忆存储位置</strong></div>
-                    <span class="p2-memory-folder-box" id="p2-memory-path">本地记忆文件夹</span>
+                    <span class="p2-memory-folder-box" id="p2-memory-path">本地主机</span>
                   </div>
                 </section>
                 <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
@@ -11487,6 +11490,29 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   </div>
                 </section>
                 <p id="p2-local-settings-feedback" role="status" aria-live="polite" hidden></p>
+              </section>
+              <section class="config-section-panel p2-proactive-panel" id="p2-settings-proactive" data-config-panel="proactive" role="tabpanel" aria-label="主动辅助">
+                <header class="pa-lead"><h2>主动辅助</h2><p>根据授权上下文准备聊天回复，提供可协助处理的任务建议。</p></header>
+                <div class="pa-view-bar"><div class="pa-view-tabs" role="tablist" aria-label="主动辅助分类"><button type="button" role="tab" data-pa-view="settings" aria-controls="pa-settings" aria-selected="true">设置</button><button type="button" role="tab" data-pa-view="reply" aria-controls="pa-records" aria-selected="false">回复建议</button><button type="button" role="tab" data-pa-view="task" aria-controls="pa-records" aria-selected="false">任务建议</button></div><button type="button" class="pa-help" id="pa-help">ⓘ 使用帮助</button></div>
+                <div id="pa-settings">
+                  <section class="pa-card pa-master"><div class="pa-setting-row"><div class="pa-copy"><h3>主动辅助</h3><p>开启后提供回复与任务建议；关闭后停止本模块的感知与建议。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="enabled" aria-label="主动辅助" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div></section>
+                  <section class="pa-setting-section"><h3 class="pa-section-label">回复建议</h3><div class="pa-card">
+                    <div class="pa-setting-row"><div class="pa-copy"><h3>启用回复建议</h3><p>根据聊天内容准备回复建议，按 Tab 填入，由你发送。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="replyEnabled" aria-label="启用回复建议" aria-checked="false"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div>
+                    <div class="pa-setting-row pa-apps-row"><div class="pa-apps-head"><div class="pa-copy"><h3>关注应用</h3><p>仅在所选应用中提供回复建议。</p></div><span id="pa-app-count">未选择应用</span></div><div class="pa-app-options" role="group" aria-label="关注应用"><label><input type="checkbox" value="微信" data-pa-app><span>微信</span></label><label><input type="checkbox" value="飞书" data-pa-app><span>飞书</span></label><label><input type="checkbox" value="钉钉" data-pa-app><span>钉钉</span></label><label><input type="checkbox" value="企业微信" data-pa-app><span>企业微信</span></label></div></div>
+                    <div class="pa-setting-row pa-alias-row"><div class="pa-copy"><h3><label for="pa-alias-input">我的昵称（选填）</label></h3><p>添加聊天中的昵称或称呼，帮助识别别人交给你的事。</p></div><div class="pa-alias-field"><div id="pa-alias-tags" hidden></div><input type="text" id="pa-alias-input" placeholder="输入昵称，按回车添加，可添加多个" autocomplete="off"></div></div>
+                    <div class="pa-setting-row"><div class="pa-copy"><h3>回复提示方式</h3><p>显示回复建议，按 Tab 采纳并填入。</p></div><div class="pa-segment pa-reply-modes pa-preview-options" role="group" aria-label="回复提示方式"><div class="pa-mode-option" data-pa-mode-option="小卡片"><button type="button" data-pa-mode="小卡片" aria-pressed="true">小卡片</button><button type="button" class="pa-mode-help" data-pa-preview="card" aria-label="查看小卡片效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-mode-option="输入框预览"><button type="button" data-pa-mode="输入框预览" aria-pressed="false">输入框预览</button><button type="button" class="pa-mode-help" data-pa-preview="input" aria-label="查看输入框预览效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div></div></div>
+                    <div class="pa-setting-row pa-process-copy">将聊天中需要你处理的事记为待办，提前准备回复；回到对应会话后按 Tab 填入，由你发送。</div>
+                  </div></section>
+                  <section class="pa-setting-section"><h3 class="pa-section-label">任务建议</h3><div class="pa-card"><div class="pa-setting-row"><div class="pa-copy"><h3>启用任务建议</h3><p>根据当前工作内容提出建议，选择“有用，帮我做”后执行。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="taskEnabled" aria-label="启用任务建议" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div><div class="pa-setting-row"><div class="pa-copy"><h3>建议卡显示位置</h3></div><div class="pa-segment pa-placement-modes pa-preview-options" role="group" aria-label="建议卡显示位置"><div class="pa-mode-option" data-pa-placement-option="跟随窗口"><button type="button" data-pa-placement="跟随窗口" aria-pressed="true">跟随窗口</button><button type="button" class="pa-mode-help" data-pa-preview="follow" aria-label="查看跟随窗口效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="屏幕右下"><button type="button" data-pa-placement="屏幕右下" aria-pressed="false">屏幕右下</button><button type="button" class="pa-mode-help" data-pa-preview="bottom" aria-label="查看屏幕右下效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="鼠标附近"><button type="button" data-pa-placement="鼠标附近" aria-pressed="false">鼠标附近</button><button type="button" class="pa-mode-help" data-pa-preview="cursor" aria-label="查看鼠标附近效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="右上角"><button type="button" data-pa-placement="右上角" aria-pressed="false">右上角</button><button type="button" class="pa-mode-help" data-pa-preview="top" aria-label="查看右上角效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div></div></div></div></section>
+                </div>
+                <section id="pa-records" class="pa-records pa-card" role="tabpanel" hidden><header class="pa-list-toolbar"><h3 id="pa-list-title">回复建议列表</h3><div class="pa-list-actions"><button type="button" class="pa-button" id="pa-clear">清理</button><button type="button" class="pa-button" id="pa-refresh">刷新</button></div></header><div class="pa-table-scroll"><div id="pa-table" role="table"></div></div></section>
+                <p id="pa-feedback" class="pa-feedback" role="status" hidden></p>
+                <div id="pa-mode-preview" class="pa-mode-preview" role="tooltip" hidden><img id="pa-mode-preview-image" src="assets/proactive-figma/reply-card-preview.png" width="1112" height="536" alt="回复小卡片效果预览"></div>
+                <dialog id="pa-help-dialog" class="pa-help-dialog"><div class="pa-dialog-head"><h3>主动辅助</h3><button type="button" data-pa-help-close aria-label="关闭使用帮助">×</button></div><p>根据授权上下文准备聊天回复，提供可协助处理的任务建议。</p><p>根据聊天内容准备回复建议，按 Tab 填入，由你发送。</p><p>根据当前工作内容提出建议，选择“有用，帮我做”后执行。</p></dialog>
+              </section>
+              <section class="config-section-panel p2-browser-panel" id="p2-settings-browser" data-config-panel="browser" role="tabpanel" aria-label="浏览器插件">
+                <header class="bc-lead"><div><h2>浏览器插件</h2><p>将 Chrome 中已授权网站的 Cookie 同步至内置浏览器，减少重复登录。</p></div><button type="button" class="bc-refresh" id="bc-refresh"><img src="assets/proactive-figma/refresh.svg" width="24" height="24" alt=""><span>刷新</span></button></header>
+                <section class="bc-card"><div class="bc-intro"><img src="assets/proactive-figma/browser.svg" width="44" height="44" alt="" class="bc-icon"><div class="bc-copy"><div class="bc-name"><h3>Agent PC 浏览器连接器</h3><span class="bc-badge" id="bc-state">未连接</span></div><p>将已授权网站 Cookie 的新增、更新和删除同步至内置浏览器。</p><div class="bc-tags"><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">Cookie 同步</span><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">登录态复用</span></div></div><a class="bc-store" href="https://chromewebstore.google.com/" target="_blank" rel="noopener noreferrer"><img src="assets/proactive-figma/external.svg" width="20" height="20" alt="">打开 Chrome 商店</a></div><div class="bc-summary"><div><span>客户端连接服务</span><strong class="bc-accent" id="bc-service">运行正常</strong></div><div><span>安全配对</span><strong id="bc-pair">未配对</strong></div><div><span>最近同步</span><strong id="bc-sync">暂无同步记录</strong></div></div><div class="bc-note"><img src="assets/proactive-figma/info.svg" width="20" height="20" alt=""><p>插件尚未连接。安装后，在插件中允许 Cookie 访问，并在客户端确认配对。</p></div></section>
               </section>
               <dialog class="p2-system-dialog" id="p2-folder-dialog" aria-labelledby="p2-folder-title">
                 <form id="p2-folder-form"><div class="p2-dialog-head"><h3 id="p2-folder-title">选择记忆存储文件夹</h3><button type="button" class="p2-dialog-close" data-p2-close aria-label="关闭文件夹选择">×</button></div>
@@ -13173,11 +13199,12 @@ function setActiveTab(viewId) {
 }
 
 function setConfigSubpage(subpage) {
-  if (!["device", "api", "system", "memory"].includes(subpage)) return;
+  if (!["device", "api", "system", "proactive", "memory", "browser"].includes(subpage)) return;
   APP_STATE.currentPage = "screen-config";
   APP_STATE.configSubpage = subpage;
   APP_STATE.activeSubscreenSettings = null;
   renderApp();
+  window.dispatchEvent(new CustomEvent('agentpc:settings-subpage', {detail:{subpage}}));
   window.scrollTo({ top: 0, behavior: "smooth" });
 }
 
@@ -17991,37 +18018,13 @@ function syncPhysicalScreenPreview(preview) {
 }
 
 function ensurePhysicalScreenPreviews() {
+  // Keep the original feature view; remove the duplicate device-framed mirror.
+  $$(".physical-screen-preview").forEach((physical) => physical.remove());
   $$('[data-subscreen-preview]').forEach((preview) => {
-    const page = preview.dataset.subscreenPreview;
-    const title = preview.dataset.subscreenTitle || PAGE_TITLES[page] || "功能页";
-    const panel = preview.closest(".panel");
-    if (!panel) return;
-    let physical = panel.querySelector(`.physical-screen-preview[data-physical-for="${page}"]`);
-    if (!physical) {
-      physical = document.createElement("div");
-      physical.className = "physical-screen-preview";
-      physical.dataset.physicalFor = page;
-      physical.setAttribute("aria-label", `${title}自带小屏预览`);
-      physical.innerHTML = `
-        <div class="physical-screen-preview-head">
-          <strong>自带小屏</strong>
-        </div>
-        <div class="physical-screen-device">
-          <div class="physical-screen-glass"><div class="physical-screen-canvas"></div></div>
-          <span class="physical-screen-foot" aria-hidden="true"></span>
-        </div>
-      `;
-      panel.insertBefore(physical, preview);
-    }
-    const featureHeader = panel.querySelector(":scope > .section-title");
-    if (featureHeader && physical.nextElementSibling !== featureHeader) {
-      physical.after(featureHeader);
-    }
-    syncPhysicalScreenPreview(preview);
-    if (!PHYSICAL_SCREEN_OBSERVERS.has(preview)) {
-      const observer = new MutationObserver(() => syncPhysicalScreenPreview(preview));
-      observer.observe(preview, { subtree: true, childList: true, characterData: true, attributes: true });
-      PHYSICAL_SCREEN_OBSERVERS.set(preview, observer);
+    const observer = PHYSICAL_SCREEN_OBSERVERS.get(preview);
+    if (observer) {
+      observer.disconnect();
+      PHYSICAL_SCREEN_OBSERVERS.delete(preview);
     }
   });
 }
@@ -20287,7 +20290,8 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     <script src="assets/phase2-memory-import.js"></script>
     <script src="assets/phase2-memory.js?v=20261021-source-tabs"></script>
     <script src="assets/phase2-memory-sources.js?v=20261021-source-all"></script>
-    <script src="assets/phase2-settings.js?v=20261022-range-switch-fix"></script>
+    <script src="assets/phase2-settings.js?v=20261027-readonly-info"></script>
+    <script src="assets/phase2-proactive.js?v=20261027-always-visible-help"></script>
     <script src="assets/phase2-screen-reading.js?v=20261022-no-region-toolbar"></script>
     <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
     <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>

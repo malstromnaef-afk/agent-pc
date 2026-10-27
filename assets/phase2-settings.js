@@ -58,11 +58,10 @@
     q('#p2-display-select').hidden=state.screenRange!=='display';
     q('#p2-region-shortcut').hidden=state.screenRange!=='region';
     q('#p2-display-select').querySelectorAll('[data-p2-display]').forEach(input=>{input.checked=state.displays.includes(input.value);input.disabled=!state.screenEnabled||state.screenRange!=='display'||(!input.checked&&state.displays.length>=2);});
-    q('#p2-memory-path').textContent='本地记忆文件夹';
-    q('#p2-memory-path').title=state.memoryPath;
+    q('#p2-memory-path').textContent='本地主机';
+    q('#p2-memory-path').title='记忆保存在本地主机';
     const localToggle=q('#p2-local-model-toggle');
     localToggle.classList.toggle('off',!state.preferBuiltInModel);localToggle.setAttribute('aria-pressed',String(state.preferBuiltInModel));localToggle.setAttribute('aria-label',state.preferBuiltInModel?'关闭优先使用内置模型':'开启优先使用内置模型');
-    q('#p2-local-model-select').value=state.builtInModel;q('#p2-local-model-select').disabled=!state.preferBuiltInModel;
     q('#p2-local-model-usage').textContent=state.preferBuiltInModel?'6个功能正在使用':'已关闭优先使用';
     const shakeImage=shake.querySelector('.p2-toggle-on');shakeImage.src=state.magicPointerEnabled?'assets/settings-figma/a3f5c.svg':'assets/settings-figma/f6f62.svg';
     window.dispatchEvent(new CustomEvent('agentpc:screen-settings',{detail:{...state}}));
@@ -129,7 +128,6 @@
   }
   root.addEventListener('input',event=>{if(event.target.id==='p2-pointer-sensitivity'&&state.magicPointerEnabled&&state.magicPointerShakeEnabled)event.target.style.setProperty('--pointer-progress',event.target.value+'%');});
   root.addEventListener('change',event=>{
-    if(event.target.id==='p2-local-model-select'){if(state.preferBuiltInModel&&event.target.value==='gemma3:12b')update({...state,builtInModel:event.target.value});return;}
     if(event.target.id==='p2-interface-language'){if(event.target.value==='zh-CN')update({...state,interfaceLanguage:event.target.value});return;}
     if(event.target.name==='p2-screen-range'){
       selectScreenRange(event.target.value);
