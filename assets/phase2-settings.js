@@ -4,6 +4,7 @@
   if(!root)return;
   const key='system-settings-ui-v2';
   const names={wechat:'微信',feishu:'飞书',dingtalk:'钉钉',wecom:'企业微信'};
+  const interfaceLanguages=['zh-CN','en','de','it','fr','es','pt','ja'];
   const defaultCaptureShortcut='Ctrl + Alt + S';
   const defaultPointerShortcut='Alt + G';
   const shortcutPattern=/^(?:(?:Ctrl(?: \+ Alt)?|Alt)(?: \+ Shift)?) \+ [A-Z0-9]$/;
@@ -12,7 +13,7 @@
   try{
     const saved=JSON.parse(phase2Storage.getItem(key)||'null');
     if(saved&&typeof saved==='object'){
-      if(saved.interfaceLanguage==='zh-CN')state.interfaceLanguage=saved.interfaceLanguage;
+      if(interfaceLanguages.includes(saved.interfaceLanguage))state.interfaceLanguage=saved.interfaceLanguage;
       if(typeof saved.preferBuiltInModel==='boolean')state.preferBuiltInModel=saved.preferBuiltInModel;
       if(saved.builtInModel==='gemma3:12b')state.builtInModel=saved.builtInModel;
       if(saved.screenRange==='region')state.screenRange='region';
@@ -134,7 +135,7 @@
   }
   root.addEventListener('input',event=>{if(event.target.id==='p2-pointer-sensitivity'&&state.magicPointerEnabled&&state.magicPointerShakeEnabled)event.target.style.setProperty('--pointer-progress',event.target.value+'%');});
   root.addEventListener('change',event=>{
-    if(event.target.id==='p2-interface-language'){if(event.target.value==='zh-CN')update({...state,interfaceLanguage:event.target.value});return;}
+    if(event.target.id==='p2-interface-language'){if(interfaceLanguages.includes(event.target.value))update({...state,interfaceLanguage:event.target.value});return;}
     if(event.target.name==='p2-screen-range'){
       selectScreenRange(event.target.value);
       return;
