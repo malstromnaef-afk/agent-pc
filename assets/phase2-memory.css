@@ -1,4 +1,4 @@
-/* Agent pc X3 phase two: retain the existing dark panel and 2:1 preview shell. */
+/* Agent pc X3 phase two: main-screen memory workspace. */
 #memory .pm-page{display:grid;gap:20px}#memory .pm-preview-panel{padding:24px}
 #memory .pm-preview{position:relative;width:100%;aspect-ratio:2/1;overflow:hidden;border:2px solid var(--cyan);border-radius:14px;background:radial-gradient(circle at 15% 80%,rgba(28,102,83,.16),transparent 50%),#1c2024;}
 #memory .pm-preview>.subscreen-preview-chrome{position:absolute;inset:0 0 auto;height:58px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
@@ -56,8 +56,8 @@
 @media(max-width:1100px){#memory .pm-workspace{grid-template-columns:250px minmax(0,1fr)}#memory .pm-map-heading{padding:18px 14px}#memory .pm-map-heading div>span{display:block;margin:6px 0 0}#memory .pm-small-detail h4{font-size:18px}#memory .pm-small-detail p{font-size:13px}}
 @media(max-width:760px){#memory .pm-workspace{grid-template-columns:1fr}#memory .pm-library{border-right:0;border-bottom:1px solid #ffffff12}#memory .pm-memory-list{max-height:280px}#memory .pm-management-head{align-items:flex-start;flex-direction:column}#memory .pm-preview-panel,#memory .pm-management{padding:16px}#memory .pm-small-body{gap:12px;padding:10px 12px;grid-template-columns:42% minmax(0,1fr)}#memory .pm-small-left{padding-right:10px}#memory .pm-small-item{padding:8px;min-height:44px}#memory .pm-small-item strong{font-size:13px}#memory .pm-small-item span{font-size:11px}#memory .pm-small-detail{gap:7px}#memory .pm-small-detail h4{font-size:16px}#memory .pm-small-detail p{font-size:12px}#memory .pm-small-footer{font-size:11px;flex-wrap:wrap}#memory .pm-small-footer button{font-size:12px;padding:0 10px}}
 
-/* One complete memory page, reused unchanged in both preview surfaces. */
-#memory .pm-memory-body{position:absolute;inset:58px 0 0;display:flex;flex-direction:column;min-height:0;padding:0 14px 14px;gap:0}
+/* Memory content starts below the single main-page heading. */
+#memory .pm-memory-body{position:absolute;inset:0;display:flex;flex-direction:column;min-height:0;padding:0 14px 14px;gap:0}
 #memory .physical-screen-mirror-source.pm-preview>.pm-memory-body{position:absolute!important;inset:58px 0 0!important;width:auto!important;height:auto!important;margin:0!important;padding:0 14px 14px!important}
 #memory .pm-toolbar{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex:0 0 54px;min-height:54px}
 #memory .pm-toolbar .pm-button{min-height:44px;padding:0 12px}

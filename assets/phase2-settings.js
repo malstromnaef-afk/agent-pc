@@ -57,6 +57,8 @@
     root.querySelectorAll('[name="p2-screen-range"]').forEach(input=>input.checked=input.value===state.screenRange);
     q('#p2-display-select').hidden=state.screenRange!=='display';
     q('#p2-region-shortcut').hidden=state.screenRange!=='region';
+    q('#p2-region-usage').hidden=state.screenRange!=='region';
+    q('#p2-region-usage').textContent='按快捷键开始框选，点击组合键可修改；Mac 使用 '+state.captureShortcut.replace('Ctrl','Control').replace('Alt','Option')+'。';
     q('#p2-display-select').querySelectorAll('[data-p2-display]').forEach(input=>{input.checked=state.displays.includes(input.value);input.disabled=!state.screenEnabled||state.screenRange!=='display'||(!input.checked&&state.displays.length>=2);});
     q('#p2-memory-path').textContent='本地主机';
     q('#p2-memory-path').title='记忆保存在本地主机';
@@ -78,6 +80,10 @@
       button.disabled=!enabled;
       q('#p2-'+kind+'-shortcut-help').hidden=!recording;
     }
+    const exitShortcut=q('#p2-pointer-exit-shortcut');
+    exitShortcut.textContent=state.magicPointerShortcut;
+    exitShortcut.setAttribute('aria-label','退出魔法指针快捷键 '+state.magicPointerShortcut);
+    window.dispatchEvent(new CustomEvent('agentpc:shortcut-recording',{detail:{active:Boolean(recordingShortcut),kind:recordingShortcut}}));
   }
   function cancelShortcut(){if(recordingShortcut){recordingShortcut='';renderShortcut();}}
   function beginShortcut(kind){recordingShortcut=kind;q('#p2-'+kind+'-shortcut-help').textContent='按 Ctrl／Alt 与字母或数字组合，Esc 取消。';renderShortcut();q('#p2-'+kind+'-shortcut').focus();}

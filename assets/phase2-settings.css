@@ -56,6 +56,9 @@
 #screen-config .p2-fixed-shortcut{display:flex;align-items:center;justify-content:center;min-width:180px;min-height:44px;box-sizing:border-box;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:#ffffff03;color:var(--muted);font:inherit;font-size:12px;letter-spacing:.02em;line-height:20px}
 #screen-config .p2-capture-shortcut-help{margin:12px 0 0;color:var(--muted);font-size:12px;line-height:20px;text-align:right}
 #screen-config .p2-capture-shortcut-help[hidden]{display:none}
+#screen-config #p2-region-shortcut:not([hidden]){display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
+#screen-config .p2-region-shortcut-label{font-size:14px;color:var(--muted)}
+#screen-config .p2-region-start{min-height:34px;padding:4px 16px;border:1px solid var(--cyan);border-radius:8px;background:#142d30;color:var(--cyan);font-size:14px;line-height:24px}
 
 
 #screen-config .p2-interface-card{min-height:100px}

@@ -2,7 +2,7 @@
 (() => {
   const settings=window.phase2Settings;
   if(!settings)return;
-  let state=settings.getState(),lastScope='',pulseTimer,selection=null;
+  let state=settings.getState(),lastScope='',pulseTimer,selection=null,shortcutRecording=false;
   const indicator=document.createElement('button');
   indicator.type='button';indicator.id='p2-capture-indicator';indicator.className='p2-capture-indicator';
   indicator.hidden=true;indicator.setAttribute('aria-haspopup','dialog');indicator.setAttribute('aria-controls','p2-screen-consent');
@@ -19,7 +19,7 @@
     Object.assign(frame.style,{left:`${rect.x*100}vw`,top:`${rect.y*100}dvh`,width:`${rect.width*100}vw`,height:`${rect.height*100}dvh`});
   }
   function showFrame(changed){
-    if(!active(state)||selection){hideFrame();return;}
+    if(!active(state)||selection||shortcutRecording){hideFrame();return;}
     if(state.screenRange==='region'){
       clearTimeout(pulseTimer);frame.classList.remove('is-display');frame.classList.add('is-region');positionRegion();frame.hidden=false;
     }else if(changed){
@@ -59,6 +59,7 @@
     picker.classList.remove('has-region');draftFrame.hidden=true;showFrame(false);focusBack(current.focus);current.resolve(result);
   }
   function chooseRegion(){
+    if(shortcutRecording)return Promise.resolve(false);
     if(selection)return selection.promise;
     if(document.querySelector('dialog[open]'))return Promise.resolve(false);
     let resolve;const promise=new Promise(done=>resolve=done);
@@ -99,14 +100,16 @@
   picker.addEventListener('close',()=>{if(selection&&!picker.open)finishSelection(false);});
   window.addEventListener('resize',()=>{if(selection)resetSelection();else if(state.screenRange==='region'&&active(state))positionRegion();});
   document.addEventListener('keydown',event=>{
-    if(event.defaultPrevented||event.repeat||event.metaKey||!state.screenEnabled||state.screenRange!=='region'||event.target.closest?.('.is-recording'))return;
+    if(shortcutRecording||event.defaultPrevented||event.repeat||event.metaKey||!state.screenEnabled||state.screenRange!=='region'||event.target.closest?.('.is-recording'))return;
     const character=event.code?.match(/^(?:Key([A-Z])|Digit([0-9]))$/);if(!character)return;
     const shortcut=[event.ctrlKey?'Ctrl':'',event.altKey?'Alt':'',event.shiftKey?'Shift':'',character[1]||character[2]].filter(Boolean).join(' + ');
     if(shortcut!==state.captureShortcut||document.querySelector('dialog[open]'))return;
     event.preventDefault();chooseRegion();
   });
   window.addEventListener('agentpc:screen-settings',event=>render(event.detail));
+  window.addEventListener('agentpc:shortcut-recording',event=>{shortcutRecording=event.detail?.active===true;showFrame(false);});
   window.addEventListener('agentpc:screen-region-request',()=>chooseRegion());
+  document.querySelector('#p2-region-start')?.addEventListener('click',()=>{if(state.screenEnabled&&state.screenRange==='region')chooseRegion();});
   window.phase2ScreenReading={chooseRegion,flashDisplay:()=>{if(active(state)&&state.screenRange==='display')showFrame(true);}};
   render(state);
 })();

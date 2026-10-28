@@ -1,0 +1,231 @@
+/* Phase-two memory and usage are full main pages, without a device canvas. */
+.p2-page-title {
+  display: block;
+  margin: 0 0 20px;
+  padding: 0;
+  color: var(--text);
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 28px;
+  text-align: left;
+}
+
+.section-title .p2-page-title {
+  margin: 0;
+}
+
+#monitor > .monitor-page > .main-panel:first-child > .section-title {
+  margin: 0 0 20px;
+}
+
+#screen-config #config-page-title.p2-page-title {
+  margin: 0;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+body:has(#memory.active) .main,
+body:has(#usage.active) .main {
+  padding: 28px 48px;
+}
+
+#memory .pm-preview-panel,
+#usage .token-dashboard {
+  padding: 0;
+  overflow: visible;
+}
+
+#memory .pm-preview-panel > .section-title,
+#usage .token-dashboard > .section-title {
+  margin: 0 0 20px;
+  min-height: 40px;
+}
+
+#memory .section-title h3,
+#usage .token-dashboard > .section-title h3 {
+  margin: 0;
+  line-height: 1.4;
+}
+
+#memory .pm-preview,
+#usage .token-dashboard > .token-preview-canvas {
+  display: block;
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+#memory .pm-preview > .pm-memory-body {
+  position: relative;
+  inset: auto;
+  display: block;
+  width: 100%;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+#memory .pm-workspace {
+  min-height: max(560px, calc(100dvh - 140px));
+  grid-template-columns: minmax(260px, 29%) minmax(0, 1fr);
+  overflow: visible;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+}
+
+#memory .pm-workspace.pm-library-collapsed {
+  grid-template-columns: 44px minmax(0, 1fr);
+}
+
+#memory .pm-library {
+  overflow: visible;
+}
+
+#memory .pm-graph-stage {
+  min-height: 500px;
+}
+
+#usage .token-dashboard {
+  gap: 0;
+}
+
+#usage .cloud-token-dashboard {
+  display: flex;
+  height: auto;
+  min-height: 0;
+  max-height: none;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#usage .cloud-token-toolbar {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+
+#usage .cloud-token-toolbar .hybrid-token-ranges {
+  grid-column: 2;
+  grid-row: 1;
+  justify-self: end;
+  flex-wrap: wrap;
+}
+
+#usage .cloud-token-toolbar .token-agent-switch {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+#usage .cloud-token-grid {
+  flex: none;
+  grid-template-rows: auto auto;
+  gap: 16px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card {
+  min-height: 210px;
+}
+
+#usage .cloud-token-grid .hybrid-token-trend-shell {
+  height: 140px;
+}
+
+/* Dense model data can expand vertically instead of shrinking to fit a screen. */
+#usage .cloud-token-grid .hybrid-token-card[data-dense] {
+  padding: 13px 15px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card[data-dense] .hybrid-token-card-head {
+  margin-bottom: 10px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card[data-dense] h3 {
+  font-size: 15px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card[data-dense] .hybrid-token-cost-total {
+  margin: 0 0 8px;
+  font-size: 31px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card[data-dense] .hybrid-token-list {
+  gap: 7px;
+}
+
+#usage .cloud-token-grid .hybrid-token-list-row {
+  grid-template-columns: minmax(0, 1fr) minmax(56px, 110px) auto;
+  min-height: 25px;
+  gap: 9px;
+  font-size: 12px;
+}
+
+#usage .cloud-token-grid .hybrid-token-card[data-dense] .hybrid-token-list-row {
+  grid-template-columns: minmax(0, 1fr) minmax(56px, 110px) auto;
+  min-height: 25px;
+  gap: 9px;
+  font-size: 12px;
+}
+
+#usage .cloud-token-scroll-region {
+  display: flex;
+  height: auto;
+  max-height: none;
+  flex: none;
+  flex-direction: column;
+  gap: 20px;
+  overflow: visible;
+}
+
+#usage .cloud-token-scroll-region > .cloud-token-grid {
+  flex: none;
+}
+
+@media (max-width: 1600px) {
+  body:has(#memory.active) .main,
+  body:has(#usage.active) .main {
+    padding: 28px 32px;
+  }
+}
+
+@media (max-width: 900px) {
+  body:has(#memory.active) .main,
+  body:has(#usage.active) .main {
+    padding: 20px 16px;
+  }
+
+  #usage .cloud-token-toolbar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #usage .cloud-token-toolbar .hybrid-token-ranges {
+    grid-column: 1;
+    grid-row: 2;
+    justify-self: start;
+  }
+}
+
+@media (max-width: 760px) {
+  #memory .pm-workspace {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  #memory .pm-library {
+    border-right: 0;
+    border-bottom: 1px solid #ffffff14;
+  }
+
+  #memory .pm-memory-list {
+    max-height: none;
+  }
+
+  #usage .cloud-token-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

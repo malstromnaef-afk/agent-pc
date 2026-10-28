@@ -9862,14 +9862,15 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .phase2-memory-empty p{margin:0;font-size:14px;}
 </style>
     <link rel="stylesheet" href="assets/display-demo.css">
-    <link rel="stylesheet" href="assets/phase2-memory.css?v=20261010-list">
+    <link rel="stylesheet" href="assets/phase2-memory.css?v=20261028-main-header">
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
-    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261027-even-scale">
+    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261028-pointer-exit">
     <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261027-always-visible-help">
     <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261020-compact-consent">
     <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261022-no-region-toolbar">
     <script src="assets/display-demo.js" defer></script>
+    <link rel="stylesheet" href="assets/phase2-main-pages.css?v=20261028-page-titles">
     <style id="phase2-remove-preview-frame">
       /* Phase 2 presents page content without the former small-screen frame. */
       [data-subscreen-preview] {
@@ -10100,11 +10101,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
         <section class="view" id="memory" aria-label="长期记忆">
           <div class="pm-page">
             <section class="panel main-panel pm-preview-panel">
-              <div class="section-title">
-                <h3>长期记忆</h3>
-                <div class="section-actions"></div>
-              </div>
-              <div class="pm-preview" data-subscreen-preview="memory" data-subscreen-title="长期记忆" aria-label="2:1 长期记忆小屏展示效果">
+              <h2 class="p2-page-title">长期记忆</h2>
+              <div class="pm-preview" data-subscreen-preview="memory" data-subscreen-title="长期记忆" aria-label="长期记忆工作区">
                 <div class="pm-memory-body">
               <div class="pm-workspace">
                 <aside class="pm-library"><button type="button" class="pm-library-restore" data-pm-action="expand-library" aria-label="展开记忆列表" title="展开记忆列表">»</button>
@@ -10137,7 +10135,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
             <section class="panel main-panel">
               <div class="section-title">
                 <div class="preview-title-main">
-                  <h3>Agent 任务进度</h3>
+                  <h2 class="p2-page-title">任务进度</h2>
                 </div>
                 <div class="section-actions">
 
@@ -10260,8 +10258,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 
 
 	        <section class="view" id="usage">
+              <h2 class="p2-page-title">用量统计</h2>
 		          <section class="hybrid-token-board" id="hybrid-token-dashboard" data-token-surface="main" aria-label="X3 Hybrid Token用量">
-              <header class="hybrid-token-head"><h2>Token用量</h2></header>
               <div class="hybrid-token-controls">
                 <div class="hybrid-token-tabs" role="tablist" aria-label="Token统计口径">
                   <button class="hybrid-token-tab active" type="button" data-hybrid-token-tab="api" aria-selected="true">API用量</button>
@@ -10328,13 +10326,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
             </section>
 	          <div class="token-page">
 	            <section class="panel main-panel token-dashboard">
-              <div class="section-title">
-                <div class="preview-title-main">
-                  <h3>Token用量</h3>
-                </div>
-
-              </div>
-              <div class="token-preview-canvas" data-subscreen-preview="usage" data-subscreen-title="Token用量">
+              <div class="token-preview-canvas" data-subscreen-preview="usage" data-subscreen-title="Token用量" aria-label="用量统计工作区">
 	              <div class="cloud-token-dashboard" data-cloud-token-dashboard>
 	                <div class="cloud-token-toolbar">
 	                  <div class="hybrid-token-tabs" role="tablist" aria-label="Token统计口径">
@@ -10595,14 +10587,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
         <section class="view" id="voice">
           <div class="voice-page">
             <section class="panel main-panel">
-              <div class="section-title">
-                <div class="preview-title-main">
-                  <h3>AI 智能问答</h3>
-                </div>
-                <div class="section-actions">
-
-                </div>
-              </div>
+              <h2 class="p2-page-title">智能对话</h2>
               <div class="voice-console-preview" data-subscreen-preview="voice" data-subscreen-title="AI 智能问答" aria-label="2:1 横屏副屏智能问答控制台预览">
                 <div class="voice-console-grid agent-collapsed">
                   <article class="voice-assistant-panel">
@@ -10610,9 +10595,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                       <div class="qa-session-actions">
                         <button type="button" class="qa-session-icon" id="qa-session-toggle" aria-expanded="false" aria-label="打开会话列表" title="会话">☰</button>
                       </div>
-                      <button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="展开全局语音" title="展开全局语音">
-                        <span class="subscreen-global-ai-ball" aria-hidden="true"></span><span>AI 智能问答</span>
-                      </button>
                     </div>
                     <aside class="qa-session-drawer" id="qa-session-drawer" aria-hidden="true">
                       <div class="qa-session-drawer-head"><strong>AI 智能问答</strong><div class="qa-session-head-actions"><button type="button" id="qa-session-close" aria-label="收起会话侧栏" title="收起侧栏"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"></rect><path d="M9 4v16"></path></svg></button><button type="button" id="qa-session-search-toggle" aria-expanded="false" aria-label="搜索会话" title="搜索会话"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="11" cy="11" r="6"></circle><path d="m16 16 4 4"></path></svg></button></div></div>
@@ -11109,7 +11091,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
             <section class="panel config-panel">
               <div class="panel-head">
                 <div>
-                  <h2 id="config-page-title">全局配置</h2>
+                  <h2 class="p2-page-title" id="config-page-title">应用设置</h2>
                 </div>
                 <div class="action-row" id="config-page-actions"></div>
               </div>
@@ -11275,8 +11257,9 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   <p id="p2-pointer-shortcut-help" class="p2-capture-shortcut-help" role="status" hidden>按 Ctrl／Alt 与字母或数字组合，Esc 取消。</p>
                   <div class="p2-system-line p2-pointer-option-line">
                     <span class="p2-setting-label">退出快捷键</span>
-                    <kbd class="p2-fixed-shortcut" aria-label="退出魔法指针快捷键 Esc">Esc</kbd>
+                    <kbd class="p2-fixed-shortcut" id="p2-pointer-exit-shortcut" aria-label="退出魔法指针快捷键 Alt + G">Alt + G</kbd>
                   </div>
+                  <p id="p2-pointer-exit-help" class="p2-capture-shortcut-help">再次按唤起快捷键退出，未发送内容保留为草稿。</p>
                 </section>
                 <section class="inner-card p2-system-card p2-screen-card" aria-label="自动读屏">
                   <div class="p2-system-line">
@@ -11293,9 +11276,10 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                     </div>
                     <div class="p2-read-range-row">
                       <label class="p2-range-choice"><input type="radio" name="p2-screen-range" value="region"><span>框选区域</span></label>
-                      <div id="p2-region-shortcut" hidden><button type="button" class="soft-button p2-capture-shortcut" id="p2-capture-shortcut" aria-label="修改框选快捷键，当前为 Ctrl + Alt + S" aria-describedby="p2-capture-shortcut-help">Ctrl + Alt + S</button></div>
+                      <div id="p2-region-shortcut" hidden><span class="p2-region-shortcut-label">快捷键</span><button type="button" class="soft-button p2-capture-shortcut" id="p2-capture-shortcut" aria-label="修改框选快捷键，当前为 Ctrl + Alt + S" aria-describedby="p2-capture-shortcut-help">Ctrl + Alt + S</button><button type="button" class="soft-button p2-region-start" id="p2-region-start">开始框选</button></div>
                     </div>
                     <p id="p2-capture-shortcut-help" class="p2-capture-shortcut-help" role="status" hidden>按 Ctrl／Alt 与字母或数字组合，Esc 取消。</p>
+                    <p id="p2-region-usage" class="p2-capture-shortcut-help" hidden>按快捷键开始框选，点击组合键可修改；Mac 使用 Control + Option + S。</p>
                   </div>
                 </section>
                 <section class="inner-card p2-system-card p2-local-model-card" aria-labelledby="p2-local-model-heading">
@@ -11831,16 +11815,15 @@ function updateCloudTokenDetails() {
 }
 
 function mountCloudTokenDetailsInPreview() {
-  const preview = document.querySelector('.token-dashboard > .token-preview-canvas');
+  // The phase-two usage page keeps charts and details in normal page flow.
+  const page = document.querySelector('#usage .token-page');
+  const preview = page?.querySelector('.token-dashboard > .token-preview-canvas');
   const dashboard = preview?.querySelector('[data-cloud-token-dashboard]');
-  const summary = dashboard?.querySelector('.cloud-token-summary');
-  const grid = dashboard?.querySelector('.cloud-token-grid');
-  const details = document.querySelector('.token-page > .token-history-panel');
-  if (!dashboard || !summary || !grid || !details) return;
-  const scrollRegion = document.createElement('div');
-  scrollRegion.className = 'cloud-token-scroll-region';
-  dashboard.insertBefore(scrollRegion, summary);
-  scrollRegion.append(summary, grid, details);
+  const scrollRegion = dashboard?.querySelector('.cloud-token-scroll-region');
+  if (!page || !scrollRegion) return;
+  const details = scrollRegion.querySelector('.token-history-panel');
+  if (details) page.append(details);
+  scrollRegion.replaceWith(...scrollRegion.childNodes);
 }
 
 $$('[data-hybrid-token-tab]').forEach((button) => button.addEventListener('click', () => {
@@ -17873,6 +17856,30 @@ function renderSubscreenSettings() {
   $$("[data-subscreen-preview]").forEach((preview) => {
     const page = preview.dataset.subscreenPreview;
     const title = preview.dataset.subscreenTitle || PAGE_TITLES[page] || "功能页";
+    const globalVoiceEntry = IS_WIDE_PROTOTYPE || APP_STATE.previewEnabled.voice === false
+      ? ""
+      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="打开AI 智能问答" title="打开AI 智能问答">
+          <span class="subscreen-global-ai-ball" aria-hidden="true"></span>
+          <span>AI 智能问答</span>
+        </button>`;
+    // Memory and usage are main pages, not small-screen previews.
+    if (page === "memory" || page === "usage" || page === "monitor") {
+      if (page === "usage") {
+        const toolbar = preview.querySelector(".cloud-token-toolbar");
+        const ranges = preview.querySelector(".hybrid-token-ranges");
+        if (toolbar && ranges) {
+          ranges.classList.remove("cloud-token-header-ranges");
+          toolbar.append(ranges);
+        }
+      }
+      preview.querySelector(":scope > .subscreen-preview-chrome")?.remove();
+      preview.querySelector(":scope > .subscreen-global-ai-ball")?.remove();
+      preview.querySelector(":scope > .subscreen-device-panel")?.remove();
+      preview.classList.remove("subscreen-preview-body-hidden");
+      const actions = preview.closest(".main-panel")?.querySelector(":scope > .section-title > .section-actions");
+      actions?.querySelectorAll("[data-subscreen-ai-ball]").forEach(entry => entry.remove());
+      return;
+    }
     let chrome = preview.querySelector(":scope > .subscreen-preview-chrome");
     if (!chrome) {
       chrome = document.createElement("div");
@@ -17893,12 +17900,6 @@ function renderSubscreenSettings() {
         </span>`
       : "";
     const voicePanelToggle = "";
-    const globalVoiceEntry = IS_WIDE_PROTOTYPE || APP_STATE.previewEnabled.voice === false
-      ? ""
-      : `<button class="subscreen-ai-qa-entry" type="button" data-subscreen-ai-ball="open" aria-label="打开AI 智能问答" title="打开AI 智能问答">
-          <span class="subscreen-global-ai-ball" aria-hidden="true"></span>
-          <span>AI 智能问答</span>
-        </button>`;
     const cloudTokenRanges = PROTOTYPE_SIZE === "small" && page === "usage"
       ? preview.querySelector(".hybrid-token-ranges")
       : null;
@@ -18234,7 +18235,7 @@ function saveConfigPage() {
 function renderConfigPage() {
   const isApi = APP_STATE.configSubpage === "api";
   const title = $("#config-page-title");
-  if (title) title.textContent = "设置";
+  if (title) title.textContent = "应用设置";
   const actions = $("#config-page-actions");
   if (actions) actions.style.display = isApi ? "none" : "flex";
   $$("[data-config-panel]").forEach((panel) => {
@@ -20130,9 +20131,9 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     <script src="assets/phase2-memory-import.js"></script>
     <script src="assets/phase2-memory.js?v=20261028-preview-control-removed"></script>
     <script src="assets/phase2-memory-sources.js?v=20261021-source-all"></script>
-    <script src="assets/phase2-settings.js?v=20261027-readonly-info"></script>
+    <script src="assets/phase2-settings.js?v=20261028-pointer-exit"></script>
     <script src="assets/phase2-proactive.js?v=20261027-always-visible-help"></script>
-    <script src="assets/phase2-screen-reading.js?v=20261022-no-region-toolbar"></script>
+    <script src="assets/phase2-screen-reading.js?v=20261028-region-entry"></script>
     <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
     <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>
   </body>
