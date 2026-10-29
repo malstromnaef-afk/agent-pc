@@ -61,8 +61,8 @@
     q('#p2-region-usage').hidden=state.screenRange!=='region';
     q('#p2-region-usage').textContent='按快捷键开始框选，点击组合键可修改；Mac 使用 '+state.captureShortcut.replace('Ctrl','Control').replace('Alt','Option')+'。';
     q('#p2-display-select').querySelectorAll('[data-p2-display]').forEach(input=>{input.checked=state.displays.includes(input.value);input.disabled=!state.screenEnabled||state.screenRange!=='display'||(!input.checked&&state.displays.length>=2);});
-    q('#p2-memory-path').textContent='本地主机';
-    q('#p2-memory-path').title='记忆保存在本地主机';
+    q('#p2-memory-path').textContent='本地电脑';
+    q('#p2-memory-path').title='记忆保存在本地电脑';
     const localToggle=q('#p2-local-model-toggle');
     localToggle.classList.toggle('off',!state.preferBuiltInModel);localToggle.setAttribute('aria-pressed',String(state.preferBuiltInModel));localToggle.setAttribute('aria-label',state.preferBuiltInModel?'关闭优先使用内置模型':'开启优先使用内置模型');
     q('#p2-local-model-usage').textContent=state.preferBuiltInModel?'6个功能正在使用':'已关闭优先使用';

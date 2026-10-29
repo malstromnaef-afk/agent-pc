@@ -1,7 +1,6 @@
 /* Figma-matched UI prototype. Records and connector status are design fixtures;
  * this module never reads chats, executes tasks, or synchronizes cookies. */
 (() => {
-  const APPS = ['微信', '飞书', '钉钉', '企业微信'];
   const MODES = ['小卡片', '输入框预览'];
   const PLACEMENTS = ['跟随窗口', '屏幕右下', '鼠标附近', '右上角'];
   const defaults = {enabled:true, replyEnabled:false, taskEnabled:true, apps:[], aliases:[], mode:'小卡片', placement:'跟随窗口'};
@@ -12,19 +11,31 @@
     const value = String(input || '').trim();
     return value && !values.includes(value) ? [...values, value] : [...values];
   }
+  function normalizeInstalledApps(apps) {
+    if (!Array.isArray(apps)) return [];
+    const unique = new Map();
+    apps.forEach(app => {
+      if (!app || typeof app.name !== 'string' || !app.name.trim()) return;
+      const rawId = app.id || app.appUserModelId || app.launchId || app.target || app.path || app.name;
+      if (typeof rawId !== 'string' && typeof rawId !== 'number') return;
+      const id = String(rawId).trim();
+      if (id && !unique.has(id)) unique.set(id, {id, name:app.name.trim()});
+    });
+    return [...unique.values()].sort((first, second) => first.name.localeCompare(second.name, 'zh-CN'));
+  }
   function restoreSettings(value) {
     const input = value && typeof value === 'object' ? value : {};
     const result = {...defaults, apps:[], aliases:[]};
     for (const key of ['enabled', 'replyEnabled', 'taskEnabled']) {
       if (typeof input[key] === 'boolean') result[key] = input[key];
     }
-    result.apps = [...new Set((Array.isArray(input.apps) ? input.apps : []).filter(x => APPS.includes(x)))];
+    result.apps = [...new Set((Array.isArray(input.apps) ? input.apps : []).filter(value => typeof value === 'string' && value.trim()).map(value => value.trim()))];
     result.aliases = (Array.isArray(input.aliases) ? input.aliases : []).reduce((all, x) => typeof x === 'string' ? addAlias(all, x) : all, []);
     if (MODES.includes(input.mode)) result.mode = input.mode;
     if (PLACEMENTS.includes(input.placement)) result.placement = input.placement;
     return result;
   }
-  if (typeof module !== 'undefined' && module.exports) module.exports = {clearReplyRecords, addAlias, restoreSettings};
+  if (typeof module !== 'undefined' && module.exports) module.exports = {clearReplyRecords, addAlias, restoreSettings, normalizeInstalledApps};
   if (typeof document === 'undefined') return;
   const root = document.getElementById('p2-settings-proactive');
   if (!root) return;
@@ -68,6 +79,149 @@
   ];
   const q = s => root.querySelector(s);
   const qa = s => [...root.querySelectorAll(s)];
+  let installedApps = [];
+  let appsStatus = 'idle';
+  let activeAppIndex = -1;
+  const appSearch = q('#pa-app-search');
+  const appList = q('#pa-app-list');
+  function closeAppList() {
+    appList.hidden = true;
+    appSearch.setAttribute('aria-expanded', 'false');
+    q('#pa-app-expand').setAttribute('aria-expanded', 'false');
+    appSearch.removeAttribute('aria-activedescendant');
+    activeAppIndex = -1;
+  }
+  function appSelected(app) {
+    return state.apps.includes(app.id) || state.apps.includes(app.name);
+  }
+  function filteredApps() {
+    const keyword = appSearch.value.trim().toLocaleLowerCase();
+    return installedApps.filter(app => app.name.toLocaleLowerCase().includes(keyword));
+  }
+  function renderAppList() {
+    appList.replaceChildren();
+    if (appsStatus === 'unsupported') {
+      closeAppList();
+      return;
+    }
+    const results = filteredApps();
+    activeAppIndex = Math.min(activeAppIndex, results.length - 1);
+    results.forEach((app, index) => {
+      const option = document.createElement('button');
+      option.type = 'button';
+      option.id = `pa-app-option-${index}`;
+      option.dataset.paSelectApp = app.id;
+      option.setAttribute('role', 'option');
+      option.setAttribute('aria-selected', String(appSelected(app)));
+      option.tabIndex = -1;
+      option.classList.toggle('is-active', index === activeAppIndex);
+      const label = document.createElement('span');
+      label.textContent = app.name;
+      const check = document.createElement('span');
+      check.textContent = appSelected(app) ? '✓' : '';
+      check.setAttribute('aria-hidden', 'true');
+      option.append(label, check);
+      appList.append(option);
+    });
+    if (!results.length) {
+      const empty = document.createElement('div');
+      empty.className = 'pa-app-empty';
+      empty.textContent = appsStatus === 'loading' ? '正在读取已安装的 App…' : appsStatus === 'error' ? '应用列表读取失败，请重新展开重试' : installedApps.length ? '没有匹配的 App' : '未读取到已安装的 App';
+      appList.append(empty);
+    }
+    if (activeAppIndex >= 0) appSearch.setAttribute('aria-activedescendant', `pa-app-option-${activeAppIndex}`);
+    else appSearch.removeAttribute('aria-activedescendant');
+  }
+  async function readInstalledApps() {
+    if (appsStatus === 'loading' || appsStatus === 'ready') return;
+    const bridge = window.agentPC || window.electronAPI || window.windowsBridge;
+    const reader = bridge?.getInstalledApps || bridge?.listInstalledApps;
+    const status = q('#pa-app-status');
+    if (typeof reader !== 'function') {
+      appsStatus = 'unsupported';
+      status.textContent = '';
+      status.hidden = true;
+      renderAppList();
+      return;
+    }
+    appsStatus = 'loading';
+    status.hidden = true;
+    renderAppList();
+    try {
+      const apps = await reader.call(bridge);
+      if (!Array.isArray(apps)) throw new Error('Invalid app list');
+      installedApps = normalizeInstalledApps(apps);
+      appsStatus = 'ready';
+      renderAppTags();
+    } catch (_) {
+      appsStatus = 'error';
+      status.textContent = '无法读取本机应用，请重新展开列表重试。';
+      status.hidden = false;
+    }
+    renderAppList();
+  }
+  function openAppList() {
+    if (!state.enabled) return;
+    appList.hidden = false;
+    appSearch.setAttribute('aria-expanded', 'true');
+    q('#pa-app-expand').setAttribute('aria-expanded', 'true');
+    renderAppList();
+    void readInstalledApps();
+  }
+  function renderAppTags() {
+    const tags = q('#pa-app-tags');
+    tags.replaceChildren();
+    tags.hidden = !state.apps.length;
+    state.apps.forEach(id => {
+      const app = installedApps.find(value => value.id === id || value.name === id);
+      const name = app?.name || id;
+      const tag = document.createElement('span');
+      tag.className = 'pa-app-tag';
+      const label = document.createElement('span');
+      label.textContent = name;
+      const remove = document.createElement('button');
+      remove.type = 'button';
+      remove.textContent = '×';
+      remove.dataset.paRemoveApp = id;
+      remove.setAttribute('aria-label', `移除应用 ${name}`);
+      remove.disabled = !state.enabled;
+      tag.append(label, remove);
+      tags.append(tag);
+    });
+  }
+  appSearch.addEventListener('focus', openAppList);
+  appSearch.addEventListener('click', openAppList);
+  appSearch.addEventListener('input', () => {
+    activeAppIndex = -1;
+    openAppList();
+  });
+  q('#pa-app-expand').addEventListener('click', () => {
+    if (appList.hidden) { appSearch.focus(); openAppList(); }
+    else closeAppList();
+  });
+  appSearch.addEventListener('keydown', event => {
+    if (event.isComposing) return;
+    if (event.key === 'Escape' || event.key === 'Tab') { closeAppList(); return; }
+    if (['ArrowDown', 'ArrowUp'].includes(event.key)) {
+      event.preventDefault();
+      openAppList();
+      const count = filteredApps().length;
+      if (count) activeAppIndex = activeAppIndex < 0 ? (event.key === 'ArrowDown' ? 0 : count - 1) : (activeAppIndex + (event.key === 'ArrowDown' ? 1 : count - 1)) % count;
+      renderAppList();
+      if (activeAppIndex >= 0) q(`#pa-app-option-${activeAppIndex}`)?.scrollIntoView?.({block:'nearest'});
+    }
+    if (event.key === 'Enter' && !appList.hidden) {
+      event.preventDefault();
+      const app = filteredApps()[activeAppIndex];
+      if (app) q(`#pa-app-option-${activeAppIndex}`)?.click();
+    }
+  });
+  document.addEventListener('click', event => {
+    if (!q('#pa-app-picker').contains(event.target)) closeAppList();
+  });
+  root.addEventListener('focusout', event => {
+    if (event.relatedTarget && !q('#pa-app-picker').contains(event.relatedTarget)) closeAppList();
+  });
   const preview = q('#pa-mode-preview');
   const previewImage = q('#pa-mode-preview-image');
   const previewImages = {
@@ -156,7 +310,11 @@
       el.setAttribute('aria-checked', String(state[el.dataset.paToggle]));
       el.disabled = el.dataset.paToggle !== 'enabled' && !state.enabled;
     });
-    qa('[data-pa-app]').forEach(el => { el.checked = state.apps.includes(el.value); el.disabled = !state.enabled; });
+    appSearch.disabled = !state.enabled;
+    q('#pa-app-expand').disabled = !state.enabled;
+    if (!state.enabled) closeAppList();
+    renderAppTags();
+    renderAppList();
     q('#pa-app-count').textContent = state.apps.length ? `已选 ${state.apps.length} 个` : '未选择应用';
     qa('[data-pa-mode]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.paMode === state.mode)); el.disabled = !state.enabled; });
     qa('[data-pa-mode-option]').forEach(option => {
@@ -222,6 +380,7 @@
   function selectView(next, focus=false) {
     if (!['settings','reply','task'].includes(next)) return;
     hideModePreview();
+    closeAppList();
     view = next;
     qa('[data-pa-view]').forEach(el => { const active = el.dataset.paView === view; el.setAttribute('aria-selected', String(active)); el.tabIndex = active ? 0 : -1; });
     q('#pa-settings').hidden = view !== 'settings';
@@ -232,6 +391,24 @@
   }
   root.addEventListener('click', event => {
     const target = event.target;
+    const appOption = target.closest('[data-pa-select-app]');
+    if (appOption && state.enabled) {
+      const app = installedApps.find(value => value.id === appOption.dataset.paSelectApp);
+      if (!app) return;
+      const selected = appSelected(app);
+      const next = state.apps.filter(id => id !== app.id && id !== app.name);
+      if (!selected) next.push(app.id);
+      if (save({...state, apps:next})) appSearch.value = '';
+      appSearch.focus();
+      renderAppList();
+      return;
+    }
+    const removeApp = target.closest('[data-pa-remove-app]');
+    if (removeApp && !removeApp.disabled) {
+      save({...state, apps:state.apps.filter(id => id !== removeApp.dataset.paRemoveApp)});
+      appSearch.focus();
+      return;
+    }
     const tab = target.closest('[data-pa-view]'); if (tab) { selectView(tab.dataset.paView); return; }
     const toggle = target.closest('[data-pa-toggle]'); if (toggle && !toggle.disabled) { save({...state,[toggle.dataset.paToggle]:!state[toggle.dataset.paToggle]}); return; }
     const mode = target.closest('[data-pa-mode]'); if (mode && !mode.disabled) { save({...state, mode:mode.dataset.paMode}); return; }
@@ -247,10 +424,6 @@
     if (target.closest('#pa-refresh')) { renderRecords(); return; }
     if (target.closest('#pa-help')) { const dialog = q('#pa-help-dialog'); if (!dialog.open) dialog.showModal(); return; }
     if (target.closest('[data-pa-help-close]')) q('#pa-help-dialog').close();
-  });
-  root.addEventListener('change', event => {
-    if (!event.target.matches('[data-pa-app]')) return;
-    save({...state, apps:qa('[data-pa-app]').filter(el => el.checked).map(el => el.value)});
   });
   root.addEventListener('keydown', event => {
     if (event.target.id === 'pa-alias-input' && event.key === 'Enter' && !event.isComposing) {
@@ -280,6 +453,7 @@
     configTabs[index].focus();
   }));
   renderSettings(); selectView('settings');
+  if (state.apps.length) void readInstalledApps();
   function initialRoute() {
     const params = new URLSearchParams(location.search);
     if (['proactive','browser'].includes(params.get('settingsTab')) && typeof setConfigSubpage === 'function') setConfigSubpage(params.get('settingsTab'));

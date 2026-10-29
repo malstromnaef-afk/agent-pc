@@ -1,0 +1,19 @@
+/* Memory storage and manual export share the existing Figma settings card. */
+#screen-config .p2-memory-storage-card{padding:0 32px;border:1px solid #343b42;border-radius:12px;background:#171d1e}
+#screen-config .p2-memory-storage-row{display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:92px;box-sizing:border-box;padding:24px 0}
+#screen-config .p2-memory-storage-row strong{font-size:18px;font-weight:500;line-height:28px;color:#edf0f5}
+#screen-config .p2-memory-export-row{min-height:104px;border-top:1px solid #343b42}
+#screen-config .p2-memory-export-copy{min-width:0}
+#screen-config .p2-memory-export-copy p{margin:8px 0 0;color:#929da9;font-size:12px;line-height:20px}
+#screen-config .p2-memory-storage-card .p2-memory-folder-box{display:inline-flex;align-items:center;justify-content:center;gap:8px;width:168px;min-height:40px;border-radius:8px;flex-shrink:0}
+#screen-config .p2-memory-folder-box svg{width:20px;height:20px;flex-shrink:0}
+#screen-config .p2-memory-export-button{display:inline-flex;align-items:center;justify-content:center;min-width:168px;min-height:40px;box-sizing:border-box;padding:8px 20px;border:1px solid #343b42;border-radius:8px;background:#252a31;color:#edf0f5;font-family:inherit;font-size:16px;font-weight:500;line-height:24px;cursor:pointer;flex-shrink:0}
+#screen-config .p2-memory-export-button:hover{border-color:#59636d;background:#30373e}
+#screen-config .p2-memory-export-button:focus-visible{outline:2px solid #12d7dc;outline-offset:4px}
+#screen-config .p2-memory-export-button:disabled{opacity:.55;cursor:wait}
+#screen-config #p2-memory-export-feedback,#screen-config #p2-memory-export-error{margin:0;padding:0 0 20px;font-size:14px;line-height:24px;overflow-wrap:anywhere}
+#screen-config #p2-memory-export-feedback{color:#12d7dc}
+#screen-config #p2-memory-export-error{color:#efb47e}
+#screen-config .p2-memory-storage-card [hidden]{display:none!important}
+@media(max-width:900px){#screen-config .p2-memory-storage-card{padding:0 24px}}
+@media(max-width:600px){#screen-config .p2-memory-storage-card{padding:0 16px}#screen-config .p2-memory-storage-row{gap:16px;flex-wrap:wrap}#screen-config .p2-memory-export-button,#screen-config .p2-memory-storage-card .p2-memory-folder-box{min-width:120px;width:auto}#screen-config .p2-memory-export-row>.p2-memory-export-button{margin-left:auto}}

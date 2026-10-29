@@ -9866,7 +9866,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
     <link rel="stylesheet" href="assets/phase2-settings.css?v=20261028-pointer-exit">
-    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261027-always-visible-help">
+    <link rel="stylesheet" href="assets/phase2-memory-export.css?v=20261029-direct-memory-download">
+    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261029-app-picker">
     <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261020-compact-consent">
     <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261022-no-region-toolbar">
     <script src="assets/display-demo.js" defer></script>
@@ -11298,11 +11299,17 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
               <section class="config-section-panel" id="p2-settings-memory" data-config-panel="memory" role="tabpanel" aria-labelledby="p2-setting-tab-memory">
                 <div id="p2-local-memory-content" class="pmo-onboarding pmo-main pmo-inline"></div>
                 <p id="p2-local-memory-feedback" role="status" aria-live="polite" hidden></p>
-                <section class="inner-card p2-system-card p2-memory-path-card" aria-label="记忆存储位置">
-                  <div class="p2-system-line">
-                    <div class="p2-folder-copy"><strong>记忆存储位置</strong></div>
-                    <span class="p2-memory-folder-box" id="p2-memory-path">本地主机</span>
+                <section class="inner-card p2-system-card p2-memory-storage-card" id="p2-memory-storage" aria-label="记忆存储与导出" data-export-state="idle" aria-busy="false">
+                  <div class="p2-memory-storage-row">
+                    <strong>记忆存储位置</strong>
+                    <span class="p2-memory-folder-box"><svg width="20" height="20" viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M18 25.5H31.5V6H4.5V25.5H18ZM18 25.5V31.5M13.5 31.5H18M18 31.5H22.5" stroke="currentColor" stroke-width="2.7" stroke-linecap="round" stroke-linejoin="round"/></svg><span id="p2-memory-path">本地电脑</span></span>
                   </div>
+                  <div class="p2-memory-storage-row p2-memory-export-row">
+                    <div class="p2-memory-export-copy"><strong>记忆导出</strong><p>把记忆打包成一个 .tar.gz 文件</p></div>
+                    <button type="button" class="p2-memory-export-button" id="p2-memory-export-button">导出</button>
+                  </div>
+                  <p id="p2-memory-export-feedback" role="status" aria-live="polite" hidden></p>
+                  <p id="p2-memory-export-error" role="alert" hidden></p>
                 </section>
                 <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
                   <div class="p2-system-heading"><h3 id="p2-app-heading">应用连接</h3><p>通过对应的 CLI 适配器，让 Agent 调用应用功能。</p></div>
@@ -11322,8 +11329,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   <section class="pa-card pa-master"><div class="pa-setting-row"><div class="pa-copy"><h3>主动辅助</h3><p>开启后提供回复与任务建议；关闭后停止本模块的感知与建议。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="enabled" aria-label="主动辅助" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div></section>
                   <section class="pa-setting-section"><h3 class="pa-section-label">回复建议</h3><div class="pa-card">
                     <div class="pa-setting-row"><div class="pa-copy"><h3>启用回复建议</h3><p>根据聊天内容准备回复建议，按 Tab 填入，由你发送。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="replyEnabled" aria-label="启用回复建议" aria-checked="false"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div>
-                    <div class="pa-setting-row pa-apps-row"><div class="pa-apps-head"><div class="pa-copy"><h3>关注应用</h3><p>仅在所选应用中提供回复建议。</p></div><span id="pa-app-count">未选择应用</span></div><div class="pa-app-options" role="group" aria-label="关注应用"><label><input type="checkbox" value="微信" data-pa-app><span>微信</span></label><label><input type="checkbox" value="飞书" data-pa-app><span>飞书</span></label><label><input type="checkbox" value="钉钉" data-pa-app><span>钉钉</span></label><label><input type="checkbox" value="企业微信" data-pa-app><span>企业微信</span></label></div></div>
-                    <div class="pa-setting-row pa-alias-row"><div class="pa-copy"><h3><label for="pa-alias-input">我的昵称（选填）</label></h3><p>添加聊天中的昵称或称呼，帮助识别别人交给你的事。</p></div><div class="pa-alias-field"><div id="pa-alias-tags" hidden></div><input type="text" id="pa-alias-input" placeholder="输入昵称，按回车添加，可添加多个" autocomplete="off"></div></div>
+                    <div class="pa-setting-row pa-apps-row"><div class="pa-apps-head"><div class="pa-copy"><h3>关注应用</h3><p>只有选中的软件会被关注</p></div><span id="pa-app-count">未选择应用</span></div><div class="pa-app-picker" id="pa-app-picker"><div class="pa-app-field"><svg class="pa-app-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg><div id="pa-app-tags" hidden></div><input id="pa-app-search" type="text" role="combobox" aria-label="关注应用" aria-expanded="false" aria-controls="pa-app-list" aria-autocomplete="list" aria-describedby="pa-app-status" placeholder="搜索应用名称" autocomplete="off"><button type="button" id="pa-app-expand" aria-label="展开应用列表" aria-expanded="false" aria-controls="pa-app-list">⌄</button></div><div id="pa-app-list" role="listbox" aria-label="本机已安装的应用" aria-multiselectable="true" hidden></div><p id="pa-app-status" role="status" hidden></p></div></div>
+                    <div class="pa-setting-row pa-alias-row"><div class="pa-copy"><h3><label for="pa-alias-input">我的昵称（选填）</label></h3><p>你在微信、飞书等软件里的昵称，或群里大家对你的称呼。填了以后，系统能分清哪些话是在叫你，不会把你自己说的话误当成别人找你办事。</p></div><div class="pa-alias-field"><div id="pa-alias-tags" hidden></div><input type="text" id="pa-alias-input" placeholder="输入昵称，按回车添加，可添加多个" autocomplete="off"></div></div>
                     <div class="pa-setting-row"><div class="pa-copy"><h3>回复提示方式</h3><p>显示回复建议，按 Tab 采纳并填入。</p></div><div class="pa-segment pa-reply-modes pa-preview-options" role="group" aria-label="回复提示方式"><div class="pa-mode-option" data-pa-mode-option="小卡片"><button type="button" data-pa-mode="小卡片" aria-pressed="true">小卡片</button><button type="button" class="pa-mode-help" data-pa-preview="card" aria-label="查看小卡片效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-mode-option="输入框预览"><button type="button" data-pa-mode="输入框预览" aria-pressed="false">输入框预览</button><button type="button" class="pa-mode-help" data-pa-preview="input" aria-label="查看输入框预览效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div></div></div>
                     <div class="pa-setting-row pa-process-copy">将聊天中需要你处理的事记为待办，提前准备回复；回到对应会话后按 Tab 填入，由你发送。</div>
                   </div></section>
@@ -20130,13 +20137,14 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-memory-import.js"></script>
-    <script src="assets/phase2-memory.js?v=20261028-preview-control-removed"></script>
+    <script src="assets/phase2-memory.js?v=20261029-memory-export-source"></script>
     <script src="assets/phase2-memory-sources.js?v=20261021-source-all"></script>
-    <script src="assets/phase2-settings.js?v=20261028-pointer-exit"></script>
-    <script src="assets/phase2-proactive.js?v=20261027-always-visible-help"></script>
+    <script src="assets/phase2-settings.js?v=20261029-local-memory-copy"></script>
+    <script src="assets/phase2-proactive.js?v=20261029-app-picker-no-hint"></script>
     <script src="assets/phase2-screen-reading.js?v=20261028-region-entry"></script>
     <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
     <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>
+    <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
     <script src="assets/phase2-chat-layout.js?v=20261028-compact"></script>
   </body>
 </html>

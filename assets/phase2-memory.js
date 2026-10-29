@@ -25,8 +25,9 @@
       state.items=saved.items;state.selected=saved.selected;state.preview=saved.preview!==false;
     }
   } catch (_) { storageWarning=true; }
+  const memoryChanged = () => window.dispatchEvent(new CustomEvent('agentpc:memory-changed'));
   const persist = () => {
-    try {phase2Storage.setItem('memory-demo-v1',JSON.stringify({items:state.items,selected:state.selected,preview:state.preview}));}
+    try {phase2Storage.setItem('memory-demo-v1',JSON.stringify({items:state.items,selected:state.selected,preview:state.preview}));memoryChanged();}
     catch (_) {notice('本地存储不可用，本次修改仅在当前页面保留。');}
   };
   // Keep list topics separate from the existing graph/editor categories.
@@ -199,7 +200,7 @@
       case 'zoom-out':state.zoom=Math.max(.7,+(state.zoom-.15).toFixed(2));renderGraph();break;
       case 'reset-zoom':state.zoom=1;renderGraph();break;
       case 'delete':{const m=current();if(m)showDialog(`<h3 id="pm-dialog-title">删除记忆</h3><p>${esc(m.title)}</p><div class="pm-dialog-actions"><button class="pm-button" type="button" data-pm-action="close-dialog">取消</button><button class="pm-button pm-primary" type="button" data-pm-action="confirm-delete" data-delete-id="${esc(m.id)}">确认删除</button></div>`);break;}
-      case 'confirm-delete':{const items=state.items.filter(m=>m.id!==button.dataset.deleteId);try{phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:null,preview:state.preview}));state.items=items;reconcile();closeDialog();render();notice('记忆已删除。');}catch(_){notice('删除失败，本地存储不可用。记忆已保留。');}break;}
+      case 'confirm-delete':{const items=state.items.filter(m=>m.id!==button.dataset.deleteId);try{phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:null,preview:state.preview}));state.items=items;reconcile();closeDialog();render();memoryChanged();notice('记忆已删除。');}catch(_){notice('删除失败，本地存储不可用。记忆已保留。');}break;}
     }
   });
   root.addEventListener('keydown',e=>{const node=e.target.closest('.pm-graph-node');if(node&&(e.key==='Enter'||e.key===' ')){e.preventDefault();node.dispatchEvent(new MouseEvent('click',{bubbles:true}));}});
@@ -226,12 +227,52 @@
       phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:m.id,preview:state.preview}));
       state.items=items;
     state.search='';$m('#pm-search').value='';state.category='all';state.selected=m.id;state.detailOpen=false;
-      active.saving=false;closeDialog();render();notice(active.mode==='import'?'已补充到当前记忆，原内容保留。':(previous?'记忆已修改。':'记忆已保存。'));
+      active.saving=false;closeDialog();render();memoryChanged();notice(active.mode==='import'?'已补充到当前记忆，原内容保留。':(previous?'记忆已修改。':'记忆已保存。'));
     }catch(error){active.saving=false;e.target.querySelectorAll('input,textarea,select,button').forEach(control=>control.disabled=false);renderAttachments();$m('[data-pm-action="close-dialog"]').disabled=false;$m('#pm-form-error').hidden=false;$m('#pm-form-error').textContent=/[\u4e00-\u9fff]/.test(error.message)?error.message:'保存失败，本地存储空间不足或不可用。输入内容已保留。';}
   });
   dialog.addEventListener('cancel',e=>{if(draft?.saving)e.preventDefault();else draft=null;});
   dialog.addEventListener('close',()=>{draft=null;});
   dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)closeDialog();});
+  const cloneSnapshot = value => JSON.parse(JSON.stringify(value));
+  const snapshot = () => cloneSnapshot({items:state.items,selected:state.selected,preview:true});
+  const validateSnapshot = value => {
+    const invalid = () => {throw new Error('记忆备份格式无效，请选择有效的原型记忆备份。');};
+    const object = item => item && typeof item==='object' && !Array.isArray(item);
+    const nonempty = text => typeof text==='string' && text.trim().length>0;
+    let normalized;
+    try {normalized=cloneSnapshot(value);}catch(_){invalid();}
+    if(!object(normalized)||!Array.isArray(normalized.items))invalid();
+    const ids=new Set();
+    for(const item of normalized.items){
+      if(!object(item)||!nonempty(item.id)||ids.has(item.id)||typeof item.title!=='string'||typeof item.content!=='string'||typeof item.category!=='string'||!Object.hasOwn(categories,item.category)||!Array.isArray(item.related)||!item.related.every(name=>typeof name==='string'))invalid();
+      ids.add(item.id);
+      if(item.sourceFiles!==undefined){
+        if(!Array.isArray(item.sourceFiles))invalid();
+        const fileIds=new Set();
+        for(const file of item.sourceFiles){
+          if(!object(file)||!nonempty(file.id)||fileIds.has(file.id)||!nonempty(file.key)||!nonempty(file.name)||!['md','txt','pdf','docx','xlsx','csv'].includes(file.ext)||!Number.isSafeInteger(file.size)||file.size<0||(file.note!==undefined&&typeof file.note!=='string'))invalid();
+          fileIds.add(file.id);
+        }
+      }
+    }
+    return {items:normalized.items,selected:ids.has(normalized.selected)?normalized.selected:(normalized.items[0]?.id||null),preview:true};
+  };
+  const isBusy = () => Boolean(draft?.busy||draft?.saving);
+  window.phase2MemoryBackupSource = {
+    snapshot,
+    validate:validateSnapshot,
+    isBusy,
+    restore(value){
+      if(isBusy())throw new Error('记忆资料正在处理或保存，请完成后再恢复备份。');
+      const normalized=validateSnapshot(value);
+      phase2Storage.setItem('memory-demo-v1',JSON.stringify(normalized));
+      if(dialog.open)closeDialog();
+      state.items=normalized.items;state.selected=normalized.selected;state.preview=true;
+      state.search='';state.category='all';state.detailOpen=false;$m('#pm-search').value='';
+      render();memoryChanged();
+      return snapshot();
+    }
+  };
   render();if(storageWarning)notice('原型存储读取失败，当前展示演示数据。');
   new ResizeObserver(()=>{if($m('#pm-graph').clientWidth>0)renderGraph();}).observe($m('#pm-graph'));
   if(new URLSearchParams(location.search).get('page')==='memory')setActiveTab('memory');
