@@ -1,11 +1,11 @@
 @media (min-width: 901px) {
-  body #app-shell.app { grid-template-columns: 200px minmax(0, 1fr); }
-  body #app-shell > .sidebar { padding: 24px 12px; }
-  body #app-shell > .sidebar .brand { gap: 8px; padding: 0 0 18px; min-height: 72px; }
-  body #app-shell > .sidebar .brand-logo { width: 36px; height: 36px; flex-shrink: 0; border-radius: 12px; font-size: 16px; }
-  body #app-shell > .sidebar .brand-copy > span { font-size: 14px; }
+  body #app-shell.app { grid-template-columns: 140px minmax(0, 1fr); }
+  body #app-shell > .sidebar { padding: 20px 10px; }
+  body #app-shell > .sidebar .brand { gap: 8px; padding: 0 0 16px; min-height: 64px; }
+  body #app-shell > .sidebar .brand-logo { width: 32px; height: 32px; flex-shrink: 0; border-radius: 10px; font-size: 14px; }
+  body #app-shell > .sidebar .brand-copy > span { font-size: 12px; line-height: 18px; white-space: normal; overflow-wrap: anywhere; }
   body #app-shell > .sidebar .prototype-return-button { min-height: 26px; height: 26px; min-width: 52px; font-size: 12px; padding: 0 8px; }
-  body #app-shell > .sidebar .nav-item { padding: 12px; font-size: 16px; min-height: 44px; }
+  body #app-shell > .sidebar .nav-item { padding: 10px; font-size: 14px; line-height: 20px; min-height: 44px; }
 }
 body:has(#voice.active) .main { padding: 0 24px 0 0; }
 #voice .voice-page { display: flex; flex-direction: column; gap: 20px; }
