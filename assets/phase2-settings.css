@@ -86,16 +86,16 @@ body:has(#screen-config.active) #p2-capture-indicator{display:none}
 
 /* Figma 533:1003 — complete system settings, including the built-in model. */
 body:has(#screen-config.active){--p2-setting-line:#343b42;--p2-setting-muted:#929da9;background:#111516;color:#edf0f5;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
-body:has(#screen-config.active) .app{grid-template-columns:360px minmax(0,1fr);background:#111516;min-height:100vh}
-body:has(#screen-config.active) .sidebar{padding:28px 24px;gap:24px;background:#111416;border-right:1px solid #343b42}
-body:has(#screen-config.active) .brand{gap:20px;padding:0 0 24px;min-height:93px;border-color:#343b42}
-body:has(#screen-config.active) .brand-logo{width:54px;height:54px;border-radius:18px;background:#12332b;border:1px solid #219959;box-shadow:none;color:#20dc85;font-size:18px;flex-shrink:0;line-height:28px}
-body:has(#screen-config.active) .brand-copy{align-items:flex-start;gap:8px}
-body:has(#screen-config.active) .brand-copy>span{font-size:18px;font-weight:500;color:#929da9;line-height:28px}
-body:has(#screen-config.active) .prototype-return-button{height:30px;min-height:30px;min-width:64px;border-radius:10px;background:#142d30;border-color:#22686b;font-size:16px;color:#12d7dc;padding:0 8px;line-height:24px}
-body:has(#screen-config.active) .nav{gap:8px;padding:0}
-body:has(#screen-config.active) .nav-item{min-height:48px;padding:0 20px;border-radius:10px;font-size:18px;font-weight:500;color:#bac1cc;line-height:28px}
-body:has(#screen-config.active) .nav-item.active{border-color:#343b42;background:#252a31;color:#edf0f5}
+
+
+
+
+
+
+
+
+
+
 body:has(#screen-config.active) .main{padding:28px 48px;overflow-x:visible;min-width:0}
 body:has(#screen-config.active) .topbar{display:none}
 #screen-config .config-layout,#screen-config .config-panel{width:100%;max-width:none;min-width:0}
@@ -183,10 +183,10 @@ body:has(#screen-config.active) .topbar{display:none}
 #screen-config .p2-prototype-note{font-size:12px;color:#78838b;line-height:20px}
 #screen-config :is(.p2-settings-tab,.p2-local-model-controls select,.p2-system-toggle button,#p2-memory-folder,[data-p2-cli]):focus-visible{outline:2px solid #12d7dc;outline-offset:3px}
 @media(max-width:1600px){
- body:has(#screen-config.active) .app{grid-template-columns:260px minmax(0,1fr)}
- body:has(#screen-config.active) .sidebar{padding:28px 20px}
- body:has(#screen-config.active) .brand{gap:12px}
- body:has(#screen-config.active) .brand-copy>span{font-size:16px;line-height:24px}
+
+
+
+
  body:has(#screen-config.active) .main{padding:28px 32px}
  #screen-config .p2-system-card{padding-left:24px;padding-right:24px}
  #screen-config .p2-local-model-summary{gap:12px}
@@ -206,11 +206,11 @@ body:has(#screen-config.active) .topbar{display:none}
  #screen-config #p2-display-select{justify-content:flex-start;gap:20px;width:auto}
 }
 @media(max-width:900px){
- body:has(#screen-config.active) .app{grid-template-columns:1fr}
- body:has(#screen-config.active) .sidebar{position:static;height:auto;padding:16px;gap:12px}
- body:has(#screen-config.active) .brand{min-height:0;padding-bottom:16px}
- body:has(#screen-config.active) .nav{display:flex;flex-wrap:wrap;gap:8px}
- body:has(#screen-config.active) .nav-item{width:auto;min-height:44px;padding:0 12px;font-size:14px;line-height:24px}
+
+
+
+
+
  body:has(#screen-config.active) .main{padding:20px 16px}
  #screen-config .p2-system-card{padding:16px}
  #screen-config .p2-system-line{flex-wrap:wrap;padding:12px 0;gap:12px}

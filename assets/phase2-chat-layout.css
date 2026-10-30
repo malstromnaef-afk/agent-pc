@@ -43,7 +43,7 @@ body:has(#voice.active) .main { padding: 0 24px 0 0; }
 .p2-chat-examples button:hover { background: #192e34; border-color: #5caeb5; }
 .p2-chat-examples strong { display: block; font-size: 16px; font-weight: 500; }
 .p2-chat-examples span { display: block; margin-top: 12px; font-size: 12px; color: #8e9ca9; line-height: 1.6; }
-#voice .p2-main-chat:not(.p2-original-voice) .voice-composer-shell { grid-column: 2; grid-row: 3; position: static !important; width: calc(100% - 48px); max-width: 1000px; min-height: 0; margin: 12px auto 20px; padding: 16px; border: 1px solid #39434a; border-radius: 18px; background: #161c20; box-shadow: none; }
+#voice .p2-main-chat:not(.p2-original-voice) .voice-composer-shell { grid-column: 2; grid-row: 3; position: static !important; width: calc(100% - 48px); max-width: none; min-height: 0; margin: 12px auto 20px; padding: 16px; border: 1px solid #39434a; border-radius: 18px; background: #161c20; box-shadow: none; }
 #voice .p2-main-chat:not(.p2-original-voice) .voice-composer-input { display: block; padding: 0; background: transparent; border: 0; border-radius: 0; }
 #voice .p2-main-chat:not(.p2-original-voice) #voice-text-input { display: block; width: 100%; min-height: 100px; max-height: 180px; resize: vertical; border: 0; border-radius: 0; padding: 8px; color: #e7eef3; background: transparent; font: inherit; font-size: 16px; box-shadow: none; outline-offset: 2px; }
 #voice .p2-main-chat:not(.p2-original-voice) .voice-composer-footer { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding-top: 12px; }

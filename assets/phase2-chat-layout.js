@@ -9,9 +9,10 @@
   QA_STATE.sessionDrawerOpen = true;
 
   const page = document.querySelector('#voice .voice-page');
-  const notes = document.createElement('details');
-  notes.className = 'p2-chat-notes';
-  notes.innerHTML = '<summary>研发说明</summary>';
+  const notes = document.createElement('div');
+  notes.className = 'p2-chat-dev-state';
+  notes.hidden = true;
+  notes.style.display = 'none';
   page.querySelectorAll(':scope > .qa-permission-panel, :scope > .qa-office-dialog-demo, :scope > .dev-field-notes').forEach(node => notes.append(node));
   page.append(notes);
 

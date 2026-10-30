@@ -9865,14 +9865,14 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <link rel="stylesheet" href="assets/phase2-memory.css?v=20261028-main-header">
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
-    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261028-pointer-exit">
+    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261030-shared-sidebar-20261028-pointer-exit">
     <link rel="stylesheet" href="assets/phase2-memory-export.css?v=20261029-direct-memory-download">
     <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261029-app-picker">
     <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261020-compact-consent">
     <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261022-no-region-toolbar">
     <script src="assets/display-demo.js" defer></script>
     <link rel="stylesheet" href="assets/phase2-main-pages.css?v=20261028-page-titles">
-    <link rel="stylesheet" href="assets/phase2-chat-layout.css?v=20261029-sidebar-140">
+    <link rel="stylesheet" href="assets/phase2-chat-layout.css?v=20261030-wide-composer">
     <style id="phase2-remove-preview-frame">
       /* Phase 2 presents page content without the former small-screen frame. */
       [data-subscreen-preview] {
@@ -9886,7 +9886,99 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
         box-shadow: none;
       }
     </style>
-  </head>
+  <style>
+.qa-input-selections{display:flex;gap:6px;flex-wrap:wrap;padding:10px 12px 0}.qa-input-selections[hidden],.qa-skill-menu[hidden]{display:none!important}
+.qa-input-chip{display:inline-flex;align-items:center;gap:7px;max-width:100%;padding:5px 9px;border:1px solid #d8dce5;border-radius:9px;background:#f3f5f9;color:#455166;font-size:12px}.qa-input-chip span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:220px}.qa-input-chip button{border:0;background:transparent;color:inherit;cursor:pointer;padding:0 3px;font-size:16px}
+.qa-skill-anchor{position:relative}.qa-skill-menu{position:absolute;bottom:calc(100% + 10px);left:0;width:210px;padding:8px;background:#fff;border:1px solid #e1e4eb;border-radius:14px;box-shadow:0 12px 36px #17244324;z-index:150}.qa-skill-menu small{display:block;padding:6px 8px;color:#8a92a2;font-size:11px}.qa-skill-menu button{display:block!important;width:100%;text-align:left;padding:9px!important;border:0!important;border-radius:8px!important;background:transparent!important;color:#263348!important}.qa-skill-menu button:hover{background:#eef2f8!important}.qa-skill-menu button span{display:block;font-size:11px;color:#8992a0;margin-top:3px}.voice-composer-toolbar{flex-wrap:wrap}.voice-composer-input{overflow:visible!important}#qa-skill-entry[aria-expanded="true"]{background:#e7edf9;color:#365b9d}
+</style>
+<style>
+/* Follow the existing system/proactive settings tokens and control assets. */
+#screen-config .replica-settings{padding:0;color:var(--pa-text)}
+#screen-config .replica-settings [hidden]{display:none!important}
+#screen-config .replica-settings :is(h2,h3,h4,p){margin:0}
+#screen-config .replica-settings :is(h2,h3,h4){font-size:18px;line-height:28px;font-weight:700;color:var(--pa-text)}
+#screen-config .replica-settings p{font-size:12px;line-height:20px;color:var(--pa-muted)}
+#screen-config .replica-settings button,#screen-config .replica-settings input{font-family:inherit;box-shadow:none}
+#screen-config .replica-head{margin-bottom:20px}
+#screen-config .replica-head p{margin-top:4px}
+#screen-config .replica-tabs{display:flex;gap:32px;border-bottom:1px solid var(--pa-line);margin-bottom:20px;min-height:40px}
+#screen-config .replica-tabs button{position:relative;padding:0 0 12px;border:0;border-bottom:3px solid transparent;background:none;font-size:16px;font-weight:500;line-height:24px;color:var(--pa-muted);cursor:pointer}
+#screen-config .replica-tabs button.active{color:var(--pa-cyan);border-bottom-color:var(--pa-cyan)}
+#screen-config :is(#replica-apps,#replica-skills){padding:8px 32px 24px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card)}
+#screen-config #replica-skills{padding-top:24px}
+#screen-config .replica-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 0;min-width:0}
+#screen-config .replica-row>div:first-child{min-width:0}
+#screen-config .replica-row p{margin-top:4px}
+#screen-config .replica-settings button:not(.replica-switch):not([role="tab"]){cursor:pointer}
+#screen-config :is(.replica-row>button,.replica-warning button,.replica-skill-tools button):not(.replica-switch){display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:7px 16px;border:1px solid var(--pa-line);border-radius:8px;background:#242a32;color:var(--pa-text);font-size:16px;line-height:24px;white-space:nowrap;flex-shrink:0}
+#screen-config .replica-warning{display:flex;align-items:center;justify-content:space-between;gap:20px;padding:12px 16px;margin:4px 0 12px;border:1px solid #694248;border-radius:8px;background:#302023;color:#e6b8b8;font-size:12px;line-height:20px}
+#screen-config .replica-filters{display:flex;gap:8px}
+#screen-config .replica-filters button{padding:7px 16px;min-height:40px;border:1px solid transparent;border-radius:8px;background:none;color:var(--pa-muted);font-size:14px;line-height:24px}
+#screen-config .replica-filters button.active{border-color:#22686b;background:#142d30;color:var(--pa-cyan)}
+#screen-config .replica-settings input[type="search"]{width:280px;min-width:0;min-height:40px;padding:8px 12px;border:1px solid var(--pa-line);border-radius:8px;background:#151b20;color:var(--pa-text);font-size:14px;line-height:24px}
+#screen-config .replica-settings input::placeholder{color:var(--pa-muted)}
+#screen-config .replica-app{border-top:1px solid var(--pa-line);border-bottom:1px solid var(--pa-line);margin-top:4px}
+#screen-config .replica-app-copy{display:flex;align-items:center;gap:16px}
+#screen-config .replica-app-icon{display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border-radius:8px;background:#233c48;color:#5ac5e7;font-size:28px}
+#screen-config .replica-security{padding-top:16px}
+#screen-config .replica-skill-tools{display:flex;gap:12px;flex-wrap:wrap}
+#screen-config .replica-skill-tools input[type="search"]{width:420px;flex:1}
+#screen-config .replica-empty{text-align:center;padding:64px 12px 88px;font-size:14px;line-height:24px;color:var(--pa-muted)}
+#screen-config .replica-settings .replica-group-label{margin:20px 0 12px;font-size:14px;line-height:24px}
+#screen-config .replica-switch-group{padding:8px 32px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card)}
+#screen-config .replica-switch-group .replica-row+.replica-row{border-top:1px solid var(--pa-line)}
+#screen-config .replica-switch{display:grid;place-items:center;position:relative;width:56px;height:44px;flex:0 0 56px;padding:0;border:0;border-radius:16px;background:transparent;cursor:pointer}
+#screen-config .replica-switch img{display:block;pointer-events:none;width:56px;height:32px}
+#screen-config .replica-switch[aria-checked="true"] .pa-switch-off,#screen-config .replica-switch[aria-checked="false"] .pa-switch-on{display:none}
+#screen-config .replica-cache{width:100%;padding:24px 32px;margin-top:20px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card);color:var(--pa-text);text-align:left}
+#screen-config .replica-cache strong{display:block;margin-bottom:4px;font-size:18px;line-height:28px;font-weight:700}
+#screen-config .replica-cache span span{display:block;color:var(--pa-muted);font-size:12px;line-height:20px}
+#screen-config .replica-settings :is(button,input):focus-visible{outline:2px solid var(--pa-cyan);outline-offset:3px}
+@media(max-width:1600px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:24px;padding-right:24px}}
+@media(max-width:900px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:16px;padding-right:16px}}
+@media(max-width:650px){#screen-config .replica-row{gap:12px;flex-wrap:wrap}#screen-config .replica-settings input[type="search"]{width:100%}#screen-config .replica-switch-group .replica-row{flex-wrap:nowrap}#screen-config .replica-skill-tools input[type="search"]{flex-basis:100%}#screen-config .replica-warning{flex-wrap:wrap}}
+</style>
+<style>
+/* Grouped settings navigation: one click opens a leaf panel. */
+#screen-config .config-panel{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:28px;align-items:start}
+#screen-config .config-panel>.panel-head{grid-column:1/-1;grid-row:1;margin-bottom:20px}
+#screen-config .config-panel>.p2-settings-tabs{grid-column:1;grid-row:2;display:flex;flex-direction:column;align-items:stretch;gap:0;margin:0;padding:0 20px 0 0;border-right:1px solid #343b42;min-height:540px}
+#screen-config .config-panel>.config-section-panel{grid-column:2;grid-row:2;min-width:0}
+#screen-config .p2-settings-nav-group{display:flex;flex-direction:column;gap:6px;padding:0 0 20px}
+#screen-config .p2-settings-nav-group+.p2-settings-nav-group{padding-top:20px;border-top:1px solid #343b42}
+#screen-config .p2-settings-nav-group h3{margin:0 0 6px;padding:0 12px;color:#929da9;font-size:12px;line-height:20px;font-weight:500}
+#screen-config .p2-settings-nav-group .p2-settings-tab{width:100%;min-width:0;text-align:left;padding:0 12px;border-color:transparent;background:transparent;font-size:16px;line-height:24px}
+#screen-config .p2-settings-nav-group .p2-settings-tab:hover{background:#1c252a}
+#screen-config .p2-settings-nav-group .p2-settings-tab.active{border-color:#22686b;background:#142d30;color:#12d7dc}
+/* Request tools live at the bottom left inside the composer. */
+#voice .p2-main-chat:not(.p2-original-voice) .voice-composer-footer{justify-content:flex-start;align-items:center;gap:10px}
+#voice .qa-composer-tools-left{display:flex;align-items:center;gap:8px;order:0;flex-shrink:0;margin-right:auto}
+#voice .voice-composer-toolbar{order:1;flex:0 1 auto;justify-content:flex-end;gap:8px}
+#voice .voice-composer-actions{order:2;margin-left:0;flex-shrink:0}
+#voice #voice-input-hint{order:3;flex-basis:100%;text-align:right;font-size:11px;line-height:16px}
+#voice :is(#qa-skill-entry,#qa-attachment-entry){display:inline-flex;align-items:center;gap:7px;min-height:36px;padding:6px 12px;border:1px solid #41494f;border-radius:10px;background:#ffffff08;color:#aebac2;font:inherit;font-size:14px;line-height:22px;cursor:pointer}
+#voice :is(#qa-skill-entry,#qa-attachment-entry):hover{border-color:#5f858a;background:#1d3035;color:#c6f6f7}
+#voice :is(#qa-skill-entry,#qa-attachment-entry) svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+#voice #qa-skill-entry[aria-expanded="true"]{border-color:#22686b;background:#142d30;color:#12d7dc}
+#voice .qa-skill-menu{background:#20282d;border-color:#414a52;border-radius:12px;box-shadow:0 12px 32px #0006}
+#voice .qa-skill-menu button{color:#edf0f5!important}
+#voice .qa-skill-menu button:hover{background:#2b3e43!important}
+#voice .qa-skill-menu :is(small,button span){color:#929da9}
+#voice .qa-input-chip{background:#202c32;border-color:#3c515b;color:#c9dde5}
+@media(max-width:760px){#screen-config .config-panel{grid-template-columns:150px minmax(0,1fr);column-gap:16px}#screen-config .config-panel>.p2-settings-tabs{padding-right:12px}#screen-config .p2-settings-nav-group .p2-settings-tab{font-size:14px}#voice .voice-composer-toolbar{flex-wrap:wrap}#voice #voice-api-model{max-width:160px}}
+@media(max-width:480px){#screen-config .config-panel{grid-template-columns:116px minmax(0,1fr);column-gap:12px}#screen-config .p2-settings-nav-group .p2-settings-tab{padding:0 6px;font-size:13px}#screen-config .p2-settings-nav-group h3{padding-left:6px}#voice .voice-composer-toolbar{order:3;flex-basis:100%;justify-content:flex-start}#voice #voice-input-hint{order:4}#voice .voice-composer-actions{margin-left:auto}}
+</style>
+<style>
+#voice #voice-input-hint{display:none!important}
+</style>
+<style>
+/* Keep memory content close to the shared navigation, without nested left gutters. */
+body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:24px;padding-right:24px}
+#memory .pm-library{padding-left:0}
+#monitor>.monitor-page>.main-panel:first-child{padding-left:0;padding-right:0}
+@media(max-width:900px){body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:16px;padding-right:16px}}
+</style>
+</head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
       <div class="prototype-launcher-inner">
@@ -10642,8 +10734,12 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                     </div>
                     <div class="voice-composer-shell">
                       <div class="voice-composer-input">
+                        <div id="qa-input-selections" class="qa-input-selections" aria-live="polite" hidden></div>
                         <textarea id="voice-text-input" rows="2" placeholder="输入你的问题…"></textarea>
                         <div class="voice-composer-footer">
+<div class="qa-composer-tools-left"><div class="qa-skill-anchor"><button type="button" id="qa-skill-entry" aria-expanded="false" aria-controls="qa-skill-menu"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 6a5 5 0 0 0-6 6L3 17a2.1 2.1 0 0 0 3 3l5-5a5 5 0 0 0 6-6l-3 3-3-3 3-3Z"/></svg><span>Skill</span></button><div id="qa-skill-menu" class="qa-skill-menu" hidden><small>选择技能 · 演示</small><button type="button" data-qa-skill="文档总结">文档总结<span>提炼内容与要点</span></button><button type="button" data-qa-skill="文案润色">文案润色<span>优化表达与结构</span></button><button type="button" data-qa-skill="信息整理">信息整理<span>分类整理已有资料</span></button></div></div>
+                            <button type="button" id="qa-attachment-entry"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m8 13 7-7a3 3 0 0 1 4 4l-9 9a5 5 0 0 1-7-7L13 2M6 15l9-9"/></svg><span>附件</span></button><input type="file" id="qa-attachment-picker" multiple hidden>
+                            </div>
                           <span class="voice-input-hint" id="voice-input-hint">Enter 发送 · Shift+Enter 换行</span>
                           <div class="voice-composer-toolbar">
                             <select id="voice-api-model" aria-label="选择API与模型">
@@ -11098,13 +11194,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                 <div class="action-row" id="config-page-actions"></div>
               </div>
 
-              <div class="p2-settings-tabs" role="tablist" aria-label="设置分类">
-                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="api" aria-controls="p2-settings-api" aria-selected="false">API 设置</button>
-                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="system" aria-controls="p2-settings-system" aria-selected="false">系统设置</button>
-                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="proactive" aria-controls="p2-settings-proactive" aria-selected="false">主动辅助</button>
-                <button type="button" role="tab" class="p2-settings-tab" id="p2-setting-tab-memory" data-phase2-setting-tab="memory" aria-controls="p2-settings-memory" aria-selected="false">本地记忆</button>
-                <button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="browser" aria-controls="p2-settings-browser" aria-selected="false">浏览器插件</button>
-              </div>
+              <div class="p2-settings-tabs" role="tablist" aria-label="设置分类"><div class="p2-settings-nav-group" role="group" aria-label="日常设置"><h3>日常设置</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="system" aria-controls="p2-settings-system" aria-selected="false">系统设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="proactive" aria-controls="p2-settings-proactive" aria-selected="false">主动辅助</button></div><div class="p2-settings-nav-group" role="group" aria-label="模型与能力"><h3>模型与能力</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="api" aria-controls="p2-settings-api" aria-selected="false">API 设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="apps-skills" aria-controls="p2-settings-apps-skills" aria-selected="false">应用与技能</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="browser" aria-controls="p2-settings-browser" aria-selected="false">浏览器插件</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="computer" aria-controls="p2-settings-computer" aria-selected="false">电脑操作</button></div><div class="p2-settings-nav-group" role="group" aria-label="数据管理"><h3>数据管理</h3><button type="button" role="tab" class="p2-settings-tab" id="p2-setting-tab-memory" data-phase2-setting-tab="memory" aria-controls="p2-settings-memory" aria-selected="false">本地记忆</button></div></div>
 <section class="inner-card device-preview-panel config-section-panel" data-config-panel="device">
                 <div class="device-settings-grid">
                   <article class="device-setting-card">
@@ -11345,6 +11435,28 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                 <header class="bc-lead"><div><h2>浏览器插件</h2><p>将 Chrome 中已授权网站的 Cookie 同步至内置浏览器，减少重复登录。</p></div><button type="button" class="bc-refresh" id="bc-refresh"><img src="assets/proactive-figma/refresh.svg" width="24" height="24" alt=""><span>刷新</span></button></header>
                 <section class="bc-card"><div class="bc-intro"><img src="assets/proactive-figma/browser.svg" width="44" height="44" alt="" class="bc-icon"><div class="bc-copy"><div class="bc-name"><h3>Agent PC 浏览器连接器</h3><span class="bc-badge" id="bc-state">未连接</span></div><p>将已授权网站 Cookie 的新增、更新和删除同步至内置浏览器。</p><div class="bc-tags"><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">Cookie 同步</span><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">登录态复用</span></div></div><a class="bc-store" href="https://chromewebstore.google.com/" target="_blank" rel="noopener noreferrer"><img src="assets/proactive-figma/external.svg" width="20" height="20" alt="">打开 Chrome 商店</a></div><div class="bc-summary"><div><span>客户端连接服务</span><strong class="bc-accent" id="bc-service">运行正常</strong></div><div><span>安全配对</span><strong id="bc-pair">未配对</strong></div><div><span>最近同步</span><strong id="bc-sync">暂无同步记录</strong></div></div><div class="bc-note"><img src="assets/proactive-figma/info.svg" width="20" height="20" alt=""><p>插件尚未连接。安装后，在插件中允许 Cookie 访问，并在客户端确认配对。</p></div></section>
               </section>
+
+<section class="config-section-panel replica-settings" id="p2-settings-apps-skills" data-config-panel="apps-skills" role="tabpanel" aria-label="应用与技能">
+<header class="replica-head"><h2>应用与技能</h2><p>管理应用授权与 AI 技能，扩展助手可调用的工具。</p></header>
+<div class="replica-tabs" role="tablist" aria-label="应用与技能"><button type="button" role="tab" aria-selected="true" data-replica-tab="apps" class="active">应用连接</button><button type="button" role="tab" aria-selected="false" data-replica-tab="skills">Skills</button></div>
+<div id="replica-apps" role="tabpanel">
+<div class="replica-row"><div><h3>应用连接</h3><p>连接常用应用，让 AI 在你授权的范围内使用它们。</p></div><button type="button" data-replica-refresh aria-label="刷新应用连接">↻</button></div>
+<div class="replica-warning"><span>⊗　当前设备版本尚不支持应用连接，请更新设备后重试。</span><button type="button" data-replica-refresh>刷新</button></div>
+<div class="replica-row"><div><h4>添加应用</h4><p>连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-replica-unavailable>＋ 自定义 MCP</button></div>
+<div class="replica-row"><div class="replica-filters" aria-label="应用地区"><button type="button" class="active" data-replica-region="all" aria-pressed="true">全部</button><button type="button" data-replica-region="cn" aria-pressed="false">国内</button><button type="button" data-replica-region="global" aria-pressed="false">国际</button></div><input type="search" id="replica-app-search" placeholder="搜索应用" aria-label="搜索应用"></div>
+<div id="replica-feishu" class="replica-row replica-app"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书</h4><p>在对话中完成一次连接，之后在任意会话里使用飞书。</p></div></div><button type="button" data-replica-unavailable>配置</button></div>
+<p class="replica-security">♧　凭证保存在设备上，连接不经过云端中转。</p>
+</div>
+<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">还没有 skill — 让 AI 跑几次任务自然会生长出来</div></div>
+</section>
+<section class="config-section-panel replica-settings" id="p2-settings-computer" data-config-panel="computer" role="tabpanel" aria-label="电脑操作">
+<header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式，并管理识别缓存。</p></header>
+<p class="replica-group-label">操作方式</p><div class="replica-switch-group">
+<div class="replica-row"><div><h4>接管键鼠操作电脑</h4><p>允许 AI 接管鼠标键盘，像人一样点击和打字。关闭后 AI 无法直接操控电脑。</p></div><button type="button" role="switch" aria-checked="true" aria-label="接管键鼠操作电脑" class="replica-switch" data-replica-switch="mouse"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
+<div class="replica-row"><div><h4>后台静默操作应用</h4><p>允许 AI 在后台读取并操作应用窗口，不动鼠标、不打扰你正常使用。</p></div><button type="button" role="switch" aria-checked="true" aria-label="后台静默操作应用" class="replica-switch" data-replica-switch="background"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
+<p class="replica-group-label">桌面理解</p><div class="replica-switch-group"><div class="replica-row"><div><h4>使用激进的桌面理解模式</h4><p>AI 操作电脑时同步查看屏幕画面，理解更准，速度稍慢。</p></div><button type="button" role="switch" aria-checked="false" aria-label="使用激进的桌面理解模式" class="replica-switch" data-replica-switch="vision"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
+<button type="button" class="replica-cache replica-row" data-replica-cache><span><strong>图标识别模型缓存</strong><span>预下载或清理应用识别模型，用于排查电脑操作中的识别问题。</span></span><span aria-hidden="true">›</span></button>
+</section>
               <dialog class="p2-system-dialog" id="p2-folder-dialog" aria-labelledby="p2-folder-title">
                 <form id="p2-folder-form"><div class="p2-dialog-head"><h3 id="p2-folder-title">选择记忆存储文件夹</h3><button type="button" class="p2-dialog-close" data-p2-close aria-label="关闭文件夹选择">×</button></div>
                   <label for="p2-folder-input">文件夹路径</label><input id="p2-folder-input" type="text" required placeholder="例如 D:\AgentPC\Memory" autocomplete="off">
@@ -13030,7 +13142,7 @@ function setActiveTab(viewId) {
 }
 
 function setConfigSubpage(subpage) {
-  if (!["device", "api", "system", "proactive", "memory", "browser"].includes(subpage)) return;
+  if (!["device", "api", "system", "proactive", "memory", "browser", "apps-skills", "computer"].includes(subpage)) return;
   APP_STATE.currentPage = "screen-config";
   APP_STATE.configSubpage = subpage;
   APP_STATE.activeSubscreenSettings = null;
@@ -19115,7 +19227,7 @@ function qaRender(){
   const textMic=root.querySelector("#voice-mic-button"),inputHint=root.querySelector("#voice-input-hint");
   if(textMic){textMic.classList.toggle("recording",QA_STATE.textDictating);textMic.setAttribute("aria-pressed",String(QA_STATE.textDictating));textMic.setAttribute("aria-label",QA_STATE.textDictating?"结束语音输入":"语音输入");textMic.title=QA_STATE.textDictating?"结束语音输入":"语音输入";}
   if(inputHint)inputHint.textContent=QA_STATE.textDictating?"正在听写，再次点击麦克风结束":"Enter 发送 · Shift+Enter 换行";
-  const sendButton=root.querySelector("#voice-send-button"),requestBlocked=!navigator.onLine||["offline","no-model","model-invalid"].includes(QA_STATE.issue)||!qaModels().length;if(sendButton){sendButton.disabled=requestBlocked||QA_STATE.phase==="thinking";sendButton.title=requestBlocked?"当前暂不可发送":"发送问题";}
+  const sendButton=root.querySelector("#voice-send-button"),requestBlocked=!navigator.onLine||["offline","no-model","model-invalid"].includes(QA_STATE.issue)||!qaModels().length;if(sendButton){sendButton.disabled=requestBlocked||QA_STATE.phase==="thinking";sendButton.title=requestBlocked?"当前暂不可发送":"Enter 发送 · Shift+Enter 换行";}
   const model=root.querySelector("#voice-api-model");if(model){const options=qaModels(),invalid=QA_STATE.issue==="model-invalid";if(!invalid)qaSelectedModel();model.innerHTML=(invalid?'<option value="">当前模型已失效，请重新选择</option>':"")+options.map(v=>{const [,p,m]=v.split("|");return `<option value="${escapeHtml(v)}">${escapeHtml(p)} · ${escapeHtml(m)}</option>`}).join("")||'<option value="">无可用模型</option>';model.value=invalid?"":QA_STATE.selectedModelKey;}
   const conversation=root.querySelector("#qa-conversation");
   if(conversation){const activeSession=QA_STATE.recentSessions.find(s=>s.sessionId===QA_STATE.activeSessionId),sessionHeading=activeSession?`<div class="qa-current-session-title">${escapeHtml(activeSession.title)}</div>`:"";conversation.className=QA_STATE.messages.length?"voice-chat-window":"qa-conversation-empty";conversation.innerHTML=QA_STATE.messages.length?sessionHeading+QA_STATE.messages.map(m=>`<div class="qa-message ${m.role==='user'?'user':'ai'} ${m.loading?'loading':''}"><small>${m.role==='user'?'你':'AI'}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):'<strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p>';conversation.scrollTop=0;}
@@ -19221,7 +19333,7 @@ function qaRecheckPermission(){const next=QA_STATE.permission==="recheck-denied"
 function qaScheduleAutoSubmit(followup=false){clearTimeout(qaAutoListenTimer);QA_STATE.cancelRecognition=false;qaAutoListenTimer=setTimeout(()=>{if(QA_STATE.phase!=="listening"||QA_STATE.micMuted)return;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>{if(!QA_STATE.cancelRecognition)qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理");},450);},1400);}
 document.addEventListener("input",e=>{if(e.target.id==="voice-text-input")QA_STATE.draft=e.target.value;},true);
 document.addEventListener("pointerdown",e=>{if(e.target.closest("#voice-mic-button")){e.preventDefault();e.stopImmediatePropagation();}},true);
-document.addEventListener("keydown",e=>{if(e.target.id==="voice-text-input"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.stopImmediatePropagation();QA_STATE.draft=e.target.value;qaSubmit(QA_STATE.draft);QA_STATE.draft="";e.target.value="";}},true);
+document.addEventListener("keydown",e=>{if(e.target.id==="voice-text-input"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();e.stopImmediatePropagation();QA_STATE.draft=e.target.value;if(qaSubmit(QA_STATE.draft)){QA_STATE.draft="";e.target.value="";}}},true);
 document.addEventListener("click",e=>{
   const officeDialog=e.target.closest("[data-qa-office-dialog]");if(officeDialog){e.preventDefault();e.stopImmediatePropagation();qaShowOfficeDialog(officeDialog.dataset.qaOfficeDialog);return;}
   const entry=e.target.closest("[data-subscreen-ai-ball]");if(entry){e.preventDefault();e.stopImmediatePropagation();window.phase2Assistant?.wake();return;}
@@ -19236,7 +19348,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#qa-interrupt-ai")){QA_STATE.speaking=false;QA_STATE.interrupted=true;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(true);return;}
   if(e.target.closest("#qa-call-mic")){if(!QA_STATE.callActive)return;QA_STATE.micMuted=!QA_STATE.micMuted;if(QA_STATE.micMuted){clearTimeout(qaAutoListenTimer);if(QA_STATE.phase==="listening")QA_STATE.phase="muted";}else if(QA_STATE.phase==="muted"){QA_STATE.phase="listening";qaScheduleAutoSubmit(false);}qaRender();return;}
   if(e.target.closest("#qa-end-voice")){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;QA_STATE.interrupted=false;if(["listening","muted","recognizing"].includes(QA_STATE.phase)){QA_STATE.cancelRecognition=true;QA_STATE.phase="idle";}else if(QA_STATE.phase==="speaking"){QA_STATE.speaking=false;QA_STATE.phase="stopped";}else if(QA_STATE.phase!=="thinking")QA_STATE.phase="idle";qaRender();return;}
-  if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";qaSubmit(QA_STATE.draft);QA_STATE.draft="";if(i)i.value="";return;}
+  if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";if(qaSubmit(QA_STATE.draft)){QA_STATE.draft="";if(i)i.value="";}return;}
   if(e.target.closest("#qa-session-toggle")){QA_STATE.sessionDrawerOpen=!QA_STATE.sessionDrawerOpen;qaRender();return;}
   if(e.target.closest("#qa-session-close")){QA_STATE.sessionDrawerOpen=false;qaRender();return;}
   if(e.target.closest("#qa-session-search-toggle")){const root=qaRoot(),input=root?.querySelector("#qa-drawer-search"),button=root?.querySelector("#qa-session-search-toggle");if(!input)return;input.hidden=!input.hidden;button?.setAttribute("aria-expanded",String(!input.hidden));if(!input.hidden)requestAnimationFrame(()=>input.focus({preventScroll:true}));else{input.value="";qaRenderDrawer("");}return;}
@@ -20145,6 +20257,50 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
     <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
-    <script src="assets/phase2-chat-layout.js?v=20261028-compact"></script>
-  </body>
+    <script src="assets/phase2-chat-layout.js?v=20261030-no-dev-notes"></script>
+  <script>
+// Composer selections are demonstration metadata; no files are uploaded.
+const qaComposerSelection={skill:"",files:[]};
+function qaComposerClose(){const root=qaRoot();const menu=root?.querySelector("#qa-skill-menu");if(menu)menu.hidden=true;root?.querySelector("#qa-skill-entry")?.setAttribute("aria-expanded","false");}
+function qaComposerRender(){const box=qaRoot()?.querySelector("#qa-input-selections");if(!box)return;box.hidden=!qaComposerSelection.skill&&!qaComposerSelection.files.length;box.innerHTML=(qaComposerSelection.skill?`<div class="qa-input-chip"><span>Skill · ${escapeHtml(qaComposerSelection.skill)}</span><button type="button" data-qa-remove-skill aria-label="移除技能">×</button></div>`:"")+qaComposerSelection.files.map((f,i)=>`<div class="qa-input-chip" title="${escapeHtml(f.name)}"><span>附件 · ${escapeHtml(f.name)}</span><button type="button" data-qa-remove-file="${i}" aria-label="移除附件 ${escapeHtml(f.name)}">×</button></div>`).join("");}
+const qaSubmitWithoutSelection=qaSubmit;
+qaSubmit=function(text){
+ const typed=text.trim();if((!typed&&!qaComposerSelection.files.length)||QA_STATE.phase==="thinking")return false;
+ if(!navigator.onLine||["offline","no-model","model-invalid"].includes(QA_STATE.issue)||!qaModels().length){qaSubmitWithoutSelection(typed||"请查看附件");return false;}
+ const selection={skill:qaComposerSelection.skill,files:qaComposerSelection.files.map(f=>({name:f.name,size:f.size,type:f.type}))};
+ const parts=[selection.skill?`技能：${selection.skill}`:"",selection.files.length?`附件：${selection.files.map(f=>f.name).join("、")}`:"",typed||"请问你希望如何处理这些附件？"].filter(Boolean);
+ qaSubmitWithoutSelection(parts.join("\n"));
+ const sent=[...QA_STATE.messages].reverse().find(m=>m.role==="user");if(sent){sent.skill=selection.skill;sent.attachments=selection.files;}
+ qaComposerSelection.skill="";qaComposerSelection.files=[];QA_STATE.draft="";qaComposerClose();qaComposerRender();
+ if(selection.skill||selection.files.length)showLightToast("原型演示：已随消息提交，未执行技能或上传文件");return true;
+};
+document.addEventListener("click",e=>{
+ const root=qaRoot();if(!root?.contains(e.target)){qaComposerClose();return;}
+ if(e.target.closest("#qa-skill-entry")){const menu=root.querySelector("#qa-skill-menu");menu.hidden=!menu.hidden;root.querySelector("#qa-skill-entry").setAttribute("aria-expanded",String(!menu.hidden));return;}
+ const skill=e.target.closest("[data-qa-skill]");if(skill){qaComposerSelection.skill=skill.dataset.qaSkill;qaComposerClose();qaComposerRender();return;}
+ if(e.target.closest("#qa-attachment-entry")){qaComposerClose();root.querySelector("#qa-attachment-picker").click();return;}
+ if(e.target.closest("[data-qa-remove-skill]")){qaComposerSelection.skill="";qaComposerRender();return;}
+ const remove=e.target.closest("[data-qa-remove-file]");if(remove){qaComposerSelection.files.splice(Number(remove.dataset.qaRemoveFile),1);qaComposerRender();return;}
+ if(!e.target.closest(".qa-skill-anchor"))qaComposerClose();
+});
+document.addEventListener("change",e=>{if(e.target.id!=="qa-attachment-picker")return;for(const f of e.target.files||[]){if(!qaComposerSelection.files.some(x=>x.name===f.name&&x.size===f.size&&x.lastModified===f.lastModified))qaComposerSelection.files.push(f);}e.target.value="";qaComposerRender();});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"){qaComposerClose();}});
+const qaCreateWithoutSelection=qaCreateSession;qaCreateSession=function(){qaComposerSelection.skill="";qaComposerSelection.files=[];qaComposerClose();qaCreateWithoutSelection();qaComposerRender();};
+</script>
+<script>
+let replicaRegion="all";
+function replicaFilterApps(){const query=document.querySelector("#replica-app-search").value.trim().toLowerCase();document.querySelector("#replica-feishu").hidden=replicaRegion==="global"||!("飞书 feishu lark".includes(query));}
+document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();});
+document.addEventListener("click",e=>{
+const tab=e.target.closest("[data-replica-tab]");if(tab){document.querySelectorAll("[data-replica-tab]").forEach(b=>{const active=b===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});document.querySelector("#replica-apps").hidden=tab.dataset.replicaTab!=="apps";document.querySelector("#replica-skills").hidden=tab.dataset.replicaTab!=="skills";return;}
+const region=e.target.closest("[data-replica-region]");if(region){replicaRegion=region.dataset.replicaRegion;document.querySelectorAll("[data-replica-region]").forEach(b=>{b.classList.toggle("active",b===region);b.setAttribute("aria-pressed",String(b===region));});replicaFilterApps();return;}
+const toggle=e.target.closest("[data-replica-switch]");if(toggle){const checked=toggle.getAttribute("aria-checked")!=="true";toggle.setAttribute("aria-checked",String(checked));try{phase2Storage.setItem("replica-computer-"+toggle.dataset.replicaSwitch,String(checked));}catch(_){}showLightToast("原型演示：仅保存开关状态，未控制电脑");return;}
+if(e.target.closest("[data-replica-refresh]")){return;}
+if(e.target.closest("[data-replica-unavailable]")){showLightToast("原型演示：未接入应用连接服务");return;}
+if(e.target.closest("[data-replica-folder]")){showLightToast("原型演示：暂未接入本机 Skills 文件夹");return;}
+if(e.target.closest("[data-replica-cache]")){showLightToast("原型演示：暂未接入图标识别模型缓存");return;}
+});
+document.querySelectorAll("[data-replica-switch]").forEach(b=>{try{const saved=phase2Storage.getItem("replica-computer-"+b.dataset.replicaSwitch);if(saved!==null)b.setAttribute("aria-checked",saved);}catch(_){}});
+</script>
+</body>
 </html>
