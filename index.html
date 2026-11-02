@@ -9857,20 +9857,20 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 </style>
     <link rel="stylesheet" href="assets/display-demo.css">
     <script src="assets/display-demo.js" defer></script>
+<style>
+.prototype-link-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1500px;gap:28px}
+.prototype-size-link strong{font-size:clamp(20px,2.1vw,32px);white-space:nowrap}
+@media(max-width:900px){.prototype-link-grid{grid-template-columns:1fr;max-width:480px}}
+</style>
 </head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
       <div class="prototype-launcher-inner">
         <h1>Agent X3</h1>
         <nav class="prototype-link-grid" aria-label="选择 Agent pc X3 版本">
-          <a class="prototype-size-link" data-prototype-size="small" href="?prototype=small">
-            <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>Agent pc X3一期</strong>
-          </a>
-          <a class="prototype-size-link" data-prototype-phase="second" href="agent-pc-x3-phase2.html?prototype=small">
-            <span class="prototype-device-symbol" aria-hidden="true"></span>
-            <strong>Agent pc X3二期</strong>
-          </a>
+          <a class="prototype-size-link" data-prototype-size="small" href="?prototype=small"><span class="prototype-device-symbol" aria-hidden="true"></span><strong>Agent pc X3一期小款</strong></a>
+          <a class="prototype-size-link" data-prototype-phase="second-small" href="agent-pc-x3-phase2-small.html?prototype=small"><span class="prototype-device-symbol" aria-hidden="true"></span><strong>Agent pc X3二期小款</strong></a>
+          <a class="prototype-size-link" data-prototype-phase="second" href="agent-pc-x3-phase2.html?prototype=small"><span class="prototype-device-symbol" aria-hidden="true"></span><strong>Agent pc X3二期大款</strong></a>
         </nav>
         <nav class="prototype-system-links" aria-label="系统级原型演示">
           <a class="prototype-system-link" href="?prototype=display-demo"><span aria-hidden="true">▣</span>双屏识别演示</a>
@@ -17806,37 +17806,13 @@ function syncPhysicalScreenPreview(preview) {
 }
 
 function ensurePhysicalScreenPreviews() {
+  // Keep the original feature view; remove the duplicate device-framed mirror.
+  $$(".physical-screen-preview").forEach((physical) => physical.remove());
   $$('[data-subscreen-preview]').forEach((preview) => {
-    const page = preview.dataset.subscreenPreview;
-    const title = preview.dataset.subscreenTitle || PAGE_TITLES[page] || "功能页";
-    const panel = preview.closest(".panel");
-    if (!panel) return;
-    let physical = panel.querySelector(`.physical-screen-preview[data-physical-for="${page}"]`);
-    if (!physical) {
-      physical = document.createElement("div");
-      physical.className = "physical-screen-preview";
-      physical.dataset.physicalFor = page;
-      physical.setAttribute("aria-label", `${title}自带小屏预览`);
-      physical.innerHTML = `
-        <div class="physical-screen-preview-head">
-          <strong>自带小屏</strong>
-        </div>
-        <div class="physical-screen-device">
-          <div class="physical-screen-glass"><div class="physical-screen-canvas"></div></div>
-          <span class="physical-screen-foot" aria-hidden="true"></span>
-        </div>
-      `;
-      panel.insertBefore(physical, preview);
-    }
-    const featureHeader = panel.querySelector(":scope > .section-title");
-    if (featureHeader && physical.nextElementSibling !== featureHeader) {
-      physical.after(featureHeader);
-    }
-    syncPhysicalScreenPreview(preview);
-    if (!PHYSICAL_SCREEN_OBSERVERS.has(preview)) {
-      const observer = new MutationObserver(() => syncPhysicalScreenPreview(preview));
-      observer.observe(preview, { subtree: true, childList: true, characterData: true, attributes: true });
-      PHYSICAL_SCREEN_OBSERVERS.set(preview, observer);
+    const observer = PHYSICAL_SCREEN_OBSERVERS.get(preview);
+    if (observer) {
+      observer.disconnect();
+      PHYSICAL_SCREEN_OBSERVERS.delete(preview);
     }
   });
 }
