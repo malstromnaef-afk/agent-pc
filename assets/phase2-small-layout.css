@@ -1,10 +1,18 @@
 /* Second-phase features inside the original phase-one small-model workbench. */
 #voice .voice-dialog-mode-switch{display:flex!important}
-#screen-config .config-panel{display:block}
-#screen-config .p2-settings-tabs{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start;margin:18px 0}
-#screen-config .p2-settings-nav-group{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px}
-#screen-config .p2-settings-nav-group h3{margin:0 6px 0 0;font-size:12px;color:var(--muted);font-weight:500}
-#screen-config .p2-settings-nav-group .p2-settings-tab{width:auto;min-height:36px;height:36px;padding:0 12px;font-size:13px}
+/* Settings follow the grouped left navigation used by the large model. */
+#screen-config .config-panel{display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:28px;align-items:start}
+#screen-config .config-panel>.panel-head{grid-column:1/-1;grid-row:1;margin-bottom:20px}
+#screen-config .config-panel>.p2-settings-tabs{grid-column:1;grid-row:2;display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:0;margin:0;padding:0 20px 0 0;border:0;border-right:1px solid var(--line);min-height:540px}
+#screen-config .config-panel>.config-section-panel{grid-column:2;grid-row:2;min-width:0}
+#screen-config .p2-settings-nav-group{display:flex;flex-direction:column;flex-wrap:nowrap;align-items:stretch;gap:6px;padding:0 0 20px;border:0;border-radius:0}
+#screen-config .p2-settings-nav-group+.p2-settings-nav-group{padding-top:20px;border-top:1px solid var(--line)}
+#screen-config .p2-settings-nav-group h3{margin:0 0 6px;padding:0 12px;color:var(--muted);font-size:12px;line-height:20px;font-weight:500}
+#screen-config .p2-settings-nav-group .p2-settings-tab{width:100%;min-width:0;height:44px;min-height:44px;text-align:left;padding:0 12px;border:1px solid transparent;border-radius:9px;background:transparent;font-size:16px;line-height:24px;color:var(--text)}
+#screen-config .p2-settings-nav-group .p2-settings-tab:hover{background:#1c252a}
+#screen-config .p2-settings-nav-group .p2-settings-tab.active{border-color:#22686b;background:#142d30;color:#12d7dc}
+@media(max-width:760px){#screen-config .config-panel{grid-template-columns:150px minmax(0,1fr);column-gap:16px}#screen-config .config-panel>.p2-settings-tabs{padding-right:12px}#screen-config .p2-settings-nav-group .p2-settings-tab{font-size:14px}}
+@media(max-width:480px){#screen-config .config-panel{grid-template-columns:116px minmax(0,1fr);column-gap:12px}#screen-config .p2-settings-nav-group .p2-settings-tab{padding:0 6px;font-size:13px}#screen-config .p2-settings-nav-group h3{padding-left:6px}}
 #voice .qa-composer-tools-left{display:flex;gap:6px;align-items:center;margin-right:auto}
 #voice .qa-composer-tools-left button{font:inherit;font-size:11px;padding:6px 9px;min-height:32px;border:1px solid var(--line);border-radius:8px;background:#20272c;color:var(--text)}
 #voice .qa-composer-tools-left button svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.7;vertical-align:middle;margin-right:4px}

@@ -1,0 +1,42 @@
+/* Retained settings presentation, isolated from removed assistance features. */
+#screen-config{--pa-bg:#111516;--pa-card:#171d1e;--pa-line:#343b42;--pa-text:#edf0f5;--pa-muted:#929da9;--pa-cyan:#12d7dc}
+#screen-config .p2-browser-panel.active{display:block;color:var(--pa-text)}
+#p2-settings-browser :is(h2,h3,p){margin:0}
+#p2-settings-browser button{font-family:inherit;box-shadow:none}
+.bc-lead{display:flex;align-items:center;justify-content:space-between;gap:24px;margin-bottom:20px;min-height:0}
+.bc-lead h2{font-size:18px;line-height:28px;font-weight:700;color:#e5e9ef}
+.bc-lead p{font-size:12px;line-height:20px;color:#929fa9;margin-top:4px!important}
+.bc-refresh{display:inline-flex;justify-content:center;align-items:center;gap:8px;width:104px;min-height:40px;padding:0;border:1px solid #343b42;border-radius:8px;background:#242a32;color:#e5ebf0;font-size:16px;flex-shrink:0;line-height:24px}
+.bc-refresh[aria-busy='true'] img{animation:pa-spin .6s linear infinite}
+.bc-card{padding:20px 32px;border:1px solid #343b42;border-radius:12px;background:#171d1e;display:flex;flex-direction:column;gap:12px}
+.bc-intro{display:flex;align-items:center;gap:20px;min-height:100px}
+.bc-icon{flex:0 0 44px}
+.bc-copy{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0;min-height:0}
+.bc-name{display:flex;gap:16px;align-items:center;min-height:0}
+.bc-name h3{font-size:18px;font-weight:700;line-height:28px;color:#e5e9ef}
+.bc-badge{display:inline-flex;align-items:center;justify-content:center;width:84px;height:28px;flex-shrink:0;border-radius:6px;background:#242a32;color:#929fa9;font-size:12px;line-height:20px}
+.bc-copy>p{font-size:12px;line-height:20px;color:#929fa9;min-height:0}
+.bc-tags{display:flex;gap:24px;font-size:12px;line-height:20px;color:#929fa9}
+.bc-tags>span{display:flex;align-items:center;gap:8px;min-width:160px}
+.bc-store{display:inline-flex;justify-content:center;align-items:center;gap:12px;width:208px;min-height:40px;flex:0 0 208px;border:1px solid #00cbd5;border-radius:8px;background:#133033;color:#00cbd5;text-decoration:none;font-size:16px;line-height:24px}
+.bc-summary{display:grid;grid-template-columns:1fr 1fr 1fr;border-top:1px solid #343b42;border-bottom:1px solid #343b42;padding:12px 0;min-height:76px}
+.bc-summary>div{display:flex;flex-direction:column;gap:8px;min-height:52px;padding:4px 24px;border-right:1px solid #343b42}
+.bc-summary>div:first-child{padding-left:0}.bc-summary>div:last-child{border-right:0}
+.bc-summary span{font-size:12px;line-height:20px;color:#929fa9}.bc-summary strong{font-size:16px;line-height:24px;font-weight:400;color:#e5e9ef}.bc-summary .bc-accent{color:#00cbd5}
+.bc-note{display:flex;align-items:center;gap:12px;min-height:20px;font-size:12px;line-height:20px;color:#e5e9ef}.bc-note p{flex:1}
+
+:is(.bc-refresh,.bc-store):focus-visible{outline:2px solid #00cbd5;outline-offset:4px}
+@keyframes pa-spin{to{transform:rotate(360deg)}}
+@media(max-width:1450px){.bc-name{flex-wrap:wrap}.bc-tags{gap:16px}.bc-tags>span{min-width:130px}}
+@media(max-width:1100px){.bc-intro{flex-wrap:wrap}.bc-store{margin-left:64px}}
+@media(max-width:700px){.bc-card{padding:24px 20px}.bc-summary{grid-template-columns:1fr}.bc-summary>div{padding:12px 0;border-right:0;border-bottom:1px solid #343b42}.bc-summary>div:last-child{border-bottom:0}.bc-lead{align-items:flex-start}.bc-refresh{width:96px}.bc-store{margin-left:0}.bc-name h3{font-size:18px;line-height:28px}.bc-note{align-items:flex-start}}
+@media(max-width:1600px){.bc-card{padding-left:24px;padding-right:24px}}
+@media(max-width:900px){.bc-card{padding-left:16px;padding-right:16px}}
+
+/* CLI settings belong to the application tab, not the memory tab. */
+#screen-config #replica-apps .p2-app-card{margin-top:20px;padding:20px 0 0;border:0;border-top:1px solid var(--pa-line);border-radius:0;background:transparent}
+#screen-config #replica-apps .p2-cli-grid{margin-top:16px;grid-template-columns:repeat(2,minmax(0,1fr))}
+#screen-config #replica-apps .p2-cli-card{min-width:0}
+#screen-config #replica-apps .p2-cli-status{display:flex!important;color:var(--pa-muted);font-size:12px}
+#replica-app-empty{padding:24px 0;color:var(--pa-muted)}
+@media(max-width:1000px){#screen-config #replica-apps .p2-cli-grid{grid-template-columns:1fr}}

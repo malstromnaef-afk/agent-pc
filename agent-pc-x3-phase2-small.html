@@ -9867,9 +9867,10 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
     <link rel="stylesheet" href="assets/phase2-settings.css?v=20261030-shared-sidebar-20261028-pointer-exit">
     <link rel="stylesheet" href="assets/phase2-memory-export.css?v=20261029-direct-memory-download">
-    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261029-app-picker">
+
+    <link rel="stylesheet" href="assets/phase2-small-settings.css?v=20261102-small-scope">
     <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261020-compact-consent">
-    <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261022-no-region-toolbar">
+
     <script src="assets/display-demo.js" defer></script>
     <style id="phase2-remove-preview-frame">
       /* Phase 2 presents page content without the former small-screen frame. */
@@ -9928,12 +9929,9 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config .replica-switch{display:grid;place-items:center;position:relative;width:56px;height:44px;flex:0 0 56px;padding:0;border:0;border-radius:16px;background:transparent;cursor:pointer}
 #screen-config .replica-switch img{display:block;pointer-events:none;width:56px;height:32px}
 #screen-config .replica-switch[aria-checked="true"] .pa-switch-off,#screen-config .replica-switch[aria-checked="false"] .pa-switch-on{display:none}
-#screen-config .replica-cache{width:100%;padding:24px 32px;margin-top:20px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card);color:var(--pa-text);text-align:left}
-#screen-config .replica-cache strong{display:block;margin-bottom:4px;font-size:18px;line-height:28px;font-weight:700}
-#screen-config .replica-cache span span{display:block;color:var(--pa-muted);font-size:12px;line-height:20px}
 #screen-config .replica-settings :is(button,input):focus-visible{outline:2px solid var(--pa-cyan);outline-offset:3px}
-@media(max-width:1600px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:24px;padding-right:24px}}
-@media(max-width:900px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:16px;padding-right:16px}}
+@media(max-width:1600px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group){padding-left:24px;padding-right:24px}}
+@media(max-width:900px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group){padding-left:16px;padding-right:16px}}
 @media(max-width:650px){#screen-config .replica-row{gap:12px;flex-wrap:wrap}#screen-config .replica-settings input[type="search"]{width:100%}#screen-config .replica-switch-group .replica-row{flex-wrap:nowrap}#screen-config .replica-skill-tools input[type="search"]{flex-basis:100%}#screen-config .replica-warning{flex-wrap:wrap}}
 </style>
 
@@ -9946,7 +9944,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .prototype-size-link strong{font-size:clamp(20px,2.1vw,32px);white-space:nowrap}
 @media(max-width:900px){.prototype-link-grid{grid-template-columns:1fr;max-width:480px}}
 </style>
-<link rel="stylesheet" href="assets/phase2-small-layout.css?v=20261102-small-original">
+<link rel="stylesheet" href="assets/phase2-small-layout.css?v=20261102-settings-sidebar">
 </head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
@@ -11337,66 +11335,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                 <div class="action-row" id="config-page-actions"></div>
               </div>
 
-              <div class="p2-settings-tabs" role="tablist" aria-label="设置分类"><div class="p2-settings-nav-group" role="group" aria-label="日常设置"><h3>日常设置</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="device" aria-selected="false">设备设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="system" aria-controls="p2-settings-system" aria-selected="false">系统设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="proactive" aria-controls="p2-settings-proactive" aria-selected="false">主动辅助</button></div><div class="p2-settings-nav-group" role="group" aria-label="模型与能力"><h3>模型与能力</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="api" aria-controls="p2-settings-api" aria-selected="false">API 设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="apps-skills" aria-controls="p2-settings-apps-skills" aria-selected="false">应用与技能</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="browser" aria-controls="p2-settings-browser" aria-selected="false">浏览器插件</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="computer" aria-controls="p2-settings-computer" aria-selected="false">电脑操作</button></div><div class="p2-settings-nav-group" role="group" aria-label="数据管理"><h3>数据管理</h3><button type="button" role="tab" class="p2-settings-tab" id="p2-setting-tab-memory" data-phase2-setting-tab="memory" aria-controls="p2-settings-memory" aria-selected="false">本地记忆</button></div></div>
-<section class="inner-card device-preview-panel config-section-panel" data-config-panel="device">
-                <div class="device-settings-grid">
-                  <article class="device-setting-card">
-                    <label for="device-brightness">亮度</label>
-                    <input id="device-brightness" type="range" min="10" max="100" value="80" />
-                    <strong id="device-brightness-value">80%</strong>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <div>
-                      <span>自动休眠</span>
-                      <strong id="device-auto-sleep-label">开启</strong>
-                    </div>
-                    <button class="toggle" id="device-auto-sleep" aria-pressed="true" aria-label="自动休眠已开启"></button>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <label for="device-sleep-time">休眠时间</label>
-                    <select id="device-sleep-time">
-                      <option>1 分钟</option>
-                      <option selected>5 分钟</option>
-                      <option>10 分钟</option>
-                      <option>30 分钟</option>
-                    </select>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <span>唤醒方式</span>
-                    <label class="check-row"><input id="device-wake-touch" type="checkbox" checked />触摸唤醒</label>
-                    <label class="check-row"><input id="device-wake-voice" type="checkbox" />语音唤醒</label>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <div>
-                      <span>屏幕常亮</span>
-                      <strong id="device-always-on-label">关闭</strong>
-                    </div>
-                    <button class="toggle off" id="device-always-on" aria-pressed="false" aria-label="屏幕常亮已关闭"></button>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <div>
-                      <span>重要提醒点亮副屏</span>
-                      <strong id="device-alert-wake-label">开启</strong>
-                    </div>
-                    <button class="toggle" id="device-alert-wake" aria-pressed="true" aria-label="重要提醒点亮副屏已开启"></button>
-                  </article>
-
-                  <article class="device-setting-card">
-                    <div>
-                      <span>触控反馈</span>
-                      <strong id="device-touch-feedback-label">开启</strong>
-                    </div>
-                    <button class="toggle" id="device-touch-feedback" aria-pressed="true" aria-label="触控反馈已开启"></button>
-                  </article>
-                </div>
-              </section>
-
-              <section class="inner-card api-settings-panel config-section-panel" id="p2-settings-api" data-config-panel="api">
+              <div class="p2-settings-tabs" role="tablist" aria-label="设置分类"><div class="p2-settings-nav-group" role="group" aria-label="日常设置"><h3>日常设置</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="system" aria-controls="p2-settings-system" aria-selected="false">系统设置</button></div><div class="p2-settings-nav-group" role="group" aria-label="模型与能力"><h3>模型与能力</h3><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="api" aria-controls="p2-settings-api" aria-selected="false">API 设置</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="apps-skills" aria-controls="p2-settings-apps-skills" aria-selected="false">应用与技能</button><button type="button" role="tab" class="p2-settings-tab" data-phase2-setting-tab="computer" aria-controls="p2-settings-computer" aria-selected="false">电脑操作</button></div><div class="p2-settings-nav-group" role="group" aria-label="数据管理"><h3>数据管理</h3><button type="button" role="tab" class="p2-settings-tab" id="p2-setting-tab-memory" data-phase2-setting-tab="memory" aria-controls="p2-settings-memory" aria-selected="false">本地记忆</button></div></div>
+<section class="inner-card api-settings-panel config-section-panel" id="p2-settings-api" data-config-panel="api">
                 <div class="api-model-tabs" role="tablist" aria-label="API模型类型">
                   <button class="api-model-tab active" id="api-tab-llm" type="button" role="tab" aria-selected="true">大语言模型</button>
                   <button class="api-model-tab" id="api-tab-voice" type="button" role="tab" aria-selected="false">语音模型</button>
@@ -11411,7 +11351,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   </div>
                   <div class="api-config-grid" id="api-config-list"></div>
                   <div class="api-provider-empty" id="api-config-empty">
-                    <strong>还没有大语言模型配置</strong>
+                    <strong>还没有云端大语言模型配置</strong>
                     <span>点击“添加模型”，选择国内、海外或自定义服务商。</span>
                   </div>
                 </div>
@@ -11472,61 +11412,9 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                     <div class="p2-language-field"><select id="p2-interface-language" aria-label="界面语言"><option value="zh-CN">简体中文</option><option value="en">English（英语）</option><option value="de">Deutsch（德语）</option><option value="it">Italiano（意大利语）</option><option value="fr">Français（法语）</option><option value="es">Español（西班牙语）</option><option value="pt">Português（葡萄牙语）</option><option value="ja">日本語（日语）</option></select></div>
                   </div>
                 </section>
-                <section class="inner-card p2-system-card p2-pointer-card" aria-label="魔法指针">
-                  <div class="p2-system-line">
-                    <div><strong>魔法指针</strong><p>晃动光标或使用快捷键唤起，选择内容交给 Agent 处理。</p></div>
-                    <div class="p2-system-toggle"><span id="p2-pointer-state">关闭</span><button type="button" class="toggle off" id="p2-pointer-toggle" aria-label="开启魔法指针" aria-pressed="false"><img class="p2-toggle-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                  </div>
-                  <div class="p2-system-line p2-pointer-option-line">
-                    <div><strong>晃动唤起</strong><p>快速左右晃动光标唤起。</p></div>
-                    <div class="p2-system-toggle"><span id="p2-pointer-shake-state">开启</span><button type="button" class="toggle" id="p2-pointer-shake-toggle" aria-label="关闭晃动唤起" aria-pressed="true" disabled><img class="p2-toggle-on" src="assets/settings-figma/f6f62.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                  </div>
-                  <div class="p2-system-line p2-pointer-sensitivity-line">
-                    <label for="p2-pointer-sensitivity">晃动灵敏度</label>
-                    <div class="p2-pointer-slider"><span aria-hidden="true">低</span><span class="p2-slider-control"><img class="p2-slider-reference" src="assets/settings-figma/a2110.svg" width="346" height="22" alt=""><input id="p2-pointer-sensitivity" type="range" min="0" max="100" step="1" value="50" disabled title="开启魔法指针后可调整"></span><span aria-hidden="true">高</span></div>
-                  </div>
-                  <div class="p2-system-line p2-pointer-option-line">
-                    <span class="p2-setting-label">唤起快捷键</span>
-                    <button type="button" class="soft-button p2-capture-shortcut" id="p2-pointer-shortcut" aria-label="修改魔法指针快捷键，当前为 Alt + G" aria-describedby="p2-pointer-shortcut-help" disabled>Alt + G</button>
-                  </div>
-                  <p id="p2-pointer-shortcut-help" class="p2-capture-shortcut-help" role="status" hidden>按 Ctrl／Alt 与字母或数字组合，Esc 取消。</p>
-                  <div class="p2-system-line p2-pointer-option-line">
-                    <span class="p2-setting-label">退出快捷键</span>
-                    <kbd class="p2-fixed-shortcut" id="p2-pointer-exit-shortcut" aria-label="退出魔法指针快捷键 Alt + G">Alt + G</kbd>
-                  </div>
-                  <p id="p2-pointer-exit-help" class="p2-capture-shortcut-help">再次按唤起快捷键退出，未发送内容保留为草稿。</p>
-                </section>
-                <section class="inner-card p2-system-card p2-screen-card" aria-label="自动读屏">
-                  <div class="p2-system-line">
-                    <div><strong>自动读屏</strong><p>持续读取所选屏幕或区域的内容。</p></div>
-                    <div class="p2-system-toggle"><span id="p2-screen-state">关闭</span><button type="button" class="toggle off" id="p2-screen-toggle" aria-label="开启自动读屏" aria-pressed="false"><img class="p2-toggle-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                  </div>
-                  <div id="p2-screen-range-options" role="group" aria-label="读取范围" hidden>
-                    <div class="p2-read-range-row">
-                      <label class="p2-range-choice"><input type="radio" name="p2-screen-range" value="display" checked><span>整个屏幕<small>最多选择 2 个</small></span></label>
-                      <div id="p2-display-select" class="p2-display-options" role="group" aria-label="读取显示器">
-                        <label><input type="checkbox" value="external" data-p2-display>显示器 1 · 外接显示器</label>
-                        <label><input type="checkbox" value="builtin" data-p2-display>显示器 2 · 自带小屏</label>
-                      </div>
-                    </div>
-                    <div class="p2-read-range-row">
-                      <label class="p2-range-choice"><input type="radio" name="p2-screen-range" value="region"><span>框选区域</span></label>
-                      <div id="p2-region-shortcut" hidden><span class="p2-region-shortcut-label">快捷键</span><button type="button" class="soft-button p2-capture-shortcut" id="p2-capture-shortcut" aria-label="修改框选快捷键，当前为 Ctrl + Alt + S" aria-describedby="p2-capture-shortcut-help">Ctrl + Alt + S</button><button type="button" class="soft-button p2-region-start" id="p2-region-start">开始框选</button></div>
-                    </div>
-                    <p id="p2-capture-shortcut-help" class="p2-capture-shortcut-help" role="status" hidden>按 Ctrl／Alt 与字母或数字组合，Esc 取消。</p>
-                    <p id="p2-region-usage" class="p2-capture-shortcut-help" hidden>按快捷键开始框选，点击组合键可修改；Mac 使用 Control + Option + S。</p>
-                  </div>
-                </section>
-                <section class="inner-card p2-system-card p2-local-model-card" aria-labelledby="p2-local-model-heading">
-                  <div class="p2-local-model-copy">
-                    <div class="p2-local-model-summary"><h3 id="p2-local-model-heading">屏幕识别内置模型</h3><span id="p2-local-model-usage" title="原型演示数据，未接入实际用量统计">6个功能正在使用</span><span title="原型演示数据，未接入实际费用统计">已约$0.0511</span></div>
-                    <p>小功能(标题、感知、补全、记忆)默认在本机模型上运行,不出境、不计费;关掉则一律走云端。</p>
-                  </div>
-                  <div class="p2-local-model-controls">
-                    <div class="p2-system-toggle"><span>优先使用内置模型</span><button type="button" class="toggle" id="p2-local-model-toggle" aria-label="关闭优先使用内置模型" aria-pressed="true"><img class="p2-toggle-on" src="assets/settings-figma/889f2.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                    <span id="p2-local-model-select" aria-label="内置模型">Gemma 3 12B</span>
-                  </div>
-                </section>
+
+
+
                 <p id="p2-system-feedback" role="status" aria-live="polite" hidden></p>
               </section>
               <section class="config-section-panel" id="p2-settings-memory" data-config-panel="memory" role="tabpanel" aria-labelledby="p2-setting-tab-memory">
@@ -11544,61 +11432,38 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   <p id="p2-memory-export-feedback" role="status" aria-live="polite" hidden></p>
                   <p id="p2-memory-export-error" role="alert" hidden></p>
                 </section>
-                <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
-                  <div class="p2-system-heading"><h3 id="p2-app-heading">应用连接</h3><p>通过对应的 CLI 适配器，让 Agent 调用应用功能。</p></div>
-                  <div class="p2-cli-grid">
-                    <article class="p2-cli-card"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wechat" aria-label="连接微信 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="feishu" aria-label="连接飞书 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="dingtalk" aria-label="连接钉钉 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wecom" aria-label="连接企业微信 CLI">连接</button></article>
-                  </div>
-                </section>
                 <p id="p2-local-settings-feedback" role="status" aria-live="polite" hidden></p>
               </section>
-              <section class="config-section-panel p2-proactive-panel" id="p2-settings-proactive" data-config-panel="proactive" role="tabpanel" aria-label="主动辅助">
-                <header class="pa-lead"><h2>主动辅助</h2><p>根据授权上下文准备聊天回复，提供可协助处理的任务建议。</p></header>
-                <div class="pa-view-bar"><div class="pa-view-tabs" role="tablist" aria-label="主动辅助分类"><button type="button" role="tab" data-pa-view="settings" aria-controls="pa-settings" aria-selected="true">设置</button><button type="button" role="tab" data-pa-view="reply" aria-controls="pa-records" aria-selected="false">回复建议</button><button type="button" role="tab" data-pa-view="task" aria-controls="pa-records" aria-selected="false">任务建议</button></div><button type="button" class="pa-help" id="pa-help">ⓘ 使用帮助</button></div>
-                <div id="pa-settings">
-                  <section class="pa-card pa-master"><div class="pa-setting-row"><div class="pa-copy"><h3>主动辅助</h3><p>开启后提供回复与任务建议；关闭后停止本模块的感知与建议。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="enabled" aria-label="主动辅助" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div></section>
-                  <section class="pa-setting-section"><h3 class="pa-section-label">回复建议</h3><div class="pa-card">
-                    <div class="pa-setting-row"><div class="pa-copy"><h3>启用回复建议</h3><p>根据聊天内容准备回复建议，按 Tab 填入，由你发送。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="replyEnabled" aria-label="启用回复建议" aria-checked="false"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div>
-                    <div class="pa-setting-row pa-apps-row"><div class="pa-apps-head"><div class="pa-copy"><h3>关注应用</h3><p>只有选中的软件会被关注</p></div><span id="pa-app-count">未选择应用</span></div><div class="pa-app-picker" id="pa-app-picker"><div class="pa-app-field"><svg class="pa-app-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg><div id="pa-app-tags" hidden></div><input id="pa-app-search" type="text" role="combobox" aria-label="关注应用" aria-expanded="false" aria-controls="pa-app-list" aria-autocomplete="list" aria-describedby="pa-app-status" placeholder="搜索应用名称" autocomplete="off"><button type="button" id="pa-app-expand" aria-label="展开应用列表" aria-expanded="false" aria-controls="pa-app-list">⌄</button></div><div id="pa-app-list" role="listbox" aria-label="本机已安装的应用" aria-multiselectable="true" hidden></div><p id="pa-app-status" role="status" hidden></p></div></div>
-                    <div class="pa-setting-row pa-alias-row"><div class="pa-copy"><h3><label for="pa-alias-input">我的昵称（选填）</label></h3><p>你在微信、飞书等软件里的昵称，或群里大家对你的称呼。填了以后，系统能分清哪些话是在叫你，不会把你自己说的话误当成别人找你办事。</p></div><div class="pa-alias-field"><div id="pa-alias-tags" hidden></div><input type="text" id="pa-alias-input" placeholder="输入昵称，按回车添加，可添加多个" autocomplete="off"></div></div>
-                    <div class="pa-setting-row"><div class="pa-copy"><h3>回复提示方式</h3><p>显示回复建议，按 Tab 采纳并填入。</p></div><div class="pa-segment pa-reply-modes pa-preview-options" role="group" aria-label="回复提示方式"><div class="pa-mode-option" data-pa-mode-option="小卡片"><button type="button" data-pa-mode="小卡片" aria-pressed="true">小卡片</button><button type="button" class="pa-mode-help" data-pa-preview="card" aria-label="查看小卡片效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-mode-option="输入框预览"><button type="button" data-pa-mode="输入框预览" aria-pressed="false">输入框预览</button><button type="button" class="pa-mode-help" data-pa-preview="input" aria-label="查看输入框预览效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div></div></div>
-                    <div class="pa-setting-row pa-process-copy">将聊天中需要你处理的事记为待办，提前准备回复；回到对应会话后按 Tab 填入，由你发送。</div>
-                  </div></section>
-                  <section class="pa-setting-section"><h3 class="pa-section-label">任务建议</h3><div class="pa-card"><div class="pa-setting-row"><div class="pa-copy"><h3>启用任务建议</h3><p>根据当前工作内容提出建议，选择“有用，帮我做”后执行。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="taskEnabled" aria-label="启用任务建议" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div><div class="pa-setting-row"><div class="pa-copy"><h3>建议卡显示位置</h3></div><div class="pa-segment pa-placement-modes pa-preview-options" role="group" aria-label="建议卡显示位置"><div class="pa-mode-option" data-pa-placement-option="跟随窗口"><button type="button" data-pa-placement="跟随窗口" aria-pressed="true">跟随窗口</button><button type="button" class="pa-mode-help" data-pa-preview="follow" aria-label="查看跟随窗口效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="屏幕右下"><button type="button" data-pa-placement="屏幕右下" aria-pressed="false">屏幕右下</button><button type="button" class="pa-mode-help" data-pa-preview="bottom" aria-label="查看屏幕右下效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="鼠标附近"><button type="button" data-pa-placement="鼠标附近" aria-pressed="false">鼠标附近</button><button type="button" class="pa-mode-help" data-pa-preview="cursor" aria-label="查看鼠标附近效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div><div class="pa-mode-option" data-pa-placement-option="右上角"><button type="button" data-pa-placement="右上角" aria-pressed="false">右上角</button><button type="button" class="pa-mode-help" data-pa-preview="top" aria-label="查看右上角效果" aria-describedby="pa-mode-preview"><svg viewBox="0 0 20 20" width="16" height="16" aria-hidden="true"><circle cx="10" cy="10" r="8" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7.6 7.3a2.4 2.4 0 1 1 4 1.8c-1 .6-1.6 1-1.6 2.2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="10" cy="14" r=".9" fill="currentColor"/></svg></button></div></div></div></div></section>
-                </div>
-                <section id="pa-records" class="pa-records pa-card" role="tabpanel" hidden><header class="pa-list-toolbar"><h3 id="pa-list-title">回复建议列表</h3><div class="pa-list-actions"><button type="button" class="pa-button" id="pa-clear">清理</button><button type="button" class="pa-button" id="pa-refresh">刷新</button></div></header><div class="pa-table-scroll"><div id="pa-table" role="table"></div></div></section>
-                <p id="pa-feedback" class="pa-feedback" role="status" hidden></p>
-                <div id="pa-mode-preview" class="pa-mode-preview" role="tooltip" hidden><img id="pa-mode-preview-image" src="assets/proactive-figma/reply-card-preview.png" width="1112" height="536" alt="回复小卡片效果预览"></div>
-                <dialog id="pa-help-dialog" class="pa-help-dialog"><div class="pa-dialog-head"><h3>主动辅助</h3><button type="button" data-pa-help-close aria-label="关闭使用帮助">×</button></div><p>根据授权上下文准备聊天回复，提供可协助处理的任务建议。</p><p>根据聊天内容准备回复建议，按 Tab 填入，由你发送。</p><p>根据当前工作内容提出建议，选择“有用，帮我做”后执行。</p></dialog>
-              </section>
-              <section class="config-section-panel p2-browser-panel" id="p2-settings-browser" data-config-panel="browser" role="tabpanel" aria-label="浏览器插件">
-                <header class="bc-lead"><div><h2>浏览器插件</h2><p>将 Chrome 中已授权网站的 Cookie 同步至内置浏览器，减少重复登录。</p></div><button type="button" class="bc-refresh" id="bc-refresh"><img src="assets/proactive-figma/refresh.svg" width="24" height="24" alt=""><span>刷新</span></button></header>
-                <section class="bc-card"><div class="bc-intro"><img src="assets/proactive-figma/browser.svg" width="44" height="44" alt="" class="bc-icon"><div class="bc-copy"><div class="bc-name"><h3>Agent PC 浏览器连接器</h3><span class="bc-badge" id="bc-state">未连接</span></div><p>将已授权网站 Cookie 的新增、更新和删除同步至内置浏览器。</p><div class="bc-tags"><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">Cookie 同步</span><span><img src="assets/proactive-figma/check.svg" width="18" height="18" alt="">登录态复用</span></div></div><a class="bc-store" href="https://chromewebstore.google.com/" target="_blank" rel="noopener noreferrer"><img src="assets/proactive-figma/external.svg" width="20" height="20" alt="">打开 Chrome 商店</a></div><div class="bc-summary"><div><span>客户端连接服务</span><strong class="bc-accent" id="bc-service">运行正常</strong></div><div><span>安全配对</span><strong id="bc-pair">未配对</strong></div><div><span>最近同步</span><strong id="bc-sync">暂无同步记录</strong></div></div><div class="bc-note"><img src="assets/proactive-figma/info.svg" width="20" height="20" alt=""><p>插件尚未连接。安装后，在插件中允许 Cookie 访问，并在客户端确认配对。</p></div></section>
-              </section>
 
-<section class="config-section-panel replica-settings" id="p2-settings-apps-skills" data-config-panel="apps-skills" role="tabpanel" aria-label="应用与技能">
+              <section class="config-section-panel replica-settings" id="p2-settings-apps-skills" data-config-panel="apps-skills" role="tabpanel" aria-label="应用与技能">
 <header class="replica-head"><h2>应用与技能</h2><p>管理应用授权与 AI 技能，扩展助手可调用的工具。</p></header>
 <div class="replica-tabs" role="tablist" aria-label="应用与技能"><button type="button" role="tab" aria-selected="true" data-replica-tab="apps" class="active">应用连接</button><button type="button" role="tab" aria-selected="false" data-replica-tab="skills">Skills</button></div>
 <div id="replica-apps" role="tabpanel">
 <div class="replica-row"><div><h3>应用连接</h3><p>连接常用应用，让 AI 在你授权的范围内使用它们。</p></div><button type="button" data-replica-refresh aria-label="刷新应用连接">↻</button></div>
-<div class="replica-warning"><span>⊗　当前设备版本尚不支持应用连接，请更新设备后重试。</span><button type="button" data-replica-refresh>刷新</button></div>
+<div class="replica-warning"><span>当前为交互原型，尚未接入应用连接服务。配置仅用于演示。</span><button type="button" data-replica-refresh>刷新</button></div>
 <div class="replica-row"><div><h4>添加应用</h4><p>连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-replica-unavailable>＋ 自定义 MCP</button></div>
 <div class="replica-row"><div class="replica-filters" aria-label="应用地区"><button type="button" class="active" data-replica-region="all" aria-pressed="true">全部</button><button type="button" data-replica-region="cn" aria-pressed="false">国内</button><button type="button" data-replica-region="global" aria-pressed="false">国际</button></div><input type="search" id="replica-app-search" placeholder="搜索应用" aria-label="搜索应用"></div>
-<div id="replica-feishu" class="replica-row replica-app"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书</h4><p>在对话中完成一次连接，之后在任意会话里使用飞书。</p></div></div><button type="button" data-replica-unavailable>配置</button></div>
-<p class="replica-security">♧　凭证保存在设备上，连接不经过云端中转。</p>
+<div id="replica-feishu" class="replica-row replica-app" data-app-region="cn" data-app-search="飞书 feishu lark mcp"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书 MCP</h4><p>通过 MCP 调用已适配的应用工具，当前未连接。</p></div></div><button type="button" data-replica-unavailable>配置</button></div>
+                <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
+                  <div class="p2-system-heading"><h3 id="p2-app-heading">CLI 应用连接</h3><p>配置对应的 CLI 适配器路径；当前为原型，尚未接入执行服务。</p></div>
+                  <div class="p2-cli-grid">
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wechat" aria-label="连接微信 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="feishu" aria-label="连接飞书 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="dingtalk" aria-label="连接钉钉 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wecom" aria-label="连接企业微信 CLI">连接</button></article>
+                  </div>
+                </section>
+<p id="replica-app-empty" role="status" hidden>没有匹配的应用。</p>
+<p class="replica-security">当前为交互原型，未连接应用或调用 MCP、CLI 工具。</p>
 </div>
-<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">还没有 skill — 让 AI 跑几次任务自然会生长出来</div></div>
+<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">尚未接入本机 Skills 列表。</div></div>
 </section>
 <section class="config-section-panel replica-settings" id="p2-settings-computer" data-config-panel="computer" role="tabpanel" aria-label="电脑操作">
-<header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式，并管理识别缓存。</p></header>
+<header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式。</p></header>
 <p class="replica-group-label">操作方式</p><div class="replica-switch-group">
 <div class="replica-row"><div><h4>接管键鼠操作电脑</h4><p>允许 AI 接管鼠标键盘，像人一样点击和打字。关闭后 AI 无法直接操控电脑。</p></div><button type="button" role="switch" aria-checked="true" aria-label="接管键鼠操作电脑" class="replica-switch" data-replica-switch="mouse"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-<div class="replica-row"><div><h4>后台静默操作应用</h4><p>允许 AI 在后台读取并操作应用窗口，不动鼠标、不打扰你正常使用。</p></div><button type="button" role="switch" aria-checked="true" aria-label="后台静默操作应用" class="replica-switch" data-replica-switch="background"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
-<p class="replica-group-label">桌面理解</p><div class="replica-switch-group"><div class="replica-row"><div><h4>使用激进的桌面理解模式</h4><p>AI 操作电脑时同步查看屏幕画面，理解更准，速度稍慢。</p></div><button type="button" role="switch" aria-checked="false" aria-label="使用激进的桌面理解模式" class="replica-switch" data-replica-switch="vision"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
-<button type="button" class="replica-cache replica-row" data-replica-cache><span><strong>图标识别模型缓存</strong><span>预下载或清理应用识别模型，用于排查电脑操作中的识别问题。</span></span><span aria-hidden="true">›</span></button>
+<div class="replica-row"><div><h4>后台静默操作应用</h4><p>允许 AI 在你交办任务后，通过已适配接口操作应用；不持续读取屏幕。</p></div><button type="button" role="switch" aria-checked="true" aria-label="后台静默操作应用" class="replica-switch" data-replica-switch="background"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
+
 </section>
               <dialog class="p2-system-dialog" id="p2-folder-dialog" aria-labelledby="p2-folder-title">
                 <form id="p2-folder-form"><div class="p2-dialog-head"><h3 id="p2-folder-title">选择记忆存储文件夹</h3><button type="button" class="p2-dialog-close" data-p2-close aria-label="关闭文件夹选择">×</button></div>
@@ -13285,7 +13150,7 @@ function setActiveTab(viewId) {
 }
 
 function setConfigSubpage(subpage) {
-  if (!["device", "api", "system", "proactive", "memory", "browser", "apps-skills", "computer"].includes(subpage)) return;
+  if (!["api", "system", "memory", "apps-skills", "computer"].includes(subpage)) return;
   APP_STATE.currentPage = "screen-config";
   APP_STATE.configSubpage = subpage;
   APP_STATE.activeSubscreenSettings = null;
@@ -16588,7 +16453,6 @@ function runVoiceAction(action = "查询任务", customText = "") {
     搜索: { text: "搜索今天的安全告警", result: "已找到 4 条告警，最高风险为批量文件修改。" },
     打开应用: { text: "打开应用", result: "请继续说出或选择要打开的应用。" },
     设置提醒: { text: "提醒我周五 18 点查看研发周报", result: "已创建周五 18 点研发周报提醒。" },
-    截图: { text: "截取当前副屏画面", result: "已完成当前副屏截图，已写入语音记录。" },
     亮度调节: { text: "把副屏亮度调低一点", result: "副屏亮度已调整为 60%。" },
     音量调节: { text: "把系统音量调到 40%", result: "音量已调整到 40%。" },
     静音: { text: "将会议声音静音", result: "会议声音已静音，录音与转写继续。" },
@@ -16680,7 +16544,6 @@ function showVoiceRecord(index) {
     打开页面: { result: "已打开目标页面", target: "定时任务", advice: "页面已经跳转，可返回语音记录继续查看。", jump: "schedule", label: "查看定时任务" },
     打开应用: { result: "等待选择目标应用", target: "应用选择", advice: "选择目标应用后，会更新本条语音执行记录。", jump: "voice", label: "选择应用" },
     设置提醒: { result: "已同步创建定时任务", target: "定时任务", advice: "可进入定时任务查看提醒规则和执行状态。", jump: "schedule", label: "查看定时任务" },
-    截图: { result: "已完成截图", target: "AI 智能问答", advice: "截图只作为本次语音能力执行结果记录，不弹确认。", jump: "voice", label: "返回语音记录" },
     亮度调节: { result: "已同步设备亮度", target: "全局设置", advice: "亮度已更新，后续可在全局设置里调整设备显示。", jump: "voice", label: "返回语音记录" },
     音量调节: { result: "已同步设备音量", target: "全局设置", advice: "音量已更新，后续可在全局设置里调整声音状态。", jump: "voice", label: "返回语音记录" },
     静音: { result: "已同步会议声音状态", target: "AI 会议助手", advice: "录音与转写继续，会议声音状态可在会议助手查看。", jump: "meeting", label: "查看会议助手" },
@@ -18258,7 +18121,7 @@ function renderApiSettings() {
   const provider=$("#api-provider");
   if(!provider)return;
   const cards=$("#api-provider-cards");
-  cards.innerHTML=APP_STATE.apiConfigs.length?APP_STATE.apiConfigs.map(config=>`<button class="api-provider-card ${config.configId===APP_STATE.apiEditingId?"active":""}" data-api-edit="${escapeHtml(config.configId)}"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>${escapeHtml(config.displayName||config.provider)}</strong></span><small>${escapeHtml(config.provider)} · 默认模型：${escapeHtml(config.model||"未选择")}</small></span><span class="api-provider-status ${apiStatusClass(config)}">${escapeHtml(config.status)}</span></button>`).join(""):'<div class="api-provider-empty">还没有大语言模型配置。<br>点击“添加”开始配置。</div>';
+  cards.innerHTML=APP_STATE.apiConfigs.length?APP_STATE.apiConfigs.map(config=>`<button class="api-provider-card ${config.configId===APP_STATE.apiEditingId?"active":""}" data-api-edit="${escapeHtml(config.configId)}"><span class="api-provider-card-main"><span class="api-provider-card-title"><strong>${escapeHtml(config.displayName||config.provider)}</strong></span><small>${escapeHtml(config.provider)} · 默认模型：${escapeHtml(config.model||"未选择")}</small></span><span class="api-provider-status ${apiStatusClass(config)}">${escapeHtml(config.status)}</span></button>`).join(""):'<div class="api-provider-empty">还没有云端大语言模型配置。<br>点击“添加”开始配置。</div>';
   provider.value=settings.provider;
   $("#api-config-name").value=settings.displayName||"";
   $("#api-editor-title").textContent=APP_STATE.apiEditingId?`编辑 ${settings.provider}`:"添加服务商";
@@ -18401,7 +18264,7 @@ const API_UNIFIED_PROVIDERS={
 
 const API_CONFIG_UI={category:"llm",step:1,selectedProviderId:"",editingId:"",deleteId:"",values:{},hasCredential:false,connectionStatus:"unconfigured",lastValidatedAt:null};
 APP_STATE.voiceApiConfigs=APP_STATE.voiceApiConfigs||[];
-function apiCategoryMeta(){return API_CONFIG_UI.category==="llm"?{title:"大语言模型",description:"配置国内与海外的文字问答模型，内置服务商由系统自动适配协议。",empty:"还没有大语言模型配置"}:{title:"语音模型",description:"配置国内与海外的麦克风对话、语音回答和实时打断模型。",empty:"还没有语音模型配置"};}
+function apiCategoryMeta(){return API_CONFIG_UI.category==="llm"?{title:"大语言模型",description:"配置国内与海外的文字问答模型，内置服务商由系统自动适配协议。",empty:"还没有云端大语言模型配置"}:{title:"语音模型",description:"配置国内与海外的麦克风对话、语音回答和实时打断模型。",empty:"还没有语音模型配置"};}
 function apiCategoryConfigs(category=API_CONFIG_UI.category){return category==="llm"?APP_STATE.apiConfigs:APP_STATE.voiceApiConfigs;}
 function apiProviderById(id,category=API_CONFIG_UI.category){return API_UNIFIED_PROVIDERS[category].find(provider=>provider.id===id);}
 function apiStorageKey(category){return category==="llm"?"agentPcLlmApiConfigs":"agentPcVoiceModelConfigs";}
@@ -18788,14 +18651,6 @@ function bindEvents() {
     }
     setActiveTab(target);
   });
-  $("#device-brightness").addEventListener("input", (event) => updateDeviceSetting("brightness", Number(event.target.value)));
-  $("#device-sleep-time").addEventListener("change", (event) => updateDeviceSetting("sleepTime", event.target.value));
-  $("#device-wake-touch").addEventListener("change", (event) => updateDeviceSetting("wakeTouch", event.target.checked));
-  $("#device-wake-voice").addEventListener("change", (event) => updateDeviceSetting("wakeVoice", event.target.checked));
-  $("#device-auto-sleep").addEventListener("click", () => updateDeviceSetting("autoSleep", !APP_STATE.deviceSettings.autoSleep));
-  $("#device-always-on").addEventListener("click", () => updateDeviceSetting("alwaysOn", !APP_STATE.deviceSettings.alwaysOn));
-  $("#device-alert-wake").addEventListener("click", () => updateDeviceSetting("alertWake", !APP_STATE.deviceSettings.alertWake));
-  $("#device-touch-feedback").addEventListener("click", () => updateDeviceSetting("touchFeedback", !APP_STATE.deviceSettings.touchFeedback));
   $("#api-tab-llm").addEventListener("click",()=>switchApiModelTab("llm"));
   $("#api-tab-voice").addEventListener("click",()=>switchApiModelTab("voice"));
   $("#api-add-model").addEventListener("click",()=>openApiConfigDialog());
@@ -19343,7 +19198,9 @@ function qaAnswer(text){
   QA_STATE.messages.push({messageId:`msg-${Date.now()}-user`,role:"user",text,createdAt:stamp,time:nowText(),inputType:QA_STATE.mode},{messageId:`msg-${Date.now()}-ai`,requestId,role:"ai",text:"正在整理回答…",createdAt:stamp,time:nowText(),status:"thinking",providerId:selected.providerId,modelId:selected.model,loading:true});
   QA_STATE.phase="thinking";qaRender();
   clearTimeout(qaTimer);qaTimer=setTimeout(()=>{
-    const last=QA_STATE.messages[QA_STATE.messages.length-1];last.loading=false;last.status="success";last.createdAt=new Date().toISOString();last.time=nowText();
+    const last=QA_STATE.messages[QA_STATE.messages.length-1];if(!last)return;
+    if(!navigator.onLine){last.loading=false;last.status="failed";last.text="网络连接中断，请恢复网络后重试。";QA_STATE.phase="failed";QA_STATE.issue="offline";qaRender();return;}
+    last.loading=false;last.status="success";last.createdAt=new Date().toISOString();last.time=nowText();
     last.text=/量子|计算/.test(text)?"量子计算利用量子比特的叠加与纠缠处理信息，适合部分搜索、模拟与优化问题；它不会在所有任务上替代经典计算机。":"这是一个通用知识与内容问答示例。P0 会基于当前会话持续回答，并保留上下文供你继续追问。";
     QA_STATE.phase=QA_STATE.mode==="voice"?"speaking":"success";QA_STATE.speaking=QA_STATE.mode==="voice";QA_STATE.interrupted=false;qaRender();
   },900);
@@ -19355,6 +19212,9 @@ function qaSubmit(text){
   qaAnswer(text.trim());
 }
 function qaRender(){
+  if(!navigator.onLine)QA_STATE.issue="offline";
+  else if(!qaModels().length)QA_STATE.issue="no-model";
+  else if(["offline","no-model"].includes(QA_STATE.issue))QA_STATE.issue="";
   const root=qaRoot(),panel=root?.querySelector(".voice-assistant-panel");if(!panel)return;
   panel.classList.toggle("text-mode",QA_STATE.mode==="text");
   root.querySelectorAll("[data-voice-input-mode]").forEach(b=>{const a=b.dataset.voiceInputMode===QA_STATE.mode;b.classList.toggle("active",a);b.setAttribute("aria-pressed",String(a));});
@@ -19379,7 +19239,7 @@ function qaRender(){
   if(permissionAction){const needsSettings=["unauthorized","expired"].includes(QA_STATE.permission),needsRecheck=["waiting","recheck-denied"].includes(QA_STATE.permission);permissionAction.classList.toggle("visible",needsSettings||needsRecheck);permissionAction.textContent=needsRecheck?"重新检查":"去授权";permissionAction.dataset.action=needsRecheck?"recheck":"settings";}
   if(actions){actions.classList.toggle("active",["listening","thinking","speaking"].includes(QA_STATE.phase));actions.querySelector("#qa-finish-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-cancel-listening").style.display=QA_STATE.phase==="listening"?"inline-flex":"none";actions.querySelector("#qa-stop-speaking").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";actions.querySelector("#qa-stop-generating").style.display=QA_STATE.phase==="thinking"?"inline-flex":"none";actions.querySelector("#qa-interrupt-ai").style.display=QA_STATE.phase==="speaking"?"inline-flex":"none";}
   root.querySelector(".qa-banner")?.remove();
-  const issues={"mic-permission":"麦克风未授权 · 前往系统设置开启权限，或改用文字模式","mic-permission-closed":"语音不可用 · 麦克风权限已关闭，请重新开启或改用文字模式","mic-settings-opened":"等待系统设置返回 · 完成授权后返回并重新检查","mic-authorized":"麦克风已授权 · 现在可以使用语音问答","mic-busy":"麦克风正被其他应用占用 · 释放后重试，或改用文字模式","mic-missing":"未检测到麦克风设备 · 请检查设备连接或系统设置","offline":"当前无网络 · 会话和草稿已保留，请恢复网络后重试","no-model":"暂无可用模型 · 请完成 API 配置","model-invalid":"当前模型已失效 · 请选择其他可用模型","recognition-failed":"未能识别语音 · 请重新说，或切换到文字模式"};
+  const issues={"mic-permission":"麦克风未授权 · 前往系统设置开启权限，或改用文字模式","mic-permission-closed":"语音不可用 · 麦克风权限已关闭，请重新开启或改用文字模式","mic-settings-opened":"等待系统设置返回 · 完成授权后返回并重新检查","mic-authorized":"麦克风已授权 · 现在可以使用语音问答","mic-busy":"麦克风正被其他应用占用 · 释放后重试，或改用文字模式","mic-missing":"未检测到麦克风设备 · 请检查设备连接或系统设置","offline":"当前无网络 · 会话和草稿已保留，请恢复网络后重试","no-model":"尚未配置云端模型 · 请前往 API 设置","model-invalid":"当前模型已失效 · 请选择其他可用模型","recognition-failed":"未能识别语音 · 请重新说，或切换到文字模式"};
   if(QA_STATE.issue&&QA_STATE.issue!=="model-invalid"&&issues[QA_STATE.issue]){const banner=document.createElement("div");banner.className="qa-banner";banner.append(document.createTextNode(issues[QA_STATE.issue]));if(QA_STATE.issue==="no-model"){const action=document.createElement("button");action.type="button";action.id="qa-banner-api-settings";action.textContent="前往 API 设置";banner.append(action);}root.append(banner);}
   const callFooter=root.querySelector(".qa-call-footer");if(callFooter)callFooter.classList.toggle("active",QA_STATE.callActive);
   const callMic=root.querySelector("#qa-call-mic");if(callMic){callMic.classList.toggle("muted",QA_STATE.micMuted);callMic.setAttribute("aria-pressed",String(QA_STATE.micMuted));callMic.setAttribute("aria-label",QA_STATE.micMuted?"打开麦克风":"关闭麦克风");callMic.title=QA_STATE.micMuted?"打开麦克风":"关闭麦克风";}
@@ -20386,12 +20246,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     </script>
     <script src="assets/phase2-small-memory-import.js"></script>
     <script src="assets/phase2-small-memory.js?v=20261102-preview-switch"></script>
-    <script src="assets/phase2-memory-sources.js?v=20261021-source-all"></script>
-    <script src="assets/phase2-settings.js?v=20261029-local-memory-copy"></script>
-    <script src="assets/phase2-proactive.js?v=20261029-app-picker-no-hint"></script>
-    <script src="assets/phase2-screen-reading.js?v=20261028-region-entry"></script>
-    <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
-    <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>
+    <script src="assets/phase2-small-memory-sources.js?v=20261102-small-scope"></script>
+    <script src="assets/phase2-small-settings.js?v=20261102-small-scope"></script>
+    <script src="assets/phase2-small-assistant.js?v=20261102-small-scope"></script>
+    <script src="assets/phase2-small-memory-onboarding.js?v=20261102-small-scope"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
   <script>
 // Composer selections are demonstration metadata; no files are uploaded.
@@ -20424,19 +20282,28 @@ const qaCreateWithoutSelection=qaCreateSession;qaCreateSession=function(){qaComp
 </script>
 <script>
 let replicaRegion="all";
-function replicaFilterApps(){const query=document.querySelector("#replica-app-search").value.trim().toLowerCase();document.querySelector("#replica-feishu").hidden=replicaRegion==="global"||!("飞书 feishu lark".includes(query));}
-document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();});
+function replicaFilterApps(){
+ const query=document.querySelector("#replica-app-search").value.trim().toLowerCase();let count=0;
+ document.querySelectorAll("#replica-apps [data-app-search]").forEach(row=>{row.hidden=!(replicaRegion==="all"||row.dataset.appRegion===replicaRegion)||!row.dataset.appSearch.toLowerCase().includes(query);if(!row.hidden)count++;});
+ const group=document.querySelector("#replica-apps .p2-app-card");group.hidden=![...group.querySelectorAll("[data-app-search]")].some(row=>!row.hidden);
+ document.querySelector("#replica-app-empty").hidden=count>0;
+}
+document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();if(e.target.matches('#replica-skills input[type="search"]'))document.querySelector('#replica-skills .replica-empty').textContent=e.target.value.trim()?'尚未接入本机 Skills 列表，暂时无法搜索。':'尚未接入本机 Skills 列表。';});
 document.addEventListener("click",e=>{
 const tab=e.target.closest("[data-replica-tab]");if(tab){document.querySelectorAll("[data-replica-tab]").forEach(b=>{const active=b===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});document.querySelector("#replica-apps").hidden=tab.dataset.replicaTab!=="apps";document.querySelector("#replica-skills").hidden=tab.dataset.replicaTab!=="skills";return;}
 const region=e.target.closest("[data-replica-region]");if(region){replicaRegion=region.dataset.replicaRegion;document.querySelectorAll("[data-replica-region]").forEach(b=>{b.classList.toggle("active",b===region);b.setAttribute("aria-pressed",String(b===region));});replicaFilterApps();return;}
 const toggle=e.target.closest("[data-replica-switch]");if(toggle){const checked=toggle.getAttribute("aria-checked")!=="true";toggle.setAttribute("aria-checked",String(checked));try{phase2Storage.setItem("replica-computer-"+toggle.dataset.replicaSwitch,String(checked));}catch(_){}showLightToast("原型演示：仅保存开关状态，未控制电脑");return;}
-if(e.target.closest("[data-replica-refresh]")){return;}
+if(e.target.closest("[data-replica-refresh]")){replicaFilterApps();showLightToast("原型演示：已刷新界面，未连接应用或读取本机 Skills");return;}
 if(e.target.closest("[data-replica-unavailable]")){showLightToast("原型演示：未接入应用连接服务");return;}
 if(e.target.closest("[data-replica-folder]")){showLightToast("原型演示：暂未接入本机 Skills 文件夹");return;}
-if(e.target.closest("[data-replica-cache]")){showLightToast("原型演示：暂未接入图标识别模型缓存");return;}
+
 });
 document.querySelectorAll("[data-replica-switch]").forEach(b=>{try{const saved=phase2Storage.getItem("replica-computer-"+b.dataset.replicaSwitch);if(saved!==null)b.setAttribute("aria-checked",saved);}catch(_){}});
 </script>
-<script>QA_STATE.mode="voice";qaRender();</script>
+<script>
+window.addEventListener("offline",()=>qaRender());
+window.addEventListener("online",()=>qaRender());
+QA_STATE.mode="voice";qaRender();
+</script>
 </body>
 </html>

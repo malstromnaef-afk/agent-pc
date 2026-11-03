@@ -8,9 +8,9 @@
   const filterTabs = {all:'全部',project:'项目',work:'工作',tool:'工具'};
   const colors = {project:'#56bbae',preference:'#b396dc',decision:'#cfab76',document:'#6daae0'};
   const initial = [
-    {id:'m1',title:'Agent PC 二期项目背景',content:'沿用一期软件框架，整合屏幕理解、本地知识与长期记忆、任务执行。文本、全局语音和屏幕感知共同作为任务入口。',category:'project',core:true,source:'Agent PC 二期需求说明（示例）',related:['Agent PC','微信','飞书','钉钉'],updated:'2026-10-09'},
+    {id:'m1',title:'Agent PC 二期项目背景',content:'沿用小款软件框架，新增图片与附件提问、Skill、工具调用及长期记忆。理解与生成使用已配置的云端模型。',category:'project',core:true,source:'Agent PC 二期需求说明（示例）',related:['Agent PC','微信','飞书','钉钉'],updated:'2026-10-09'},
     {id:'m2',title:'办公回复的表达习惯',content:'先给结论，再补充必要说明。回复简短、具体，重要信息突出展示，避免反复解释已有背景。',category:'preference',core:true,source:'用户手动保存（示例）',related:['用户偏好','微信'],updated:'2026-10-09'},
-    {id:'m3',title:'聊天回复的采纳规则',content:'建议回复在当前聊天光标旁展示，按 Tab 填入输入框。用户检查、修改后自行发送，系统不自动发送。',category:'decision',core:true,source:'已确认交互规则（示例）',related:['Agent PC','微信','飞书'],updated:'2026-10-08'},
+    {id:'m3',title:'聊天回复的采纳规则',content:'用户主动交办任务后生成回复草稿，检查、修改后自行使用，系统不自动发送。',category:'decision',core:true,source:'已确认交互规则（示例）',related:['Agent PC','微信','飞书'],updated:'2026-10-08'},
     {id:'m4',title:'项目进展汇报模板',content:'进度汇报按“已完成、进行中、待处理”整理。保留已经确认的事项，并在引用历史决定时展示资料来源。',category:'document',core:false,source:'项目进展模板.md（示例）',related:['项目管理','飞书'],updated:'2026-10-08'},
     {id:'m5',title:'报价资料与文件位置',content:'准备报价时，参考产品资料、价格表与报价模板。价格和数量需核对；生成文件后先预览再使用。',category:'document',core:false,source:'产品报价资料（示例）',related:['产品资料','微信'],updated:'2026-10-07'},
     {id:'m6',title:'售后问题处理经验',content:'相似问题优先查询操作手册与历史处理记录。没有匹配依据时说明缺少资料，避免编造处理方案。',category:'document',core:false,source:'售后操作手册（示例）',related:['操作手册','钉钉'],updated:'2026-10-07'},
@@ -25,6 +25,10 @@
       state.items=saved.items;state.selected=saved.selected;state.preview=saved.preview!==false;
     }
   } catch (_) { storageWarning=true; }
+  for(const item of state.items){
+    if(item.id==="m1"&&item.source===initial.find(m=>m.id==="m1").source&&item.content==="沿用一期软件框架，整合屏幕理解、本地知识与长期记忆、任务执行。文本、全局语音和屏幕感知共同作为任务入口。")item.content="沿用小款软件框架，新增图片与附件提问、Skill、工具调用及长期记忆。理解与生成使用已配置的云端模型。";
+    if(item.id==="m3"&&item.source===initial.find(m=>m.id==="m3").source&&item.content==="建议回复在当前聊天光标旁展示，按 Tab 填入输入框。用户检查、修改后自行发送，系统不自动发送。")item.content="用户主动交办任务后生成回复草稿，检查、修改后自行使用，系统不自动发送。";
+  }
   const memoryChanged = () => window.dispatchEvent(new CustomEvent('agentpc:memory-changed'));
   const persist = () => {
     try {phase2Storage.setItem('memory-demo-v1',JSON.stringify({items:state.items,selected:state.selected,preview:state.preview}));memoryChanged();}
