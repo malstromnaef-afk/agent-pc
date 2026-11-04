@@ -9237,14 +9237,14 @@ body.api-dialog-open { overflow:hidden; }
 
       .prototype-launcher-inner {
         display: grid;
-        gap: clamp(82px, 12vh, 142px);
-        width: min(100%, 1360px);
+        gap: clamp(56px, 8vh, 88px);
+        width: min(100%, 1120px);
       }
 
       .prototype-launcher h1 {
         margin: 0;
         color: var(--cyan);
-        font-size: clamp(62px, 7vw, 112px);
+        font-size: clamp(40px, 4.5vw, 68px);
         font-weight: 400;
         letter-spacing: -0.04em;
         text-align: center;
@@ -9254,14 +9254,14 @@ body.api-dialog-open { overflow:hidden; }
       .prototype-link-grid {
         display: grid;
         grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: clamp(64px, 5.5vw, 96px);
+        gap: clamp(24px, 3vw, 48px);
       }
 
       .prototype-system-links {
         display: flex;
         justify-content: center;
         gap: 16px;
-        margin-top: -54px;
+        margin-top: -20px;
       }
 
       .prototype-system-link {
@@ -9379,13 +9379,13 @@ body.api-dialog-open { overflow:hidden; }
       .system-control-hint { margin:0; color:rgba(224,238,239,.48); font-size:11px; text-align:center; }
 
       .prototype-size-link {
-        --device-width: 46%;
+        --device-width: 40%;
         position: relative;
         display: grid;
-        min-height: clamp(230px, 30vh, 330px);
+        min-height: clamp(190px, 25vh, 260px);
         place-items: center;
         align-content: center;
-        gap: 38px;
+        gap: 28px;
         overflow: hidden;
         border: 1px solid rgba(32, 230, 230, 0.24);
         border-radius: 22px;
@@ -9474,7 +9474,7 @@ body.api-dialog-open { overflow:hidden; }
         position: relative;
         z-index: 1;
         color: var(--cyan);
-        font-size: clamp(25px, 2.4vw, 42px);
+        font-size: clamp(18px, 1.65vw, 28px);
         font-weight: 500;
         letter-spacing: -0.02em;
         white-space: nowrap;
@@ -9496,7 +9496,7 @@ body.api-dialog-open { overflow:hidden; }
         body.prototype-landing .prototype-launcher { padding: 56px 28px; }
         .prototype-launcher-inner { gap: 64px; }
         .prototype-link-grid { grid-template-columns: 1fr; }
-        .prototype-size-link { min-height: 220px; }
+        .prototype-size-link { min-height: 190px; }
         .prototype-system-links { margin-top:-34px; flex-direction:column; align-items:stretch; }
         .prototype-system-link { width:100%; }
         .display-state { padding:24px 16px; }
@@ -9509,7 +9509,7 @@ body.api-dialog-open { overflow:hidden; }
         body.prototype-landing { overflow:auto; }
         body.prototype-landing .prototype-launcher { min-height:480px; padding:18px 48px; }
         .prototype-launcher-inner { gap:24px; width:min(100%,920px); }
-        .prototype-launcher h1 { font-size:54px; }
+        .prototype-launcher h1 { font-size:40px; }
         .prototype-link-grid { gap:34px; }
         .prototype-size-link { min-height:160px; font-size:26px; }
         .prototype-size-link .prototype-device-symbol { transform:scale(.72); margin:-16px 0; }
@@ -9858,7 +9858,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     <link rel="stylesheet" href="assets/display-demo.css">
     <script src="assets/display-demo.js" defer></script>
 <style>
-.prototype-link-grid{grid-template-columns:repeat(3,minmax(0,1fr));max-width:1500px;gap:28px}
+.prototype-link-grid{grid-template-columns:repeat(3,minmax(0,1fr));width:min(100%,1360px);max-width:1500px;gap:clamp(40px,4vw,72px)}
 .prototype-size-link strong{font-size:clamp(20px,2.1vw,32px);white-space:nowrap}
 @media(max-width:900px){.prototype-link-grid{grid-template-columns:1fr;max-width:480px}}
 </style>

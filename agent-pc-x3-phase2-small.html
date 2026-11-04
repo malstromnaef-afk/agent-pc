@@ -11394,16 +11394,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                     <div class="api-confirm-actions"><button class="soft-button" id="api-confirm-cancel">取消</button><button class="primary-button api-delete-button" id="api-confirm-delete">确认删除</button></div>
                   </div>
                 </div>
-                <details class="dev-field-notes">
-                  <summary>研发字段标注 · API配置</summary>
-                  <div class="dev-field-grid">
-                    <div class="dev-field-item"><strong>配置标识</strong><code>configId / category / providerId</code><br>大语言模型与语音模型独立存储和路由。</div>
-                    <div class="dev-field-item"><strong>密钥存储</strong><code>credentialRef: string|null</code><br>正式版由 Electron 主进程和 Windows 安全凭据模块保存，页面不回显明文。</div>
-                    <div class="dev-field-item"><strong>连接状态</strong><code>unconfigured / pending / testing / connected / failed / expired</code><br>页面中文文案由状态枚举映射。</div>
-                    <div class="dev-field-item"><strong>验证结果</strong><code>lastValidatedAt: ISO 8601|null</code><br><code>validationErrorCode</code>用于区分URL、密钥、模型和网络错误。</div>
-                    <div class="dev-field-item dev-field-rule"><strong>原型边界</strong>HTML 模拟动态字段、失败与成功状态；正式产品由服务商适配器发起真实验证。</div>
-                  </div>
-                </details>
               </section>
               <section class="config-section-panel p2-system-panel" id="p2-settings-system" data-config-panel="system" role="tabpanel" aria-label="系统设置">
                 <section class="inner-card p2-system-card p2-interface-card" aria-label="界面偏好">
@@ -11454,7 +11444,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
                   </div>
                 </section>
 <p id="replica-app-empty" role="status" hidden>没有匹配的应用。</p>
-<p class="replica-security">当前为交互原型，未连接应用或调用 MCP、CLI 工具。</p>
 </div>
 <div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">尚未接入本机 Skills 列表。</div></div>
 </section>
