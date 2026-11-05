@@ -9862,9 +9862,8 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .phase2-memory-empty p{margin:0;font-size:14px;}
 </style>
     <link rel="stylesheet" href="assets/display-demo.css">
-    <link rel="stylesheet" href="assets/phase2-memory.css?v=20261028-main-header">
+    <link rel="stylesheet" href="assets/phase2-memory.css?v=20261104-memory-editor-style">
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
-    <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
     <link rel="stylesheet" href="assets/phase2-settings.css?v=20261030-shared-sidebar-20261028-pointer-exit">
     <link rel="stylesheet" href="assets/phase2-memory-export.css?v=20261029-direct-memory-download">
 
@@ -9944,7 +9943,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 .prototype-size-link strong{font-size:clamp(20px,2.1vw,32px);white-space:nowrap}
 @media(max-width:900px){.prototype-link-grid{grid-template-columns:1fr;max-width:480px}}
 </style>
-<link rel="stylesheet" href="assets/phase2-small-layout.css?v=20261102-settings-sidebar">
+<link rel="stylesheet" href="assets/phase2-small-layout.css?v=20261104-memory-node-reader">
 </head>
   <body class="prototype-landing">
     <main class="prototype-launcher" id="prototype-launcher" aria-label="Agent X3 原型入口">
@@ -10165,18 +10164,28 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
               <div class="pm-workspace">
                 <aside class="pm-library"><button type="button" class="pm-library-restore" data-pm-action="expand-library" aria-label="展开记忆列表" title="展开记忆列表">»</button>
                   <div class="pm-memory-library">
-                  <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆、内容或来源" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
-                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-source" data-pm-action="memory-sources" aria-label="记忆来源"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.39-6.1L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></svg><span>来源</span></button><button type="button" class="pm-list-new" data-pm-action="new" aria-label="新建记忆">＋ 新建</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
-                  <div class="pm-core-heading">★ 核心记忆</div><div id="pm-core-list"></div>
-                  <div id="pm-category-tabs" class="pm-category-tabs" aria-label="记忆筛选"></div>
-                  <div id="pm-memory-list" class="pm-memory-list"></div>
+                  <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆标题或内容" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
+                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-new" data-pm-action="new" aria-label="新建记忆">＋ 新建</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
+                  <nav id="pm-memory-list" class="pm-memory-list" aria-label="记忆目录"></nav>
                   </div>
 
                 </aside>
                 <div class="pm-map-column">
-                  <div class="pm-map-heading"><div><strong>关系图谱</strong></div></div>
-                  <div class="pm-graph-stage" id="pm-graph-stage"><svg id="pm-graph" viewBox="0 0 900 620" role="group" aria-label="记忆关系图谱"></svg><div class="pm-graph-tools"><button type="button" data-pm-action="zoom-in" aria-label="放大图谱">＋</button><button type="button" data-pm-action="zoom-out" aria-label="缩小图谱">−</button><button type="button" data-pm-action="reset-zoom" aria-label="重置图谱">⊙</button></div><div class="pm-map-legend"><span><i class="pm-dot project"></i>项目</span><span><i class="pm-dot preference"></i>偏好</span><span><i class="pm-dot decision"></i>工作要求</span><span><i class="pm-dot document"></i>资料</span></div></div>
-                  <div id="pm-detail" class="pm-detail" hidden></div>
+                  <div class="pm-graph-view">
+                    <div class="pm-map-heading"><div><strong>关系图谱</strong></div></div>
+                    <div class="pm-graph-stage" id="pm-graph-stage"><svg id="pm-graph" viewBox="0 0 900 620" role="group" aria-label="记忆关系图谱"></svg><div class="pm-graph-tools"><button type="button" data-pm-action="zoom-in" aria-label="放大图谱">＋</button><button type="button" data-pm-action="zoom-out" aria-label="缩小图谱">−</button><button type="button" data-pm-action="reset-zoom" aria-label="重置图谱">⊙</button></div><div class="pm-map-legend"><span><i class="pm-dot project"></i>项目</span><span><i class="pm-dot preference"></i>偏好</span><span><i class="pm-dot decision"></i>工作要求</span><span><i class="pm-dot document"></i>资料</span></div></div>
+                  </div>
+                  <section class="pm-file-reader" aria-label="文件阅读区" hidden>
+                    <header class="pm-reader-header">
+                      <button class="pm-reader-back" type="button" data-pm-action="close-reader">← 返回图谱</button>
+                      <div class="pm-reader-path">
+                        <span data-pm-reader-memory></span>
+                        <span aria-hidden="true">/</span>
+                        <strong data-pm-reader-filename></strong>
+                      </div>
+                    </header>
+                    <div class="pm-reader-content" data-pm-reader-content tabindex="0" role="region" aria-label="文件正文"></div>
+                  </section>
                 </div>
               </div>
               <div id="pm-feedback" class="pm-feedback" role="status" hidden></div>
@@ -19215,7 +19224,7 @@ function qaRender(){
   const sendButton=root.querySelector("#voice-send-button"),requestBlocked=!navigator.onLine||["offline","no-model","model-invalid"].includes(QA_STATE.issue)||!qaModels().length;if(sendButton){sendButton.disabled=requestBlocked||QA_STATE.phase==="thinking";sendButton.title=requestBlocked?"当前暂不可发送":"Enter 发送 · Shift+Enter 换行";}
   const model=root.querySelector("#voice-api-model");if(model){const options=qaModels(),invalid=QA_STATE.issue==="model-invalid";if(!invalid)qaSelectedModel();model.innerHTML=(invalid?'<option value="">当前模型已失效，请重新选择</option>':"")+options.map(v=>{const [,p,m]=v.split("|");return `<option value="${escapeHtml(v)}">${escapeHtml(p)} · ${escapeHtml(m)}</option>`}).join("")||'<option value="">无可用模型</option>';model.value=invalid?"":QA_STATE.selectedModelKey;}
   const conversation=root.querySelector("#qa-conversation");
-  if(conversation){const activeSession=QA_STATE.recentSessions.find(s=>s.sessionId===QA_STATE.activeSessionId),sessionHeading=activeSession?`<div class="qa-current-session-title">${escapeHtml(activeSession.title)}</div>`:"";conversation.className=QA_STATE.messages.length?"voice-chat-window":"qa-conversation-empty";conversation.innerHTML=QA_STATE.messages.length?sessionHeading+QA_STATE.messages.map(m=>`<div class="qa-message ${m.role==='user'?'user':'ai'} ${m.loading?'loading':''}"><small>${m.role==='user'?'你':'AI'}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):'<strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p>';conversation.scrollTop=0;}
+  if(conversation){const activeSession=QA_STATE.recentSessions.find(s=>s.sessionId===QA_STATE.activeSessionId),sessionHeading=activeSession?`<div class="qa-current-session-title">${escapeHtml(activeSession.title)}</div>`:"";conversation.className=QA_STATE.messages.length?"voice-chat-window":"qa-conversation-empty";conversation.innerHTML=QA_STATE.messages.length?sessionHeading+QA_STATE.messages.map(m=>m.role==="model-switch"?`<div class="qa-model-change" role="status" title="新模型用于后续提问，正在生成的回答继续使用原模型"><span>${escapeHtml(m.text)}</span></div>`:`<div class="qa-message ${m.role==='user'?'user':'ai'} ${m.loading?'loading':''}"><small>${m.role==='user'?'你':'AI'}</small><p>${escapeHtml(m.text)}</p></div>`).join(""):'<strong>开始新的问答</strong><p>可通过语音或键盘询问通用知识与内容问题。</p>';conversation.scrollTop=0;}
   const title=root.querySelector("#voice-dialogue-title"),result=root.querySelector("#voice-dialogue-result"),orb=root.querySelector("#voice-dialogue-orb-button"),actions=root.querySelector("#qa-voice-actions"),permissionAction=root.querySelector("#qa-voice-permission-action");
   let meta={idle:["你可以开始说话","点击语音球开始，或切换到文字模式。"],muted:["麦克风已关闭","点击底部麦克风按钮恢复收听。"],listening:QA_STATE.interrupted?["已打断AI，正在听你说…","AI播报已停止，请直接说出新的问题。"]:["正在收听…","检测到说话结束后将自动提交。"],recognizing:["正在识别…",""],thinking:["正在思考…","切换模式不会取消当前请求。"],speaking:["正在回答…","你可以直接说话打断，原回答文字会继续保留。"],stopped:["回答已停止","文字回答已保留，可继续追问。"],failed:["未能识别语音","请重新说，或切换到文字模式。"]}[QA_STATE.phase]||["你可以开始说话",""];
   if(QA_STATE.permission==="unauthorized")meta=["麦克风未授权","请前往 Windows 系统设置开启麦克风权限；文字问答仍可使用。"];
@@ -19329,11 +19338,11 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#qa-finish-listening")){const followup=QA_STATE.interrupted;QA_STATE.cancelRecognition=false;QA_STATE.phase="recognizing";qaRender();setTimeout(()=>{if(!QA_STATE.cancelRecognition)qaSubmit(followup?"那它目前最适合解决哪些实际问题？":"请解释一下量子计算的基本原理");},500);return;}
   if(e.target.closest("#qa-cancel-listening")){QA_STATE.phase=QA_STATE.interrupted?"stopped":"idle";QA_STATE.interrupted=false;qaRender();return;}
   if(e.target.closest("#qa-stop-speaking")){QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
-  if(e.target.closest("#qa-stop-generating")){clearTimeout(qaTimer);const pending=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"&&m.loading);if(pending){pending.loading=false;pending.status="stopped";pending.text="回答生成已停止。";}QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
+  if(e.target.closest("#qa-stop-generating")){if(window.phase2ChatControls){window.phase2ChatControls.stop();return;}clearTimeout(qaTimer);const pending=[...QA_STATE.messages].reverse().find(m=>m.role==="ai"&&m.loading);if(pending){pending.loading=false;pending.status="stopped";pending.text="回答生成已停止。";}QA_STATE.phase="stopped";QA_STATE.speaking=false;qaRender();return;}
   if(e.target.closest("#qa-interrupt-ai")){QA_STATE.speaking=false;QA_STATE.interrupted=true;QA_STATE.phase="listening";qaRender();qaScheduleAutoSubmit(true);return;}
   if(e.target.closest("#qa-call-mic")){if(!QA_STATE.callActive)return;QA_STATE.micMuted=!QA_STATE.micMuted;if(QA_STATE.micMuted){clearTimeout(qaAutoListenTimer);if(QA_STATE.phase==="listening")QA_STATE.phase="muted";}else if(QA_STATE.phase==="muted"){QA_STATE.phase="listening";qaScheduleAutoSubmit(false);}qaRender();return;}
   if(e.target.closest("#qa-end-voice")){clearTimeout(qaAutoListenTimer);QA_STATE.callActive=false;QA_STATE.micMuted=false;QA_STATE.interrupted=false;if(["listening","muted","recognizing"].includes(QA_STATE.phase)){QA_STATE.cancelRecognition=true;QA_STATE.phase="idle";}else if(QA_STATE.phase==="speaking"){QA_STATE.speaking=false;QA_STATE.phase="stopped";}else if(QA_STATE.phase!=="thinking")QA_STATE.phase="idle";qaRender();return;}
-  if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";if(qaSubmit(QA_STATE.draft)){QA_STATE.draft="";if(i)i.value="";}return;}
+  if(e.target.closest("#voice-send-button")){e.preventDefault();e.stopImmediatePropagation();if(QA_STATE.phase==="thinking"&&window.phase2ChatControls){window.phase2ChatControls.stop();return;}const i=qaRoot()?.querySelector("#voice-text-input");QA_STATE.draft=i?.value||"";if(qaSubmit(QA_STATE.draft)){QA_STATE.draft="";if(i)i.value="";}return;}
   if(e.target.closest("#qa-session-toggle")){QA_STATE.sessionDrawerOpen=!QA_STATE.sessionDrawerOpen;qaRender();return;}
   if(e.target.closest("#qa-session-close")){QA_STATE.sessionDrawerOpen=false;qaRender();return;}
   if(e.target.closest("#qa-session-search-toggle")){const root=qaRoot(),input=root?.querySelector("#qa-drawer-search"),button=root?.querySelector("#qa-session-search-toggle");if(!input)return;input.hidden=!input.hidden;button?.setAttribute("aria-expanded",String(!input.hidden));if(!input.hidden)requestAnimationFrame(()=>input.focus({preventScroll:true}));else{input.value="";qaRenderDrawer("");}return;}
@@ -19348,7 +19357,7 @@ document.addEventListener("click",e=>{
   if(e.target.closest("#qa-permission-primary")){if(QA_STATE.permission==="error")qaRecheckPermission();else if(["unauthorized","expired","settings-error"].includes(QA_STATE.permission))qaOpenPermissionSettings();return;}
   if(e.target.closest("#qa-permission-recheck")){qaRecheckPermission();return;}
 },true);
-document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){const next=e.target.value;if(QA_STATE.permission==="requesting"&&["authorized","unauthorized"].includes(next)){qaApplyPermissionResult(next);return;}QA_STATE.permission=next;if(next==="authorized")QA_STATE.hadMicrophoneGrant=true;QA_STATE.issue=next==="expired"?"mic-permission-closed":next==="unauthorized"?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();QA_STATE.selectedModelKey=e.target.value;QA_STATE.modelProvider=qaSelectedModel()?.provider||"";QA_STATE.issue="";qaRender();},true);
+document.addEventListener("change",e=>{if(e.target.id==="qa-permission-demo"){const next=e.target.value;if(QA_STATE.permission==="requesting"&&["authorized","unauthorized"].includes(next)){qaApplyPermissionResult(next);return;}QA_STATE.permission=next;if(next==="authorized")QA_STATE.hadMicrophoneGrant=true;QA_STATE.issue=next==="expired"?"mic-permission-closed":next==="unauthorized"?"mic-permission":"";qaRender();return;}if(e.target.id==="qa-state-demo"){QA_STATE.issue=e.target.value;QA_STATE.phase=e.target.value==="recognition-failed"?"failed":"idle";qaRender();return;}if(e.target.id!=="voice-api-model"||!e.target.value)return;e.stopImmediatePropagation();if(window.phase2ChatControls){window.phase2ChatControls.changeModel(e.target.value);return;}QA_STATE.selectedModelKey=e.target.value;QA_STATE.modelProvider=qaSelectedModel()?.provider||"";QA_STATE.issue="";qaRender();},true);
 document.addEventListener("input",e=>{if(e.target.id==="qa-history-search")qaRenderMainHistory(e.target.value);if(e.target.id==="qa-drawer-search")qaRenderDrawer(e.target.value);},true);
 window.addEventListener("offline",()=>{QA_STATE.issue="offline";qaRender();});
 window.addEventListener("online",()=>{if(QA_STATE.issue==="offline")QA_STATE.issue="";qaRender();});
@@ -20234,11 +20243,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-small-memory-import.js"></script>
-    <script src="assets/phase2-small-memory.js?v=20261102-preview-switch"></script>
-    <script src="assets/phase2-small-memory-sources.js?v=20261102-small-scope"></script>
+    <script src="assets/phase2-small-memory.js?v=20261104-memory-editor-no-outline"></script>
     <script src="assets/phase2-small-settings.js?v=20261102-small-scope"></script>
     <script src="assets/phase2-small-assistant.js?v=20261102-small-scope"></script>
-    <script src="assets/phase2-small-memory-onboarding.js?v=20261102-small-scope"></script>
+    <script src="assets/phase2-small-memory-onboarding.js?v=20261104-im-close"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
   <script>
 // Composer selections are demonstration metadata; no files are uploaded.
@@ -20294,5 +20302,7 @@ window.addEventListener("offline",()=>qaRender());
 window.addEventListener("online",()=>qaRender());
 QA_STATE.mode="voice";qaRender();
 </script>
+<link rel="stylesheet" href="assets/phase2-small-chat-controls.css?v=20261104-answer-model">
+<script src="assets/phase2-small-chat-controls.js?v=20261104-answer-model"></script>
 </body>
 </html>

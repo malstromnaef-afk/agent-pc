@@ -70,6 +70,13 @@
 #memory .pm-memory-list{max-height:none;overflow:visible}
 #memory .pm-category-tabs{margin:12px 0 8px;padding-top:10px;gap:3px}
 #memory .pm-category-tabs button{min-height:36px;padding:0 7px}
+#memory .pm-category-filter{margin:12px 0 8px;padding-top:10px;border-top:1px solid #ffffff12}
+#memory .pm-category-filter select{
+  box-sizing:border-box;width:100%;min-height:36px;padding:0 10px;
+  border:1px solid #34454b;border-radius:7px;background:#182328;color:#dbe5ea;
+  font:inherit;font-size:13px;color-scheme:dark;cursor:pointer;
+}
+#memory .pm-category-filter select:focus-visible{outline:2px solid #62e1ee;outline-offset:2px}
 #memory .pm-map-heading{flex:0 0 42px;padding:9px 14px;min-height:42px;box-sizing:border-box}
 #memory .pm-map-heading div>span{display:inline;margin:0 0 0 9px;font-size:10px}
 #memory .pm-local-mark{font-size:10px}
@@ -179,3 +186,134 @@
 #memory .pm-editor-source-file{display:grid;gap:6px;margin:8px 0}
 #memory .pm-editor-source-file .pm-button{justify-self:start}
 #memory .pm-editor-source-file pre{max-height:180px}
+
+/* Dark memory editor and detail dialogs in the X3 small model. */
+#memory .pm-dialog:is([data-pm-dialog-style="editor"],[data-pm-dialog-style="detail"]){
+  width:min(620px,calc(100vw - 32px));
+  max-height:calc(100dvh - 32px);
+  box-sizing:border-box;
+  padding:0;
+  border:1px solid #303235;
+  border-radius:13px;
+  background:#111213;
+  color:#f3f5f6;
+  box-shadow:0 22px 68px #0009;
+}
+#memory .pm-dialog:is([data-pm-dialog-style="editor"],[data-pm-dialog-style="detail"])::backdrop{
+  background:#030405a3;
+  backdrop-filter:blur(3px);
+}
+#memory .pm-memory-dialog-header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  padding:15px 22px;
+  border-bottom:1px solid #292b2d;
+}
+#memory .pm-memory-dialog-header h3{margin:0;font-size:21px;font-weight:650;overflow-wrap:anywhere}
+#memory .pm-memory-dialog-header .pm-detail-close{flex:none;color:#b9bdc1;border-radius:8px}
+#memory .pm-memory-dialog-header .pm-detail-close:hover{background:#222426}
+#memory .pm-dialog[data-pm-dialog-style="editor"] form{gap:0}
+#memory .pm-memory-dialog-body{
+  max-height:calc(100dvh - 185px);
+  overflow:auto;
+  padding:17px 22px;
+}
+#memory .pm-memory-editor-fields{display:grid;gap:14px}
+#memory .pm-memory-editor-top{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:13px}
+#memory .pm-memory-editor-fields .pm-field{gap:6px;color:#c4c7ca}
+#memory .pm-memory-editor-fields .pm-field :is(input,select,textarea){
+  border-color:#353739;background:#1a1b1c;color:#f3f5f6;
+}
+#memory .pm-category-picker{position:relative;min-width:0}
+#memory .pm-category-picker input{padding-right:43px}
+#memory .pm-category-toggle{
+  position:absolute;inset:0 0 0 auto;width:40px;border:0;border-radius:0 9px 9px 0;
+  background:transparent;color:#c4c7ca;font:inherit;font-size:19px;cursor:pointer;
+}
+#memory .pm-category-toggle:hover{color:#62e1ee}
+#memory .pm-category-options{
+  position:absolute;z-index:3;top:calc(100% + 5px);left:0;right:0;max-height:270px;overflow:auto;
+  padding:4px;border:1px solid #414447;border-radius:9px;background:#1a1b1c;box-shadow:0 8px 24px #0009;
+}
+#memory .pm-category-options [role="option"]{
+  position:relative;padding:9px 10px;border-radius:5px;color:#e8e9ea;cursor:pointer;overflow-wrap:anywhere;
+}
+#memory .pm-category-options .pm-category-custom{color:#62e1ee}
+#memory .pm-category-options [role="option"]:is(:hover,[aria-selected="true"]){background:#263237;color:#86edf5}
+#memory .pm-category-options [aria-keyshortcuts]{padding-right:42px}
+#memory .pm-category-more{
+  position:absolute;inset:0 0 0 auto;width:38px;display:grid;place-items:center;
+  border-radius:5px;color:#a6adb2;font-size:20px;line-height:1;
+}
+#memory .pm-category-more:hover{background:#303a3e;color:#b3f6fc}
+#memory .pm-category-actions{
+  position:absolute;z-index:4;right:4px;min-width:112px;padding:4px;
+  border:1px solid #414447;border-radius:8px;background:#232526;box-shadow:0 8px 24px #0009;
+}
+#memory .pm-category-actions button{
+  display:block;width:100%;padding:9px 10px;border:0;border-radius:5px;background:none;
+  color:#e8e9ea;font:inherit;text-align:left;cursor:pointer;
+}
+#memory .pm-category-actions button:is(:hover,:focus-visible){background:#303a3e}
+#memory .pm-category-actions [data-category-action="delete"]{color:#ffa4aa}
+#memory .pm-dialog.pm-category-confirmation{
+  width:min(420px,calc(100vw - 32px));box-sizing:border-box;padding:22px;
+  border:1px solid #37393b;border-radius:13px;background:#111213;color:#f3f5f6;
+}
+#memory .pm-category-confirmation::backdrop{background:#03040593;backdrop-filter:none}
+#memory .pm-category-confirmation h3{margin:0 0 10px;overflow-wrap:anywhere}
+#memory .pm-category-confirmation form{gap:8px}
+#memory .pm-category-confirmation .pm-category-action-error{margin:0;color:#f5a2a5}
+#memory .pm-category-confirmation .pm-category-confirm-rename{background:#35d5e8;border-color:#35d5e8;color:#071618}
+#memory .pm-category-confirmation .pm-category-confirm-delete{background:#a52f40;border-color:#a52f40;color:#fff}
+#memory .pm-category-confirmation .pm-category-confirm-delete:hover{background:#bf4051;border-color:#bf4051}
+#memory .pm-memory-editor-fields textarea{min-height:126px}
+#memory .pm-memory-import-row{display:flex;align-items:center;flex-wrap:wrap;gap:8px 12px}
+#memory .pm-memory-import-row span{font-size:12px;color:#a4b5bd}
+#memory .pm-memory-editor-fields #pm-form-error{margin:0;color:#f5a2a5}
+#memory .pm-memory-detail-body{display:grid;gap:16px}
+#memory .pm-memory-detail-label{margin-bottom:5px;color:#a5aaaf;font-size:12px}
+#memory .pm-memory-detail-meta{display:flex;align-items:center;flex-wrap:wrap;gap:8px;color:#a6acb0;font-size:13px}
+#memory .pm-memory-detail-meta:empty{display:none}
+#memory .pm-memory-core-badge{
+  padding:3px 8px;border:1px solid #524025;border-radius:6px;background:#322619;color:#f5bd72;
+}
+#memory .pm-memory-detail-body h4{margin:0 0 8px;color:#c5c9cd;font-size:13px;font-weight:600}
+#memory .pm-memory-detail-text,#memory .pm-memory-detail-source{
+  padding:12px 13px;border:1px solid #353739;border-radius:9px;background:#1a1b1c;color:#ebedee;
+  font-size:14px;overflow-wrap:anywhere;
+}
+#memory .pm-memory-detail-text{min-height:108px;box-sizing:border-box;line-height:1.75;white-space:pre-wrap}
+#memory .pm-memory-detail-info{border:1px solid #303234;border-radius:9px}
+#memory .pm-memory-detail-info summary{padding:10px 13px;color:#c5c9cd;font-size:13px;cursor:pointer}
+#memory .pm-memory-detail-info dl{display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);gap:12px;margin:0;padding:0 13px 11px;font-size:13px}
+#memory .pm-memory-detail-info dl div{display:flex;gap:8px;min-width:0}
+#memory .pm-memory-detail-info dt{flex:none;color:#a2a8ad}
+#memory .pm-memory-detail-info dd{margin:0;overflow-wrap:anywhere}
+#memory button.pm-memory-detail-source{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;text-align:left;cursor:pointer;
+}
+#memory button.pm-memory-detail-source:hover{border-color:#5a7c80}
+#memory .pm-memory-detail-source + .pm-memory-detail-source{margin-top:7px}
+#memory .pm-memory-detail-source small{display:block;margin-top:4px;color:#a8adb1}
+#memory .pm-memory-detail-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:6px}
+#memory .pm-memory-detail-heading h4{margin:0}
+#memory .pm-memory-detail-link{color:#62e1ee;font-size:13px;white-space:nowrap}
+#memory button.pm-memory-detail-link{border:0;background:none;padding:6px 0;cursor:pointer}
+#memory .pm-memory-detail-tags{display:flex;flex-wrap:wrap;gap:6px;color:#a8adb1}
+#memory .pm-memory-detail-tags span{padding:4px 8px;border:1px solid #36393c;border-radius:6px;background:#1e2022;color:#c4c8cc;font-size:12px;overflow-wrap:anywhere}
+#memory .pm-memory-dialog-actions{margin:0;padding:12px 22px;border-top:1px solid #292b2d;flex-wrap:wrap}
+#memory .pm-dialog:is([data-pm-dialog-style="editor"],[data-pm-dialog-style="detail"]) .pm-button{
+  background:#1a1b1c;border-color:#393b3e;color:#e8e9ea;
+}
+#memory .pm-dialog:is([data-pm-dialog-style="editor"],[data-pm-dialog-style="detail"]) .pm-button:hover{border-color:#5a7c80}
+#memory .pm-dialog:is([data-pm-dialog-style="editor"],[data-pm-dialog-style="detail"]) .pm-primary{
+  background:#35d5e8;border-color:#35d5e8;color:#071618;font-weight:650;
+}
+#memory .pm-dialog[data-pm-dialog-style="detail"] .pm-memory-delete{margin-right:auto;color:#f69a9d}
+@media(max-width:520px){
+  #memory .pm-memory-dialog-header,#memory .pm-memory-dialog-body,#memory .pm-memory-dialog-actions{padding-inline:15px}
+  #memory .pm-memory-editor-top,#memory .pm-memory-detail-info dl{grid-template-columns:1fr}
+}

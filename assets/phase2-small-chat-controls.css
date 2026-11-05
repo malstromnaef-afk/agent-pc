@@ -1,0 +1,46 @@
+/* Keep the existing composer and button geometry; only swap the action icon. */
+.voice-send-button svg {width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.voice-send-button.is-generating svg {fill:currentColor;stroke:none}
+.qa-generation-note {display:block;color:var(--muted);font-size:11px;font-weight:400;margin-top:2px}
+.qa-model-change {display:flex;align-items:center;justify-content:center;gap:10px;width:100%;margin:7px 0;color:var(--muted);font-size:11px;font-weight:400;line-height:1.5;text-align:center}
+.qa-model-change::before,.qa-model-change::after {content:"";height:1px;min-width:18px;flex:1;background:var(--line)}
+.qa-model-change>span {max-width:82%;overflow-wrap:anywhere}
+.qa-answer-model {justify-self:start;margin:-9px 0 2px 14px;color:#a4b1bb;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+.voice-assistant-panel.text-mode #qa-conversation,
+.voice-assistant-panel.text-mode .voice-chat-window>.voice-chat-window {min-height:0;height:100%;overflow-y:auto;overscroll-behavior:contain}
+
+/* One surface for the message and its controls. */
+.voice-assistant-panel.text-mode .voice-composer-shell {
+  padding: 12px 14px 9px;
+  border: 1px solid #36434a;
+  border-radius: 17px;
+  background: #181f24;
+  box-shadow: 0 8px 24px #0004;
+}
+.voice-assistant-panel.text-mode .voice-composer-shell:focus-within {
+  border-color: #4b827f;
+  box-shadow: 0 0 0 2px #64dfcd14, 0 8px 24px #0004;
+}
+.voice-assistant-panel.text-mode .voice-composer-input textarea {
+  border: 0;
+  background: transparent;
+  padding: 5px 4px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.voice-assistant-panel.text-mode .voice-composer-input textarea::placeholder {color: #a4b1bb}
+#voice .voice-composer-footer {gap: 6px 10px}
+#voice .voice-composer-footer :is(button, select) {min-height: 44px; border-radius: 10px; font-size: 12px}
+#voice .qa-composer-tools-left button,
+#voice .voice-composer-toolbar :is(button, select),
+#voice .voice-mic-button {
+  border-color: transparent;
+  background: transparent;
+  color: #c4cfd6;
+  font-weight: 500;
+}
+#voice .voice-composer-toolbar select {min-width: 112px;max-width: 155px;background: #232d34}
+#voice .voice-composer-footer :is(button, select):hover:not(:disabled) {background-color: #2a363e}
+#voice .voice-composer-footer :is(button, select):focus-visible {outline: 2px solid #75dacb;outline-offset: 2px}
+#voice .voice-send-button:disabled {background: #29373d;color: #819298;opacity: 1}
+#voice .qa-input-chip {background: #26343b;border-color: #405159;color: #e1ebef}

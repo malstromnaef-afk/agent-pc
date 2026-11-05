@@ -47,7 +47,7 @@
     <p class="pmo-onboarding-error" id="pmo-error" role="alert" hidden></p>
     <footer class="pmo-main-footer"><button type="button" class="pmo-submit" id="pmo-submit" disabled>开启所选记忆</button><button type="button" class="pmo-later" id="pmo-later">以后</button></footer></div>`);
   const im = makeDialog('pmo-im','pmo-im-title','pmo-im',`${closeButton('返回记忆来源')}
-    <header><div class="pmo-im-heading"><button type="button" class="pmo-back" data-pmo-back aria-label="返回记忆设置">← 返回</button><h2 id="pmo-im-title" tabindex="-1">即时通讯记忆</h2></div><p>选择应用，将授权范围内的聊天内容整理为记忆。</p></header>
+    <header><div class="pmo-im-heading"><h2 id="pmo-im-title" tabindex="-1">即时通讯记忆</h2></div><p>选择应用，将授权范围内的聊天内容整理为记忆。</p></header>
     <div class="pmo-app-list">${apps.map(([id,name,icon]) => `<section class="pmo-app-row"><span class="pmo-app-icon">${image(icon,62,62)}</span><div class="pmo-app-copy"><strong>${name}</strong><span>● 未连接</span></div><button type="button" class="pmo-connect" data-pmo-connect="${id}" aria-label="连接${name}">连接</button></section>`).join('')}</div>
     <p class="pmo-onboarding-error" id="pmo-im-error" role="alert" hidden></p>`);
   const agent = makeDialog('pmo-agents','pmo-agents-title','pmo-agents',`${closeButton('返回记忆来源')}
@@ -143,7 +143,7 @@
   });
   $('#pmo-open-im').addEventListener('click',() => {setError(im,'#pmo-im-error');present(im);});
   $('#pmo-open-agents').addEventListener('click',() => {agentDraft = ['workbuddy','trae'];setError(agent,'#pmo-agent-error');renderAgents();present(agent);});
-  [im,agent].forEach(dialog => dialog.addEventListener('click',event => {if(event.target.closest('[data-pmo-close], [data-pmo-back]'))back(dialog);}));
+  [im,agent].forEach(dialog => dialog.addEventListener('click',event => {if(event.target.closest('[data-pmo-close]'))back(dialog);}));
   dialogs.forEach(dialog => {
     dialog.addEventListener('cancel',event => {event.preventDefault();if(dialog === main)closeAll();else back(dialog);});
     dialog.addEventListener('click',event => {

@@ -23,11 +23,199 @@
 #voice .qa-skill-menu button:hover{background:#263b40!important}
 #memory .pm-preview-panel>.p2-page-title{font-size:16px;margin:0 0 18px;font-weight:700;color:var(--text)}
 #memory .pm-preview{max-width:none;aspect-ratio:2/1}
-#memory .pm-workspace{min-height:0;height:100%;grid-template-columns:36% minmax(0,1fr)}
+#memory .pm-workspace{min-height:0;height:100%;grid-template-columns:max(168px,18%) minmax(0,1fr)}
 #memory .pm-library{overflow:auto}
 #memory .pm-graph-stage{min-height:0;flex:1}
 #memory .pm-map-column{min-height:0;overflow:auto}
 #memory .pm-preview[data-subscreen-preview="memory"] .pm-memory-body{top:58px}
+
+#memory .pm-directory {
+  min-width: 0;
+  margin-bottom: 4px;
+}
+#memory .pm-directory-label,
+#memory .pm-directory-entry .pm-row-file {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  min-height: 29px;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #a9bac4;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+}
+#memory .pm-directory-label {
+  color: #c5d4db;
+  font-size: 12px;
+  font-weight: 550;
+  list-style: none;
+}
+#memory .pm-directory-label::-webkit-details-marker {
+  display: none;
+}
+#memory .pm-directory-label::before {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  margin: 0 2px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  color: #7f9ba5;
+  content: "";
+  transform: rotate(-45deg);
+}
+#memory .pm-directory[open] > .pm-directory-label::before {
+  transform: rotate(45deg);
+}
+#memory :is(.pm-directory-label, .pm-directory-entry .pm-row-file) > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#memory :is(.pm-directory-label, .pm-directory-entry .pm-row-file) > svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+#memory .pm-directory-files {
+  margin-left: 8px;
+  padding-left: 7px;
+  border-left: 1px solid #ffffff1c;
+}
+#memory .pm-directory-entry {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-top: 2px;
+  border-radius: 6px;
+}
+#memory .pm-directory-entry .pm-row-file {
+  flex: 1 1 auto;
+}
+#memory .pm-directory-entry .pm-row-actions {
+  gap: 0;
+}
+#memory .pm-directory-entry .pm-row-icon {
+  width: 23px;
+  height: 27px;
+  padding: 4px;
+}
+#memory .pm-directory-entry .pm-row-icon svg {
+  width: 13px;
+  height: 13px;
+}
+#memory .pm-directory-label:hover,
+#memory .pm-directory-entry:hover {
+  background: #ffffff0a;
+}
+#memory .pm-directory-entry:has(.pm-row-file[aria-current="true"]) {
+  background: #20e6e61b;
+  box-shadow: inset 0 0 0 1px #20e6e630;
+}
+#memory .pm-directory-entry .pm-row-file[aria-current="true"] {
+  color: #95f0ee;
+}
+#memory .pm-graph-view,
+#memory .pm-file-reader {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+#memory .pm-graph-view[hidden],
+#memory .pm-file-reader[hidden] {
+  display: none;
+}
+#memory .pm-file-reader {
+  background: #151c20;
+}
+#memory .pm-reader-header {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 12px 16px;
+}
+#memory .pm-reader-back {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #a9bac4;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+}
+#memory .pm-reader-back:hover {
+  color: #95f0ee;
+  background: #20e6e60e;
+}
+#memory .pm-reader-path {
+  display: flex;
+  flex: 1 1 170px;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: #9dafb9;
+  font-size: 12px;
+}
+#memory .pm-reader-path > :not([aria-hidden]) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#memory .pm-reader-path strong {
+  color: var(--text);
+}
+#memory .pm-reader-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 20px clamp(12px, 3vw, 32px);
+  color: #c8d5db;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+#memory .pm-reader-content :is(h1, h2, h3) {
+  color: var(--text);
+  line-height: 1.35;
+}
+#memory .pm-reader-content :is(h1, h2, h3):first-child {
+  margin-top: 0;
+}
+#memory .pm-reader-content pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+#memory :is(.pm-directory-label, .pm-row-file, .pm-reader-back, .pm-reader-content):focus-visible {
+  outline: 1px solid #20e6e6;
+  outline-offset: -1px;
+}
+#memory .physical-screen-mirror-source :is(.pm-directory-label, .pm-row-file, .pm-reader-content, .pm-reader-back) {
+  pointer-events: auto !important;
+}
+
 /* Keep internal development state in the DOM for handlers, outside the product UI. */
 #voice .qa-permission-panel,#voice .qa-office-dialog-demo,#voice .dev-field-notes{display:none!important}
 
