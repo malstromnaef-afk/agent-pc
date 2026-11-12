@@ -18,12 +18,11 @@
     pendingUninstall = null;
   });
   const storageKey = 'phase2-small-skills-list-v1';
-  const pdfSkill = { path: 'demo/pdf-cleanup', name: '扫描版 PDF 清理', description: '整理扫描版 PDF，改善页面方向、边缘和阅读效果。', installed: false };
+  const removedDemoPath = 'demo/pdf-cleanup';
   const examples = [
     { path: 'demo/design', name: '前端界面设计', description: '设计网页和应用界面，细化组件布局、视觉样式和交互。' },
     { path: 'demo/review', name: '网页设计检查', description: '检查网页布局、交互和可访问性。' },
     { path: 'demo/find', name: '查找技能', description: '根据任务查找合适的技能。' },
-    pdfSkill,
   ];
   let skills = examples;
   let scan = 0;
@@ -32,8 +31,9 @@
     const saved = JSON.parse(phase2Storage.getItem(storageKey) || 'null');
     if (Array.isArray(saved?.skills) && Array.isArray(saved?.enabled)) {
       enabledByPath = new Map(saved.enabled);
-      skills = saved.skills;
-      if (!skills.some(skill => skill.path === pdfSkill.path)) skills = [...skills, pdfSkill];
+      skills = saved.skills.filter(skill => skill.path !== removedDemoPath);
+      enabledByPath.delete(removedDemoPath);
+      if (skills.length !== saved.skills.length) save();
     }
   } catch {}
 
@@ -48,7 +48,7 @@
   function renderCard(skill) {
     const item = document.createElement('li');
     item.className = 'replica-skill-card';
-    item.innerHTML = '<header><h4></h4><button type="button" class="skill-installed"></button></header>' +
+    item.innerHTML = '<header><h4></h4><button type="button" class="skill-installed">安装</button></header>' +
       '<p class="skill-description"></p>' +
       '<footer><label><input type="checkbox" role="switch"><span></span></label>' +
       '<button type="button" class="replica-remove-connection">卸载</button></footer>';
@@ -67,8 +67,7 @@
       const installed = skill.installed !== false;
       item.toggleAttribute('data-skill-disabled', installed && !toggle.checked);
       footer.hidden = !installed;
-      badge.textContent = installed ? '已安装' : '安装';
-      badge.disabled = installed;
+      badge.hidden = installed;
       status.textContent = toggle.checked ? '已启用' : '已停用';
     }
     renderState();
@@ -131,8 +130,8 @@
     const found = await Promise.all(Array.from(picker.files).filter(file => file.name === 'SKILL.md').map(readSkill));
     if (current !== scan) return;
     const previous = new Map(skills.map(skill => [skill.path, skill]));
-    skills = [...found.map(skill => ({ ...skill, installed: previous.get(skill.path)?.installed ?? true })),
-      previous.get(pdfSkill.path) || pdfSkill].sort((a, b) => a.name.localeCompare(b.name));
+    skills = found.map(skill => ({ ...skill, installed: previous.get(skill.path)?.installed ?? true }))
+      .sort((a, b) => a.name.localeCompare(b.name));
     save();
     render();
   });

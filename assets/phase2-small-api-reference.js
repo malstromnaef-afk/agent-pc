@@ -43,10 +43,12 @@
     <div data-x3-view="llm" role="tabpanel" aria-label="大语言模型">
       <form class="x3-card" data-x3-model="llm">
         <h3>配置大语言模型</h3>
-        ${select('provider', '配置名称', providers('llm'))}
-        ${input('baseUrl', 'API 基础地址', 'url', '请输入服务商的 API 基础地址')}
+        ${select('provider', '配置名称', [...providers('llm').filter(([id]) => !id.startsWith('custom-')), ['custom', '＋ 自定义模型']])}
+        <div data-x3-custom hidden>${select('protocol', 'API 协议', [['', '选择协议'], ['custom-openai', 'OpenAI 兼容'], ['custom-anthropic', 'Anthropic 兼容']])}</div>
+        <label><span data-x3-api-label>API 基础地址</span><input name="baseUrl" type="url" placeholder="请输入服务商的 API 基础地址"></label>
         ${keyField}
-        ${singleSelect('model', '大语言模型', qwen)}
+        <div data-x3-preset-model>${singleSelect('model', '大语言模型', qwen)}</div>
+        <div data-x3-custom hidden>${input('customName', '显示名称（可选）', 'text', '例如：我的模型服务')}</div>
         ${save}
       </form>
     </div>
@@ -140,6 +142,14 @@
     renderTabs();
   }
   function renderLlmOptions(selected) {
+    const custom = llm.elements.provider.value === 'custom';
+    llm.querySelectorAll('[data-x3-custom]').forEach(field => { field.hidden = !custom; });
+    llm.querySelector('[data-x3-preset-model]').hidden = custom;
+    llm.elements.model.disabled = custom;
+    const label = custom ? 'API 地址' : 'API 基础地址';
+    llm.querySelector('[data-x3-api-label]').textContent = label;
+    llm.elements.baseUrl.placeholder = `请输入服务商的${' '}${label}`;
+    if (custom) return;
     const provider = apiProviderById(llm.elements.provider.value, 'llm');
     const models = provider.id === 'qwen' ? [qwen, ...provider.models] : provider.models || [];
     llm.elements.model.replaceChildren(...(models.length ? models : ['自定义模型']).map(model => new Option(model, model)));
@@ -148,18 +158,23 @@
   function saveCloud(category, form) {
     const fields = new FormData(form);
     const prior = apiCategoryConfigs(category)[0];
-    const sameProvider = prior?.providerId === (category === 'llm' ? fields.get('provider') : 'qwen-realtime');
-    const provider = apiProviderById(category === 'llm' ? fields.get('provider') : 'qwen-realtime', category);
-    const name = category === 'llm' ? form.elements.provider.selectedOptions[0].text : fields.get('displayName').trim() || '阿里百炼 · 实时语音';
+    const custom = category === 'llm' && fields.get('provider') === 'custom';
+    const providerId = category === 'voice' ? 'qwen-realtime' : custom ? fields.get('protocol') : fields.get('provider');
+    if (custom && !providerId) return feedback(form, '请选择 API 协议。');
+    const sameProvider = prior?.providerId === providerId;
+    const provider = apiProviderById(providerId, category);
+    const name = custom ? fields.get('customName').trim() || '自定义模型'
+      : category === 'llm' ? form.elements.provider.selectedOptions[0].text : fields.get('displayName').trim() || '阿里百炼 · 实时语音';
     const endpoint = category === 'llm' ? fields.get('baseUrl').trim() : '';
-    const model = fields.get('model');
+    const model = fields.get('model') || '';
     if (category === 'llm' && !endpoint) return feedback(form, '请输入 API 基础地址。');
     if (!fields.get('apiKey').trim() && !(sameProvider && prior.hasCredential)) return feedback(form, '请输入 API Key。');
     const configId = sameProvider ? prior.configId : `model-${globalThis.crypto?.randomUUID?.() || Date.now()}`;
-    const values = category === 'llm' ? { baseUrl: endpoint, model } : { voiceModel: model, voice: fields.get('voice') };
+    const values = custom ? { baseUrl: endpoint, protocol: provider.protocol }
+      : category === 'llm' ? { baseUrl: endpoint, model } : { voiceModel: model, voice: fields.get('voice') };
     const record = {
       configId, category, providerId: provider.id, provider: provider.label, displayName: name,
-      marketLabel: provider.region, model, defaultModelId: model, availableModels: [model], values,
+      marketLabel: provider.region, model, defaultModelId: model, availableModels: model ? [model] : [], values,
       hasCredential: true, credentialRef: `credential://${configId}`, status: '已配置',
       connectionStatus: 'connected', saved: true, lastTest: nowText(), lastValidatedAt: null,
     };
@@ -196,7 +211,7 @@
     });
   }
   llm.elements.provider.addEventListener('change', () => {
-    llm.elements.baseUrl.value = apiProviderById(llm.elements.provider.value, 'llm').baseUrl || '';
+    llm.elements.baseUrl.value = apiProviderById(llm.elements.provider.value, 'llm')?.baseUrl || '';
     llm.elements.apiKey.value = '';
     llm.elements.apiKey.placeholder = '';
     renderLlmOptions();
@@ -253,7 +268,12 @@
   });
 
   const llmConfig = apiCategoryConfigs('llm')[0];
-  llm.elements.provider.value = apiProviderById(llmConfig?.providerId, 'llm') ? llmConfig.providerId : 'qwen';
+  const customConfig = llmConfig?.providerId?.startsWith('custom-');
+  llm.elements.provider.value = customConfig ? 'custom' : apiProviderById(llmConfig?.providerId, 'llm') ? llmConfig.providerId : 'qwen';
+  if (customConfig) {
+    llm.elements.protocol.value = llmConfig.providerId;
+    llm.elements.customName.value = llmConfig.displayName === '自定义模型' ? '' : llmConfig.displayName;
+  }
   llm.elements.baseUrl.value = llmConfig?.values?.baseUrl || '';
   llm.elements.apiKey.placeholder = llmConfig?.hasCredential ? '••••••••••••••••' : '';
   renderLlmOptions(llmConfig?.model);
