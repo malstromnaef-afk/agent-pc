@@ -9921,7 +9921,6 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config #replica-apps .replica-disconnected{background:transparent;border-color:var(--pa-line);color:var(--pa-muted)}
 #screen-config #replica-apps button.replica-remove-connection{border:1px solid #c66b6b;border-radius:8px;background:transparent;color:#e08484;box-shadow:none;white-space:nowrap}
 #screen-config #replica-apps button.replica-remove-connection:hover{background:#c66b6b18}
-#screen-config #replica-apps .p2-cli-card[data-connected] .p2-cli-status i{background:#4bd4bd}
 #screen-config .replica-app-copy{
 display:flex;align-items:center;gap:16px}
 #screen-config .replica-app-icon{display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border-radius:8px;background:#233c48;color:#5ac5e7;font-size:28px}
@@ -11470,10 +11469,10 @@ display:flex;align-items:center;gap:16px}
                 <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
                   <div class="p2-system-heading"><h3 id="p2-app-heading">CLI 应用连接</h3><p>配置对应的 CLI 适配器路径。</p></div>
                   <div class="p2-cli-grid">
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wechat" aria-label="连接微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="feishu" aria-label="连接飞书 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="dingtalk" aria-label="连接钉钉 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wecom" aria-label="连接企业微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wechat" aria-label="连接微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="feishu" aria-label="连接飞书 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="dingtalk" aria-label="连接钉钉 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wecom" aria-label="连接企业微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
                   </div>
                 </section>
 <p id="replica-app-empty" role="status" hidden>没有匹配的应用。</p>
@@ -20342,15 +20341,11 @@ document.querySelectorAll('[data-cli-connect]').forEach(connect => {
   const card = connect.closest('.p2-cli-card');
   const connectedBadge = card.querySelector('.replica-connection-status');
   const remove = card.querySelector('[data-cli-remove]');
-  const status = card.querySelector('[data-p2-cli-status]');
-  status.setAttribute('role', 'status');
   const key = `replica-cli-connected-${connect.dataset.cliConnect}`;
   function render(connected) {
-    card.toggleAttribute('data-connected', connected);
     connect.hidden = connected;
     connectedBadge.hidden = !connected;
     remove.hidden = !connected;
-    status.textContent = connected ? '已连接' : '未连接';
   }
   function update(connected) {
     try { phase2Storage.setItem(key, String(connected)); }
