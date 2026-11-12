@@ -9915,10 +9915,36 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config .replica-filters button.active{border-color:#22686b;background:#142d30;color:var(--pa-cyan)}
 #screen-config .replica-settings input[type="search"]{width:280px;min-width:0;min-height:40px;padding:8px 12px;border:1px solid var(--pa-line);border-radius:8px;background:#151b20;color:var(--pa-text);font-size:14px;line-height:24px}
 #screen-config .replica-settings input::placeholder{color:var(--pa-muted)}
-#screen-config .replica-app{border-top:1px solid var(--pa-line);border-bottom:1px solid var(--pa-line);margin-top:4px}
-#screen-config .replica-app-copy{display:flex;align-items:center;gap:16px}
+#screen-config .replica-app{border-top:1px solid var(--pa-line);margin-top:4px}
+#screen-config .replica-mcp-actions{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:8px}
+#screen-config #replica-apps .replica-connection-status{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid #3d7778;border-radius:8px;background:#152627;color:#79d9d8;font:inherit;white-space:nowrap}
+#screen-config #replica-apps .replica-disconnected{background:transparent;border-color:var(--pa-line);color:var(--pa-muted)}
+#screen-config #replica-apps button.replica-remove-connection{border:1px solid #c66b6b;border-radius:8px;background:transparent;color:#e08484;box-shadow:none;white-space:nowrap}
+#screen-config #replica-apps button.replica-remove-connection:hover{background:#c66b6b18}
+#screen-config #replica-apps .p2-cli-card[data-connected] .p2-cli-status i{background:#4bd4bd}
+#screen-config .replica-app-copy{
+display:flex;align-items:center;gap:16px}
 #screen-config .replica-app-icon{display:grid;place-items:center;flex-shrink:0;width:44px;height:44px;border-radius:8px;background:#233c48;color:#5ac5e7;font-size:28px}
 #screen-config .replica-security{padding-top:16px}
+.skill-uninstall-dialog{width:min(420px,calc(100% - 32px));padding:22px;border:1px solid var(--line);border-radius:12px;background:#1d2123;color:var(--text)}
+.skill-uninstall-dialog::backdrop{background:#0008}
+.skill-uninstall-dialog h3{margin:0 0 8px}
+.skill-uninstall-dialog p{color:var(--muted);overflow-wrap:anywhere}
+.skill-uninstall-dialog footer{display:flex;justify-content:flex-end;gap:8px}
+#screen-config .replica-skill-list{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 0;padding:0}
+#screen-config .replica-skill-card{display:flex;flex-direction:column;gap:10px;min-width:0;padding:16px;border:1px solid var(--pa-line);border-radius:12px;background:#1d2123;overflow-wrap:anywhere}
+#screen-config .replica-skill-card :is(header,footer){display:flex;align-items:center;justify-content:space-between;gap:8px}
+#screen-config .replica-skill-card footer{margin-top:auto;padding-top:12px;border-top:1px solid var(--pa-line)}
+#screen-config .replica-skill-card[data-skill-disabled]{border-style:dashed}
+#screen-config .replica-skill-card footer button{margin-left:auto}
+#screen-config .replica-skill-card .skill-installed{background:transparent;padding:3px 7px;border:1px solid var(--pa-line);border-radius:5px;color:var(--pa-muted);font-size:12px;white-space:nowrap}
+#screen-config .replica-skill-card footer label{display:flex;align-items:center;gap:8px;color:var(--pa-muted);font-size:13px;cursor:pointer}
+#screen-config #replica-skills .replica-skill-card .replica-remove-connection{min-height:32px;padding:0 12px;border:1px solid #c66b6b;border-radius:8px;color:#e08484;background:transparent}
+#screen-config .replica-skill-card input[role="switch"]{appearance:none;width:40px;height:22px;border:0;border-radius:12px;background:#505962;margin:0;padding:3px;display:grid;cursor:pointer}
+#screen-config .replica-skill-card input[role="switch"]::before{content:"";width:16px;height:16px;border-radius:50%;background:#fff}
+#screen-config .replica-skill-card input[role="switch"]:checked{background:#21a9af}
+#screen-config .replica-skill-card input[role="switch"]:checked::before{justify-self:end}
+@media(max-width:1000px){#screen-config .replica-skill-list{grid-template-columns:1fr}}
 #screen-config .replica-skill-tools{display:flex;gap:12px;flex-wrap:wrap}
 #screen-config .replica-skill-tools input[type="search"]{width:420px;flex:1}
 #screen-config .replica-empty{text-align:center;padding:64px 12px 88px;font-size:14px;line-height:24px;color:var(--pa-muted)}
@@ -11438,23 +11464,21 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 <header class="replica-head"><h2>应用与技能</h2><p>管理应用授权与 AI 技能，扩展助手可调用的工具。</p></header>
 <div class="replica-tabs" role="tablist" aria-label="应用与技能"><button type="button" role="tab" aria-selected="true" data-replica-tab="apps" class="active">应用连接</button><button type="button" role="tab" aria-selected="false" data-replica-tab="skills">Skills</button></div>
 <div id="replica-apps" role="tabpanel">
-<div class="replica-row"><div><h3>应用连接</h3><p>连接常用应用，让 AI 在你授权的范围内使用它们。</p></div><button type="button" data-replica-refresh aria-label="刷新应用连接">↻</button></div>
-<div class="replica-warning"><span>当前为交互原型，尚未接入应用连接服务。配置仅用于演示。</span><button type="button" data-replica-refresh>刷新</button></div>
-<div class="replica-row"><div><h4>添加应用</h4><p>连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-replica-unavailable>＋ 自定义 MCP</button></div>
+<div class="replica-row"><div><h4>添加应用</h4><p>连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-custom-mcp-open>＋ 自定义 MCP</button></div>
 <div class="replica-row"><div class="replica-filters" aria-label="应用地区"><button type="button" class="active" data-replica-region="all" aria-pressed="true">全部</button><button type="button" data-replica-region="cn" aria-pressed="false">国内</button><button type="button" data-replica-region="global" aria-pressed="false">国际</button></div><input type="search" id="replica-app-search" placeholder="搜索应用" aria-label="搜索应用"></div>
-<div id="replica-feishu" class="replica-row replica-app" data-app-region="cn" data-app-search="飞书 feishu lark mcp"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书 MCP</h4><p>通过 MCP 调用已适配的应用工具，当前未连接。</p></div></div><button type="button" data-replica-unavailable>配置</button></div>
+<div id="replica-feishu" class="replica-row replica-app" data-app-region="cn" data-app-search="飞书 feishu lark mcp"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书 MCP</h4><p data-feishu-mcp-status role="status">通过 MCP 调用已适配的应用工具，当前未连接。</p></div></div><div class="replica-mcp-actions"><button type="button" class="replica-connection-status replica-disconnected" data-feishu-mcp-disconnected aria-label="未连接，点击连接飞书 MCP">未连接</button><span class="replica-mcp-connected replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-feishu-mcp-remove hidden>移除连接</button></div></div>
                 <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
-                  <div class="p2-system-heading"><h3 id="p2-app-heading">CLI 应用连接</h3><p>配置对应的 CLI 适配器路径；当前为原型，尚未接入执行服务。</p></div>
+                  <div class="p2-system-heading"><h3 id="p2-app-heading">CLI 应用连接</h3><p>配置对应的 CLI 适配器路径。</p></div>
                   <div class="p2-cli-grid">
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wechat" aria-label="连接微信 CLI">连接</button></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="feishu" aria-label="连接飞书 CLI">连接</button></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="dingtalk" aria-label="连接钉钉 CLI">连接</button></article>
-                    <article class="p2-cli-card" data-app-region="cn" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wecom" aria-label="连接企业微信 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wechat" aria-label="连接微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="feishu" aria-label="连接飞书 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="dingtalk" aria-label="连接钉钉 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
+                    <article class="p2-cli-card" data-app-region="cn" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><div class="replica-mcp-actions"><button type="button" class="soft-button" data-cli-connect="wecom" aria-label="连接企业微信 CLI">连接</button><span class="replica-connection-status" hidden>已连接</span><button type="button" class="replica-remove-connection" data-cli-remove hidden>移除连接</button></div></article>
                   </div>
                 </section>
 <p id="replica-app-empty" role="status" hidden>没有匹配的应用。</p>
 </div>
-<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">尚未接入本机 Skills 列表。</div></div>
+<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-skills-refresh>↻ 刷新</button><button type="button" data-skills-folder>打开 Skills 文件夹</button><input type="file" webkitdirectory multiple hidden data-skills-picker></div><ul class="replica-skill-list" hidden></ul><div class="replica-empty" role="status">暂无 Skills。打开 Skills 文件夹后即可查看。</div></div>
 </section>
 <section class="config-section-panel replica-settings" id="p2-settings-computer" data-config-panel="computer" role="tabpanel" aria-label="电脑操作">
 <header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式。</p></header>
@@ -20279,20 +20303,79 @@ const qaCreateWithoutSelection=qaCreateSession;qaCreateSession=function(){qaComp
 </script>
 <script>
 let replicaRegion="all";
+const feishuMcpRow = document.querySelector('#replica-feishu');
+const feishuMcpDisconnected = feishuMcpRow.querySelector('[data-feishu-mcp-disconnected]');
+const feishuMcpRemove = feishuMcpRow.querySelector('[data-feishu-mcp-remove]');
+const feishuMcpConnected = feishuMcpRow.querySelector('.replica-mcp-connected');
+const feishuMcpKey = 'replica-feishu-mcp-connected';
+function renderFeishuMcp(connected) {
+  feishuMcpDisconnected.hidden = connected;
+  feishuMcpConnected.hidden = !connected;
+  feishuMcpRemove.hidden = !connected;
+  feishuMcpRow.querySelector('[data-feishu-mcp-status]').textContent =
+    connected ? '通过 MCP 调用已适配的应用工具，当前已连接。' : '通过 MCP 调用已适配的应用工具，当前未连接。';
+}
+function setFeishuMcp(connected) {
+  try {
+    phase2Storage.setItem(feishuMcpKey, String(connected));
+  } catch {
+    showLightToast('连接状态保存失败，请重试。');
+    return;
+  }
+  renderFeishuMcp(connected);
+  (connected ? feishuMcpRemove : feishuMcpDisconnected).focus();
+  showLightToast(connected ? '原型演示：飞书 MCP 已连接' : '飞书 MCP 连接已移除');
+}
+let pendingMcpRemoval;
+function confirmConnectionRemoval(name, remove) {
+  const dialog = document.querySelector('#mcp-remove-dialog');
+  dialog.querySelector('h3').textContent = `移除「${name}」？`;
+  pendingMcpRemoval = remove;
+  dialog.returnValue = 'cancel';
+  dialog.showModal();
+}
+feishuMcpDisconnected.addEventListener('click', () => setFeishuMcp(true));
+feishuMcpRemove.addEventListener('click', () => confirmConnectionRemoval('飞书 MCP', () => setFeishuMcp(false)));
+try { renderFeishuMcp(phase2Storage.getItem(feishuMcpKey) === 'true'); } catch {}
+
+document.querySelectorAll('[data-cli-connect]').forEach(connect => {
+  const card = connect.closest('.p2-cli-card');
+  const connectedBadge = card.querySelector('.replica-connection-status');
+  const remove = card.querySelector('[data-cli-remove]');
+  const status = card.querySelector('[data-p2-cli-status]');
+  status.setAttribute('role', 'status');
+  const key = `replica-cli-connected-${connect.dataset.cliConnect}`;
+  function render(connected) {
+    card.toggleAttribute('data-connected', connected);
+    connect.hidden = connected;
+    connectedBadge.hidden = !connected;
+    remove.hidden = !connected;
+    status.textContent = connected ? '已连接' : '未连接';
+  }
+  function update(connected) {
+    try { phase2Storage.setItem(key, String(connected)); }
+    catch { showLightToast('连接状态保存失败，请重试。'); return; }
+    render(connected);
+    (connected ? remove : connect).focus();
+  }
+  connect.addEventListener('click', () => update(true));
+  remove.addEventListener('click', () => confirmConnectionRemoval(card.querySelector('h4').textContent + ' CLI', () => update(false)));
+  try { render(phase2Storage.getItem(key) === 'true'); } catch {}
+});
 function replicaFilterApps(){
+
  const query=document.querySelector("#replica-app-search").value.trim().toLowerCase();let count=0;
  document.querySelectorAll("#replica-apps [data-app-search]").forEach(row=>{row.hidden=!(replicaRegion==="all"||row.dataset.appRegion===replicaRegion)||!row.dataset.appSearch.toLowerCase().includes(query);if(!row.hidden)count++;});
  const group=document.querySelector("#replica-apps .p2-app-card");group.hidden=![...group.querySelectorAll("[data-app-search]")].some(row=>!row.hidden);
  document.querySelector("#replica-app-empty").hidden=count>0;
 }
-document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();if(e.target.matches('#replica-skills input[type="search"]'))document.querySelector('#replica-skills .replica-empty').textContent=e.target.value.trim()?'尚未接入本机 Skills 列表，暂时无法搜索。':'尚未接入本机 Skills 列表。';});
+document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();});
 document.addEventListener("click",e=>{
 const tab=e.target.closest("[data-replica-tab]");if(tab){document.querySelectorAll("[data-replica-tab]").forEach(b=>{const active=b===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});document.querySelector("#replica-apps").hidden=tab.dataset.replicaTab!=="apps";document.querySelector("#replica-skills").hidden=tab.dataset.replicaTab!=="skills";return;}
 const region=e.target.closest("[data-replica-region]");if(region){replicaRegion=region.dataset.replicaRegion;document.querySelectorAll("[data-replica-region]").forEach(b=>{b.classList.toggle("active",b===region);b.setAttribute("aria-pressed",String(b===region));});replicaFilterApps();return;}
 const toggle=e.target.closest("[data-replica-switch]");if(toggle){const checked=toggle.getAttribute("aria-checked")!=="true";toggle.setAttribute("aria-checked",String(checked));try{phase2Storage.setItem("replica-computer-"+toggle.dataset.replicaSwitch,String(checked));}catch(_){}showLightToast("原型演示：仅保存开关状态，未控制电脑");return;}
 if(e.target.closest("[data-replica-refresh]")){replicaFilterApps();showLightToast("原型演示：已刷新界面，未连接应用或读取本机 Skills");return;}
 if(e.target.closest("[data-replica-unavailable]")){showLightToast("原型演示：未接入应用连接服务");return;}
-if(e.target.closest("[data-replica-folder]")){showLightToast("原型演示：暂未接入本机 Skills 文件夹");return;}
 
 });
 document.querySelectorAll("[data-replica-switch]").forEach(b=>{try{const saved=phase2Storage.getItem("replica-computer-"+b.dataset.replicaSwitch);if(saved!==null)b.setAttribute("aria-checked",saved);}catch(_){}});
@@ -20306,5 +20389,87 @@ QA_STATE.mode="voice";qaRender();
 <script src="assets/phase2-small-chat-controls.js?v=20261104-answer-model"></script>
 <link rel="stylesheet" href="assets/phase2-small-api-reference.css">
 <script src="assets/phase2-small-api-reference.js"></script>
+<link rel="stylesheet" href="assets/phase2-small-custom-mcp.css">
+<dialog id="custom-mcp-drawer" class="custom-mcp-drawer" aria-labelledby="custom-mcp-title">
+  <form>
+    <header>
+      <div><h2 id="custom-mcp-title">自定义 MCP</h2><p>完成应用配置与账号授权。</p></div>
+      <button type="button" class="mcp-icon-button" data-mcp-close aria-label="关闭">✕</button>
+    </header>
+    <div class="custom-mcp-body">
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-json">导入连接 JSON</label>
+        <textarea id="custom-mcp-json" name="config" placeholder="粘贴单个服务配置，或包含 mcpServers 的 JSON。"></textarea>
+        <button type="button" class="soft-button mcp-import" data-mcp-apply disabled>应用配置</button>
+        <label hidden>选择要导入的服务<select name="server"></select></label>
+      </div>
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-name">连接名称</label>
+        <input id="custom-mcp-name" name="connectionName" required>
+      </div>
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-address">服务地址</label>
+        <div class="mcp-address">
+          <input id="custom-mcp-address" name="address" type="password" inputmode="url" placeholder="https://example.com/mcp" autocomplete="off" required>
+          <button type="button" class="mcp-icon-button" data-mcp-visibility aria-label="显示服务地址" aria-pressed="false">◉</button>
+        </div>
+      </div>
+      <fieldset>
+        <legend>认证方式</legend>
+        <div class="custom-mcp-options">
+          <label><input type="radio" name="auth" value="browser" checked>浏览器授权</label>
+          <label><input type="radio" name="auth" value="address">连接地址 / 凭证</label>
+        </div>
+      </fieldset>
+      <p class="mcp-hint" data-mcp-auth-hint></p>
+      <fieldset class="custom-mcp-headers" data-mcp-headers hidden>
+        <legend>请求头（选填）</legend>
+        <div class="custom-mcp-header-list" data-mcp-header-list></div>
+        <button type="button" class="soft-button" data-mcp-add-header>＋ 添加请求头</button>
+      </fieldset>
+      <template id="custom-mcp-header-template">
+        <div class="custom-mcp-header-row">
+          <input aria-label="请求头名称" placeholder="请求头名称" autocomplete="off">
+          <div class="mcp-address">
+            <input type="password" aria-label="请求头值" placeholder="请求头值" autocomplete="off">
+            <button type="button" class="mcp-icon-button" data-header-visibility aria-label="显示请求头值" aria-pressed="false">◉</button>
+          </div>
+          <button type="button" class="mcp-icon-button" data-header-remove aria-label="删除请求头">⌫</button>
+        </div>
+      </template>
+      <fieldset aria-label="服务地区">
+        <div class="custom-mcp-options">
+          <label><input type="radio" name="region" value="global" checked>国际</label>
+          <label><input type="radio" name="region" value="cn">国内</label>
+        </div>
+      </fieldset>
+      <p class="mcp-error" role="alert" hidden></p>
+    </div>
+    <footer>
+      <button type="button" class="soft-button" data-mcp-close>取消</button>
+      <button type="submit" class="primary-button">添加并授权</button>
+    </footer>
+  </form>
+</dialog>
+<dialog id="mcp-remove-dialog" class="skill-uninstall-dialog" aria-labelledby="mcp-remove-title" aria-describedby="mcp-remove-copy">
+  <form method="dialog">
+    <h3 id="mcp-remove-title"></h3>
+    <p id="mcp-remove-copy">移除后，此连接将从应用连接中断开。</p>
+    <footer>
+      <button class="soft-button" value="cancel" autofocus>取消</button>
+      <button class="danger-button" value="remove">确认</button>
+    </footer>
+  </form>
+</dialog>
+<script>
+document.querySelector('#mcp-remove-dialog').addEventListener('close', event => {
+  const remove = pendingMcpRemoval;
+  pendingMcpRemoval = undefined;
+  if (event.currentTarget.returnValue === 'remove') remove?.();
+});
+</script>
+<script src="assets/phase2-small-custom-mcp.js?v=connection-remove-confirm"></script>
+<script src="assets/phase2-small-skills-list.js?v=uninstall-ok"></script>
 </body>
+
 </html>

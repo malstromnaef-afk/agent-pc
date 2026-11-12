@@ -1,0 +1,48 @@
+.custom-mcp-drawer {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: min(600px, calc(100vw - 32px));
+  max-width: none;
+  max-height: calc(100dvh - 32px);
+  padding: 0;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  overflow: hidden;
+  color: var(--text);
+  background: #171b1d;
+  box-shadow: 0 20px 64px #0008;
+}
+.custom-mcp-drawer::backdrop { background: #0007; }
+.custom-mcp-drawer form { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; max-height: calc(100dvh - 34px); }
+.custom-mcp-drawer header, .custom-mcp-drawer footer {
+  display: flex; align-items: center; gap: 14px; padding: 16px 24px;
+}
+.custom-mcp-drawer header { justify-content: space-between; border-bottom: 1px solid var(--line); }
+.custom-mcp-drawer header h2, .custom-mcp-drawer header p { margin: 0; }
+.custom-mcp-drawer header p, .custom-mcp-drawer .mcp-hint { color: var(--muted); font-size: 13px; }
+.custom-mcp-drawer footer { justify-content: flex-end; border-top: 1px solid var(--line); background: #191e20; }
+.custom-mcp-body { overflow: auto; display: grid; align-content: start; gap: 18px; padding: 24px; }
+.custom-mcp-field { display: grid; gap: 8px; }
+.custom-mcp-field > label, .custom-mcp-drawer legend { font-weight: 650; }
+.custom-mcp-drawer :is(input:not([type=radio]), textarea, select) {
+  width: 100%; min-height: 40px; padding: 8px 12px; border: 1px solid var(--line);
+  border-radius: 8px; background: #13181b; color: var(--text); font: inherit;
+}
+.custom-mcp-drawer textarea { min-height: 84px; resize: vertical; }
+.custom-mcp-drawer fieldset { border: 0; padding: 0; margin: 0; min-width: 0; }
+.custom-mcp-options { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 10px; }
+.custom-mcp-options label { display: flex; align-items: center; gap: 6px; }
+.custom-mcp-options input { accent-color: #18afb2; }
+.custom-mcp-drawer .mcp-hint { margin: 0; }
+.custom-mcp-drawer .mcp-address { position: relative; }
+.custom-mcp-drawer .mcp-address input { padding-right: 42px; }
+.custom-mcp-drawer .mcp-address button { position: absolute; inset: 0 0 0 auto; }
+.custom-mcp-drawer .mcp-icon-button { border: 0; background: transparent; color: var(--muted); width: 40px; min-height: 40px; }
+.custom-mcp-drawer .mcp-error { margin: 0; color: #ffadad; font-size: 13px; }
+.custom-mcp-drawer button:disabled { opacity: .45; cursor: default; }
+.custom-mcp-drawer .mcp-import { justify-self: start; }
+.custom-mcp-drawer [hidden] { display: none !important; }
+.custom-mcp-header-list { display: grid; gap: 8px; margin: 10px 0 12px; }
+.custom-mcp-header-row { display: grid; grid-template-columns: minmax(0, 4fr) minmax(0, 6fr) 36px; gap: 8px; }
+.custom-mcp-header-row > [data-header-remove] { width: 36px; }
