@@ -48,6 +48,8 @@
 .x3-row { display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 62px; }
 .x3-row strong { font-weight: 650; }
 .x3-row select { width: auto; min-width: 92px; }
+.x3-row label[for="p2-interface-language"] { flex: 0 0 auto; white-space: nowrap; }
+.x3-row #p2-interface-language { min-width: 0; }
 .x3-card small { display: block; color: #a1a9b8; margin-top: 7px; }
 .x3-switch {
   appearance: none; width: 44px; height: 25px; flex: 0 0 44px;

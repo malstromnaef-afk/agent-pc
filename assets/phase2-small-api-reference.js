@@ -88,7 +88,7 @@
   system.innerHTML = `
     <div role="tabpanel" aria-label="系统设置">
       <div class="x3-card x3-row"><label for="p2-interface-language"><strong>语言偏好</strong></label><span data-x3-language></span></div>
-      <div class="x3-card x3-row"><div><strong>大小屏显隐同步</strong><small>开启后，大屏切换业务页面时，小屏同步切换。</small></div>${toggle('sync', '大小屏显隐同步')}</div>
+      <div class="x3-card x3-row"><div><strong>大小屏同步</strong><small>开启后，大屏切换菜单小屏同步切换。</small></div>${toggle('sync', '大小屏同步')}</div>
     </div>`;
   language.querySelector('option[value="zh-CN"]').textContent = '中文';
   system.querySelector('[data-x3-language]').replaceWith(language);
