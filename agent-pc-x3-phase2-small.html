@@ -9973,6 +9973,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config [data-feishu-retry] .mcp-auth-spinner {margin-right:6px;vertical-align:middle}
 #screen-config #mcp-state-comparison:not([hidden]) {display:grid;gap:24px;margin-top:24px}
 #screen-config #replica-apps .mcp-brand[data-brand="todoist"] {padding:0;border:0;background:none}
+#screen-config #replica-apps .mcp-custom-brand {display:grid;place-items:center;background:#142d30;color:var(--pa-cyan);font-size:10px;font-weight:700}
 #screen-config #replica-apps .mcp-directory .replica-row {gap:12px;padding:8px 0}
 #screen-config #replica-apps .mcp-directory .replica-row:first-child {padding:16px 0}
 #screen-config #replica-apps .mcp-directory .replica-app {padding:16px 4px;border-top:0;border-bottom:1px solid var(--pa-line)}
@@ -20501,7 +20502,8 @@ const mcpCards = new Set();
 const mcpProfiles = {
   feishu: { name: '飞书 MCP', region: 'cn' },
   todoist: { name: 'Todoist', region: 'global' },
-  drive: { name: 'Google Drive', region: 'global' }
+  drive: { name: 'Google Drive', region: 'global' },
+  custom: { name: '自定义 MCP' }
 };
 const mcpStatusLabels = {
   offline: '未连接', retrying: '连接中', failed: '连接失败', setup: '需要配置',
@@ -20529,7 +20531,7 @@ function cloneMcpCard() {
   return card;
 }
 
-function mountMcpCard(card, provider, { state: initialState, expanded, firstRetryFails = false, list = false, accountGroup = feishuSection, onRemove } = {}) {
+function mountMcpCard(card, provider, { state: initialState, expanded, firstRetryFails = false, list = false, accountGroup = feishuSection, onRemove, custom } = {}) {
   const profile = mcpProfiles[provider];
   const control = name => card.querySelector('[data-feishu-' + name + ']');
   const details = card.querySelector('.mcp-connection-details');
@@ -20537,20 +20539,39 @@ function mountMcpCard(card, provider, { state: initialState, expanded, firstRetr
   const name = control('rename').querySelector('input');
   const search = control('tool-search');
   const retry = control('retry');
+  const authorize = control('authorize');
   const logo = card.querySelector('.mcp-brand');
   const warning = card.querySelector('.mcp-warning');
-  let label = profile.name;
+  let label = custom?.name ?? profile.name;
   let enabled = true;
   let state = initialState;
   let connectedAt;
   let retryTimer;
   let failNextRetry = firstRetryFails;
-  const entry = { card, provider, list, get state() { return state; }, expand, start };
+  const entry = { card, provider, list, region: custom?.region ?? profile.region, get state() { return state; }, expand, start };
   mcpCards.add(entry);
   card.dataset.mcpProvider = provider;
   control('title').textContent = label;
-  control('add-account').hidden = provider === 'feishu';
-  if (provider !== 'feishu') {
+  control('add-account').hidden = provider === 'feishu' || provider === 'custom';
+  if (custom) {
+    const icon = document.createElement('span');
+    icon.className = 'mcp-brand mcp-custom-brand';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = 'MCP';
+    logo.replaceWith(icon);
+    control('provider').textContent = profile.name;
+    control('endpoint').textContent = custom.endpoint;
+    control('count').textContent = custom.todoistSample ? ' · 1 个工具' : ' · 0 个工具';
+    control('tool-count').textContent = custom.todoistSample ? '1' : '0';
+    const [tool, ...extraTools] = card.querySelectorAll('.mcp-tool');
+    tool.querySelector('strong').textContent = '查看任务';
+    tool.querySelector('p').textContent = '列出指定项目中的待办事项。';
+    extraTools.forEach(item => item.remove());
+    if (!custom.todoistSample) {
+      tool.remove();
+      control('tool-empty').textContent = '此连接尚未提供可用工具。';
+    }
+  } else if (provider !== 'feishu') {
     logo.dataset.brand = provider;
     control('provider').textContent = label;
     control('count').textContent = ' · 1 个工具';
@@ -20631,11 +20652,15 @@ function mountMcpCard(card, provider, { state: initialState, expanded, firstRetr
   }
 
   function start() {
+    if (custom?.auth === 'address') {
+      reconnect();
+      return;
+    }
     render('waiting', true);
     control('authorize').focus({ preventScroll: true });
   }
 
-  retry.addEventListener('click', () => {
+  function reconnect() {
     if (state === 'setup') {
       showLightToast('当前设备的应用配置尚未就绪，请更新设备后重试。');
       return;
@@ -20645,7 +20670,8 @@ function mountMcpCard(card, provider, { state: initialState, expanded, firstRetr
       render(failNextRetry ? 'failed' : 'connected', failNextRetry ? undefined : false);
       failNextRetry = false;
     }, 900);
-  });
+  }
+  retry.addEventListener('click', reconnect);
   control('authorize').addEventListener('click', () => {
     if (state === 'required') {
       start();
@@ -20655,11 +20681,18 @@ function mountMcpCard(card, provider, { state: initialState, expanded, firstRetr
       render('connected', true);
       expandButtons[0].focus({ preventScroll: true });
     }
-    if (provider === 'todoist') {
+    if (provider === 'todoist' || custom) {
       const dialog = document.querySelector('#todoist-auth-demo');
+      if (dialog.open) return;
+      const title = dialog.querySelector('h3');
+      const description = dialog.querySelector('p');
+      title.textContent = (custom ? label : 'Todoist') + ' 模拟授权';
+      description.textContent = custom && !custom.todoistSample
+        ? '同意后，演示将此连接显示为已连接。'
+        : '同意后，演示将允许 Agent 查看 Todoist 任务。';
       dialog.returnValue = 'cancel';
       dialog.addEventListener('close', () => {
-        if (dialog.returnValue === 'allow' && state === 'waiting') finishAuthorization();
+        if (dialog.returnValue === 'allow' && state === 'waiting' && mcpCards.has(entry)) finishAuthorization();
       }, { once: true });
       dialog.showModal();
       return;
@@ -20712,14 +20745,15 @@ function mountMcpCard(card, provider, { state: initialState, expanded, firstRetr
   return entry;
 }
 
-function addSavedMcpAccount(provider, state, expanded, accountGroup = feishuSection) {
+function addSavedMcpAccount(provider, state, expanded, accountGroup = feishuSection, custom) {
   const card = cloneMcpCard();
   accountGroup.append(card);
   return mountMcpCard(card, provider, {
-    state, expanded, list: accountGroup === feishuSection, accountGroup,
+    state, expanded, list: accountGroup === feishuSection, accountGroup, custom,
     onRemove() {
       replicaFilterApps();
-      if (!feishuCatalogRow.hidden) feishuConnect.focus();
+      if (custom) document.querySelector('[data-custom-mcp-open]').focus();
+      else if (!feishuCatalogRow.hidden) feishuConnect.focus();
     }
   });
 }
@@ -20870,9 +20904,9 @@ function replicaFilterApps() {
   let saved = 0;
   let visibleConnected = 0;
   for (const entry of mcpCards) {
-    const { card, provider, state, list } = entry;
+    const { card, region, state, list } = entry;
     const connected = card.dataset.mcpStatus === 'connected';
-    const regionMatches = replicaRegion === 'all' || connectedOnly || mcpProfiles[provider].region === replicaRegion;
+    const regionMatches = replicaRegion === 'all' || connectedOnly || region === replicaRegion;
     const matches = (card.querySelector('[data-feishu-title]').textContent + ' ' +
       card.querySelector('[data-feishu-provider]').textContent).toLowerCase().includes(query);
     card.hidden = state === 'before' || !matches || !regionMatches || (connectedOnly && !connected);
@@ -20939,8 +20973,8 @@ QA_STATE.mode="voice";qaRender();
 </script>
 <link rel="stylesheet" href="assets/phase2-small-chat-controls.css?v=20261104-answer-model">
 <script src="assets/phase2-small-chat-controls.js?v=20261104-answer-model"></script>
-<link rel="stylesheet" href="assets/phase2-small-api-reference.css?v=provider-three-rows">
-<script src="assets/phase2-small-api-reference.js?v=provider-footer"></script>
+<link rel="stylesheet" href="assets/phase2-small-api-reference.css?v=model-settings">
+<script src="assets/phase2-small-api-reference.js?v=model-settings"></script>
 <link rel="stylesheet" href="assets/phase2-small-custom-mcp.css">
 <dialog id="custom-mcp-drawer" class="custom-mcp-drawer" aria-labelledby="custom-mcp-title">
   <form>
@@ -20951,8 +20985,15 @@ QA_STATE.mode="voice";qaRender();
     <div class="custom-mcp-body">
       <div class="custom-mcp-field">
         <label for="custom-mcp-json">导入连接 JSON</label>
-        <textarea id="custom-mcp-json" name="config" placeholder="粘贴单个服务配置，或包含 mcpServers 的 JSON。"></textarea>
-        <button type="button" class="soft-button mcp-import" data-mcp-apply disabled>应用配置</button>
+        <textarea id="custom-mcp-json" name="config" rows="7" spellcheck="false" placeholder="粘贴单个服务配置，或包含 mcpServers 的 JSON。">
+{
+  "mcpServers": {
+    "Todoist 演示": {
+      "url": "https://todoist.example.com/mcp"
+    }
+  }
+}</textarea>
+        <button type="button" class="soft-button mcp-import" data-mcp-apply>应用配置</button>
         <label hidden>选择要导入的服务<select name="server"></select></label>
       </div>
       <div class="custom-mcp-field">
@@ -21020,7 +21061,7 @@ document.querySelector('#mcp-remove-dialog').addEventListener('close', event => 
   if (event.currentTarget.returnValue === 'remove') remove?.();
 });
 </script>
-<script src="assets/phase2-small-custom-mcp.js?v=feishu-authorization-flow"></script>
+<script src="assets/phase2-small-custom-mcp.js?v=json-import"></script>
 <script src="assets/phase2-small-skills-list.js?v=skills-shared-filters"></script>
 </body>
 

@@ -11,6 +11,7 @@
   const headerList = drawer.querySelector('[data-mcp-header-list]');
   const headerTemplate = drawer.querySelector('#custom-mcp-header-template');
   const addHeader = drawer.querySelector('[data-mcp-add-header]');
+  const submitButton = form.querySelector('[type="submit"]');
   let importedServers = [];
 
   function addHeaderRow() {
@@ -42,36 +43,47 @@
     hint.hidden = !browserAuth;
     hint.textContent = '支持通过浏览器授权的远程 HTTP MCP 服务。请填写 HTTPS 地址，勿包含密钥或令牌。';
     headers.hidden = browserAuth;
+    submitButton.textContent = browserAuth ? '添加并授权' : '保存并连接';
   }
 
   function importServer(entry) {
     const [name, details] = entry;
-    connectionName.value = details.name || name;
-    address.value = details.url || details.serverUrl || '';
+    connectionName.value = name;
+    address.value = details.url;
+    auth.value = details.auth;
+    headerList.replaceChildren();
+    for (const [key, value] of Object.entries(details.headers)) {
+      const input = addHeaderRow();
+      input.value = key;
+      input.closest('.custom-mcp-header-row').querySelector('[type="password"]').value = value;
+    }
+    syncAuthHint();
   }
 
-  openButton.addEventListener('click', () => {
+  function resetForm() {
     form.reset();
     report();
     importedServers = [];
+    server.replaceChildren();
     headerList.replaceChildren();
-    addHeaderRow();
     server.closest('label').hidden = true;
-    applyButton.disabled = true;
+    applyButton.disabled = !config.value.trim();
     address.type = 'password';
     visibility.setAttribute('aria-pressed', 'false');
     visibility.setAttribute('aria-label', '显示服务地址');
     syncAuthHint();
+  }
+
+  openButton.addEventListener('click', () => {
+    resetForm();
+    addHeaderRow();
     drawer.showModal();
   });
   drawer.querySelectorAll('[data-mcp-close]').forEach(button => {
     button.addEventListener('click', () => drawer.close());
   });
   drawer.addEventListener('close', () => {
-    form.reset();
-    server.replaceChildren();
-    headerList.replaceChildren();
-    importedServers = [];
+    if (!drawer.open) resetForm();
   });
   visibility.addEventListener('click', () => {
     const visible = address.type === 'password';
@@ -92,13 +104,30 @@
     report();
     try {
       const data = JSON.parse(config.value);
-      const entries = data?.mcpServers ? Object.entries(data.mcpServers) : [[data?.name || '', data]];
-      importedServers = entries.filter(([, entry]) => typeof (entry?.url || entry?.serverUrl) === 'string');
-      if (!importedServers.length) throw new Error();
+      if (!data || typeof data !== 'object' || Array.isArray(data)) throw new Error();
+      const singleName = typeof data.name === 'string' ? data.name : connectionName.value;
+      const servers = data.mcpServers ?? data.servers ?? { [singleName || 'MCP']: data };
+      if (!servers || typeof servers !== 'object' || Array.isArray(servers)) throw new Error();
+      const entries = Object.entries(servers);
+      if (!entries.length || entries.length > 30) throw new Error();
+      importedServers = entries.map(([name, entry]) => {
+        if (!entry || typeof entry !== 'object' || Array.isArray(entry)) throw new Error();
+        if (entry.command || entry.args || entry.env || ['sse', 'stdio'].includes(entry.type)) throw new Error();
+        const url = entry.url || entry.httpUrl || entry.serverUrl;
+        const requestHeaders = entry.headers ?? {};
+        if (typeof url !== 'string' || typeof requestHeaders !== 'object' || Array.isArray(requestHeaders)) throw new Error();
+        if (Object.values(requestHeaders).some(value => typeof value !== 'string')) throw new Error();
+        const auth = Object.keys(requestHeaders).length || new URL(url).search ? 'address' : 'browser';
+        return [name, { url, headers: requestHeaders, auth }];
+      });
       server.replaceChildren(...importedServers.map(([name], index) => new Option(name, index)));
       server.closest('label').hidden = importedServers.length < 2;
       importServer(importedServers[0]);
+      config.value = '';
+      applyButton.disabled = true;
     } catch {
+      importedServers = [];
+      server.closest('label').hidden = true;
       report('请输入包含远程服务地址的有效 JSON。');
     }
   });
@@ -107,34 +136,24 @@
     report();
     const name = connectionName.value.trim();
     if (!name) { report('请输入连接名称。'); connectionName.focus(); return; }
+    let url;
     try {
-      const url = new URL(address.value.trim());
-      if (url.protocol !== 'https:' || url.username || url.password) throw new Error();
+      url = new URL(address.value.trim());
+      if (url.protocol !== 'https:' || url.username || url.password || url.hash || (auth.value === 'browser' && url.search)) throw new Error();
     } catch {
       report('请输入有效的 HTTPS 服务地址。');
       address.focus();
       return;
     }
 
-    const row = document.createElement('div');
-    row.className = 'replica-row replica-app';
-    row.dataset.appRegion = region.value;
-    row.dataset.appSearch = name.toLowerCase();
-    const copy = document.createElement('div');
-    const title = document.createElement('h4');
-    title.textContent = name;
-    const status = document.createElement('p');
-    status.textContent = '自定义 MCP · 待授权';
-    copy.append(title, status);
-    const remove = document.createElement('button');
-    remove.type = 'button';
-    remove.className = 'replica-remove-connection';
-    remove.textContent = '移除连接';
-    remove.addEventListener('click', () => confirmConnectionRemoval(name, () => { row.remove(); replicaFilterApps(); openButton.focus(); }));
-    row.append(copy, remove);
-    document.querySelector('#replica-app-empty').before(row);
-    replicaFilterApps();
+    const account = addSavedMcpAccount('custom', 'before', true, feishuSection, {
+      name,
+      endpoint: url.origin + url.pathname,
+      region: region.value,
+      auth: auth.value,
+      todoistSample: url.href === 'https://todoist.example.com/mcp',
+    });
     drawer.close();
-    showLightToast('已添加原型配置，待授权。');
+    account.start();
   });
 })();
