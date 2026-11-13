@@ -132,7 +132,7 @@
     remove.textContent = '移除连接';
     remove.addEventListener('click', () => confirmConnectionRemoval(name, () => { row.remove(); replicaFilterApps(); openButton.focus(); }));
     row.append(copy, remove);
-    document.querySelector('#replica-feishu').after(row);
+    document.querySelector('#replica-app-empty').before(row);
     replicaFilterApps();
     drawer.close();
     showLightToast('已添加原型配置，待授权。');

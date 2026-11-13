@@ -2,8 +2,14 @@
   const panel = document.querySelector('#replica-skills');
   const picker = panel.querySelector('[data-skills-picker]');
   const search = panel.querySelector('input[type="search"]');
+  const views = [...panel.querySelectorAll('[data-skills-view]')];
+  let view = 'discover';
   const list = panel.querySelector('.replica-skill-list');
   const empty = panel.querySelector('.replica-empty');
+  const searchSummary = document.createElement('p');
+  searchSummary.className = 'replica-skill-search-summary';
+  searchSummary.setAttribute('role', 'status');
+  list.before(searchSummary);
   const confirmDialog = document.createElement('dialog');
   confirmDialog.className = 'skill-uninstall-dialog';
   confirmDialog.setAttribute('aria-labelledby', 'skill-uninstall-title');
@@ -19,6 +25,12 @@
   });
   const storageKey = 'phase2-small-skills-list-v1';
   const removedDemoPath = 'demo/pdf-cleanup';
+  const searchableExample = {
+    path: 'demo/web-summary',
+    name: '网页摘要',
+    description: '提炼网页的主要内容。',
+    installed: false,
+  };
   const examples = [
     { path: 'demo/design', name: '前端界面设计', description: '设计网页和应用界面，细化组件布局、视觉样式和交互。' },
     { path: 'demo/review', name: '网页设计检查', description: '检查网页布局、交互和可访问性。' },
@@ -48,7 +60,8 @@
   function renderCard(skill) {
     const item = document.createElement('li');
     item.className = 'replica-skill-card';
-    item.innerHTML = '<header><h4></h4><button type="button" class="skill-installed">安装</button></header>' +
+    item.innerHTML = '<header><h4></h4><div class="skill-install-action">' +
+      '<button type="button" class="soft-button">安装</button><span class="skill-installed-label" hidden>已安装</span></div></header>' +
       '<p class="skill-description"></p>' +
       '<footer><label><input type="checkbox" role="switch"><span></span></label>' +
       '<button type="button" class="replica-remove-connection">卸载</button></footer>';
@@ -58,7 +71,9 @@
     description.hidden = !skill.description;
     const toggle = item.querySelector('input');
     const status = item.querySelector('label span');
-    const badge = item.querySelector('.skill-installed');
+    const installAction = item.querySelector('.skill-install-action');
+    const install = installAction.querySelector('button');
+    const installedLabel = installAction.querySelector('.skill-installed-label');
     const footer = item.querySelector('footer');
     const uninstall = footer.querySelector('button');
     toggle.setAttribute('aria-label', '启用 ' + skill.name);
@@ -67,7 +82,8 @@
       const installed = skill.installed !== false;
       item.toggleAttribute('data-skill-disabled', installed && !toggle.checked);
       footer.hidden = !installed;
-      badge.hidden = installed;
+      install.hidden = installed;
+      installedLabel.hidden = !installed;
       status.textContent = toggle.checked ? '已启用' : '已停用';
     }
     renderState();
@@ -78,13 +94,14 @@
     });
     function setInstalled(installed) {
       skill.installed = installed;
+      if (installed && !skills.some(entry => entry.path === skill.path)) skills = [...skills, skill];
       enabledByPath.delete(skill.path);
       toggle.checked = installed;
       save();
       renderState();
-      (installed ? toggle : badge).focus();
+      (installed ? toggle : install).focus();
     }
-    badge.addEventListener('click', () => setInstalled(true));
+    install.addEventListener('click', () => setInstalled(true));
     uninstall.addEventListener('click', () => {
       confirmDialog.querySelector('#skill-uninstall-copy').textContent = `是否卸载「${skill.name}」？`;
       pendingUninstall = () => setInstalled(false);
@@ -96,13 +113,16 @@
 
   function render() {
     const query = search.value.trim().toLowerCase();
-    const matches = (skills || []).filter(skill => skill.name.toLowerCase().includes(query));
+    const candidates = view === 'installed' ? skills.filter(skill => skill.installed !== false)
+      : skills.some(skill => skill.path === searchableExample.path) ? skills : [...skills, searchableExample];
+    const matches = candidates.filter(skill =>
+      skill.name.toLowerCase().includes(query) || (skill.description || '').toLowerCase().includes(query));
+    searchSummary.hidden = !query;
+    searchSummary.textContent = query ? `搜索结果（${matches.length}）` : '';
     list.replaceChildren(...matches.map(renderCard));
     list.hidden = matches.length === 0;
     empty.hidden = !list.hidden;
-    empty.textContent = skills === null ? '暂无 Skills。打开 Skills 文件夹后即可查看。'
-      : skills.length === 0 ? '列表中没有 Skills。'
-      : '没有找到匹配的 Skills。';
+    empty.textContent = query ? '没有找到匹配的 Skills。' : '暂无已安装的技能。';
   }
 
   function chooseFolder() {
@@ -125,6 +145,14 @@
   panel.querySelector('[data-skills-folder]').addEventListener('click', chooseFolder);
   panel.querySelector('[data-skills-refresh]').addEventListener('click', chooseFolder);
   search.addEventListener('input', render);
+  views.forEach(button => button.addEventListener('click', () => {
+    view = button.dataset.skillsView;
+    views.forEach(option => {
+      option.classList.toggle('active', option === button);
+      option.setAttribute('aria-pressed', String(option === button));
+    });
+    render();
+  }));
   picker.addEventListener('change', async () => {
     const current = ++scan;
     const found = await Promise.all(Array.from(picker.files).filter(file => file.name === 'SKILL.md').map(readSkill));

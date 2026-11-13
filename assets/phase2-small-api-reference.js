@@ -43,12 +43,18 @@
     <div data-x3-view="llm" role="tabpanel" aria-label="大语言模型">
       <form class="x3-card" data-x3-model="llm">
         <h3>配置大语言模型</h3>
-        ${select('provider', '配置名称', [...providers('llm').filter(([id]) => !id.startsWith('custom-')), ['custom', '＋ 自定义模型']])}
+        <div class="x3-provider">
+          <span id="x3-provider-label">提供商</span>
+          <button type="button" data-x3-provider-trigger aria-labelledby="x3-provider-label x3-provider-value" aria-expanded="false" aria-controls="x3-provider-menu"><span id="x3-provider-value"></span><span aria-hidden="true">⌄</span></button>
+          <div id="x3-provider-menu" hidden><div class="x3-provider-list"></div></div>
+          <select name="provider" hidden>${[...providers('llm').filter(([id]) => !id.startsWith('custom-')), ['custom', '＋ 自定义模型']].map(([id, name]) => `<option value="${escapeHtml(id)}">${escapeHtml(name)}</option>`).join('')}</select>
+        </div>
         <div data-x3-custom hidden>${select('protocol', 'API 协议', [['', '选择协议'], ['custom-openai', 'OpenAI 兼容'], ['custom-anthropic', 'Anthropic 兼容']])}</div>
-        <label><span data-x3-api-label>API 基础地址</span><input name="baseUrl" type="url" placeholder="请输入服务商的 API 基础地址"></label>
+        <div data-x3-preset-model>${singleSelect('model', '模型', '')}</div>
+        <div data-x3-custom hidden>${input('modelId', '模型 ID', 'text', '请输入服务商提供的模型 ID')}</div>
         ${keyField}
-        <div data-x3-preset-model>${singleSelect('model', '大语言模型', qwen)}</div>
-        <div data-x3-custom hidden>${input('customName', '显示名称（可选）', 'text', '例如：我的模型服务')}</div>
+        ${input('baseUrl', 'API 地址', 'url', '请输入服务商的 API 地址')}
+        <div data-x3-custom hidden>${input('customName', '模型展示名称（选填）', 'text', '例如：我的模型服务')}</div>
         ${save}
       </form>
     </div>
@@ -146,13 +152,14 @@
     llm.querySelectorAll('[data-x3-custom]').forEach(field => { field.hidden = !custom; });
     llm.querySelector('[data-x3-preset-model]').hidden = custom;
     llm.elements.model.disabled = custom;
-    const label = custom ? 'API 地址' : 'API 基础地址';
-    llm.querySelector('[data-x3-api-label]').textContent = label;
-    llm.elements.baseUrl.placeholder = `请输入服务商的${' '}${label}`;
+    llm.querySelector('#x3-provider-value').textContent = llm.elements.provider.selectedOptions[0].text;
+    llm.querySelectorAll('[data-x3-provider-option]').forEach(button => {
+      button.setAttribute('aria-pressed', String(button.dataset.x3ProviderOption === llm.elements.provider.value));
+    });
     if (custom) return;
     const provider = apiProviderById(llm.elements.provider.value, 'llm');
-    const models = provider.id === 'qwen' ? [qwen, ...provider.models] : provider.models || [];
-    llm.elements.model.replaceChildren(...(models.length ? models : ['自定义模型']).map(model => new Option(model, model)));
+    const models = provider?.models || [];
+    llm.elements.model.replaceChildren(new Option('请选择模型', ''), ...models.map(model => new Option(model, model)));
     if (models.includes(selected)) llm.elements.model.value = selected;
   }
   function saveCloud(category, form) {
@@ -163,14 +170,15 @@
     if (custom && !providerId) return feedback(form, '请选择 API 协议。');
     const sameProvider = prior?.providerId === providerId;
     const provider = apiProviderById(providerId, category);
-    const name = custom ? fields.get('customName').trim() || '自定义模型'
+    const model = custom ? fields.get('modelId').trim() : fields.get('model') || '';
+    if (category === 'llm' && !model) return feedback(form, custom ? '请输入模型 ID。' : '请选择模型。');
+    const name = custom ? fields.get('customName').trim() || model
       : category === 'llm' ? form.elements.provider.selectedOptions[0].text : fields.get('displayName').trim() || '阿里百炼 · 实时语音';
     const endpoint = category === 'llm' ? fields.get('baseUrl').trim() : '';
-    const model = fields.get('model') || '';
-    if (category === 'llm' && !endpoint) return feedback(form, '请输入 API 基础地址。');
+    if (category === 'llm' && !endpoint) return feedback(form, '请输入 API 地址。');
     if (!fields.get('apiKey').trim() && !(sameProvider && prior.hasCredential)) return feedback(form, '请输入 API Key。');
     const configId = sameProvider ? prior.configId : `model-${globalThis.crypto?.randomUUID?.() || Date.now()}`;
-    const values = custom ? { baseUrl: endpoint, protocol: provider.protocol }
+    const values = custom ? { baseUrl: endpoint, protocol: provider.protocol, modelId: model }
       : category === 'llm' ? { baseUrl: endpoint, model } : { voiceModel: model, voice: fields.get('voice') };
     const record = {
       configId, category, providerId: provider.id, provider: provider.label, displayName: name,
@@ -210,6 +218,38 @@
       }
     });
   }
+  const providerTrigger = llm.querySelector('[data-x3-provider-trigger]');
+  const providerMenu = llm.querySelector('#x3-provider-menu');
+  function toggleProviderMenu(open) {
+    providerMenu.hidden = !open;
+    providerTrigger.setAttribute('aria-expanded', String(open));
+  }
+  for (const option of llm.elements.provider.options) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.x3ProviderOption = option.value;
+    button.textContent = option.text;
+    button.addEventListener('click', () => {
+      if (llm.elements.provider.value !== option.value) {
+        llm.elements.provider.value = option.value;
+        llm.elements.provider.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      toggleProviderMenu(false);
+      providerTrigger.focus();
+    });
+    const destination = option.value === 'custom' ? providerMenu : providerMenu.firstElementChild;
+    destination.append(button);
+  }
+  providerTrigger.addEventListener('click', () => toggleProviderMenu(providerMenu.hidden));
+  document.addEventListener('click', event => {
+    if (!event.target.closest('.x3-provider')) toggleProviderMenu(false);
+  });
+  llm.addEventListener('keydown', event => {
+    if (event.key === 'Escape' && !providerMenu.hidden) {
+      toggleProviderMenu(false);
+      providerTrigger.focus();
+    }
+  });
   llm.elements.provider.addEventListener('change', () => {
     llm.elements.baseUrl.value = apiProviderById(llm.elements.provider.value, 'llm')?.baseUrl || '';
     llm.elements.apiKey.value = '';
@@ -272,7 +312,8 @@
   llm.elements.provider.value = customConfig ? 'custom' : apiProviderById(llmConfig?.providerId, 'llm') ? llmConfig.providerId : 'qwen';
   if (customConfig) {
     llm.elements.protocol.value = llmConfig.providerId;
-    llm.elements.customName.value = llmConfig.displayName === '自定义模型' ? '' : llmConfig.displayName;
+    llm.elements.modelId.value = llmConfig.values?.modelId || llmConfig.model || '';
+    llm.elements.customName.value = ['自定义模型', llm.elements.modelId.value].includes(llmConfig.displayName) ? '' : llmConfig.displayName;
   }
   llm.elements.baseUrl.value = llmConfig?.values?.baseUrl || '';
   llm.elements.apiKey.placeholder = llmConfig?.hasCredential ? '••••••••••••••••' : '';
