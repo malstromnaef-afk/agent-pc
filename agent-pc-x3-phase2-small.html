@@ -20453,10 +20453,22 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-small-memory-import.js"></script>
-    <script src="assets/phase2-small-memory.js?v=20261104-memory-editor-no-outline"></script>
+    <script src="assets/phase2-small-memory.js?v=20261118-im-import"></script>
     <script src="assets/phase2-small-settings.js?v=20261102-small-scope"></script>
     <script src="assets/phase2-small-assistant.js?v=20261102-small-scope"></script>
-    <script src="assets/phase2-small-memory-onboarding.js?v=20261104-im-close"></script>
+    <style>
+      .pmo-im .pmo-connect{width:auto;min-width:126px;padding-inline:12px;white-space:nowrap}
+      .pmo-im-form{display:grid;gap:14px}
+      .pmo-im-form label{display:grid;gap:6px;color:var(--pmo-muted)}
+      .pmo-im-form input:not([type="radio"]),.pmo-im-form select,.pmo-im-form textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #536372;border-radius:8px;background:#11191e;color:#f5f7fa;font:inherit;color-scheme:dark}
+      .pmo-im-form textarea{resize:vertical}
+      .pmo-im-chats{display:grid;gap:6px}
+      .pmo-im-chats label{display:flex;align-items:center;padding:8px;border:1px solid #536372;border-radius:8px;color:#f5f7fa}
+      .pmo-im-chats label[hidden]{display:none}
+      .pmo-im-chats small{margin-left:auto;color:var(--pmo-muted)}
+      .pmo-im-form .pmo-back{justify-self:start}
+    </style>
+    <script src="assets/phase2-small-memory-onboarding.js?v=20261118-im-flow-v7"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
   <script>
 // Composer selections are demonstration metadata; no files are uploaded.

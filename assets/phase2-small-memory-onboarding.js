@@ -1,4 +1,4 @@
-/* UI prototype only: saves source preferences, never reads chats or third-party Agent memories. */
+/* Local chat imports are saved to the prototype memory library. CLI sessions are illustrative. */
 (() => {
   const root = document.querySelector('#memory');
   if (!root) return;
@@ -25,7 +25,7 @@
     conversation:['Agent对话记忆','记住工作背景与偏好','conversation.svg'],
     files:['文件记忆','从指定资料中形成记忆','folder.svg']
   };
-  const apps = [['feishu','飞书','feishu.png'],['dingtalk','钉钉','dingtalk.png'],['wecom','企业微信','wecom.png'],['wechat','微信','wechat.png']];
+  const apps = [['feishu','飞书','feishu.png'],['dingtalk','钉钉','dingtalk.png'],['wecom','企业微信','wecom.png'],['wechat','个人微信','wechat.png']];
   const agents = [['workbuddy','WorkBuddy','workbuddy.png'],['trae','TRAE IDE 国内版','trae-cn.png'],['codex','Codex','codex.png']];
   function makeDialog(id, titleId, className, html) {
     const dialog = document.createElement('dialog');
@@ -47,9 +47,26 @@
     <p class="pmo-onboarding-error" id="pmo-error" role="alert" hidden></p>
     <footer class="pmo-main-footer"><button type="button" class="pmo-submit" id="pmo-submit" disabled>开启所选记忆</button><button type="button" class="pmo-later" id="pmo-later">以后</button></footer></div>`);
   const im = makeDialog('pmo-im','pmo-im-title','pmo-im',`${closeButton('返回记忆来源')}
-    <header><div class="pmo-im-heading"><h2 id="pmo-im-title" tabindex="-1">即时通讯记忆</h2></div><p>选择应用，将授权范围内的聊天内容整理为记忆。</p></header>
-    <div class="pmo-app-list">${apps.map(([id,name,icon]) => `<section class="pmo-app-row"><span class="pmo-app-icon">${image(icon,62,62)}</span><div class="pmo-app-copy"><strong>${name}</strong><span>● 未连接</span></div><button type="button" class="pmo-connect" data-pmo-connect="${id}" aria-label="连接${name}">连接</button></section>`).join('')}</div>
-    <p class="pmo-onboarding-error" id="pmo-im-error" role="alert" hidden></p>`);
+    <div id="pmo-im-content"></div>`);
+  const imContent = im.querySelector('#pmo-im-content');
+  let imStep = 'home', imApp, imDraft = '';
+  function renderIm(step) {
+    imStep = step;
+    im.setAttribute('aria-labelledby', 'pmo-im-title');
+    const heading = (title, description = '') => `<header><div class="pmo-im-heading">${step === 'home' ? '' : '<button type="button" class="pmo-back" data-pmo-im-home>‹ 返回</button>'}<h2 id="pmo-im-title" tabindex="-1">${title}</h2></div>${description ? `<p>${description}</p>` : ''}</header>`;
+    const actions = `<p class="pmo-onboarding-error" id="pmo-im-error" role="alert" hidden></p><div class="pmo-agent-actions"><button type="button" class="pmo-cancel" data-pmo-im-home>取消</button><button type="submit" class="pmo-submit" disabled>确定</button></div>`;
+    if (step === 'home') {
+      imContent.innerHTML = heading('即时通讯记忆','选择会话或导入聊天内容，整理成可查找的记忆。') + `<div class="pmo-app-list">${apps.map(([id,name,icon]) => `<section class="pmo-app-row"><span class="pmo-app-icon">${image(icon,62,62)}</span><div class="pmo-app-copy"><strong>${name}</strong>${window.phase2SmallMemoryPreview?.hasChat(name) ? '<span>已保存聊天记忆</span>' : id === 'wechat' ? '' : '<span>● 未连接</span>'}</div><button type="button" class="pmo-connect" data-pmo-connect="${id}" aria-label="${name} ${id === 'wechat' ? '导入聊天' : '连接 CLI'}">${id === 'wechat' ? '导入聊天' : '连接 CLI'}</button></section>`).join('')}</div>`;
+    } else if (step === 'import') {
+      imContent.innerHTML = heading(`导入${imApp[1]}聊天`) + `<form class="pmo-im-form"><label>聊天原文<textarea name="chat" rows="5" placeholder="粘贴聊天原文"></textarea></label><label>上传 TXT / JSON<input type="file" accept=".txt,.json" name="chat-file"></label>${actions}</form>`;
+      imContent.querySelector('textarea').value = imDraft;
+    } else {
+      const isFeishu = imApp[0] === 'feishu';
+      const chats = isFeishu ? [['产品研发群','群聊'],['项目交付群','群聊'],['李明','单聊']] : [['产品研发群',''],['项目交付群','']];
+      imContent.innerHTML = heading(`选择${imApp[1]}${isFeishu ? '会话' : '群聊'}`,isFeishu ? '选择一项，导入该单聊或群聊的聊天记录。' : '选择一个群聊，导入该群的聊天记录。') + `<form class="pmo-im-form"><input type="search" name="search" aria-label="搜索会话" placeholder="${isFeishu ? '输入联系人或群名' : '输入群名'}"><div class="pmo-im-chats">${chats.map(([name,type]) => `<label><input type="radio" name="chat-group" value="${name}"> ${name}${type ? ` <small>${type}</small>` : ''}</label>`).join('')}</div><div data-pmo-empty role="status" hidden>没有匹配的会话</div><label>历史消息<select name="days"><option value="30">近 30 天</option><option value="7">近 7 天</option><option value="1">近 1 天</option></select></label><button type="button" class="pmo-back" data-pmo-im-import>手动导入</button>${actions}</form>`;
+    }
+    if (im.open) imContent.querySelector('h2').focus({preventScroll:true});
+  }
   const agent = makeDialog('pmo-agents','pmo-agents-title','pmo-agents',`${closeButton('返回记忆来源')}
     <header><h2 id="pmo-agents-title" tabindex="-1">导入第三方 Agent</h2><p>选择应用，授权后自动导入已有记忆。</p></header>
     <div class="pmo-agent-list">${agents.map(([id,name,icon]) => `<label class="pmo-agent-row"><span class="pmo-checkbox"><input type="checkbox" value="${id}" data-pmo-agent aria-label="${name}">${image('check.svg',23,23,'pmo-checkbox-check')}</span><span class="pmo-app-icon">${image(icon,62,62)}</span><span class="pmo-agent-copy"><strong>${name}</strong><span>本地记忆</span></span></label>`).join('')}</div>
@@ -141,7 +158,7 @@
     if(source && !busy){draft[source.dataset.pmoSource] = !draft[source.dataset.pmoSource];renderMain();setError(main,'#pmo-error');saveInline();}
     if(event.target.closest('[data-pmo-close], #pmo-later'))closeAll();
   });
-  $('#pmo-open-im').addEventListener('click',() => {setError(im,'#pmo-im-error');present(im);});
+  $('#pmo-open-im').addEventListener('click',() => {renderIm('home');present(im);});
   $('#pmo-open-agents').addEventListener('click',() => {agentDraft = ['workbuddy','trae'];setError(agent,'#pmo-agent-error');renderAgents();present(agent);});
   [im,agent].forEach(dialog => dialog.addEventListener('click',event => {if(event.target.closest('[data-pmo-close]'))back(dialog);}));
   dialogs.forEach(dialog => {
@@ -172,9 +189,64 @@
     finally{busy = false;form.querySelectorAll('button,input').forEach(control => control.disabled = false);renderMain();}
   });
   im.addEventListener('click',event => {
-    const button = event.target.closest('[data-pmo-connect]');if(!button)return;
-    const app = apps.find(([id]) => id === button.dataset.pmoConnect);
-    setError(im,'#pmo-im-error',`当前为交互原型，尚未接入${app[1]}连接；未读取聊天内容。`);
+    const button = event.target.closest('[data-pmo-connect]');
+    if (button) {
+      imApp = apps.find(([id]) => id === button.dataset.pmoConnect);
+      imDraft = '';
+      renderIm(imApp[0] === 'wechat' ? 'import' : 'select');
+    }
+    if (event.target.closest('[data-pmo-im-home]')) renderIm('home');
+    if (event.target.closest('[data-pmo-im-import]')) renderIm('import');
+  });
+  function updateImConfirm() {
+    const submit = imContent.querySelector('[type="submit"]');
+    if (submit) submit.disabled = imStep === 'import' ? !imDraft.trim() : !imContent.querySelector('.pmo-im-chats label:not([hidden]) input:checked');
+  }
+  im.addEventListener('input', event => {
+    if (event.target.name === 'chat') imDraft = event.target.value;
+    if (event.target.name === 'search') {
+      const query = event.target.value.trim().toLocaleLowerCase();
+      const rows = [...imContent.querySelectorAll('.pmo-im-chats label')];
+      for (const row of rows) row.hidden = !row.querySelector('input').value.toLocaleLowerCase().includes(query);
+      imContent.querySelector('[data-pmo-empty]').hidden = rows.some(row => !row.hidden);
+    }
+    updateImConfirm();
+  });
+  im.addEventListener('change', async event => {
+    if (event.target.name !== 'chat-file') { updateImConfirm(); return; }
+    const file = event.target.files[0];
+    if (!file) return;
+    const field = imContent.querySelector('textarea');
+    try {
+      if (!/\.(txt|json)$/i.test(file.name)) throw new Error('请选择 TXT 或 JSON 文件。');
+      const text = await file.text();
+      if (!field.isConnected) return;
+      if (/\.json$/i.test(file.name)) {
+        try { JSON.parse(text); } catch (_) { throw new Error('JSON 格式无效，请检查文件。'); }
+      }
+      if (!text.trim()) throw new Error('文件没有聊天内容。');
+      field.value = imDraft = text;
+      setError(im,'#pmo-im-error');
+    } catch (error) {
+      if (field.isConnected) setError(im,'#pmo-im-error',error.message || '无法读取文件。');
+    } finally {
+      if (field.isConnected) { event.target.value = ''; updateImConfirm(); }
+    }
+  });
+  im.addEventListener('submit', event => {
+    event.preventDefault();
+    if (imStep === 'select') {
+      renderIm('home');
+      return;
+    }
+    if (!imDraft.trim()) return;
+    try {
+      window.phase2SmallMemoryPreview.importChat(imApp[1],imDraft.trim());
+      imDraft = '';
+      renderIm('home');
+    } catch (_) {
+      setError(im,'#pmo-im-error','保存失败，请重试。');
+    }
   });
   agent.addEventListener('change',event => {
     if(!event.target.matches('[data-pmo-agent]'))return;

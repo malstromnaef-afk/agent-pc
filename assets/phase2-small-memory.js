@@ -763,7 +763,23 @@
       return snapshot();
     }
   };
-  window.phase2SmallMemoryPreview={set(enabled){state.preview=enabled;persist();renderPreview();}};
+  window.phase2SmallMemoryPreview={
+    set(enabled){state.preview=enabled;persist();renderPreview();},
+    hasChat(platform){return state.items.some(item=>item.sourceType==='im'&&item.source===platform);},
+    importChat(platform,content){
+      const memory = {
+        id:'m-'+crypto.randomUUID(), title:platform+'聊天记忆', category:'其他',
+        content, source:platform, sourceType:'im', reviewStatus:'confirmed', related:[],
+        updated:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date())
+      };
+      const items = [memory,...state.items];
+      phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:memory.id,preview:state.preview}));
+      state.items=items;state.selected=memory.id;state.search='';state.entity=null;
+      $m('#pm-search').value='';
+      openDirectories.add(memory.category);
+      render();memoryChanged();
+    }
+  };
   render();if(storageWarning)notice('原型存储读取失败，当前展示演示数据。');
   new ResizeObserver(()=>{if($m('#pm-graph').clientWidth>0)renderGraph();}).observe($m('#pm-graph'));
   if(new URLSearchParams(location.search).get('page')==='memory')setActiveTab('memory');
