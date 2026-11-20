@@ -621,11 +621,11 @@
         </div>
         <label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>
         <div>
-          <div class="pm-memory-import-row">
+          ${isNew?'':`<div class="pm-memory-import-row">
             <button type="button" class="pm-button" data-pm-action="choose-memory-files" aria-describedby="pm-memory-import-hint">导入资料</button>
             <span id="pm-memory-import-hint">仅支持 Markdown（.md）</span>
-            <input type="file" data-pm-file-input accept=".md" multiple hidden>
-          </div>
+          </div>`}
+          <input type="file" data-pm-file-input accept=".md" multiple hidden>
           <div data-pm-attachments></div>
           <div data-pm-import-status role="status"></div>
         </div>
@@ -697,7 +697,8 @@
     $m('[data-pm-import-status]').innerHTML=draft.statuses.map(status=>`<div class="pm-editor-status ${status.failed?'error':''}">${esc(status.name)}：${esc(status.message)}</div>`).join('');
     const save=$m('[data-pm-save]');save.disabled=draft.busy||draft.saving||(draft.mode==='import'&&!draft.pending.length);save.textContent=draft.saving?'正在保存…':(draft.mode==='import'?'导入':'保存');
     const preview=$m('[data-pm-import-preview]');if(preview)preview.hidden=!draft.pending.length;
-    $m('[data-pm-action="choose-memory-files"]').disabled=draft.busy||draft.saving;
+    const chooseFiles=$m('[data-pm-action="choose-memory-files"]');
+    if(chooseFiles)chooseFiles.disabled=draft.busy||draft.saving;
   }
   async function importIntoMemory(files) {
     if(!draft||draft.busy||draft.saving)return;
@@ -968,7 +969,11 @@
     }
   };
   window.phase2SmallMemoryPreview={
-    createMemory(){returnFocus=()=>root.querySelector('#pm-search');editor(true);},
+    createMemory({chooseFile=false}={}){
+      returnFocus=()=>root.querySelector('#pm-search');
+      editor(true);
+      if(chooseFile)dialogContent.querySelector('[data-pm-file-input]').click();
+    },
     set(enabled){state.preview=enabled;persist();renderPreview();},
     hasChat(platform){return state.items.some(item=>item.sourceType==='im'&&item.source===platform);},
     importChat(platform,content){

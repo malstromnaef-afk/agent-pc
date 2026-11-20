@@ -9863,6 +9863,17 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 </style>
     <link rel="stylesheet" href="assets/display-demo.css">
     <link rel="stylesheet" href="assets/phase2-memory.css?v=20261028-main-header">
+    <style>
+      #memory .pm-workspace:not(.pm-library-collapsed) {
+        grid-template-columns: clamp(210px, 21%, 280px) minmax(0, 1fr);
+      }
+      @media (max-width: 760px) {
+        #memory .pm-workspace:not(.pm-library-collapsed) {
+          grid-template-columns: 34% minmax(0, 1fr);
+        }
+      }
+      #p2-settings-system .x3-screen-sync .x3-card { margin-bottom: 0; }
+    </style>
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
     <link rel="stylesheet" href="assets/phase2-settings.css?v=20261030-shared-sidebar-20261028-pointer-exit">
@@ -9904,7 +9915,7 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config .replica-tabs{display:flex;gap:32px;border-bottom:1px solid var(--pa-line);margin-bottom:20px;min-height:40px}
 #screen-config .replica-tabs button{position:relative;padding:0 0 12px;border:0;border-bottom:3px solid transparent;background:none;font-size:16px;font-weight:500;line-height:24px;color:var(--pa-muted);cursor:pointer}
 #screen-config .replica-tabs button.active{color:var(--pa-cyan);border-bottom-color:var(--pa-cyan)}
-#screen-config :is(#replica-apps,#replica-skills){padding:8px 32px 24px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card)}
+#screen-config :is(#replica-apps,#replica-skills,#replica-cli){padding:8px 32px 24px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card)}
 #screen-config #replica-skills{padding-top:24px}
 #screen-config .replica-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:16px 0;min-width:0}
 #screen-config .replica-row>div:first-child{min-width:0}
@@ -9930,13 +9941,136 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
 #screen-config .replica-switch{display:grid;place-items:center;position:relative;width:56px;height:44px;flex:0 0 56px;padding:0;border:0;border-radius:16px;background:transparent;cursor:pointer}
 #screen-config .replica-switch img{display:block;pointer-events:none;width:56px;height:32px}
 #screen-config .replica-switch[aria-checked="true"] .pa-switch-off,#screen-config .replica-switch[aria-checked="false"] .pa-switch-on{display:none}
-#screen-config .replica-cache{width:100%;padding:24px 32px;margin-top:20px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card);color:var(--pa-text);text-align:left}
-#screen-config .replica-cache strong{display:block;margin-bottom:4px;font-size:18px;line-height:28px;font-weight:700}
-#screen-config .replica-cache span span{display:block;color:var(--pa-muted);font-size:12px;line-height:20px}
 #screen-config .replica-settings :is(button,input):focus-visible{outline:2px solid var(--pa-cyan);outline-offset:3px}
-@media(max-width:1600px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:24px;padding-right:24px}}
-@media(max-width:900px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group,.replica-cache){padding-left:16px;padding-right:16px}}
+@media(max-width:1600px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group){padding-left:24px;padding-right:24px}}
+@media(max-width:900px){#screen-config :is(#replica-apps,#replica-skills,.replica-switch-group){padding-left:16px;padding-right:16px}}
 @media(max-width:650px){#screen-config .replica-row{gap:12px;flex-wrap:wrap}#screen-config .replica-settings input[type="search"]{width:100%}#screen-config .replica-switch-group .replica-row{flex-wrap:nowrap}#screen-config .replica-skill-tools input[type="search"]{flex-basis:100%}#screen-config .replica-warning{flex-wrap:wrap}}
+#screen-config #replica-apps .replica-connection-status{display:inline-flex;align-items:center;justify-content:center;min-height:34px;padding:0 12px;border:1px solid #3d7778;border-radius:8px;background:#152627;color:#79d9d8;font:inherit;white-space:nowrap}
+#screen-config #replica-apps .replica-disconnected{background:transparent;border-color:var(--pa-line);color:var(--pa-muted)}
+#screen-config :is(#replica-apps,#replica-cli) button.replica-remove-connection{border:1px solid #c66b6b;border-radius:8px;background:transparent;color:#e08484;box-shadow:none;white-space:nowrap}
+#screen-config :is(#replica-apps,#replica-cli) button.replica-remove-connection:hover{background:#c66b6b18}
+#screen-config #replica-apps .mcp-connection-row,
+#screen-config #replica-apps .mcp-auth-notice,
+#screen-config #replica-apps .mcp-permission,
+#screen-config #replica-apps .mcp-tool-heading {
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+#screen-config #replica-apps h4:not(#mcp-directory-heading) {margin:0;font-size:13px;font-weight:600}
+#screen-config #replica-apps p:not(.mcp-directory-description) {margin:0;color:var(--pa-muted);font-size:12px;line-height:1.6}
+#screen-config #replica-apps .mcp-count {margin-inline-start:6px;color:var(--pa-muted);font-weight:400}
+#screen-config #replica-apps .mcp-saved-card {margin-top:12px;border:1px solid var(--pa-line);border-radius:12px}
+#screen-config #replica-apps .mcp-connection-row {padding:16px}
+#screen-config #replica-apps .mcp-brand {width:36px;height:36px;padding:4px;object-fit:contain;border:1px solid var(--pa-line);border-radius:9px;background:#fff;flex:none}
+#screen-config #replica-apps .mcp-summary {flex:1;min-width:0;padding:0;text-align:left;background:transparent;border:0;color:var(--pa-text);font:inherit}
+#screen-config #replica-apps .mcp-identity {display:flex;align-items:center;flex-wrap:wrap;gap:5px 12px;font-size:13px}
+#screen-config #replica-apps .mcp-meta {display:block;margin-top:4px;color:var(--pa-muted);font-size:12px}
+#screen-config #replica-apps .mcp-state {display:inline-flex;align-items:center;gap:5px;font-size:11px;color:var(--pa-muted)}
+#screen-config #replica-apps .mcp-state::before {content:"";width:5px;height:5px;border-radius:50%;background:currentColor}
+#screen-config #replica-apps [data-feishu-connection-state="required"] .mcp-state {color:#fbbf24}
+#screen-config #replica-apps [data-feishu-connection-state="waiting"] .mcp-state {color:var(--pa-cyan)}
+#screen-config #replica-apps [data-feishu-connection-state="connected"]:has([data-feishu-permission][aria-checked="true"]) .mcp-state {color:#79d9aa}
+#screen-config #replica-apps :is(.mcp-control,.mcp-icon-control,.mcp-directory .replica-app>button) {min-height:30px;padding:4px 12px;border-radius:6px;font-size:12px;line-height:20px}
+#screen-config #replica-apps .mcp-icon-control {min-width:32px;padding:4px 8px}
+#screen-config #replica-apps .mcp-chevron {background:transparent;border:0;color:var(--pa-muted)}
+#screen-config #replica-apps .mcp-chevron::before {content:"";display:block;margin:auto;width:7px;height:7px;border:solid currentColor;border-width:0 1px 1px 0;transform:rotate(45deg)}
+#screen-config #replica-apps .mcp-chevron[aria-expanded="true"]::before {transform:rotate(225deg)}
+#screen-config #replica-apps .mcp-connection-details {padding:0 18px 18px 64px;color:var(--pa-text);font-size:12px}
+#screen-config #replica-apps .mcp-auth-notice {padding:12px;margin-top:4px;border-radius:8px;background:#142d30}
+#screen-config #replica-apps .mcp-auth-notice p {flex:1}
+#screen-config #replica-apps .mcp-auth-spinner {width:12px;height:12px;border:2px solid #22686b;border-top-color:var(--pa-cyan);border-radius:50%;flex:none;animation:mcp-wait-spin 1s linear infinite}
+@keyframes mcp-wait-spin {to {transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce) {#screen-config #replica-apps .mcp-auth-spinner {animation:none}}
+#screen-config #replica-apps .mcp-field-row {display:grid;grid-template-columns:90px minmax(0,1fr) auto;align-items:center;gap:10px;padding-top:12px}
+#screen-config #replica-apps .mcp-input {min-width:0;min-height:30px;padding:4px 8px;border:1px solid var(--pa-line);border-radius:6px;background:#151b20;color:var(--pa-text);font:inherit}
+#screen-config #replica-apps .mcp-permission {padding:18px 0}
+#screen-config #replica-apps .mcp-endpoint {grid-template-columns:90px minmax(0,1fr);padding:0;margin:0 0 10px;color:var(--pa-muted);overflow-wrap:anywhere}
+#screen-config #replica-apps .mcp-discovered {margin-top:18px;padding-top:14px;border-top:1px solid var(--pa-line)}
+#screen-config #replica-apps .mcp-tool-heading {margin-bottom:12px}
+#screen-config #replica-apps .mcp-tool-heading input {width:180px;min-height:30px;padding:3px 8px;border-radius:6px;font-size:12px}
+#screen-config #replica-apps .mcp-tool {padding:10px 0}
+#screen-config #replica-apps .mcp-tool+.mcp-tool {border-top:1px solid var(--pa-line)}
+#screen-config #replica-apps .mcp-tool p {margin-top:4px}
+#screen-config #replica-apps .mcp-detail-actions {display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;margin-top:16px}
+#screen-config #replica-apps .mcp-directory {margin-top:0}
+#screen-config #feishu-saved-section:not([hidden]) {margin:16px 0 24px}
+#screen-config [data-feishu-connection-state="offline"] .mcp-state {color:var(--pa-muted)}
+#screen-config #replica-apps [data-feishu-connection-state="retrying"] .mcp-state {color:var(--pa-cyan)}
+#screen-config [data-feishu-retry] .mcp-auth-spinner {margin-right:6px;vertical-align:middle}
+#screen-config #mcp-state-comparison:not([hidden]) {display:grid;gap:24px;margin-top:24px}
+#screen-config #replica-apps .mcp-brand[data-brand="todoist"] {padding:0;border:0;background:none}
+#screen-config #replica-apps .mcp-custom-brand {display:grid;place-items:center;background:#142d30;color:var(--pa-cyan);font-size:10px;font-weight:700}
+#screen-config #replica-apps .mcp-directory .replica-row {gap:12px;padding:8px 0}
+#screen-config #replica-apps .mcp-directory .replica-row:first-child {padding:16px 0}
+#screen-config #replica-apps .mcp-directory .replica-app {padding:16px 4px;border-top:0;border-bottom:1px solid var(--pa-line)}
+#screen-config #replica-apps .mcp-directory .replica-row:nth-child(2) {flex-wrap:wrap;margin-top:10px}
+#screen-config #replica-apps #replica-app-search {width:220px;min-height:32px;padding:4px 10px;border-radius:6px;font-size:12px}
+#screen-config #replica-apps #replica-app-empty {padding:26px 12px;text-align:center}
+#screen-config #replica-apps #replica-app-empty p+p {margin-top:4px}
+#screen-config #replica-apps .mcp-state::before {background:none;background-image:var(--mcp-status-icon)}
+#screen-config #replica-apps [data-mcp-status="offline"] {--mcp-status-icon:url("assets/mcp-flow/status-offline.svg")}
+#screen-config #replica-apps :is([data-mcp-status="waiting"],[data-mcp-status="retrying"]) {--mcp-status-icon:url("assets/mcp-flow/status-waiting.svg")}
+#screen-config #replica-apps [data-mcp-status="connected"] {--mcp-status-icon:url("assets/mcp-flow/status-connected.svg")}
+#screen-config #replica-apps :is([data-mcp-status="required"],[data-mcp-status="failed"],[data-mcp-status="setup"]) {--mcp-status-icon:url("assets/mcp-flow/status-warning.svg")}
+#screen-config #replica-apps [data-mcp-status="disabled"] .mcp-state::before {background:currentColor}
+#screen-config #replica-apps :is([data-mcp-status="failed"],[data-mcp-status="setup"]) .mcp-state {color:#fbbf24}
+#screen-config #replica-apps .mcp-chevron::before {width:16px;height:16px;border:0;background:url("assets/mcp-flow/chevron-up.svg") center no-repeat;transform:rotate(180deg)}
+#screen-config #replica-apps .mcp-chevron[aria-expanded="true"]::before {transform:none}
+#screen-config #replica-apps .mcp-auth-spinner {display:inline-block;border:0;background:url("assets/mcp-flow/loading.svg") center no-repeat}
+#screen-config #replica-apps .mcp-warning {margin-top:4px;padding:10px 12px;border:1px solid #645024;border-radius:6px;background:#312819;color:#fbbf24}
+#screen-config #replica-apps .mcp-tool-heading input {width:min(180px,50%);padding-inline-start:28px;background:#151b20 url("assets/mcp-flow/search.svg") left 8px center no-repeat}
+#screen-config #replica-apps .mcp-permission .replica-switch {width:44px;height:22px;flex-basis:44px;border-radius:11px;background:#39434b}
+#screen-config #replica-apps .mcp-permission .replica-switch[aria-checked="false"]::before {content:"";position:absolute;left:2px;top:2px;width:18px;height:18px;border-radius:50%;background:#fff}
+#screen-config #replica-apps .mcp-permission .replica-switch[aria-checked="true"] {background:transparent url("assets/mcp-flow/permission-on.svg") center no-repeat}
+#screen-config #replica-apps .mcp-permission .replica-switch[aria-checked="true"]:disabled {opacity:1;background-image:url("assets/mcp-flow/permission-pending.svg")}
+#screen-config #replica-apps .mcp-brand[data-brand="drive"] {width:41.592px;height:36.0197px;margin-inline:-2.796px;clip-path:inset(0 2.796px);padding:0;border:0;border-radius:0;background:none;mask:url("assets/mcp-flow/google-drive-mask.svg") 5.218px 7.141px no-repeat}
+#screen-config #replica-apps[data-mcp-flows] {padding:0;border:0;background:none}
+#screen-config #replica-apps[data-mcp-flows="compare"] #mcp-state-comparison {grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));align-items:start;gap:16px;margin-top:0}
+#screen-config #replica-apps .mcp-flow {display:grid;gap:16px;min-width:0;padding:24px 32px;border:1px solid var(--pa-line);border-radius:12px;background:var(--pa-card)}
+@media(max-width:1600px) {#screen-config #replica-apps .mcp-flow {padding-inline:24px}}
+@media(max-width:900px) {#screen-config #replica-apps .mcp-flow {padding-inline:16px}}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-flow {padding:18px 16px}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-connection-details {padding-inline:16px}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-field-row {grid-template-columns:72px minmax(0,1fr) auto}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-endpoint {grid-template-columns:72px minmax(0,1fr)}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-directory .replica-row {flex-wrap:wrap}
+#screen-config #replica-apps[data-mcp-flows="compare"] #replica-app-search {max-width:100%}
+#screen-config #replica-apps .mcp-flow-step > h4 {line-height:19px}
+#screen-config #replica-apps .mcp-first-flow > .mcp-flow-step:last-child:has([data-mcp-status="required"]) {padding-top:16px;border-top:1px solid var(--pa-line)}
+#screen-config #replica-apps .mcp-flow-step > p {margin-top:4px}
+#screen-config #replica-apps[data-mcp-flows="compare"] .mcp-flow-step > .mcp-saved-card {margin-top:8px}
+#screen-config #replica-apps .mcp-first-flow .mcp-directory .mcp-flow-step > .replica-app {margin-top:8px;padding:16px;border:1px solid var(--pa-line);border-radius:12px}
+#screen-config #replica-apps .mcp-first-flow .mcp-directory .mcp-flow-step h4 {margin:0}
+#screen-config #replica-apps #feishu-saved-section:not([hidden]) {margin:16px 0 0}
+@media(max-width:560px) {#screen-config #replica-apps .mcp-connection-details {padding-left:16px}}
+.skill-uninstall-dialog{width:min(420px,calc(100% - 32px));padding:22px;border:1px solid var(--line);border-radius:12px;background:#1d2123;color:var(--text)}
+.skill-uninstall-dialog::backdrop{background:#0008}
+.skill-uninstall-dialog h3{margin:0 0 8px}
+.skill-uninstall-dialog p{color:var(--muted);overflow-wrap:anywhere}
+.skill-uninstall-dialog footer{display:flex;justify-content:flex-end;gap:8px}
+#screen-config #replica-skills .replica-skill-search-summary{margin-top:16px;font-size:14px}
+#screen-config .replica-skill-list{list-style:none;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin:18px 0 0;padding:0}
+#screen-config .replica-skill-card{display:flex;flex-direction:column;gap:10px;min-width:0;padding:16px;border:1px solid var(--pa-line);border-radius:12px;background:#1d2123;overflow-wrap:anywhere}
+#screen-config .replica-skill-card :is(header,footer){display:flex;align-items:center;justify-content:space-between;gap:8px}
+#screen-config .replica-skill-card footer{margin-top:auto;padding-top:12px;border-top:1px solid var(--pa-line)}
+#screen-config .replica-skill-card[data-skill-disabled]{border-style:dashed}
+#screen-config .replica-skill-card footer button{margin-left:auto}
+#screen-config .replica-skill-card .skill-install-action{display:flex;justify-content:flex-end;flex-shrink:0}
+#screen-config .replica-skill-card .skill-install-action :is(button,.skill-installed-label){display:inline-flex;align-items:center;justify-content:center;box-sizing:border-box;width:66px;min-height:36px;padding:0 8px;border:1px solid var(--pa-line);border-radius:6px;font:inherit;font-size:14px;white-space:nowrap}
+#screen-config .replica-skill-card .skill-install-action .skill-installed-label{color:var(--pa-muted)}
+#screen-config .replica-skill-card .skill-install-action button{background:#25d2c2;border-color:#25d2c2;color:#071a1b;font-weight:700}
+#screen-config .replica-skill-card .skill-install-action button:hover{background:#39ddce}
+#screen-config .replica-skill-card footer label{display:flex;align-items:center;gap:8px;color:var(--pa-muted);font-size:13px;cursor:pointer}
+#screen-config #replica-skills .replica-skill-card .replica-remove-connection{min-height:32px;padding:0 12px;border:1px solid #c66b6b;border-radius:8px;color:#e08484;background:transparent}
+#screen-config .replica-skill-card input[role="switch"]{appearance:none;width:40px;height:22px;border:0;border-radius:12px;background:#505962;margin:0;padding:3px;display:grid;cursor:pointer}
+#screen-config .replica-skill-card input[role="switch"]::before{content:"";width:16px;height:16px;border-radius:50%;background:#fff}
+#screen-config .replica-skill-card input[role="switch"]:checked{background:#21a9af}
+#screen-config .replica-skill-card input[role="switch"]:checked::before{justify-self:end}
+@media(max-width:1000px){#screen-config .replica-skill-list{grid-template-columns:1fr}}
+#screen-config .replica-skill-tools{display:flex;justify-content:flex-end;align-items:center;gap:12px;flex-wrap:wrap;margin-left:auto;max-width:100%}
+#screen-config .replica-skill-tools input[type="search"]{width:280px;max-width:100%}
 </style>
 <style>
 /* Grouped settings navigation: one click opens a leaf panel. */
@@ -10201,18 +10335,28 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
               <div class="pm-workspace">
                 <aside class="pm-library"><button type="button" class="pm-library-restore" data-pm-action="expand-library" aria-label="展开记忆列表" title="展开记忆列表">»</button>
                   <div class="pm-memory-library">
-                  <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆、内容或来源" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
-                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-source" data-pm-action="memory-sources" aria-label="记忆来源"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12a9 9 0 1 0 2.39-6.1L3 8"/><path d="M3 3v5h5M12 7v5l4 2"/></svg><span>来源</span></button><button type="button" class="pm-list-new" data-pm-action="new" aria-label="新建记忆">＋ 新建</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
-                  <div class="pm-core-heading">★ 核心记忆</div><div id="pm-core-list"></div>
-                  <div id="pm-category-tabs" class="pm-category-tabs" aria-label="记忆筛选"></div>
-                  <div id="pm-memory-list" class="pm-memory-list"></div>
+                  <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆标题或内容" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
+                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-new" data-root-folder-add aria-label="新建文件夹" title="新建文件夹">＋</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
+                  <nav id="pm-memory-list" class="pm-memory-list" aria-label="记忆目录"></nav>
                   </div>
 
                 </aside>
                 <div class="pm-map-column">
+                  <div class="pm-graph-view">
                   <div class="pm-map-heading"><div><strong>关系图谱</strong></div></div>
                   <div class="pm-graph-stage" id="pm-graph-stage"><svg id="pm-graph" viewBox="0 0 900 620" role="group" aria-label="记忆关系图谱"></svg><div class="pm-graph-tools"><button type="button" data-pm-action="zoom-in" aria-label="放大图谱">＋</button><button type="button" data-pm-action="zoom-out" aria-label="缩小图谱">−</button><button type="button" data-pm-action="reset-zoom" aria-label="重置图谱">⊙</button></div><div class="pm-map-legend"><span><i class="pm-dot project"></i>项目</span><span><i class="pm-dot preference"></i>偏好</span><span><i class="pm-dot decision"></i>工作要求</span><span><i class="pm-dot document"></i>资料</span></div></div>
-                  <div id="pm-detail" class="pm-detail" hidden></div>
+                  </div>
+                  <section class="pm-file-reader" aria-label="文件阅读区" hidden>
+                    <header class="pm-reader-header">
+                      <button class="pm-reader-back" type="button" data-pm-action="close-reader">← 返回图谱</button>
+                      <div class="pm-reader-path">
+                        <span data-pm-reader-memory></span>
+                        <span aria-hidden="true">/</span>
+                        <strong data-pm-reader-filename></strong>
+                      </div>
+                    </header>
+                    <div class="pm-reader-content" data-pm-reader-content tabindex="0" role="region" aria-label="文件正文"></div>
+                  </section>
                 </div>
               </div>
               <div id="pm-feedback" class="pm-feedback" role="status" hidden></div>
@@ -11322,7 +11466,7 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
                   </div>
                 </details>
               </section>
-              <section class="config-section-panel p2-system-panel" id="p2-settings-system" data-config-panel="system" role="tabpanel" aria-label="系统设置">
+              <section class="config-section-panel p2-system-panel" id="p2-settings-system" data-config-panel="system" data-x3-keep-system role="tabpanel" aria-label="系统设置">
                 <section class="inner-card p2-system-card p2-interface-card" aria-label="界面偏好">
                   <div class="p2-system-line">
                     <strong>界面偏好</strong>
@@ -11401,15 +11545,6 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
                   <p id="p2-memory-export-feedback" role="status" aria-live="polite" hidden></p>
                   <p id="p2-memory-export-error" role="alert" hidden></p>
                 </section>
-                <section class="inner-card p2-system-card p2-app-card" aria-labelledby="p2-app-heading">
-                  <div class="p2-system-heading"><h3 id="p2-app-heading">应用连接</h3><p>通过对应的 CLI 适配器，让 Agent 调用应用功能。</p></div>
-                  <div class="p2-cli-grid">
-                    <article class="p2-cli-card"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wechat" aria-label="连接微信 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="feishu" aria-label="连接飞书 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="dingtalk" aria-label="连接钉钉 CLI">连接</button></article>
-                    <article class="p2-cli-card"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wecom" aria-label="连接企业微信 CLI">连接</button></article>
-                  </div>
-                </section>
                 <p id="p2-local-settings-feedback" role="status" aria-live="polite" hidden></p>
               </section>
               <section class="config-section-panel p2-proactive-panel" id="p2-settings-proactive" data-config-panel="proactive" role="tabpanel" aria-label="主动辅助">
@@ -11438,24 +11573,116 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
 
 <section class="config-section-panel replica-settings" id="p2-settings-apps-skills" data-config-panel="apps-skills" role="tabpanel" aria-label="应用与技能">
 <header class="replica-head"><h2>应用与技能</h2><p>管理应用授权与 AI 技能，扩展助手可调用的工具。</p></header>
-<div class="replica-tabs" role="tablist" aria-label="应用与技能"><button type="button" role="tab" aria-selected="true" data-replica-tab="apps" class="active">应用连接</button><button type="button" role="tab" aria-selected="false" data-replica-tab="skills">Skills</button></div>
+<div class="replica-tabs" role="tablist" aria-label="应用与技能"><button type="button" role="tab" aria-selected="true" data-replica-tab="apps" class="active">应用连接</button><button type="button" role="tab" aria-selected="false" data-replica-tab="skills">Skills</button><button type="button" role="tab" aria-selected="false" data-replica-tab="cli" aria-controls="replica-cli" id="replica-cli-tab">CLI</button></div>
 <div id="replica-apps" role="tabpanel">
-<div class="replica-row"><div><h3>应用连接</h3><p>连接常用应用，让 AI 在你授权的范围内使用它们。</p></div><button type="button" data-replica-refresh aria-label="刷新应用连接">↻</button></div>
-<div class="replica-warning"><span>⊗　当前设备版本尚不支持应用连接，请更新设备后重试。</span><button type="button" data-replica-refresh>刷新</button></div>
-<div class="replica-row"><div><h4>添加应用</h4><p>连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-replica-unavailable>＋ 自定义 MCP</button></div>
-<div class="replica-row"><div class="replica-filters" aria-label="应用地区"><button type="button" class="active" data-replica-region="all" aria-pressed="true">全部</button><button type="button" data-replica-region="cn" aria-pressed="false">国内</button><button type="button" data-replica-region="global" aria-pressed="false">国际</button></div><input type="search" id="replica-app-search" placeholder="搜索应用" aria-label="搜索应用"></div>
-<div id="replica-feishu" class="replica-row replica-app"><div class="replica-app-copy"><span class="replica-app-icon" aria-hidden="true">◈</span><div><h4>飞书</h4><p>在对话中完成一次连接，之后在任意会话里使用飞书。</p></div></div><button type="button" data-replica-unavailable>配置</button></div>
-<p class="replica-security">♧　凭证保存在设备上，连接不经过云端中转。</p>
+<section id="feishu-saved-section" aria-labelledby="feishu-saved-heading" hidden>
+  <h4 id="feishu-saved-heading">已添加的连接 <span class="mcp-count">1</span></h4>
+  <div class="mcp-saved-card">
+    <div class="mcp-connection-row">
+      <img class="mcp-brand" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiByeD0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTguNTYxMSA4LjI2Mjg3TDguNTkzMjIgOC4yMzA3NUM4LjYxNDEgOC4yMDk4OCA4LjYzNjU4IDguMTg3MzkgOC42NTkwNiA4LjE2NjUyTDguNzA0MDIgOC4xMjMxNkw4LjgzNzMgNy45OTE0OEw5LjAyMDM3IDcuODEzMjRMOS4xNzYxMyA3LjY1OTA4TDkuMzIyMjYgNy41MTQ1Nkw5LjQ3NDgxIDcuMzYzNjFMOS42MTQ1MiA3LjIyNTUxTDkuODEwNDMgNy4wMzI4MUM5Ljg0NzM3IDYuOTk1ODggOS44ODU5IDYuOTYwNTUgOS45MjQ0NCA2LjkyNTIyQzkuOTk1MSA2Ljg2MDk5IDEwLjA2OSA2Ljc5ODM2IDEwLjE0MjggNi43MzczNEMxMC4yMTE5IDYuNjgyNzQgMTAuMjgyNSA2LjYyOTc1IDEwLjM1NDggNi41NzgzNkMxMC40NTYgNi41MDYxIDEwLjU2MDMgNi40NDAyNiAxMC42NjYzIDYuMzc2MDNDMTAuNzcwNyA2LjMxNTAxIDEwLjg3ODMgNi4yNTcyIDEwLjk4NzUgNi4yMDI2QzExLjA5MDMgNi4xNTI4MiAxMS4xOTYzIDYuMTA2MjUgMTEuMzAzOCA2LjA2NDVDMTEuMzYzMyA2LjA0MDQxIDExLjQyNDMgNi4wMTk1NCAxMS40ODUzIDUuOTk4NjZDMTEuNTE1OCA1Ljk4OTAzIDExLjU0NjMgNS45Nzc3OSAxMS41Nzg0IDUuOTY4MTVDMTEuMzA3MSA0LjkwMDI4IDEwLjgxMDkgMy45MDQ2OCAxMC4xMjIgMy4wNDU1NkM5Ljk4ODY4IDIuODgwMTYgOS43ODYzNCAyLjc4MzgxIDkuNTc0MzggMi43ODM4MUgzLjk0NTk4QzMuODg4MTcgMi43ODM4MSAzLjg0IDIuODMwMzggMy44NCAyLjg4OThDMy44NCAyLjkyMzUyIDMuODU2MDUgMi45NTQwMyAzLjg4MzM1IDIuOTc0OTFDNS44MDM5MSA0LjM4MzIxIDcuMzk2ODkgNi4xOTI5NyA4LjU0ODI2IDguMjc3MzJMOC41NjExIDguMjYyODdaIiBmaWxsPSIjMDBENkI5Ii8+CjxwYXRoIGQ9Ik02LjMyNDI0IDEzLjIxNjhDOS4yMzA3NyAxMy4yMTY4IDExLjc2MzEgMTEuNjEyNiAxMy4wODMxIDkuMjQyMzhDMTMuMTI5NyA5LjE1ODg3IDEzLjE3NDcgOS4wNzUzNyAxMy4yMTggOC45OTAyNkMxMy4xNTIyIDkuMTE3MTIgMTMuMDc4MyA5LjIzOTE3IDEyLjk5NjQgOS4zNTQ3OEMxMi45Njc1IDkuMzk0OTMgMTIuOTM4NiA5LjQzNTA4IDEyLjkwODEgOS40NzUyMkMxMi44Njk2IDkuNTI1IDEyLjgzMSA5LjU3MTU3IDEyLjc5MDkgOS42MTgxNEMxMi43NTg4IDkuNjU1MDcgMTIuNzI2NiA5LjY5MDQgMTIuNjkyOSA5LjcyNTczQzEyLjYyNTUgOS43OTYzOCAxMi41NTQ4IDkuODYzODMgMTIuNDgwOSA5LjkyNjQ2QzEyLjQzOTIgOS45NjE3OCAxMi4zOTkxIDkuOTk1NTEgMTIuMzU1NyAxMC4wMjc2QzEyLjMwNTkgMTAuMDY2MiAxMi4yNTQ1IDEwLjEwMzEgMTIuMjAzMSAxMC4xMzY4QzEyLjE3MSAxMC4xNTkzIDEyLjEzNzMgMTAuMTgwMiAxMi4xMDM2IDEwLjIwMTFDMTIuMDY5OSAxMC4yMjE5IDEyLjAzNDUgMTAuMjQyOCAxMS45OTc2IDEwLjI2MzdDMTEuOTI1MyAxMC4zMDM4IDExLjg0OTkgMTAuMzQyNCAxMS43NzQ0IDEwLjM3NjFDMTEuNzA4NSAxMC40MDUgMTEuNjQxMSAxMC40MzIzIDExLjU3MzcgMTAuNDU4QzExLjQ5OTggMTAuNDg1MyAxMS40MjU5IDEwLjUwOTQgMTEuMzQ4OCAxMC41MzAyQzExLjIzNDggMTAuNTYyNCAxMS4xMjA4IDEwLjU4NjQgMTEuMDAzNiAxMC42MDQxQzEwLjkyMDEgMTAuNjE3IDEwLjgzMzQgMTAuNjI2NiAxMC43NDgzIDEwLjYzM0MxMC42NTgzIDEwLjYzOTQgMTAuNTY2OCAxMC42NDEgMTAuNDc1MyAxMC42NDFDMTAuMzc0MSAxMC42Mzk0IDEwLjI3MjkgMTAuNjMzIDEwLjE3MDIgMTAuNjIxOEMxMC4wOTQ3IDEwLjYxMzcgMTAuMDE5MiAxMC42MDI1IDkuOTQzNzUgMTAuNTg5N0M5Ljg3NzkxIDEwLjU3ODQgOS44MTIwOCAxMC41NjQgOS43NDYyNCAxMC41NDc5QzkuNzEwOTEgMTAuNTM5OSA5LjY3NzE5IDEwLjUzMDIgOS42NDE4NiAxMC41MjA2QzkuNTQ1NTEgMTAuNDk0OSA5LjQ0OTE2IDEwLjQ2NzYgOS4zNTI4MSAxMC40NDAzQzkuMzA0NjQgMTAuNDI1OSA5LjI1NjQ2IDEwLjQxMyA5LjIwOTg5IDEwLjM5ODZDOS4xMzc2MyAxMC4zNzc3IDkuMDY2OTggMTAuMzU1MiA4Ljk5NjMyIDEwLjMzMjdDOC45Mzg1MSAxMC4zMTUxIDguODgwNyAxMC4yOTU4IDguODIyODkgMTAuMjc2NUM4Ljc2ODI5IDEwLjI1ODkgOC43MTIwOSAxMC4yNDEyIDguNjU3NDkgMTAuMjIxOUw4LjU0NTA4IDEwLjE4MzRDOC41MDAxMiAxMC4xNjczIDguNDUzNTUgMTAuMTUxMyA4LjQwODU5IDEwLjEzNTJMOC4zMTIyNCAxMC4wOTk5QzguMjQ4MDEgMTAuMDc3NCA4LjE4Mzc4IDEwLjA1MzMgOC4xMjExNSAxMC4wMjkyQzguMDg0MjEgMTAuMDE0OCA4LjA0NzI4IDEwLjAwMTkgOC4wMTAzNSA5Ljk4NzQ4QzcuOTYwNTcgOS45NjgyMSA3LjkxMjM5IDkuOTQ4OTQgNy44NjI2MSA5LjkyOTY3QzcuODExMjMgOS45MDg3OSA3Ljc1ODIzIDkuODg3OTIgNy43MDY4NSA5Ljg2NzA0TDcuNjA1NjggOS44MjUyOUw3LjQ4MDQzIDkuNzczOUw3LjM4NDA4IDkuNzMzNzZMNy4yODQ1MiA5LjY5MDRMNy4xOTc4IDkuNjUxODZMNy4xMTkxMiA5LjYxNjUzTDcuMDM4ODMgOS41Nzk2TDYuOTU2OTMgOS41NDEwNkw2Ljg1MjU1IDkuNDkyODhMNi43NDMzNiA5LjQ0MTVDNi43MDQ4MiA5LjQyMjIzIDYuNjY2MjggOS40MDQ1NiA2LjYyNzc0IDkuMzg1MjlMNi41Mjk3OCA5LjMzNzEyQzQuODAxOTIgOC40NzQ4IDMuMjQyNjcgNy4zMTIxOCAxLjkyMjY5IDUuOTAyMjdDMS44ODI1NCA1Ljg2MDUyIDEuODE2NyA1Ljg1NzMxIDEuNzczMzUgNS44OTc0NkMxLjc1MjQ3IDUuOTE2NzMgMS43Mzk2MiA1Ljk0NTYzIDEuNzM5NjIgNS45NzQ1NEwxLjc0Mjg0IDEwLjk0MTNWMTEuMzQ0NEMxLjc0Mjg0IDExLjU3ODggMS44NTg0NSAxMS43OTcyIDIuMDUyNzYgMTEuOTI3M0MzLjMxNjU0IDEyLjc3MiA0LjgwMzUzIDEzLjIyIDYuMzI0MjQgMTMuMjE2OFoiIGZpbGw9IiMzMzcwRkYiLz4KPHBhdGggZD0iTTE0Ljg2NTYgNi4yMTUzOUMxMy44ODQ0IDUuNzM1MjUgMTIuNzYxOSA1LjYzMjQ4IDExLjcxMDEgNS45Mjc5NUMxMS42NjUyIDUuOTQwNzkgMTEuNjIxOCA1Ljk1MzY0IDExLjU3ODQgNS45NjY0OUMxMS41NDc5IDUuOTc2MTIgMTEuNTE3NCA1Ljk4NTc2IDExLjQ4NTMgNS45OTdDMTEuNDI0MyA2LjAxNzg3IDExLjM2MzMgNi4wNDAzNiAxMS4zMDM5IDYuMDYyODRDMTEuMTk2MyA2LjEwNDU5IDExLjA5MTkgNi4xNTExNiAxMC45ODc1IDYuMjAwOTRDMTAuODc4MyA2LjI1MzkzIDEwLjc3MDcgNi4zMTE3NCAxMC42NjYzIDYuMzcyNzZDMTAuNTU4OCA2LjQzNTM5IDEwLjQ1NiA2LjUwMjgzIDEwLjM1NDggNi41NzUwOUMxMC4yODI1IDYuNjI2NDggMTAuMjExOSA2LjY3OTQ3IDEwLjE0MjggNi43MzQwN0MxMC4wNjc0IDYuNzk1MDkgOS45OTUxMSA2Ljg1NjExIDkuOTI0NDUgNi45MjE5NUM5Ljg4NTkxIDYuOTU3MjggOS44NDg5OCA2Ljk5MjYxIDkuODEwNDQgNy4wMjk1NEw5LjYxNDUzIDcuMjIyMjRMOS40NzQ4MiA3LjM2MDM0TDkuMzIyMjcgNy41MTEyOUw5LjE3NjE0IDcuNjU1ODFMOS4wMjAzOCA3LjgwOTk3TDguODM4OTIgNy45ODk4Mkw4LjcwNTY0IDguMTIxNUw4LjY2MDY3IDguMTY0ODVDOC42Mzk4IDguMTg1NzMgOC42MTczMiA4LjIwODIxIDguNTk0ODMgOC4yMjkwOUw4LjU2MjcyIDguMjYxMkw4LjUxMjk0IDguMzA3NzdDOC40OTM2NyA4LjMyNTQ0IDguNDc2IDguMzQxNDkgOC40NTY3MyA4LjM1OTE2QzcuOTczMzggOC44MDM5NyA3LjQzMzgzIDkuMTg0NTUgNi44NTQxMyA5LjQ5NDQ3TDYuOTU4NSA5LjU0MjY1TDcuMDQwNCA5LjU4MTE5TDcuMTIwNjkgOS42MTgxMkw3LjE5OTM4IDkuNjUzNDVMNy4yODYwOSA5LjY5MTk5TDcuMzg1NjUgOS43MzUzNEw3LjQ4MiA5Ljc3NTQ5TDcuNjA3MjUgOS44MjY4OEw3LjcwODQyIDkuODY4NjNDNy43NTk4MSA5Ljg4OTUgNy44MTI4IDkuOTEwMzggNy44NjQxOSA5LjkzMTI1QzcuOTEyMzYgOS45NTA1MiA3Ljk2MjE0IDkuOTY5OCA4LjAxMTkyIDkuOTg5MDdDOC4wNDg4NiAxMC4wMDM1IDguMDg1NzkgMTAuMDE2NCA4LjEyMjcyIDEwLjAzMDhDOC4xODY5NiAxMC4wNTQ5IDguMjUxMTkgMTAuMDc3NCA4LjMxMzgyIDEwLjEwMTVMOC40MTAxNiAxMC4xMzY4QzguNDU1MTMgMTAuMTUyOSA4LjUwMDA5IDEwLjE2ODkgOC41NDY2NiAxMC4xODVMOC42NTkwNyAxMC4yMjM1QzguNzEzNjYgMTAuMjQxMiA4Ljc2ODI2IDEwLjI2MDQgOC44MjQ0NyAxMC4yNzgxQzguODgyMjggMTAuMjk3NCA4Ljk0MDA4IDEwLjMxNSA4Ljk5Nzg5IDEwLjMzNDNDOS4wNjg1NSAxMC4zNTY4IDkuMTQwODEgMTAuMzc3NyA5LjIxMTQ3IDEwLjQwMDJDOS4yNTk2NCAxMC40MTQ2IDkuMzA3ODIgMTAuNDI5MSA5LjM1NDM5IDEwLjQ0MTlDOS40NTA3MyAxMC40NjkyIDkuNTQ3MDggMTAuNDk2NSA5LjY0MzQzIDEwLjUyMjJDOS42Nzg3NiAxMC41MzE4IDkuNzEyNDggMTAuNTM5OSA5Ljc0NzgxIDEwLjU0OTVDOS44MTM2NSAxMC41NjU2IDkuODc5NDkgMTAuNTc4NCA5Ljk0NTMzIDEwLjU5MTJDMTAuMDIwOCAxMC42MDQxIDEwLjA5NjMgMTAuNjE1MyAxMC4xNzE3IDEwLjYyMzRDMTAuMjc0NSAxMC42MzQ2IDEwLjM3NTcgMTAuNjQxIDEwLjQ3NjkgMTAuNjQyNkMxMC41Njg0IDEwLjY0NDIgMTAuNjU5OSAxMC42NDEgMTAuNzQ5OCAxMC42MzQ2QzEwLjgzNjYgMTAuNjI4MiAxMC45MjE3IDEwLjYxODUgMTEuMDA1MiAxMC42MDU3QzExLjEyMDggMTAuNTg4IDExLjIzNjQgMTAuNTYyMyAxMS4zNTA0IDEwLjUzMThDMTEuNDI1OSAxMC41MTEgMTEuNTAxNCAxMC40ODY5IDExLjU3NTIgMTAuNDU5NkMxMS42NDI3IDEwLjQzNTUgMTEuNzEwMSAxMC40MDgyIDExLjc3NiAxMC4zNzc3QzExLjg1MTQgMTAuMzQ0IDExLjkyNjkgMTAuMzA1NCAxMS45OTkyIDEwLjI2NTNDMTIuMDM0NSAxMC4yNDYgMTIuMDY5OCAxMC4yMjUxIDEyLjEwNTIgMTAuMjAyNkMxMi4xNDA1IDEwLjE4MTggMTIuMTcyNiAxMC4xNTkzIDEyLjIwNDcgMTAuMTM4NEMxMi4yNTYxIDEwLjEwMzEgMTIuMzA3NSAxMC4wNjc3IDEyLjM1NzMgMTAuMDI5MkMxMi40MDA2IDkuOTk3MDkgMTIuNDQyNCA5Ljk2MzM3IDEyLjQ4MjUgOS45MjgwNEMxMi41NTQ4IDkuODY1NDIgMTIuNjI1NCA5Ljc5Nzk3IDEyLjY5MjkgOS43MjczMkMxMi43MjY2IDkuNjkxOTkgMTIuNzU4NyA5LjY1NjY2IDEyLjc5MDggOS42MTk3M0MxMi44MzEgOS41NzMxNiAxMi44NzExIDkuNTI0OTggMTIuOTA4MSA5LjQ3NjgxQzEyLjkzODYgOS40MzgyNyAxMi45Njc1IDkuMzk4MTIgMTIuOTk2NCA5LjM1NjM3QzEzLjA3NjcgOS4yNDA3NSAxMy4xNTA1IDkuMTIwMzIgMTMuMjE2NCA4Ljk5NTA2TDEzLjI5MTkgOC44NDU3MkwxMy45NjMxIDcuNTA4MDdMMTMuOTcxMSA3LjQ5MjAyQzE0LjE5MjcgNy4wMTM0OCAxNC40OTQ2IDYuNTgzMTIgMTQuODY1NiA2LjIxNTM5WiIgZmlsbD0iIzEzM0M5QSIvPgo8L3N2Zz4K" alt="">
+      <button type="button" class="mcp-summary" data-feishu-expand aria-controls="feishu-connection-details" aria-expanded="false">
+        <span class="mcp-identity"><strong data-feishu-title>飞书 MCP</strong><span class="mcp-state" data-feishu-state role="status"></span></span>
+        <span class="mcp-meta"><span data-feishu-provider>飞书</span><span data-feishu-count hidden> · 3 个工具</span></span>
+      </button>
+      <button type="button" class="soft-button mcp-control" data-feishu-retry hidden><span class="mcp-auth-spinner" aria-hidden="true" hidden></span>重试</button>
+      <button type="button" class="soft-button mcp-control" data-feishu-authorize hidden>打开浏览器</button>
+      <button type="button" class="mcp-icon-control mcp-chevron" data-feishu-expand aria-label="管理飞书 MCP" aria-controls="feishu-connection-details" aria-expanded="false"></button>
+    </div>
+    <div id="feishu-connection-details" class="mcp-connection-details" hidden>
+      <div class="mcp-auth-notice" data-feishu-waiting hidden>
+        <span class="mcp-auth-spinner" aria-hidden="true"></span>
+        <p>请在浏览器中完成授权。等待期间可以继续使用。</p>
+        <button type="button" class="soft-button mcp-control" data-feishu-cancel>取消</button>
+      </div>
+      <p class="mcp-warning" role="status" hidden></p>
+      <form class="mcp-field-row" data-feishu-rename>
+        <label for="feishu-connection-name">连接名称</label>
+        <input id="feishu-connection-name" class="mcp-input" type="text" value="飞书 MCP" maxlength="80" required>
+        <button type="submit" class="soft-button mcp-control" data-feishu-save disabled>保存</button>
+      </form>
+      <div class="mcp-permission">
+        <div><strong>允许 Agent 使用</strong><p>停用会保留授权。工具调用遵循你的 AI 权限设置。</p></div>
+        <button type="button" class="replica-switch" role="switch" aria-checked="true" aria-label="允许 Agent 使用" data-feishu-permission></button>
+      </div>
+      <div class="mcp-field-row mcp-endpoint"><span>服务地址</span><span data-feishu-endpoint>https://feishu.example.com/mcp</span></div>
+      <div class="mcp-field-row mcp-endpoint" data-feishu-last-row hidden><span>上次连接</span><time data-feishu-last></time></div>
+      <div class="mcp-discovered" data-feishu-tool-list hidden>
+        <div class="mcp-tool-heading"><strong>已发现的工具 <span class="mcp-count" data-feishu-tool-count>3</span></strong><input type="search" data-feishu-tool-search placeholder="搜索工具" aria-label="搜索工具"></div>
+        <div class="mcp-tool"><strong>搜索飞书文档</strong><p>按关键词查找已授权的文档。</p></div>
+        <div class="mcp-tool"><strong>读取飞书文档</strong><p>读取指定文档的内容。</p></div>
+        <div class="mcp-tool"><strong>创建飞书文档</strong><p>在已授权的位置新建文档。</p></div>
+        <p data-feishu-tool-empty hidden>无匹配</p>
+      </div>
+      <div class="mcp-detail-actions">
+        <button type="button" class="soft-button mcp-control" data-feishu-add-account hidden>添加账号</button>
+        <button type="button" class="soft-button mcp-control" data-feishu-test hidden>测试连接</button>
+        <button type="button" class="replica-remove-connection mcp-control" data-feishu-mcp-remove>移除连接</button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="mcp-directory" aria-labelledby="mcp-directory-heading">
+  <div class="replica-row"><div><h4 id="mcp-directory-heading">添加应用</h4><p class="mcp-directory-description">连接常用应用，授权后即可供 AI 使用。</p></div><button type="button" data-custom-mcp-open>＋ 自定义 MCP</button></div>
+  <div class="replica-row"><div class="replica-filters" aria-label="筛选应用"><button type="button" class="active" data-replica-region="all" aria-pressed="true">全部</button><button type="button" data-replica-region="cn" aria-pressed="false">国内</button><button type="button" data-replica-region="global" aria-pressed="false">国际</button><button type="button" data-replica-region="connected" aria-pressed="false">已连接</button></div><input type="search" id="replica-app-search" placeholder="搜索应用" aria-label="搜索应用"></div>
+  <article id="feishu-catalog-row" class="replica-row replica-app" data-app-region="cn" data-app-search="飞书 feishu lark mcp">
+    <div class="replica-app-copy"><img class="mcp-brand" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjE2IiBoZWlnaHQ9IjE2IiByeD0iMiIgZmlsbD0id2hpdGUiLz4KPHBhdGggZD0iTTguNTYxMSA4LjI2Mjg3TDguNTkzMjIgOC4yMzA3NUM4LjYxNDEgOC4yMDk4OCA4LjYzNjU4IDguMTg3MzkgOC42NTkwNiA4LjE2NjUyTDguNzA0MDIgOC4xMjMxNkw4LjgzNzMgNy45OTE0OEw5LjAyMDM3IDcuODEzMjRMOS4xNzYxMyA3LjY1OTA4TDkuMzIyMjYgNy41MTQ1Nkw5LjQ3NDgxIDcuMzYzNjFMOS42MTQ1MiA3LjIyNTUxTDkuODEwNDMgNy4wMzI4MUM5Ljg0NzM3IDYuOTk1ODggOS44ODU5IDYuOTYwNTUgOS45MjQ0NCA2LjkyNTIyQzkuOTk1MSA2Ljg2MDk5IDEwLjA2OSA2Ljc5ODM2IDEwLjE0MjggNi43MzczNEMxMC4yMTE5IDYuNjgyNzQgMTAuMjgyNSA2LjYyOTc1IDEwLjM1NDggNi41NzgzNkMxMC40NTYgNi41MDYxIDEwLjU2MDMgNi40NDAyNiAxMC42NjYzIDYuMzc2MDNDMTAuNzcwNyA2LjMxNTAxIDEwLjg3ODMgNi4yNTcyIDEwLjk4NzUgNi4yMDI2QzExLjA5MDMgNi4xNTI4MiAxMS4xOTYzIDYuMTA2MjUgMTEuMzAzOCA2LjA2NDVDMTEuMzYzMyA2LjA0MDQxIDExLjQyNDMgNi4wMTk1NCAxMS40ODUzIDUuOTk4NjZDMTEuNTE1OCA1Ljk4OTAzIDExLjU0NjMgNS45Nzc3OSAxMS41Nzg0IDUuOTY4MTVDMTEuMzA3MSA0LjkwMDI4IDEwLjgxMDkgMy45MDQ2OCAxMC4xMjIgMy4wNDU1NkM5Ljk4ODY4IDIuODgwMTYgOS43ODYzNCAyLjc4MzgxIDkuNTc0MzggMi43ODM4MUgzLjk0NTk4QzMuODg4MTcgMi43ODM4MSAzLjg0IDIuODMwMzggMy44NCAyLjg4OThDMy44NCAyLjkyMzUyIDMuODU2MDUgMi45NTQwMyAzLjg4MzM1IDIuOTc0OTFDNS44MDM5MSA0LjM4MzIxIDcuMzk2ODkgNi4xOTI5NyA4LjU0ODI2IDguMjc3MzJMOC41NjExIDguMjYyODdaIiBmaWxsPSIjMDBENkI5Ii8+CjxwYXRoIGQ9Ik02LjMyNDI0IDEzLjIxNjhDOS4yMzA3NyAxMy4yMTY4IDExLjc2MzEgMTEuNjEyNiAxMy4wODMxIDkuMjQyMzhDMTMuMTI5NyA5LjE1ODg3IDEzLjE3NDcgOS4wNzUzNyAxMy4yMTggOC45OTAyNkMxMy4xNTIyIDkuMTE3MTIgMTMuMDc4MyA5LjIzOTE3IDEyLjk5NjQgOS4zNTQ3OEMxMi45Njc1IDkuMzk0OTMgMTIuOTM4NiA5LjQzNTA4IDEyLjkwODEgOS40NzUyMkMxMi44Njk2IDkuNTI1IDEyLjgzMSA5LjU3MTU3IDEyLjc5MDkgOS42MTgxNEMxMi43NTg4IDkuNjU1MDcgMTIuNzI2NiA5LjY5MDQgMTIuNjkyOSA5LjcyNTczQzEyLjYyNTUgOS43OTYzOCAxMi41NTQ4IDkuODYzODMgMTIuNDgwOSA5LjkyNjQ2QzEyLjQzOTIgOS45NjE3OCAxMi4zOTkxIDkuOTk1NTEgMTIuMzU1NyAxMC4wMjc2QzEyLjMwNTkgMTAuMDY2MiAxMi4yNTQ1IDEwLjEwMzEgMTIuMjAzMSAxMC4xMzY4QzEyLjE3MSAxMC4xNTkzIDEyLjEzNzMgMTAuMTgwMiAxMi4xMDM2IDEwLjIwMTFDMTIuMDY5OSAxMC4yMjE5IDEyLjAzNDUgMTAuMjQyOCAxMS45OTc2IDEwLjI2MzdDMTEuOTI1MyAxMC4zMDM4IDExLjg0OTkgMTAuMzQyNCAxMS43NzQ0IDEwLjM3NjFDMTEuNzA4NSAxMC40MDUgMTEuNjQxMSAxMC40MzIzIDExLjU3MzcgMTAuNDU4QzExLjQ5OTggMTAuNDg1MyAxMS40MjU5IDEwLjUwOTQgMTEuMzQ4OCAxMC41MzAyQzExLjIzNDggMTAuNTYyNCAxMS4xMjA4IDEwLjU4NjQgMTEuMDAzNiAxMC42MDQxQzEwLjkyMDEgMTAuNjE3IDEwLjgzMzQgMTAuNjI2NiAxMC43NDgzIDEwLjYzM0MxMC42NTgzIDEwLjYzOTQgMTAuNTY2OCAxMC42NDEgMTAuNDc1MyAxMC42NDFDMTAuMzc0MSAxMC42Mzk0IDEwLjI3MjkgMTAuNjMzIDEwLjE3MDIgMTAuNjIxOEMxMC4wOTQ3IDEwLjYxMzcgMTAuMDE5MiAxMC42MDI1IDkuOTQzNzUgMTAuNTg5N0M5Ljg3NzkxIDEwLjU3ODQgOS44MTIwOCAxMC41NjQgOS43NDYyNCAxMC41NDc5QzkuNzEwOTEgMTAuNTM5OSA5LjY3NzE5IDEwLjUzMDIgOS42NDE4NiAxMC41MjA2QzkuNTQ1NTEgMTAuNDk0OSA5LjQ0OTE2IDEwLjQ2NzYgOS4zNTI4MSAxMC40NDAzQzkuMzA0NjQgMTAuNDI1OSA5LjI1NjQ2IDEwLjQxMyA5LjIwOTg5IDEwLjM5ODZDOS4xMzc2MyAxMC4zNzc3IDkuMDY2OTggMTAuMzU1MiA4Ljk5NjMyIDEwLjMzMjdDOC45Mzg1MSAxMC4zMTUxIDguODgwNyAxMC4yOTU4IDguODIyODkgMTAuMjc2NUM4Ljc2ODI5IDEwLjI1ODkgOC43MTIwOSAxMC4yNDEyIDguNjU3NDkgMTAuMjIxOUw4LjU0NTA4IDEwLjE4MzRDOC41MDAxMiAxMC4xNjczIDguNDUzNTUgMTAuMTUxMyA4LjQwODU5IDEwLjEzNTJMOC4zMTIyNCAxMC4wOTk5QzguMjQ4MDEgMTAuMDc3NCA4LjE4Mzc4IDEwLjA1MzMgOC4xMjExNSAxMC4wMjkyQzguMDg0MjEgMTAuMDE0OCA4LjA0NzI4IDEwLjAwMTkgOC4wMTAzNSA5Ljk4NzQ4QzcuOTYwNTcgOS45NjgyMSA3LjkxMjM5IDkuOTQ4OTQgNy44NjI2MSA5LjkyOTY3QzcuODExMjMgOS45MDg3OSA3Ljc1ODIzIDkuODg3OTIgNy43MDY4NSA5Ljg2NzA0TDcuNjA1NjggOS44MjUyOUw3LjQ4MDQzIDkuNzczOUw3LjM4NDA4IDkuNzMzNzZMNy4yODQ1MiA5LjY5MDRMNy4xOTc4IDkuNjUxODZMNy4xMTkxMiA5LjYxNjUzTDcuMDM4ODMgOS41Nzk2TDYuOTU2OTMgOS41NDEwNkw2Ljg1MjU1IDkuNDkyODhMNi43NDMzNiA5LjQ0MTVDNi43MDQ4MiA5LjQyMjIzIDYuNjY2MjggOS40MDQ1NiA2LjYyNzc0IDkuMzg1MjlMNi41Mjk3OCA5LjMzNzEyQzQuODAxOTIgOC40NzQ4IDMuMjQyNjcgNy4zMTIxOCAxLjkyMjY5IDUuOTAyMjdDMS44ODI1NCA1Ljg2MDUyIDEuODE2NyA1Ljg1NzMxIDEuNzczMzUgNS44OTc0NkMxLjc1MjQ3IDUuOTE2NzMgMS43Mzk2MiA1Ljk0NTYzIDEuNzM5NjIgNS45NzQ1NEwxLjc0Mjg0IDEwLjk0MTNWMTEuMzQ0NEMxLjc0Mjg0IDExLjU3ODggMS44NTg0NSAxMS43OTcyIDIuMDUyNzYgMTEuOTI3M0MzLjMxNjU0IDEyLjc3MiA0LjgwMzUzIDEzLjIyIDYuMzI0MjQgMTMuMjE2OFoiIGZpbGw9IiMzMzcwRkYiLz4KPHBhdGggZD0iTTE0Ljg2NTYgNi4yMTUzOUMxMy44ODQ0IDUuNzM1MjUgMTIuNzYxOSA1LjYzMjQ4IDExLjcxMDEgNS45Mjc5NUMxMS42NjUyIDUuOTQwNzkgMTEuNjIxOCA1Ljk1MzY0IDExLjU3ODQgNS45NjY0OUMxMS41NDc5IDUuOTc2MTIgMTEuNTE3NCA1Ljk4NTc2IDExLjQ4NTMgNS45OTdDMTEuNDI0MyA2LjAxNzg3IDExLjM2MzMgNi4wNDAzNiAxMS4zMDM5IDYuMDYyODRDMTEuMTk2MyA2LjEwNDU5IDExLjA5MTkgNi4xNTExNiAxMC45ODc1IDYuMjAwOTRDMTAuODc4MyA2LjI1MzkzIDEwLjc3MDcgNi4zMTE3NCAxMC42NjYzIDYuMzcyNzZDMTAuNTU4OCA2LjQzNTM5IDEwLjQ1NiA2LjUwMjgzIDEwLjM1NDggNi41NzUwOUMxMC4yODI1IDYuNjI2NDggMTAuMjExOSA2LjY3OTQ3IDEwLjE0MjggNi43MzQwN0MxMC4wNjc0IDYuNzk1MDkgOS45OTUxMSA2Ljg1NjExIDkuOTI0NDUgNi45MjE5NUM5Ljg4NTkxIDYuOTU3MjggOS44NDg5OCA2Ljk5MjYxIDkuODEwNDQgNy4wMjk1NEw5LjYxNDUzIDcuMjIyMjRMOS40NzQ4MiA3LjM2MDM0TDkuMzIyMjcgNy41MTEyOUw5LjE3NjE0IDcuNjU1ODFMOS4wMjAzOCA3LjgwOTk3TDguODM4OTIgNy45ODk4Mkw4LjcwNTY0IDguMTIxNUw4LjY2MDY3IDguMTY0ODVDOC42Mzk4IDguMTg1NzMgOC42MTczMiA4LjIwODIxIDguNTk0ODMgOC4yMjkwOUw4LjU2MjcyIDguMjYxMkw4LjUxMjk0IDguMzA3NzdDOC40OTM2NyA4LjMyNTQ0IDguNDc2IDguMzQxNDkgOC40NTY3MyA4LjM1OTE2QzcuOTczMzggOC44MDM5NyA3LjQzMzgzIDkuMTg0NTUgNi44NTQxMyA5LjQ5NDQ3TDYuOTU4NSA5LjU0MjY1TDcuMDQwNCA5LjU4MTE5TDcuMTIwNjkgOS42MTgxMkw3LjE5OTM4IDkuNjUzNDVMNy4yODYwOSA5LjY5MTk5TDcuMzg1NjUgOS43MzUzNEw3LjQ4MiA5Ljc3NTQ5TDcuNjA3MjUgOS44MjY4OEw3LjcwODQyIDkuODY4NjNDNy43NTk4MSA5Ljg4OTUgNy44MTI4IDkuOTEwMzggNy44NjQxOSA5LjkzMTI1QzcuOTEyMzYgOS45NTA1MiA3Ljk2MjE0IDkuOTY5OCA4LjAxMTkyIDkuOTg5MDdDOC4wNDg4NiAxMC4wMDM1IDguMDg1NzkgMTAuMDE2NCA4LjEyMjcyIDEwLjAzMDhDOC4xODY5NiAxMC4wNTQ5IDguMjUxMTkgMTAuMDc3NCA4LjMxMzgyIDEwLjEwMTVMOC40MTAxNiAxMC4xMzY4QzguNDU1MTMgMTAuMTUyOSA4LjUwMDA5IDEwLjE2ODkgOC41NDY2NiAxMC4xODVMOC42NTkwNyAxMC4yMjM1QzguNzEzNjYgMTAuMjQxMiA4Ljc2ODI2IDEwLjI2MDQgOC44MjQ0NyAxMC4yNzgxQzguODgyMjggMTAuMjk3NCA4Ljk0MDA4IDEwLjMxNSA4Ljk5Nzg5IDEwLjMzNDNDOS4wNjg1NSAxMC4zNTY4IDkuMTQwODEgMTAuMzc3NyA5LjIxMTQ3IDEwLjQwMDJDOS4yNTk2NCAxMC40MTQ2IDkuMzA3ODIgMTAuNDI5MSA5LjM1NDM5IDEwLjQ0MTlDOS40NTA3MyAxMC40NjkyIDkuNTQ3MDggMTAuNDk2NSA5LjY0MzQzIDEwLjUyMjJDOS42Nzg3NiAxMC41MzE4IDkuNzEyNDggMTAuNTM5OSA5Ljc0NzgxIDEwLjU0OTVDOS44MTM2NSAxMC41NjU2IDkuODc5NDkgMTAuNTc4NCA5Ljk0NTMzIDEwLjU5MTJDMTAuMDIwOCAxMC42MDQxIDEwLjA5NjMgMTAuNjE1MyAxMC4xNzE3IDEwLjYyMzRDMTAuMjc0NSAxMC42MzQ2IDEwLjM3NTcgMTAuNjQxIDEwLjQ3NjkgMTAuNjQyNkMxMC41Njg0IDEwLjY0NDIgMTAuNjU5OSAxMC42NDEgMTAuNzQ5OCAxMC42MzQ2QzEwLjgzNjYgMTAuNjI4MiAxMC45MjE3IDEwLjYxODUgMTEuMDA1MiAxMC42MDU3QzExLjEyMDggMTAuNTg4IDExLjIzNjQgMTAuNTYyMyAxMS4zNTA0IDEwLjUzMThDMTEuNDI1OSAxMC41MTEgMTEuNTAxNCAxMC40ODY5IDExLjU3NTIgMTAuNDU5NkMxMS42NDI3IDEwLjQzNTUgMTEuNzEwMSAxMC40MDgyIDExLjc3NiAxMC4zNzc3QzExLjg1MTQgMTAuMzQ0IDExLjkyNjkgMTAuMzA1NCAxMS45OTkyIDEwLjI2NTNDMTIuMDM0NSAxMC4yNDYgMTIuMDY5OCAxMC4yMjUxIDEyLjEwNTIgMTAuMjAyNkMxMi4xNDA1IDEwLjE4MTggMTIuMTcyNiAxMC4xNTkzIDEyLjIwNDcgMTAuMTM4NEMxMi4yNTYxIDEwLjEwMzEgMTIuMzA3NSAxMC4wNjc3IDEyLjM1NzMgMTAuMDI5MkMxMi40MDA2IDkuOTk3MDkgMTIuNDQyNCA5Ljk2MzM3IDEyLjQ4MjUgOS45MjgwNEMxMi41NTQ4IDkuODY1NDIgMTIuNjI1NCA5Ljc5Nzk3IDEyLjY5MjkgOS43MjczMkMxMi43MjY2IDkuNjkxOTkgMTIuNzU4NyA5LjY1NjY2IDEyLjc5MDggOS42MTk3M0MxMi44MzEgOS41NzMxNiAxMi44NzExIDkuNTI0OTggMTIuOTA4MSA5LjQ3NjgxQzEyLjkzODYgOS40MzgyNyAxMi45Njc1IDkuMzk4MTIgMTIuOTk2NCA5LjM1NjM3QzEzLjA3NjcgOS4yNDA3NSAxMy4xNTA1IDkuMTIwMzIgMTMuMjE2NCA4Ljk5NTA2TDEzLjI5MTkgOC44NDU3MkwxMy45NjMxIDcuNTA4MDdMMTMuOTcxMSA3LjQ5MjAyQzE0LjE5MjcgNy4wMTM0OCAxNC40OTQ2IDYuNTgzMTIgMTQuODY1NiA2LjIxNTM5WiIgZmlsbD0iIzEzM0M5QSIvPgo8L3N2Zz4K" alt=""><div><h4>飞书 MCP</h4><p>连接后，在对话中使用已授权的飞书工具。</p></div></div>
+    <button type="button" data-feishu-connect>连接</button>
+  </article>
+  <div id="replica-app-empty" role="status" hidden><p data-mcp-empty-copy></p><p data-mcp-empty-hint>可通过「自定义 MCP」添加兼容的服务。</p></div>
+</section>
+<div id="mcp-state-comparison" hidden></div>
+<dialog id="todoist-auth-demo" class="skill-uninstall-dialog" aria-labelledby="todoist-auth-heading">
+  <form method="dialog">
+    <h3 id="todoist-auth-heading">Todoist 模拟授权</h3>
+    <p>同意后，演示将允许 Agent 查看 Todoist 任务。</p>
+    <footer>
+      <button class="soft-button" value="cancel">取消</button>
+      <button class="soft-button" value="allow">同意授权</button>
+    </footer>
+  </form>
+</dialog>
 </div>
-<div id="replica-skills" role="tabpanel" hidden><div class="replica-skill-tools"><input type="search" placeholder="按名称搜索 skill..." aria-label="按名称搜索 skill"><button type="button" data-replica-refresh>↻ 刷新</button><button type="button" data-replica-folder>打开 Skills 文件夹</button></div><div class="replica-empty">还没有 skill — 让 AI 跑几次任务自然会生长出来</div></div>
+                <section id="replica-cli" role="tabpanel" aria-labelledby="replica-cli-tab" hidden>
+                  <div class="p2-system-heading"><h3 id="p2-app-heading">CLI 应用连接</h3><p>配置对应的 CLI 适配器路径。</p></div>
+<div class="replica-row">
+  <div class="replica-filters" role="group" aria-label="筛选 CLI 应用">
+    <button type="button" class="active" data-cli-filter="all" aria-pressed="true">全部</button>
+    <button type="button" data-cli-filter="connected" aria-pressed="false">已连接</button>
+  </div>
+  <input type="search" id="replica-cli-search" placeholder="搜索 CLI 应用" aria-label="搜索 CLI 应用">
+</div>
+<p id="replica-cli-empty" role="status" hidden></p>
+                  <div class="p2-cli-grid">
+                    <article class="p2-cli-card" data-app-search="微信 wechat cli"><span class="p2-cli-icon wechat" aria-hidden="true">微</span><div class="p2-cli-copy"><h4>微信</h4><span>微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wechat">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wechat" aria-label="连接微信 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-search="飞书 feishu lark cli"><span class="p2-cli-icon feishu" aria-hidden="true">飞</span><div class="p2-cli-copy"><h4>飞书</h4><span>飞书 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="feishu">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="feishu" aria-label="连接飞书 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-search="钉钉 dingtalk cli"><span class="p2-cli-icon dingtalk" aria-hidden="true">钉</span><div class="p2-cli-copy"><h4>钉钉</h4><span>钉钉 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="dingtalk">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="dingtalk" aria-label="连接钉钉 CLI">连接</button></article>
+                    <article class="p2-cli-card" data-app-search="企业微信 wecom cli"><span class="p2-cli-icon wecom" aria-hidden="true">企</span><div class="p2-cli-copy"><h4>企业微信</h4><span>企业微信 CLI 适配器</span><div class="p2-cli-status"><i></i><span data-p2-cli-status="wecom">未连接</span></div></div><button type="button" class="soft-button" data-p2-cli="wecom" aria-label="连接企业微信 CLI">连接</button></article>
+                  </div>
+                </section>
+<div id="replica-skills" role="tabpanel" hidden>
+  <div class="replica-row">
+    <div><h4>添加技能</h4><p>安装并启用技能后，即可供 AI 使用。</p></div>
+    <button type="button" data-skills-folder>打开 Skills 文件夹</button>
+  </div>
+  <div class="replica-row">
+    <div class="replica-filters" role="group" aria-label="筛选技能">
+      <button type="button" class="active" data-skills-view="discover" aria-pressed="true">全部</button>
+      <button type="button" data-skills-view="installed" aria-pressed="false">已安装</button>
+    </div>
+    <div class="replica-skill-tools">
+      <input type="search" placeholder="按名称或用途搜索技能..." aria-label="按名称或用途搜索技能">
+      <button type="button" data-skills-refresh><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 4v5h-5M20 9a8 8 0 1 0 .3 5"/></svg>刷新</button>
+      <input type="file" webkitdirectory multiple hidden data-skills-picker>
+    </div>
+  </div>
+  <ul class="replica-skill-list" hidden></ul><div class="replica-empty" role="status">暂无 Skills。打开 Skills 文件夹后即可查看。</div></div>
 </section>
 <section class="config-section-panel replica-settings" id="p2-settings-computer" data-config-panel="computer" role="tabpanel" aria-label="电脑操作">
-<header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式，并管理识别缓存。</p></header>
+<header class="replica-head"><h2>电脑操作</h2><p>选择 AI 接管键鼠或后台操作应用的方式。</p></header>
 <p class="replica-group-label">操作方式</p><div class="replica-switch-group">
 <div class="replica-row"><div><h4>接管键鼠操作电脑</h4><p>允许 AI 接管鼠标键盘，像人一样点击和打字。关闭后 AI 无法直接操控电脑。</p></div><button type="button" role="switch" aria-checked="true" aria-label="接管键鼠操作电脑" class="replica-switch" data-replica-switch="mouse"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-<div class="replica-row"><div><h4>后台静默操作应用</h4><p>允许 AI 在后台读取并操作应用窗口，不动鼠标、不打扰你正常使用。</p></div><button type="button" role="switch" aria-checked="true" aria-label="后台静默操作应用" class="replica-switch" data-replica-switch="background"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
-<p class="replica-group-label">桌面理解</p><div class="replica-switch-group"><div class="replica-row"><div><h4>使用激进的桌面理解模式</h4><p>AI 操作电脑时同步查看屏幕画面，理解更准，速度稍慢。</p></div><button type="button" role="switch" aria-checked="false" aria-label="使用激进的桌面理解模式" class="replica-switch" data-replica-switch="vision"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
-<button type="button" class="replica-cache replica-row" data-replica-cache><span><strong>图标识别模型缓存</strong><span>预下载或清理应用识别模型，用于排查电脑操作中的识别问题。</span></span><span aria-hidden="true">›</span></button>
+<div class="replica-row"><div><h4>后台静默操作应用</h4><p>允许 AI 在你交办任务后，通过已适配接口操作应用；不持续读取屏幕。</p></div><button type="button" role="switch" aria-checked="true" aria-label="后台静默操作应用" class="replica-switch" data-replica-switch="background"><img class="pa-switch-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="pa-switch-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div></div>
+
 </section>
               <dialog class="p2-system-dialog" id="p2-folder-dialog" aria-labelledby="p2-folder-title">
                 <form id="p2-folder-form"><div class="p2-dialog-head"><h3 id="p2-folder-title">选择记忆存储文件夹</h3><button type="button" class="p2-dialog-close" data-p2-close aria-label="关闭文件夹选择">×</button></div>
@@ -20249,13 +20476,234 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-memory-import.js"></script>
-    <script src="assets/phase2-memory.js?v=20261029-memory-export-source"></script>
-    <script src="assets/phase2-memory-sources.js?v=20261021-source-all"></script>
+    <style>
+#memory .pm-directory {
+  min-width: 0;
+  margin-bottom: 4px;
+}
+#memory .pm-directory-label,
+#memory .pm-directory-entry .pm-row-file {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+  min-width: 0;
+  min-height: 29px;
+  box-sizing: border-box;
+  padding: 4px;
+  border: 0;
+  border-radius: 5px;
+  background: transparent;
+  color: #a9bac4;
+  cursor: pointer;
+  font: inherit;
+  font-size: 11px;
+  line-height: 1.4;
+  text-align: left;
+}
+#memory .pm-directory-label {
+  color: #c5d4db;
+  font-size: 12px;
+  font-weight: 550;
+  list-style: none;
+}
+#memory .pm-directory-label::-webkit-details-marker {
+  display: none;
+}
+#memory .pm-directory-label::before {
+  width: 5px;
+  height: 5px;
+  flex: none;
+  margin: 0 2px;
+  border-right: 1px solid currentColor;
+  border-bottom: 1px solid currentColor;
+  color: #7f9ba5;
+  content: "";
+  transform: rotate(-45deg);
+}
+#memory .pm-directory[open] > .pm-directory-label::before {
+  transform: rotate(45deg);
+}
+#memory :is(.pm-directory-label, .pm-directory-entry .pm-row-file) > span {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#memory :is(.pm-directory-label, .pm-directory-entry .pm-row-file) > svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+#memory .pm-directory-files {
+  margin-left: 8px;
+  padding-left: 7px;
+  border-left: 1px solid #ffffff1c;
+}
+#memory .pm-directory-entry {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  margin-top: 2px;
+  border-radius: 6px;
+}
+#memory .pm-directory-entry .pm-row-file {
+  flex: 1 1 auto;
+}
+#memory .pm-directory-entry .pm-row-actions {
+  gap: 0;
+}
+#memory .pm-directory-entry .pm-row-icon {
+  width: 23px;
+  height: 27px;
+  padding: 4px;
+}
+#memory .pm-directory-entry .pm-row-icon svg {
+  width: 13px;
+  height: 13px;
+}
+#memory .pm-directory-label:hover,
+#memory .pm-directory-entry:hover {
+  background: #ffffff0a;
+}
+#memory .pm-directory-entry:has(.pm-row-file[aria-current="true"]) {
+  background: #20e6e61b;
+  box-shadow: inset 0 0 0 1px #20e6e630;
+}
+#memory .pm-directory-entry .pm-row-file[aria-current="true"] {
+  color: #95f0ee;
+}
+#memory .pm-graph-view,
+#memory .pm-file-reader {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+#memory .pm-graph-view[hidden],
+#memory .pm-file-reader[hidden] {
+  display: none;
+}
+#memory .pm-file-reader {
+  background: #151c20;
+}
+#memory .pm-reader-header {
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 12px;
+  padding: 12px 16px;
+}
+#memory .pm-reader-back {
+  padding: 6px 8px;
+  border: 0;
+  border-radius: 7px;
+  background: transparent;
+  color: #a9bac4;
+  cursor: pointer;
+  font: inherit;
+  font-size: 12px;
+  white-space: nowrap;
+}
+#memory .pm-reader-back:hover {
+  color: #95f0ee;
+  background: #20e6e60e;
+}
+#memory .pm-reader-path {
+  display: flex;
+  flex: 1 1 170px;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  color: #9dafb9;
+  font-size: 12px;
+}
+#memory .pm-reader-path > :not([aria-hidden]) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+#memory .pm-reader-path strong {
+  color: var(--text);
+}
+#memory .pm-reader-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  overscroll-behavior: contain;
+  padding: 20px clamp(12px, 3vw, 32px);
+  color: #c8d5db;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+#memory .pm-reader-content :is(h1, h2, h3) {
+  color: var(--text);
+  line-height: 1.35;
+}
+#memory .pm-reader-content :is(h1, h2, h3):first-child {
+  margin-top: 0;
+}
+#memory .pm-reader-content pre {
+  margin: 0;
+  font: inherit;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+#memory :is(.pm-directory-label, .pm-row-file, .pm-reader-back, .pm-reader-content):focus-visible {
+  outline: 1px solid #20e6e6;
+  outline-offset: -1px;
+}
+      #memory [data-empty-directory] > .pm-directory-label::before{visibility:hidden}
+      #memory .pm-directory-label > svg[hidden]{display:none}
+      #memory .pm-directory-label{display:flex;align-items:center}
+      #memory .pm-directory-label>span:not(.pm-folder-actions){flex:1}
+      #memory .pm-directory-label>.pm-folder-actions{display:flex;flex:none;margin-left:auto;visibility:hidden;overflow:visible}
+      #memory .pm-directory-label:hover>.pm-folder-actions,#memory .pm-directory-label:focus-within>.pm-folder-actions{visibility:visible}
+      .pm-folder-actions button{width:23px;height:27px;padding:0;border:0;background:transparent;color:inherit;font-size:18px;cursor:pointer;border-radius:5px}
+      .pm-folder-actions button:hover{background:#ffffff15}
+      #memory .pm-tree-folder .pm-row-file,#memory .pm-tree-folder .pm-tree-name-field{color:#c5d4db;font-size:12px;font-weight:550}
+      #memory .pm-tree-name-field{display:flex;align-items:center;gap:7px;flex:1;min-width:0;padding:4px 7px;border:1px solid #00cbd4;border-radius:7px;background:#152026}
+      #memory .pm-tree-name-field svg{width:13px;height:13px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
+      #memory .pm-tree-name-input{width:0;flex:1;min-width:0;padding-left:7px;border:0;border-left:1px solid #536372;border-radius:0;outline:none;box-shadow:none;background:transparent;color:inherit;font:inherit}
+      .pm-tree-row{display:flex;align-items:center;min-height:29px;border-radius:6px;gap:2px}
+      .pm-tree-row:hover,.pm-tree-row:focus-within{background:#ffffff10}
+      .pm-tree-row .pm-row-file{flex:1;min-width:0}
+      .pm-tree-toggle,.pm-tree-actions button{border:0;background:transparent;color:inherit;cursor:pointer;width:23px;height:27px;padding:0;font-size:18px}
+      .pm-tree-actions{display:flex;visibility:hidden;flex-shrink:0}
+      .pm-tree-row:hover .pm-tree-actions,.pm-tree-row:focus-within .pm-tree-actions{visibility:visible}
+      .pm-tree-actions button:hover{background:#ffffff15;border-radius:5px}
+      .pm-tree-menu{position:fixed;z-index:10000;width:170px;background:#202a30;color:#eaf0f4;border:1px solid #536372;border-radius:9px;box-shadow:0 8px 26px #0006;padding:5px}
+      .pm-tree-menu[hidden]{display:none}
+      .pm-tree-menu button{display:block;width:100%;text-align:left;padding:12px;border:0;border-radius:5px;background:transparent;color:inherit;font:inherit;cursor:pointer}
+      .pm-tree-menu button:hover{background:#ffffff12}
+      .pm-tree-row[data-drop="before"]{box-shadow:0 -2px #00cbd4}
+      .pm-tree-row[data-drop="after"]{box-shadow:0 2px #00cbd4}
+      [data-drop="inside"]{background:#00cbd425!important;outline:1px solid #00cbd4}
+      #pmo-folder-choose{box-sizing:border-box;width:88px;min-width:88px;max-width:88px;flex:0 0 88px;padding-inline:14px}
+      .pmo-im .pmo-connect{width:auto;min-width:126px;padding-inline:12px;white-space:nowrap}
+      .pmo-im-form{display:grid;gap:14px}
+      .pmo-im-form label{display:grid;gap:6px;color:var(--pmo-muted)}
+      .pmo-im-form input:not([type="radio"]),.pmo-im-form select,.pmo-im-form textarea{box-sizing:border-box;width:100%;padding:10px;border:1px solid #536372;border-radius:8px;background:#11191e;color:#f5f7fa;font:inherit;color-scheme:dark}
+      .pmo-im-form textarea{resize:vertical}
+      .pmo-im-chats{display:grid;gap:6px}
+      .pmo-im-chats label{display:flex;align-items:center;padding:8px;border:1px solid #536372;border-radius:8px;color:#f5f7fa}
+      .pmo-im-chats label[hidden]{display:none}
+      .pmo-im-chats small{margin-left:auto;color:var(--pmo-muted)}
+      .pmo-im-form .pmo-back{justify-self:start}
+    </style>
+    <script src="assets/phase2-small-memory.js?v=20261120-editor-import"></script>
     <script src="assets/phase2-settings.js?v=20261029-local-memory-copy"></script>
     <script src="assets/phase2-proactive.js?v=20261029-app-picker-no-hint"></script>
     <script src="assets/phase2-screen-reading.js?v=20261028-region-entry"></script>
     <script src="assets/phase2-assistant.js?v=20261021-three-states"></script>
-    <script src="assets/phase2-memory-onboarding.js?v=20261022-memory-autosave"></script>
+    <script src="assets/phase2-memory-onboarding.js?v=20261120-editor-import"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
     <script src="assets/phase2-chat-layout.js?v=20261030-no-dev-notes"></script>
   <script>
@@ -20288,19 +20736,551 @@ document.addEventListener("keydown",e=>{if(e.key==="Escape"){qaComposerClose();}
 const qaCreateWithoutSelection=qaCreateSession;qaCreateSession=function(){qaComposerSelection.skill="";qaComposerSelection.files=[];qaComposerClose();qaCreateWithoutSelection();qaComposerRender();};
 </script>
 <script>
-let replicaRegion="all";
-function replicaFilterApps(){const query=document.querySelector("#replica-app-search").value.trim().toLowerCase();document.querySelector("#replica-feishu").hidden=replicaRegion==="global"||!("飞书 feishu lark".includes(query));}
+let replicaRegion = 'all';
+const feishuCatalogRow = document.querySelector('#feishu-catalog-row');
+const feishuSection = document.querySelector('#feishu-saved-section');
+const feishuConnect = feishuCatalogRow.querySelector('[data-feishu-connect]');
+const mcpComparison = document.querySelector('#mcp-state-comparison');
+const mcpParams = new URLSearchParams(location.search);
+const mcpView = mcpParams.get('mcpView');
+const todoistDemo = !['before', 'required', 'waiting', 'connected'].includes(mcpView);
+const compareMcpStates = mcpView === 'compare';
+const mcpTemplate = feishuSection.querySelector('.mcp-saved-card').cloneNode(true);
+const mcpCards = new Set();
+const mcpProfiles = {
+  feishu: { name: '飞书 MCP', region: 'cn' },
+  todoist: { name: 'Todoist', region: 'global' },
+  drive: { name: 'Google Drive', region: 'global' },
+  custom: { name: '自定义 MCP' }
+};
+const mcpStatusLabels = {
+  offline: '未连接', retrying: '连接中', failed: '连接失败', setup: '需要配置',
+  required: '需要授权', waiting: '等待授权', connected: '已连接', disabled: '已停用'
+};
+let nextMcpId = 0;
+let pendingMcpRemoval;
+
+function confirmConnectionRemoval(name, remove) {
+  const dialog = document.querySelector('#mcp-remove-dialog');
+  dialog.querySelector('h3').textContent = `移除「${name}」？`;
+  pendingMcpRemoval = remove;
+  dialog.returnValue = 'cancel';
+  dialog.showModal();
+}
+
+function cloneMcpCard() {
+  const card = mcpTemplate.cloneNode(true);
+  const suffix = '-mcp-' + ++nextMcpId;
+  card.querySelectorAll('[id], [for], [aria-controls]').forEach(element => {
+    for (const attr of ['id', 'for', 'aria-controls']) {
+      if (element.hasAttribute(attr)) element.setAttribute(attr, element.getAttribute(attr) + suffix);
+    }
+  });
+  return card;
+}
+
+function mountMcpCard(card, provider, { state: initialState, expanded, firstRetryFails = false, list = false, accountGroup = feishuSection, onRemove, custom } = {}) {
+  const profile = mcpProfiles[provider];
+  const control = name => card.querySelector('[data-feishu-' + name + ']');
+  const details = card.querySelector('.mcp-connection-details');
+  const expandButtons = [...card.querySelectorAll('[data-feishu-expand]')];
+  const name = control('rename').querySelector('input');
+  const search = control('tool-search');
+  const retry = control('retry');
+  const authorize = control('authorize');
+  const logo = card.querySelector('.mcp-brand');
+  const warning = card.querySelector('.mcp-warning');
+  let label = custom?.name ?? profile.name;
+  let enabled = true;
+  let state = initialState;
+  let connectedAt;
+  let retryTimer;
+  let failNextRetry = firstRetryFails;
+  const entry = { card, provider, list, region: custom?.region ?? profile.region, get state() { return state; }, expand, start };
+  mcpCards.add(entry);
+  card.dataset.mcpProvider = provider;
+  control('title').textContent = label;
+  control('add-account').hidden = provider === 'feishu' || provider === 'custom';
+  if (custom) {
+    const icon = document.createElement('span');
+    icon.className = 'mcp-brand mcp-custom-brand';
+    icon.setAttribute('aria-hidden', 'true');
+    icon.textContent = 'MCP';
+    logo.replaceWith(icon);
+    control('provider').textContent = profile.name;
+    control('endpoint').textContent = custom.endpoint;
+    control('count').textContent = custom.todoistSample ? ' · 1 个工具' : ' · 0 个工具';
+    control('tool-count').textContent = custom.todoistSample ? '1' : '0';
+    const [tool, ...extraTools] = card.querySelectorAll('.mcp-tool');
+    tool.querySelector('strong').textContent = '查看任务';
+    tool.querySelector('p').textContent = '列出指定项目中的待办事项。';
+    extraTools.forEach(item => item.remove());
+    if (!custom.todoistSample) {
+      tool.remove();
+      control('tool-empty').textContent = '此连接尚未提供可用工具。';
+    }
+  } else if (provider !== 'feishu') {
+    logo.dataset.brand = provider;
+    control('provider').textContent = label;
+    control('count').textContent = ' · 1 个工具';
+    control('tool-count').textContent = '1';
+    control('endpoint').textContent = provider === 'drive' ? 'https://drive.example.com/mcp' : 'https://todoist.example.com/mcp';
+    const [tool, ...extraTools] = card.querySelectorAll('.mcp-tool');
+    tool.querySelector('strong').textContent = provider === 'drive' ? '查找文件' : '查看任务';
+    tool.querySelector('p').textContent = provider === 'drive' ? '查找已授权的文件。' : '列出指定项目中的待办事项。';
+    extraTools.forEach(item => item.remove());
+  }
+  const tools = [...card.querySelectorAll('.mcp-tool')];
+
+  function filterTools() {
+    const query = search.value.trim().toLowerCase();
+    tools.forEach(tool => { tool.hidden = !tool.textContent.toLowerCase().includes(query); });
+    control('tool-empty').hidden = tools.some(tool => !tool.hidden);
+  }
+
+  function expand(open) {
+    details.hidden = !open;
+    expandButtons.forEach(button => button.setAttribute('aria-expanded', String(open)));
+    if (open) {
+      name.value = label;
+      control('save').disabled = true;
+      search.value = '';
+      filterTools();
+    }
+  }
+
+  function render(nextState, open) {
+    state = nextState;
+    card.dataset.feishuConnectionState = state;
+    const waiting = state === 'waiting';
+    const connecting = state === 'retrying';
+    const connected = state === 'connected';
+    const active = connected && enabled;
+    const setup = state === 'setup';
+    const failed = state === 'failed';
+    const status = connected && !enabled ? 'disabled' : state;
+    control('state').textContent = mcpStatusLabels[status] || '';
+    card.dataset.mcpStatus = status;
+    retry.hidden = !['offline', 'retrying', 'failed', 'setup'].includes(state);
+    retry.disabled = connecting;
+    retry.firstElementChild.hidden = !connecting;
+    control('authorize').textContent = state === 'required' ? '授权连接' : '打开浏览器';
+    control('authorize').hidden = state !== 'required' && !waiting;
+    control('waiting').hidden = !waiting;
+    warning.hidden = !setup && !failed;
+    warning.textContent = setup ? '请先完成应用配置，再授权账号。' : '连接失败，请检查设备网络后重试。';
+    control('count').hidden = !active;
+    control('tool-list').hidden = !active;
+    control('test').hidden = !active;
+    control('permission').disabled = waiting || connecting;
+    control('permission').setAttribute('aria-checked', String(enabled));
+    control('last-row').hidden = !active;
+    if (provider === 'todoist') {
+      logo.src = ['offline', 'retrying', 'failed', 'connected'].includes(state)
+        ? 'assets/mcp-flow/todoist-connected.svg' : 'assets/mcp-flow/todoist.svg';
+    } else if (provider === 'drive') {
+      logo.src = 'assets/mcp-flow/google-drive.svg';
+    }
+    if (connected) {
+      connectedAt ||= new Date();
+      const last = control('last');
+      last.dateTime = connectedAt.toISOString();
+      last.textContent = new Intl.DateTimeFormat('zh-CN', { dateStyle: 'medium', timeStyle: 'short' }).format(connectedAt);
+    }
+    if (open !== undefined) expand(open);
+    replicaFilterApps();
+  }
+
+  function remove() {
+    clearTimeout(retryTimer);
+    mcpCards.delete(entry);
+    card.remove();
+    onRemove?.();
+    if (!list) replicaFilterApps();
+  }
+
+  function start() {
+    if (custom?.auth === 'address') {
+      reconnect();
+      return;
+    }
+    render('waiting', true);
+    control('authorize').focus({ preventScroll: true });
+  }
+
+  function reconnect() {
+    if (state === 'setup') {
+      showLightToast('当前设备的应用配置尚未就绪，请更新设备后重试。');
+      return;
+    }
+    render('retrying');
+    retryTimer = setTimeout(() => {
+      render(failNextRetry ? 'failed' : 'connected', failNextRetry ? undefined : false);
+      failNextRetry = false;
+    }, 900);
+  }
+  retry.addEventListener('click', reconnect);
+  control('authorize').addEventListener('click', () => {
+    if (state === 'required') {
+      start();
+      return;
+    }
+    function finishAuthorization() {
+      render('connected', true);
+      expandButtons[0].focus({ preventScroll: true });
+    }
+    if (provider === 'todoist' || custom) {
+      const dialog = document.querySelector('#todoist-auth-demo');
+      if (dialog.open) return;
+      const title = dialog.querySelector('h3');
+      const description = dialog.querySelector('p');
+      title.textContent = (custom ? label : 'Todoist') + ' 模拟授权';
+      description.textContent = custom && !custom.todoistSample
+        ? '同意后，演示将此连接显示为已连接。'
+        : '同意后，演示将允许 Agent 查看 Todoist 任务。';
+      dialog.returnValue = 'cancel';
+      dialog.addEventListener('close', () => {
+        if (dialog.returnValue === 'allow' && state === 'waiting' && mcpCards.has(entry)) finishAuthorization();
+      }, { once: true });
+      dialog.showModal();
+      return;
+    }
+    finishAuthorization();
+  });
+  control('cancel').addEventListener('click', () => {
+    if (initialState === 'before') remove();
+    else {
+      render('required', true);
+      control('authorize').focus();
+    }
+  });
+  expandButtons.forEach(button => button.addEventListener('click', () => expand(details.hidden)));
+  search.addEventListener('input', filterTools);
+  name.addEventListener('input', () => {
+    const value = name.value.trim();
+    control('save').disabled = !value || value === label;
+  });
+  control('rename').addEventListener('submit', event => {
+    event.preventDefault();
+    const value = name.value.trim();
+    if (!value) return;
+    label = value;
+    control('title').textContent = value;
+    expandButtons[1].setAttribute('aria-label', '管理 ' + value);
+    control('save').disabled = true;
+    replicaFilterApps();
+    name.focus();
+  });
+  control('permission').addEventListener('click', () => {
+    enabled = !enabled;
+    render(state);
+  });
+  control('test').addEventListener('click', () => showLightToast('连接正常'));
+  control('mcp-remove').addEventListener('click', () => confirmConnectionRemoval(label, remove));
+  control('add-account').addEventListener('click', () => {
+    if (provider === 'drive') {
+      showLightToast('请先完成 Google Drive 应用配置，再添加账号。');
+      return;
+    }
+    for (const other of mcpCards) {
+      if (other.card.parentElement === accountGroup) other.expand(false);
+    }
+    expand(false);
+    addSavedMcpAccount(provider, 'before', true, accountGroup).start();
+  });
+  expandButtons[1].setAttribute('aria-label', provider === 'feishu' ? '管理飞书 MCP' : '管理 ' + label);
+  render(initialState, expanded);
+  return entry;
+}
+
+function addSavedMcpAccount(provider, state, expanded, accountGroup = feishuSection, custom) {
+  const card = cloneMcpCard();
+  accountGroup.append(card);
+  return mountMcpCard(card, provider, {
+    state, expanded, list: accountGroup === feishuSection, accountGroup, custom,
+    onRemove() {
+      replicaFilterApps();
+      if (custom) document.querySelector('[data-custom-mcp-open]').focus();
+      else if (!feishuCatalogRow.hidden) feishuConnect.focus();
+    }
+  });
+}
+
+function makeMcpExample(group, { title, copy, provider = 'todoist', state, firstRetryFails }) {
+  const card = cloneMcpCard();
+  const step = makeMcpStep(title, copy, card);
+  group.append(step);
+  mountMcpCard(card, provider, { state, expanded: true, firstRetryFails, onRemove() { step.remove(); } });
+}
+
+function makeMcpStep(title, copy, content) {
+  const step = document.createElement('div');
+  step.className = 'mcp-flow-step';
+  const heading = document.createElement('h4');
+  heading.textContent = title;
+  step.append(heading);
+  if (copy) {
+    const note = document.createElement('p');
+    note.textContent = copy;
+    step.append(note);
+  }
+  step.append(content);
+  return step;
+}
+
+function makeMcpFlow(title, copy) {
+  const flow = document.createElement('section');
+  flow.className = 'mcp-flow';
+  flow.setAttribute('aria-label', title);
+  const heading = document.createElement('h3');
+  heading.textContent = title;
+  const note = document.createElement('p');
+  note.textContent = copy;
+  flow.append(heading, note);
+  mcpComparison.append(flow);
+  return flow;
+}
+
+feishuSection.querySelector('.mcp-saved-card').remove();
+if (todoistDemo) {
+  feishuCatalogRow.dataset.appRegion = 'global';
+  feishuCatalogRow.dataset.appSearch = 'todoist 任务 项目';
+  feishuCatalogRow.querySelector('h4').textContent = 'Todoist';
+  feishuCatalogRow.querySelector('p').textContent = '管理任务与项目。';
+  const catalogLogo = feishuCatalogRow.querySelector('.mcp-brand');
+  catalogLogo.src = 'assets/mcp-flow/todoist.svg';
+  catalogLogo.dataset.brand = 'todoist';
+  feishuCatalogRow.after(feishuSection);
+  if (compareMcpStates) {
+    mcpComparison.hidden = false;
+    mcpComparison.parentElement.dataset.mcpFlows = 'compare';
+    const first = makeMcpFlow('首次添加 MCP', '点击「连接」 → 在浏览器同意授权 → 客户端显示「已连接」。');
+    first.classList.add('mcp-first-flow');
+    const directory = document.querySelector('.mcp-directory');
+    first.append(directory);
+    const step = makeMcpStep('第 1 步 · 连接入口', '在「添加应用」里找到 Todoist，点右侧「连接」。', feishuCatalogRow);
+    directory.insertBefore(step, feishuSection);
+    makeMcpExample(first, {
+      title: '第 2 步 · 等待授权', state: 'waiting',
+      copy: '在网页里同意授权。网页没打开时，点卡片上的「打开浏览器」。'
+    });
+    makeMcpExample(first, {
+      title: '第 3 步 · 已连接', state: 'connected',
+      copy: '收到授权结果后，卡片自动更新，并显示可用工具。'
+    });
+    makeMcpExample(first, {
+      title: '缺账号授权 · 已有连接', state: 'required',
+      copy: '连接已经添加。点「授权连接」，在浏览器登录并同意权限。'
+    });
+    const reconnect = makeMcpFlow('MCP 重新连接', '已有连接掉线时，点「重试」，等待连接结果。');
+    makeMcpExample(reconnect, {
+      title: '第 1 步 · 未连接', state: 'offline', firstRetryFails: true,
+      copy: '应用已经添加，但当前没连上服务。点「重试」，卡片进入「连接中」。'
+    });
+    makeMcpExample(reconnect, {
+      title: '第 2 步 · 连接中', state: 'retrying',
+      copy: '按钮显示加载状态，成功后卡片显示「已连接」。'
+    });
+    makeMcpExample(reconnect, {
+      title: '失败时 · 连接失败', state: 'failed',
+      copy: '检查设备网络后，点「重试」重新连接。'
+    });
+    makeMcpExample(reconnect, {
+      title: '缺应用配置', provider: 'drive', state: 'setup',
+      copy: '应用配置尚未就绪。点「重试」会检查配置，未就绪时提示更新设备。'
+    });
+  } else {
+    const card = cloneMcpCard();
+    const group = makeMcpStep('重新连接', '', card);
+    mcpComparison.append(group);
+    mountMcpCard(card, 'todoist', { state: 'offline', expanded: true, accountGroup: group, firstRetryFails: true });
+  }
+}
+
+feishuConnect.addEventListener('click', () => {
+  addSavedMcpAccount(todoistDemo ? 'todoist' : 'feishu', 'before', false).start();
+});
+if (!todoistDemo && mcpView !== 'before') {
+  addSavedMcpAccount('feishu', mcpView, true);
+}
+replicaFilterApps();
+
+const requestedMcpTab = mcpParams.get('settingsTab');
+const settingsTab = mcpView ? 'apps' : { apps: 'apps', 'apps-skills': 'apps', skills: 'skills', cli: 'cli' }[requestedMcpTab];
+if (settingsTab) {
+  window.addEventListener('load', () => {
+    setConfigSubpage('apps-skills');
+    document.querySelector(`[data-replica-tab="${settingsTab}"]`).click();
+  }, { once: true });
+}
+
+function replicaFilterApps() {
+  const query = document.querySelector('#replica-app-search').value.trim().toLowerCase();
+  const connectedOnly = replicaRegion === 'connected';
+  const rows = document.querySelectorAll('.mcp-directory .replica-app[data-app-search]');
+  const hasCatalogConnection = [...mcpCards].some(entry => entry.list && entry.state !== 'before' && entry.provider === (todoistDemo ? 'todoist' : 'feishu'));
+  let count = 0;
+  for (const row of rows) {
+    const available = row !== feishuCatalogRow || !hasCatalogConnection;
+    const regionMatches = replicaRegion === 'all' || row.dataset.appRegion === replicaRegion;
+    row.hidden = !available || !regionMatches || !row.dataset.appSearch.toLowerCase().includes(query);
+    if (!row.hidden) count++;
+  }
+  let visibleSaved = 0;
+  let saved = 0;
+  let visibleConnected = 0;
+  for (const entry of mcpCards) {
+    const { card, region, state, list } = entry;
+    const connected = card.dataset.mcpStatus === 'connected';
+    const regionMatches = replicaRegion === 'all' || connectedOnly || region === replicaRegion;
+    const matches = (card.querySelector('[data-feishu-title]').textContent + ' ' +
+      card.querySelector('[data-feishu-provider]').textContent).toLowerCase().includes(query);
+    card.hidden = state === 'before' || !matches || !regionMatches || (connectedOnly && !connected);
+    if (list && state !== 'before') {
+      saved++;
+      if (!card.hidden) visibleSaved++;
+    }
+    if (!card.hidden && connected) visibleConnected++;
+  }
+  for (const step of mcpComparison.querySelectorAll('.mcp-flow-step')) {
+    step.hidden = !step.querySelector('.mcp-saved-card:not([hidden]), .replica-app:not([hidden])');
+  }
+  feishuSection.hidden = !visibleSaved;
+  feishuSection.querySelector('.mcp-count').textContent = saved;
+  mcpComparison.querySelectorAll('.mcp-flow:not(.mcp-first-flow)').forEach(flow => {
+    flow.hidden = !flow.querySelector('.mcp-flow-step:not([hidden])');
+  });
+  const hasExistingConnection = !compareMcpStates && Boolean(mcpComparison.querySelector('.mcp-flow-step:not([hidden])'));
+  if (!compareMcpStates) mcpComparison.hidden = !hasExistingConnection;
+  const empty = document.querySelector('#replica-app-empty');
+  empty.hidden = connectedOnly ? visibleConnected > 0 : count > 0 || visibleSaved > 0 || hasExistingConnection;
+  empty.querySelector('[data-mcp-empty-copy]').textContent = query ? '无匹配'
+    : connectedOnly ? '暂无已连接的应用。' : '暂无可添加的应用';
+  empty.querySelector('[data-mcp-empty-hint]').hidden = Boolean(query) || connectedOnly;
+}
+const cliSearch = document.querySelector('#replica-cli-search');
+const cliFilters = [...document.querySelectorAll('[data-cli-filter]')];
+function filterCliApps() {
+  const connectedOnly = cliFilters.some(button => button.dataset.cliFilter === 'connected' && button.classList.contains('active'));
+  const query = cliSearch.value.trim().toLowerCase();
+  let count = 0;
+  document.querySelectorAll('#replica-cli .p2-cli-card').forEach(card => {
+    card.hidden = (connectedOnly && card.querySelector('[data-p2-cli-status]')?.textContent.trim() !== '已连接') ||
+      !card.dataset.appSearch.toLowerCase().includes(query);
+    if (!card.hidden) count++;
+  });
+  const empty = document.querySelector('#replica-cli-empty');
+  empty.hidden = count > 0;
+  empty.textContent = connectedOnly && !query ? '暂无已连接的 CLI 应用。' : '没有匹配的 CLI 应用。';
+}
+cliSearch.addEventListener('input', filterCliApps);
+cliFilters.forEach(button => button.addEventListener('click', () => {
+  cliFilters.forEach(option => {
+    option.classList.toggle('active', option === button);
+    option.setAttribute('aria-pressed', String(option === button));
+  });
+  filterCliApps();
+}));
 document.addEventListener("input",e=>{if(e.target.id==="replica-app-search")replicaFilterApps();});
 document.addEventListener("click",e=>{
-const tab=e.target.closest("[data-replica-tab]");if(tab){document.querySelectorAll("[data-replica-tab]").forEach(b=>{const active=b===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});document.querySelector("#replica-apps").hidden=tab.dataset.replicaTab!=="apps";document.querySelector("#replica-skills").hidden=tab.dataset.replicaTab!=="skills";return;}
+const tab=e.target.closest("[data-replica-tab]");if(tab){document.querySelectorAll("[data-replica-tab]").forEach(b=>{const active=b===tab;b.classList.toggle("active",active);b.setAttribute("aria-selected",String(active));});document.querySelector("#replica-apps").hidden=tab.dataset.replicaTab!=="apps";document.querySelector("#replica-skills").hidden=tab.dataset.replicaTab!=="skills";document.querySelector("#replica-cli").hidden=tab.dataset.replicaTab!=="cli";return;}
 const region=e.target.closest("[data-replica-region]");if(region){replicaRegion=region.dataset.replicaRegion;document.querySelectorAll("[data-replica-region]").forEach(b=>{b.classList.toggle("active",b===region);b.setAttribute("aria-pressed",String(b===region));});replicaFilterApps();return;}
 const toggle=e.target.closest("[data-replica-switch]");if(toggle){const checked=toggle.getAttribute("aria-checked")!=="true";toggle.setAttribute("aria-checked",String(checked));try{phase2Storage.setItem("replica-computer-"+toggle.dataset.replicaSwitch,String(checked));}catch(_){}showLightToast("原型演示：仅保存开关状态，未控制电脑");return;}
-if(e.target.closest("[data-replica-refresh]")){return;}
+if(e.target.closest("[data-replica-refresh]")){replicaFilterApps();showLightToast("原型演示：已刷新界面，未连接应用或读取本机 Skills");return;}
 if(e.target.closest("[data-replica-unavailable]")){showLightToast("原型演示：未接入应用连接服务");return;}
-if(e.target.closest("[data-replica-folder]")){showLightToast("原型演示：暂未接入本机 Skills 文件夹");return;}
-if(e.target.closest("[data-replica-cache]")){showLightToast("原型演示：暂未接入图标识别模型缓存");return;}
+
 });
 document.querySelectorAll("[data-replica-switch]").forEach(b=>{try{const saved=phase2Storage.getItem("replica-computer-"+b.dataset.replicaSwitch);if(saved!==null)b.setAttribute("aria-checked",saved);}catch(_){}});
 </script>
+<link rel="stylesheet" href="assets/phase2-small-custom-mcp.css">
+<dialog id="custom-mcp-drawer" class="custom-mcp-drawer" aria-labelledby="custom-mcp-title">
+  <form>
+    <header>
+      <div><h2 id="custom-mcp-title">自定义 MCP</h2><p>完成应用配置与账号授权。</p></div>
+      <button type="button" class="mcp-icon-button" data-mcp-close aria-label="关闭">✕</button>
+    </header>
+    <div class="custom-mcp-body">
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-json">导入连接 JSON</label>
+        <textarea id="custom-mcp-json" name="config" rows="7" spellcheck="false" placeholder="粘贴单个服务配置，或包含 mcpServers 的 JSON。">
+{
+  "mcpServers": {
+    "Todoist 演示": {
+      "url": "https://todoist.example.com/mcp"
+    }
+  }
+}</textarea>
+        <button type="button" class="soft-button mcp-import" data-mcp-apply>应用配置</button>
+        <label hidden>选择要导入的服务<select name="server"></select></label>
+      </div>
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-name">连接名称</label>
+        <input id="custom-mcp-name" name="connectionName" required>
+      </div>
+      <div class="custom-mcp-field">
+        <label for="custom-mcp-address">服务地址</label>
+        <div class="mcp-address">
+          <input id="custom-mcp-address" name="address" type="password" inputmode="url" placeholder="https://example.com/mcp" autocomplete="off" required>
+          <button type="button" class="mcp-icon-button" data-mcp-visibility aria-label="显示服务地址" aria-pressed="false">◉</button>
+        </div>
+      </div>
+      <fieldset>
+        <legend>认证方式</legend>
+        <div class="custom-mcp-options">
+          <label><input type="radio" name="auth" value="browser" checked>浏览器授权</label>
+          <label><input type="radio" name="auth" value="address">连接地址 / 凭证</label>
+        </div>
+      </fieldset>
+      <p class="mcp-hint" data-mcp-auth-hint></p>
+      <fieldset class="custom-mcp-headers" data-mcp-headers hidden>
+        <legend>请求头（选填）</legend>
+        <div class="custom-mcp-header-list" data-mcp-header-list></div>
+        <button type="button" class="soft-button" data-mcp-add-header>＋ 添加请求头</button>
+      </fieldset>
+      <template id="custom-mcp-header-template">
+        <div class="custom-mcp-header-row">
+          <input aria-label="请求头名称" placeholder="请求头名称" autocomplete="off">
+          <div class="mcp-address">
+            <input type="password" aria-label="请求头值" placeholder="请求头值" autocomplete="off">
+            <button type="button" class="mcp-icon-button" data-header-visibility aria-label="显示请求头值" aria-pressed="false">◉</button>
+          </div>
+          <button type="button" class="mcp-icon-button" data-header-remove aria-label="删除请求头">⌫</button>
+        </div>
+      </template>
+      <fieldset aria-label="服务地区">
+        <div class="custom-mcp-options">
+          <label><input type="radio" name="region" value="global" checked>国际</label>
+          <label><input type="radio" name="region" value="cn">国内</label>
+        </div>
+      </fieldset>
+      <p class="mcp-error" role="alert" hidden></p>
+    </div>
+    <footer>
+      <button type="button" class="soft-button" data-mcp-close>取消</button>
+      <button type="submit" class="primary-button">添加并授权</button>
+    </footer>
+  </form>
+</dialog>
+<dialog id="mcp-remove-dialog" class="skill-uninstall-dialog" aria-labelledby="mcp-remove-title" aria-describedby="mcp-remove-copy">
+  <form method="dialog">
+    <h3 id="mcp-remove-title"></h3>
+    <p id="mcp-remove-copy">移除后，此连接将从应用连接中断开。</p>
+    <footer>
+      <button class="soft-button" value="cancel" autofocus>取消</button>
+      <button class="danger-button" value="remove">确认</button>
+    </footer>
+  </form>
+</dialog>
+<script>
+document.querySelector('#mcp-remove-dialog').addEventListener('close', event => {
+  const remove = pendingMcpRemoval;
+  pendingMcpRemoval = undefined;
+  if (event.currentTarget.returnValue === 'remove') remove?.();
+});
+</script>
+<script src="assets/phase2-small-custom-mcp.js?v=json-import"></script>
+<script src="assets/phase2-small-skills-list.js?v=skills-shared-filters"></script>
+<link rel="stylesheet" href="assets/phase2-small-api-reference.css?v=shared-model-settings">
+<script src="assets/phase2-small-api-reference.js?v=shared-model-settings"></script>
 </body>
 </html>

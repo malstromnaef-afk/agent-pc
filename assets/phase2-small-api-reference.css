@@ -1,4 +1,5 @@
-#screen-config :is([data-config-panel="api"],[data-config-panel="system"]) > :not(.x3-reference) {
+#screen-config [data-config-panel="api"]:has(> .x3-reference) > :not(.x3-reference),
+#screen-config [data-config-panel="system"]:not([data-x3-keep-system]) > :not(.x3-reference) {
   display: none !important;
 }
 .x3-reference {

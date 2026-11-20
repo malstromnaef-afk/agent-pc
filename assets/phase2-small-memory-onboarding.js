@@ -169,7 +169,7 @@
     shownThisVisit = true;
     closeAll();
     setActiveTab('memory');
-    window.phase2SmallMemoryPreview.createMemory();
+    window.phase2SmallMemoryPreview.createMemory({chooseFile:true});
   });
   $('#pmo-submit').addEventListener('click',async () => {
     if(context === 'settings' || busy || (!saved.authorized && !Object.keys(sources).some(id => draft[id])))return;

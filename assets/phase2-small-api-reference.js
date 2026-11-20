@@ -138,17 +138,24 @@
         <div class="x3-save-row"><button type="submit" class="soft-button" value="cancel" autofocus>取消</button><button type="submit" class="x3-danger" value="confirm">确认</button></div>
       </form>
     </dialog>`;
+  const syncCard = `<div class="x3-card x3-row"><div><strong>大小屏同步</strong><small>开启后，大屏切换菜单小屏同步切换。</small></div>${toggle('sync', '大小屏同步')}</div>`;
   const system = document.createElement('div');
   system.className = 'x3-reference';
-  system.innerHTML = `
-    <div role="tabpanel" aria-label="系统设置">
-      <div class="x3-card x3-row"><label for="p2-interface-language"><strong>语言偏好</strong></label><span data-x3-language></span></div>
-      <div class="x3-card x3-row"><div><strong>大小屏同步</strong><small>开启后，大屏切换菜单小屏同步切换。</small></div>${toggle('sync', '大小屏同步')}</div>
-    </div>`;
-  language.querySelector('option[value="zh-CN"]').textContent = '中文';
-  system.querySelector('[data-x3-language]').replaceWith(language);
+  if (systemPanel.hasAttribute('data-x3-keep-system')) {
+    system.classList.add('x3-screen-sync');
+    system.innerHTML = syncCard;
+    language.closest('.p2-interface-card').after(system);
+  } else {
+    system.innerHTML = `
+      <div role="tabpanel" aria-label="系统设置">
+        <div class="x3-card x3-row"><label for="p2-interface-language"><strong>语言偏好</strong></label><span data-x3-language></span></div>
+        ${syncCard}
+      </div>`;
+    language.querySelector('option[value="zh-CN"]').textContent = '中文';
+    system.querySelector('[data-x3-language]').replaceWith(language);
+    systemPanel.append(system);
+  }
   apiPanel.append(api);
-  systemPanel.append(system);
 
   const llm = api.querySelector('[data-x3-model="llm"]');
   const modelDialog = api.querySelector('.x3-model-dialog');
