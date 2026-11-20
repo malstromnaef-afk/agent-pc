@@ -623,7 +623,7 @@
     const m=isNew?{title:'',content:'',category:''}:current();if(!m)return;
     draft={mode:'edit',fromFileMemory,id:isNew?null:m.id,attachments:(m.sourceFiles||[]).map(file=>({...file})),pending:[],statuses:[],busy:false,saving:false};
     showDialog(`<header class="pm-memory-dialog-header">
-      <h3 id="pm-dialog-title">${isNew?'新建记忆':'修改记忆'}</h3>
+      <h3 id="pm-dialog-title">${fromFileMemory?'导入记忆':isNew?'新建记忆':'修改记忆'}</h3>
       ${dialogCloseButton}
     </header>
     <form id="pm-form" data-edit-id="${isNew?'':esc(m.id)}">
@@ -653,7 +653,7 @@
             <p class="pm-paste-status" role="status" hidden></p>
           </div>
           <div class="pm-paste-card">
-            <div class="pm-paste-heading"><span class="pm-paste-step" aria-hidden="true">2</span><h4>将结果粘贴到下方</h4></div>
+            <div class="pm-paste-heading"><span class="pm-paste-step" aria-hidden="true">2</span><h4>粘贴记忆到记忆库</h4></div>
             <textarea class="pm-paste-input" name="content" aria-label="记忆内容" required placeholder="在此粘贴你的记忆"></textarea>
           </div>
         </section>`:`<label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>`}
