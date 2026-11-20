@@ -595,7 +595,7 @@
       }
     });
   }
-  function editor(isNew, back=null) {
+  function editor(isNew, back=null, showImport=!isNew) {
     const m=isNew?{title:'',content:'',category:''}:current();if(!m)return;
     draft={mode:'edit',id:isNew?null:m.id,attachments:(m.sourceFiles||[]).map(file=>({...file})),pending:[],statuses:[],busy:false,saving:false};
     showDialog(`<header class="pm-memory-dialog-header">
@@ -621,11 +621,11 @@
         </div>
         <label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>
         <div>
-          ${isNew?'':`<div class="pm-memory-import-row">
+          ${showImport?`<div class="pm-memory-import-row">
             <button type="button" class="pm-button" data-pm-action="choose-memory-files" aria-describedby="pm-memory-import-hint">导入资料</button>
             <span id="pm-memory-import-hint">仅支持 Markdown（.md）</span>
-          </div>`}
-          <input type="file" data-pm-file-input accept=".md" multiple hidden>
+            <input type="file" data-pm-file-input accept=".md" multiple hidden>
+          </div>`:''}
           <div data-pm-attachments></div>
           <div data-pm-import-status role="status"></div>
         </div>
@@ -969,10 +969,9 @@
     }
   };
   window.phase2SmallMemoryPreview={
-    createMemory({chooseFile=false}={}){
+    openFileMemoryEditor(){
       returnFocus=()=>root.querySelector('#pm-search');
-      editor(true);
-      if(chooseFile)dialogContent.querySelector('[data-pm-file-input]').click();
+      editor(true,null,true);
     },
     set(enabled){state.preview=enabled;persist();renderPreview();},
     hasChat(platform){return state.items.some(item=>item.sourceType==='im'&&item.source===platform);},

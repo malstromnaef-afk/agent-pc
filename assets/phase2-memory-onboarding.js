@@ -168,7 +168,7 @@
     closeAll();
     setActiveTab('memory');
     shownThisVisit = true;
-    window.phase2SmallMemoryPreview.createMemory({chooseFile:true});
+    window.phase2SmallMemoryPreview.openFileMemoryEditor();
   });
   $('#pmo-submit').addEventListener('click',async () => {
     if(context === 'settings' || busy || (!saved.authorized && !Object.keys(sources).some(id => draft[id])))return;
