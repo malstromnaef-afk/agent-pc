@@ -595,7 +595,31 @@
       }
     });
   }
-  function editor(isNew, back=null, showImport=!isNew) {
+  const fileMemoryPrompt = `请帮我整理一份我的个人使用画像，用途是让我在不同 AI 工具之间保持一致的协作体验。请基于你当前能访问到的、与我相关的长期信息和本次会话上下文进行整理。在涉及我的指令和偏好时，请尽量保留我原本的表述方式，不要过度改写。
+
+分类（按以下顺序输出）
+指令：我明确要求遵循的规则，包括语气、格式、风格、"始终做 X"、"绝不做 Y" 以及对助手行为的纠正。仅整理可从长期记忆中明确识别并客观存在的规则，不临时新增、不强加、不脑补未明确提出的要求。
+
+身份：姓名、年龄、所在地、教育背景、家庭、人际关系、语言能力和个人兴趣（仅包含我主动分享过的非敏感信息，不输出证件号、联系方式、账号等隐私数据）。
+
+职业：当前和过往的职位、公司以及主要技能领域。
+
+项目：我实际参与构建或投入精力的项目。每个项目一条。包含项目功能、当前状态以及关键决策。以项目名称或简短描述作为条目开头。
+
+偏好：广泛适用的观点、品味和工作风格偏好。
+
+格式
+使用分类标题作为每个类别的节标题。每个类别内，每行一条记录，按日期从早到晚排列。每行格式：
+
+[YYYY-MM-DD] - 条目内容
+
+如果日期未知，使用 [unknown] 代替。
+
+输出
+将整个画像包裹在一个代码块中，方便我复制。
+代码块之后，简要说明：这是否已覆盖你当前能整理出的全部相关信息；若还有未纳入的维度或你不确定的条目，请列出来，由我判断是否补充。`;
+
+  function editor(isNew, back=null, fromFileMemory=false) {
     const m=isNew?{title:'',content:'',category:''}:current();if(!m)return;
     draft={mode:'edit',id:isNew?null:m.id,attachments:(m.sourceFiles||[]).map(file=>({...file})),pending:[],statuses:[],busy:false,saving:false};
     showDialog(`<header class="pm-memory-dialog-header">
@@ -619,9 +643,22 @@
             </div>
           </div>
         </div>
-        <label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>
+        ${fromFileMemory?`<section class="pm-paste-section" aria-label="导入其他记忆">
+          <div class="pm-paste-card">
+            <div class="pm-paste-heading">
+              <h4><span aria-hidden="true">1</span>复制以下提示词到其他 AI 对话中</h4>
+              <button type="button" class="pm-button" data-pm-action="copy-memory-prompt">复制</button>
+            </div>
+            <pre class="pm-paste-prompt" tabindex="0" aria-label="记忆整理提示词">${esc(fileMemoryPrompt)}</pre>
+            <p class="pm-paste-status" role="status" hidden></p>
+          </div>
+          <div class="pm-paste-card">
+            <div class="pm-paste-heading"><h4><span aria-hidden="true">2</span>将结果粘贴到下方</h4></div>
+            <div class="pm-field pm-paste-field"><textarea name="content" aria-label="记忆内容" required placeholder="在此粘贴你的记忆"></textarea></div>
+          </div>
+        </section>`:`<label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>`}
         <div>
-          ${showImport?`<div class="pm-memory-import-row">
+          ${!isNew?`<div class="pm-memory-import-row">
             <button type="button" class="pm-button" data-pm-action="choose-memory-files" aria-describedby="pm-memory-import-hint">导入资料</button>
             <span id="pm-memory-import-hint">仅支持 Markdown（.md）</span>
             <input type="file" data-pm-file-input accept=".md" multiple hidden>
@@ -792,6 +829,24 @@
       target.focus({preventScroll:true});
     }
   }
+  async function copyMemoryPrompt(button) {
+    const card=button.closest('.pm-paste-card');
+    const status=card.querySelector('[role="status"]');
+    try {
+      await navigator.clipboard.writeText(fileMemoryPrompt);
+      status.textContent='已复制提示词';
+    } catch (_) {
+      const prompt=card.querySelector('.pm-paste-prompt');
+      prompt.focus();
+      const range=document.createRange();
+      range.selectNodeContents(prompt);
+      const selection=window.getSelection();
+      selection.removeAllRanges();
+      selection.addRange(range);
+      status.textContent='提示词已选中，请手动复制。';
+    }
+    status.hidden=false;
+  }
   async function previewEditorFile(button) {
     const preview=button.nextElementSibling;
     if(!preview.hidden){preview.hidden=true;return;}
@@ -850,6 +905,7 @@
       case 'import':importDialog();break;
       case 'collapse-library':state.libraryCollapsed=true;render();$m('[data-pm-action="expand-library"]').focus();break;
       case 'expand-library':state.libraryCollapsed=false;render();$m('[data-pm-action="collapse-library"]').focus();break;
+      case 'copy-memory-prompt':copyMemoryPrompt(button);break;
       case 'preview-editor-file':previewEditorFile(button);break;
       case 'choose-memory-files':$m('[data-pm-file-input]').click();break;
       case 'remove-memory-file':if(draft&&!draft.busy&&!draft.saving){draft.attachments=draft.attachments.filter(file=>file.id!==button.dataset.fileId);draft.pending=draft.pending.filter(file=>file.id!==button.dataset.fileId);draft.statuses=[{name:'来源已移除',message:'文字内容保留，可自行修改。'}];renderAttachments();}break;

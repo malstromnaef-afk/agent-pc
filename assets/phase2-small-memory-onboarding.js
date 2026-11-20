@@ -23,7 +23,7 @@
   } catch (_) {}
   const sources = {
     conversation:['Agent对话记忆','记住工作背景与偏好','conversation.svg'],
-    files:['文件记忆','导入 Markdown（.md）资料到记忆库','folder.svg']
+    files:['文件记忆','粘贴其他 AI 整理的内容到记忆库','folder.svg']
   };
   const apps = [['feishu','飞书','feishu.png'],['dingtalk','钉钉','dingtalk.png'],['wecom','企业微信','wecom.png'],['wechat','个人微信','wechat.png']];
   const agents = [['workbuddy','WorkBuddy','workbuddy.png'],['trae','TRAE IDE 国内版','trae-cn.png'],['codex','Codex','codex.png']];
