@@ -58,6 +58,11 @@
       state.items=saved.items.map(withoutLegacyCore);state.selected=saved.selected;state.preview=saved.preview!==false;
     }
   } catch (_) { storageWarning=true; }
+  const folderTitles = new Map();
+  try {
+    const savedTitles=JSON.parse(phase2Storage.getItem('memory-folder-titles-v1')||'[]');
+    for(const [key,title] of savedTitles)if(isCategory(key)&&typeof title==='string'&&title.trim())folderTitles.set(key,title);
+  } catch (_) {}
   const openDirectories = new Set([state.items[0]?.category??'']);
   const categoryOptions=()=>[...new Set(state.items.map(item=>item.category).filter(Boolean))];
   const existingCategory=label=>categoryOptions().find(key=>categoryLabel(key).toLowerCase()===label.toLowerCase());
@@ -110,7 +115,7 @@
   const isReading = (memoryId,fileId) => state.reader?.memoryId===memoryId&&state.reader.fileId===fileId;
   const fileIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9zM14 3v6h6"/></svg>';
   const folderIcon='<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h5l2 2h7a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
-  const directoryLabel = key => categoryLabel(key)||uncategorizedLabel;
+  const directoryLabel = key => folderTitles.get(key)||categoryLabel(key)||uncategorizedLabel;
   function directoryFiles(memory) {
     const files=filesFor(memory);
     return files.length?files:[{id:'',name:memory.title}];
@@ -125,52 +130,170 @@
     }
     return ids;
   }
+  function editTreeName(id) {
+    const item=state.items.find(item=>item.id===id);
+    const button=root.querySelector(`[data-tree-id="${CSS.escape(id)}"] .pm-row-file`);
+    if(!item||!button)return;
+    const row=button.closest('[data-tree-id]');
+    row.draggable=false;
+    editListTitle(button,button.querySelector('svg'),item.nodeType==='folder'?'文件夹名称':'文档名称',80,title=>{
+      if(title)item.title=title;
+      persist();
+    });
+  }
+  function editDirectoryName(summary) {
+    const key=summary.parentElement.dataset.pmDirectory;
+    const title=summary.querySelector('[data-directory-name]');
+    if(!title)return;
+    const icon=summary.querySelector('svg');
+    icon.hidden=true;
+    editListTitle(title,icon,'文件夹名称',categoryLimit,name=>{
+      if(!name||name===directoryLabel(key))return;
+      const titles=new Map(folderTitles).set(key,name);
+      try {
+        phase2Storage.setItem('memory-folder-titles-v1',JSON.stringify([...titles]));
+        folderTitles.set(key,name);
+      } catch (_) {notice('本地存储不可用，文件夹名称未修改。');}
+    });
+  }
+  function editListTitle(label,icon,accessibleName,maxLength,onSave) {
+    const input=document.createElement('input');
+    input.className='pm-tree-name-input';
+    const title=label.textContent.trim();
+    input.value=/^(未命名|无标题)(文档|文件夹)$/.test(title)?'':title;
+    input.placeholder='请输入标题';
+    input.maxLength=maxLength;
+    input.setAttribute('aria-label',accessibleName);
+    const field=document.createElement('div');
+    field.className='pm-tree-name-field';
+    const fieldIcon=icon.cloneNode(true);
+    fieldIcon.removeAttribute('hidden');
+    field.append(fieldIcon,input);
+    label.replaceWith(field);
+    input.focus();
+    input.select();
+    let finished=false;
+    function finish(cancel=false) {
+      if(finished)return;finished=true;
+      if(!cancel)onSave(input.value.trim());
+      render();
+    }
+    input.addEventListener('click',event=>event.stopPropagation());
+    input.addEventListener('keydown',event=>{
+      event.stopPropagation();
+      if(event.key==='Enter'){event.preventDefault();finish();}
+      if(event.key==='Escape'){event.preventDefault();finish(true);}
+    });
+    input.addEventListener('blur',()=>finish());
+  }
   function directoryEntries(memory, depth=0) {
     const children = state.items.filter(item=>item.parentId===memory.id);
     const open = expandedFiles.has(memory.id)||Boolean(state.search);
     const file = directoryFiles(memory)[0];
-    return `<div class="pm-directory-entry pm-tree-row" data-tree-id="${esc(memory.id)}" draggable="true" style="padding-left:${depth*18}px">
+    const isFolder=memory.nodeType==='folder';
+    return `<div class="pm-directory-entry pm-tree-row${isFolder?' pm-tree-folder':''}" data-tree-id="${esc(memory.id)}" draggable="true" style="padding-left:${depth*18}px">
       <button type="button" class="pm-tree-toggle" data-tree-toggle="${esc(memory.id)}" aria-label="${open?'收起':'展开'}子文件" aria-expanded="${open}" ${children.length?'':'disabled'}>${children.length?(open?'⌄':'›'):''}</button>
-      <button type="button" class="pm-row-file" data-pm-action="read-file" data-reader-memory-id="${esc(memory.id)}" data-file-id="${esc(file.id)}" title="${esc(memory.title)}">${fileIcon}<span>${esc(file.name)}</span></button>
-      <div class="pm-tree-actions"><button type="button" data-tree-menu="${esc(memory.id)}" aria-label="更多操作：${esc(memory.title)}">⋯</button><button type="button" data-tree-add="${esc(memory.id)}" aria-label="新增子文件：${esc(memory.title)}">＋</button></div></div>${open?children.map(child=>directoryEntries(child,depth+1)).join(''):''}`;
+      <button type="button" class="pm-row-file" data-pm-action="read-file" data-reader-memory-id="${esc(memory.id)}" data-file-id="${esc(file.id)}" title="${esc(memory.title)}">${isFolder?folderIcon:fileIcon}<span>${esc(isFolder?memory.title:file.name)}</span></button>
+      <div class="pm-tree-actions"><button type="button" data-tree-add="${esc(memory.id)}" aria-label="新增子文件：${esc(memory.title)}">＋</button><button type="button" data-tree-menu="${esc(memory.id)}" aria-label="更多操作：${esc(memory.title)}">⋯</button></div></div>${children.length?`<div class="pm-tree-children" ${open?'':'hidden'}>${children.map(child=>directoryEntries(child,depth+1)).join('')}</div>`:''}`;
   }
   const treeMenu=document.createElement('div');
   treeMenu.className='pm-tree-menu';treeMenu.hidden=true;treeMenu.setAttribute('role','menu');document.body.append(treeMenu);
   let menuId=null, draggingId=null;
   function showTreeMenu(id,x,y) {
-    menuId=id;treeMenu.innerHTML='<button type="button" role="menuitem" data-tree-command="rename">✎　重命名</button><button type="button" role="menuitem" data-tree-command="delete">♲　删除</button>';
+    delete treeMenu.dataset.folder;menuId=id;treeMenu.innerHTML='<button type="button" role="menuitem" data-tree-command="rename">✎　重命名</button><button type="button" role="menuitem" data-tree-command="delete">♲　删除</button>';
     treeMenu.hidden=false;treeMenu.style.left=Math.max(8,Math.min(x,innerWidth-180))+'px';treeMenu.style.top=Math.max(8,Math.min(y,innerHeight-110))+'px';treeMenu.querySelector('button').focus();
   }
   document.addEventListener('pointerdown',event=>{if(!treeMenu.contains(event.target))treeMenu.hidden=true;});
   document.addEventListener('keydown',event=>{if(event.key==='Escape')treeMenu.hidden=true;});
   treeMenu.addEventListener('click',event=>{
     const command=event.target.closest('[data-tree-command]')?.dataset.treeCommand;
+    if(command && Object.hasOwn(treeMenu.dataset,'folder')){
+      const category=treeMenu.dataset.folder;treeMenu.hidden=true;
+      manageCategory(category,command,()=>render());return;
+    }
     const item=state.items.find(item=>item.id===menuId);if(!command||!item)return;
     treeMenu.hidden=true;state.selected=item.id;
     if(command==='rename') {
-      showDialog(`<h3 id="pm-dialog-title">重命名</h3><form data-tree-rename="${esc(item.id)}"><label class="pm-field">名称<input name="title" value="${esc(item.title)}" maxlength="80" required autofocus></label><div class="pm-dialog-actions"><button type="button" class="pm-button" data-pm-action="close-dialog">取消</button><button type="submit" class="pm-button pm-primary">确定</button></div></form>`);
+      editTreeName(item.id);
     } else {
       root.querySelector('[data-tree-id="'+CSS.escape(item.id)+'"] .pm-row-file')?.focus();
       showDialog(`<h3 id="pm-dialog-title">删除文件</h3><p>删除「${esc(item.title)}」及其全部子文件？</p><div class="pm-dialog-actions"><button class="pm-button" data-pm-action="close-dialog">取消</button><button class="pm-button pm-primary" data-pm-action="confirm-delete" data-delete-id="${esc(item.id)}">删除</button></div><p id="pm-delete-error" role="alert" hidden></p>`);
     }
   });
-  root.addEventListener('submit',event=>{
-    if(!event.target.matches('[data-tree-rename]'))return;
-    event.preventDefault();event.stopImmediatePropagation();
-    const item=state.items.find(item=>item.id===event.target.dataset.treeRename);const title=new FormData(event.target).get('title').trim();if(!title||!item)return;
-    item.title=title;persist();closeDialog();render();
-  },true);
+  function createTreeEntry({category='', parentId, rootFolder=false}={}) {
+    const item={
+      id:'m-'+crypto.randomUUID(), category, parentId,
+      nodeType:rootFolder?'folder':'document',
+      title:rootFolder?'无标题文件夹':'无标题文档',
+      content:'', related:[], source:'手动添加',
+      updated:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date())
+    };
+    if(rootFolder)item.rootFolder=true;
+    state.items.push(item);
+    state.selected=item.id;
+    state.search='';
+    $m('#pm-search').value='';
+    if(parentId)expandedFiles.add(parentId);
+    if(!rootFolder){
+      const parent=state.items.find(entry=>entry.id===parentId);
+      const inRootFolder=state.items.some(folder=>folder.rootFolder&&parent&&descendants(folder.id).has(parent.id));
+      if(!inRootFolder)openDirectories.add(category);
+    }
+    persist();
+    render();
+  }
   root.addEventListener('click',event=>{
+    const folderFile=event.target.closest('.pm-row-file');
+    const folderItem=folderFile&&state.items.find(item=>item.id===folderFile.dataset.readerMemoryId&&item.nodeType==='folder');
+    if(folderItem){
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const row=folderFile.closest('[data-tree-id]');
+      const children=row.nextElementSibling;
+      if(state.search||!children?.classList.contains('pm-tree-children'))return;
+      const open=children.hidden;
+      children.hidden=!open;
+      if(open)expandedFiles.add(folderItem.id);
+      else expandedFiles.delete(folderItem.id);
+      const toggle=row.querySelector('[data-tree-toggle]');
+      toggle.textContent=open?'⌄':'›';
+      toggle.setAttribute('aria-expanded',String(open));
+      toggle.setAttribute('aria-label',open?'收起子文件':'展开子文件');
+      return;
+    }
     const add=event.target.closest('[data-tree-add]'), toggle=event.target.closest('[data-tree-toggle]'), more=event.target.closest('[data-tree-menu]');
     if(!add&&!toggle&&!more)return;event.preventDefault();event.stopImmediatePropagation();
     if(toggle){const id=toggle.dataset.treeToggle;expandedFiles.has(id)?expandedFiles.delete(id):expandedFiles.add(id);render();}
     if(more){const rect=more.getBoundingClientRect();showTreeMenu(more.dataset.treeMenu,rect.left,rect.bottom);}
     if(add){
       const parent=state.items.find(item=>item.id===add.dataset.treeAdd);
-      const item={id:'m-'+crypto.randomUUID(),parentId:parent.id,category:parent.category,title:'未命名文档',content:'',related:[],source:'手动添加',updated:new Date().toISOString().slice(0,10)};
-      state.items.push(item);state.selected=item.id;expandedFiles.add(parent.id);persist();render();showTreeMenu(item.id,0,0);treeMenu.querySelector('[data-tree-command="rename"]').click();
+      if(parent)createTreeEntry({category:parent.category,parentId:parent.id});
     }
   },true);
+  root.addEventListener('click',event=>{
+    const add=event.target.closest('[data-folder-add]'),more=event.target.closest('[data-folder-menu]');
+    const rootAdd=event.target.closest('[data-root-folder-add]');
+    if(!add&&!more&&!rootAdd)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    if(rootAdd){
+      createTreeEntry({rootFolder:true});
+    }else if(add){
+      const category=add.dataset.folderAdd;
+      createTreeEntry({category});
+    }else{
+      const category=more.dataset.folderMenu;
+      const rect=more.getBoundingClientRect();showTreeMenu(null,rect.left,rect.bottom);treeMenu.dataset.folder=category;
+    }
+  },true);
+  root.addEventListener('dblclick',event=>{
+    if(event.target.closest('.pm-folder-actions,.pm-tree-actions,.pm-tree-toggle,.pm-tree-name-field'))return;
+    const directory=event.target.closest('.pm-directory-label');
+    const fileRow=event.target.closest('.pm-tree-row');
+    if(!directory&&!fileRow)return;
+    event.preventDefault();
+    if(directory)editDirectoryName(directory);
+    else editTreeName(fileRow.dataset.treeId);
+  });
   root.addEventListener('contextmenu',event=>{const row=event.target.closest('[data-tree-id]');if(!row)return;event.preventDefault();showTreeMenu(row.dataset.treeId,event.clientX,event.clientY);});
   root.addEventListener('dragstart',event=>{const row=event.target.closest('[data-tree-id]');if(!row)return;draggingId=row.dataset.treeId;event.dataTransfer.setData('text/plain',draggingId);event.dataTransfer.effectAllowed='move';treeMenu.hidden=true;});
   function clearDrop(){root.querySelectorAll('[data-drop]').forEach(row=>delete row.dataset.drop);}
@@ -190,6 +313,7 @@
     const family=descendants(moving.id);
     moving.parentId=other?(mode==='inside'?other.id:other.parentId):undefined;
     const category=other?other.category:target.parentElement.dataset.pmDirectory;
+    moving.rootFolder=Boolean(moving.nodeType==='folder'&&other?.rootFolder&&mode!=='inside');
     for(const item of state.items)if(family.has(item.id))item.category=category;
     state.items=state.items.filter(item=>item.id!==moving.id);
     const index=other?state.items.findIndex(item=>item.id===other.id)+(mode==='after'?1:0):state.items.length;
@@ -199,17 +323,20 @@
   root.addEventListener('dragend',()=>{draggingId=null;clearDrop();});
   function renderDirectory(list) {
     const groups=new Map();
+    const rootFolders=list.filter(item=>item.rootFolder&&!item.parentId);
+    const rootFolderMembers=new Set(rootFolders.flatMap(folder=>[...descendants(folder.id)]));
     for(const memory of list){
+      if(rootFolderMembers.has(memory.id))continue;
       if(!groups.has(memory.category))groups.set(memory.category,[]);
       groups.get(memory.category).push(memory);
     }
     const other=groups.get('')||[];
     groups.delete('');
     if(other.length||!state.search)groups.set('',other);
-    $m('#pm-memory-list').innerHTML=[...groups].map(([key,items])=>`<details class="pm-directory" data-pm-directory="${esc(key)}" ${state.search||openDirectories.has(key)?'open':''}>
-      <summary class="pm-directory-label" title="${esc(directoryLabel(key))}">${folderIcon}<span>${esc(directoryLabel(key))}</span></summary>
-      <div class="pm-directory-files">${items.length?items.filter(item=>!state.items.some(parent=>parent.id===item.parentId)).map(item=>directoryEntries(item)).join(''):'<div class="pm-empty">暂无记忆</div>'}</div>
-    </details>`).join('')||'<div class="pm-empty">暂无匹配记忆</div>';
+    $m('#pm-memory-list').innerHTML=[...groups].map(([key,items])=>`<details class="pm-directory" data-pm-directory="${esc(key)}" ${items.length&&(state.search||openDirectories.has(key))?'open':''} ${items.length?'':'data-empty-directory'}>
+      <summary class="pm-directory-label" title="${esc(directoryLabel(key))}">${folderIcon}<span data-directory-name>${esc(directoryLabel(key))}</span><span class="pm-folder-actions"><button type="button" data-folder-add="${esc(key)}" aria-label="新增文档：${esc(directoryLabel(key))}">＋</button><button type="button" data-folder-menu="${esc(key)}" aria-label="更多操作：${esc(directoryLabel(key))}">⋯</button></span></summary>
+      ${items.length?`<div class="pm-directory-files">${items.filter(item=>!state.items.some(parent=>parent.id===item.parentId)).map(item=>directoryEntries(item)).join('')}</div>`:''}
+    </details>`).join('')+rootFolders.map(folder=>directoryEntries(folder)).join('')||'<div class="pm-empty">暂无匹配记忆</div>';
   }
   function renderPreview() {
     const preview=$m('.pm-preview[data-subscreen-preview="memory"]');
@@ -679,6 +806,7 @@
     const directory=e.target.closest('.pm-directory-label')?.parentElement;
     if(directory){
       e.preventDefault();
+      if(directory.hasAttribute('data-empty-directory'))return;
       directory.open=!directory.open;
       if(!state.search){
         if(directory.open)openDirectories.add(directory.dataset.pmDirectory);

@@ -10291,7 +10291,7 @@ display:flex;align-items:center;gap:16px}
                 <aside class="pm-library"><button type="button" class="pm-library-restore" data-pm-action="expand-library" aria-label="展开记忆列表" title="展开记忆列表">»</button>
                   <div class="pm-memory-library">
                   <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆标题或内容" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
-                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
+                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-new" data-root-folder-add aria-label="新建文件夹" title="新建文件夹">＋</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
                   <nav id="pm-memory-list" class="pm-memory-list" aria-label="记忆目录"></nav>
                   </div>
 
@@ -20453,10 +20453,22 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-small-memory-import.js"></script>
-    <script src="assets/phase2-small-memory.js?v=20261120-tree-style-fix"></script>
+    <script src="assets/phase2-small-memory.js?v=20261120-folder-dblclick"></script>
     <script src="assets/phase2-small-settings.js?v=20261102-small-scope"></script>
     <script src="assets/phase2-small-assistant.js?v=20261102-small-scope"></script>
     <style>
+      #memory [data-empty-directory] > .pm-directory-label::before{visibility:hidden}
+      #memory .pm-directory-label > svg[hidden]{display:none}
+      #memory .pm-directory-label{display:flex;align-items:center}
+      #memory .pm-directory-label>span:not(.pm-folder-actions){flex:1}
+      #memory .pm-directory-label>.pm-folder-actions{display:flex;flex:none;margin-left:auto;visibility:hidden;overflow:visible}
+      #memory .pm-directory-label:hover>.pm-folder-actions,#memory .pm-directory-label:focus-within>.pm-folder-actions{visibility:visible}
+      .pm-folder-actions button{width:23px;height:27px;padding:0;border:0;background:transparent;color:inherit;font-size:18px;cursor:pointer;border-radius:5px}
+      .pm-folder-actions button:hover{background:#ffffff15}
+      #memory .pm-tree-folder .pm-row-file,#memory .pm-tree-folder .pm-tree-name-field{color:#c5d4db;font-size:12px;font-weight:550}
+      #memory .pm-tree-name-field{display:flex;align-items:center;gap:7px;flex:1;min-width:0;padding:4px 7px;border:1px solid #00cbd4;border-radius:7px;background:#152026}
+      #memory .pm-tree-name-field svg{width:13px;height:13px;flex:none;fill:none;stroke:currentColor;stroke-width:1.7}
+      #memory .pm-tree-name-input{width:0;flex:1;min-width:0;padding-left:7px;border:0;border-left:1px solid #536372;border-radius:0;outline:none;box-shadow:none;background:transparent;color:inherit;font:inherit}
       .pm-tree-row{display:flex;align-items:center;min-height:29px;border-radius:6px;gap:2px}
       .pm-tree-row:hover,.pm-tree-row:focus-within{background:#ffffff10}
       .pm-tree-row .pm-row-file{flex:1;min-width:0}
@@ -20483,7 +20495,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       .pmo-im-chats small{margin-left:auto;color:var(--pmo-muted)}
       .pmo-im-form .pmo-back{justify-self:start}
     </style>
-    <script src="assets/phase2-small-memory-onboarding.js?v=20261120-tree-style-fix"></script>
+    <script src="assets/phase2-small-memory-onboarding.js?v=20261120-inline-title"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
   <script>
 // Composer selections are demonstration metadata; no files are uploaded.
