@@ -115,14 +115,88 @@
     const files=filesFor(memory);
     return files.length?files:[{id:'',name:memory.title}];
   }
-  function directoryEntries(memory) {
-    const actions=[['edit','修改'],['delete','删除']].map(([action,label])=>
-      `<button type="button" class="pm-row-icon ${action==='delete'?'pm-row-delete':''}" data-pm-action="${action}" data-memory-id="${esc(memory.id)}" aria-label="${label}：${esc(memory.title)}" title="${label}记忆">${icons[action]}</button>`).join('');
-    return directoryFiles(memory).map((file,index)=>`<div class="pm-directory-entry">
-      <button type="button" class="pm-row-file" data-pm-action="read-file" data-reader-memory-id="${esc(memory.id)}" data-file-id="${esc(file.id)}" aria-current="${isReading(memory.id,file.id)}" title="${esc(file.name)}">${fileIcon}<span>${esc(file.name)}</span></button>
-      ${index===0?`<div class="pm-row-actions">${actions}</div>`:''}
-    </div>`).join('');
+  const expandedFiles = new Set();
+  function descendants(id) {
+    const ids = new Set([id]);
+    let changed = true;
+    while (changed) {
+      changed = false;
+      for (const item of state.items) if (ids.has(item.parentId) && !ids.has(item.id)) { ids.add(item.id); changed = true; }
+    }
+    return ids;
   }
+  function directoryEntries(memory, depth=0) {
+    const children = state.items.filter(item=>item.parentId===memory.id);
+    const open = expandedFiles.has(memory.id)||Boolean(state.search);
+    const file = directoryFiles(memory)[0];
+    return `<div class="pm-directory-entry pm-tree-row" data-tree-id="${esc(memory.id)}" draggable="true" style="padding-left:${depth*18}px">
+      <button type="button" class="pm-tree-toggle" data-tree-toggle="${esc(memory.id)}" aria-label="${open?'收起':'展开'}子文件" aria-expanded="${open}" ${children.length?'':'disabled'}>${children.length?(open?'⌄':'›'):''}</button>
+      <button type="button" class="pm-row-file" data-pm-action="read-file" data-reader-memory-id="${esc(memory.id)}" data-file-id="${esc(file.id)}" title="${esc(memory.title)}">${fileIcon}<span>${esc(file.name)}</span></button>
+      <div class="pm-tree-actions"><button type="button" data-tree-menu="${esc(memory.id)}" aria-label="更多操作：${esc(memory.title)}">⋯</button><button type="button" data-tree-add="${esc(memory.id)}" aria-label="新增子文件：${esc(memory.title)}">＋</button></div></div>${open?children.map(child=>directoryEntries(child,depth+1)).join(''):''}`;
+  }
+  const treeMenu=document.createElement('div');
+  treeMenu.className='pm-tree-menu';treeMenu.hidden=true;treeMenu.setAttribute('role','menu');document.body.append(treeMenu);
+  let menuId=null, draggingId=null;
+  function showTreeMenu(id,x,y) {
+    menuId=id;treeMenu.innerHTML='<button type="button" role="menuitem" data-tree-command="rename">✎　重命名</button><button type="button" role="menuitem" data-tree-command="delete">♲　删除</button>';
+    treeMenu.hidden=false;treeMenu.style.left=Math.max(8,Math.min(x,innerWidth-180))+'px';treeMenu.style.top=Math.max(8,Math.min(y,innerHeight-110))+'px';treeMenu.querySelector('button').focus();
+  }
+  document.addEventListener('pointerdown',event=>{if(!treeMenu.contains(event.target))treeMenu.hidden=true;});
+  document.addEventListener('keydown',event=>{if(event.key==='Escape')treeMenu.hidden=true;});
+  treeMenu.addEventListener('click',event=>{
+    const command=event.target.closest('[data-tree-command]')?.dataset.treeCommand;
+    const item=state.items.find(item=>item.id===menuId);if(!command||!item)return;
+    treeMenu.hidden=true;state.selected=item.id;
+    if(command==='rename') {
+      showDialog(`<h3 id="pm-dialog-title">重命名</h3><form data-tree-rename="${esc(item.id)}"><label class="pm-field">名称<input name="title" value="${esc(item.title)}" maxlength="80" required autofocus></label><div class="pm-dialog-actions"><button type="button" class="pm-button" data-pm-action="close-dialog">取消</button><button type="submit" class="pm-button pm-primary">确定</button></div></form>`);
+    } else {
+      root.querySelector('[data-tree-id="'+CSS.escape(item.id)+'"] .pm-row-file')?.focus();
+      showDialog(`<h3 id="pm-dialog-title">删除文件</h3><p>删除「${esc(item.title)}」及其全部子文件？</p><div class="pm-dialog-actions"><button class="pm-button" data-pm-action="close-dialog">取消</button><button class="pm-button pm-primary" data-pm-action="confirm-delete" data-delete-id="${esc(item.id)}">删除</button></div><p id="pm-delete-error" role="alert" hidden></p>`);
+    }
+  });
+  root.addEventListener('submit',event=>{
+    if(!event.target.matches('[data-tree-rename]'))return;
+    event.preventDefault();event.stopImmediatePropagation();
+    const item=state.items.find(item=>item.id===event.target.dataset.treeRename);const title=new FormData(event.target).get('title').trim();if(!title||!item)return;
+    item.title=title;persist();closeDialog();render();
+  },true);
+  root.addEventListener('click',event=>{
+    const add=event.target.closest('[data-tree-add]'), toggle=event.target.closest('[data-tree-toggle]'), more=event.target.closest('[data-tree-menu]');
+    if(!add&&!toggle&&!more)return;event.preventDefault();event.stopImmediatePropagation();
+    if(toggle){const id=toggle.dataset.treeToggle;expandedFiles.has(id)?expandedFiles.delete(id):expandedFiles.add(id);render();}
+    if(more){const rect=more.getBoundingClientRect();showTreeMenu(more.dataset.treeMenu,rect.left,rect.bottom);}
+    if(add){
+      const parent=state.items.find(item=>item.id===add.dataset.treeAdd);
+      const item={id:'m-'+crypto.randomUUID(),parentId:parent.id,category:parent.category,title:'未命名文档',content:'',related:[],source:'手动添加',updated:new Date().toISOString().slice(0,10)};
+      state.items.push(item);state.selected=item.id;expandedFiles.add(parent.id);persist();render();showTreeMenu(item.id,0,0);treeMenu.querySelector('[data-tree-command="rename"]').click();
+    }
+  },true);
+  root.addEventListener('contextmenu',event=>{const row=event.target.closest('[data-tree-id]');if(!row)return;event.preventDefault();showTreeMenu(row.dataset.treeId,event.clientX,event.clientY);});
+  root.addEventListener('dragstart',event=>{const row=event.target.closest('[data-tree-id]');if(!row)return;draggingId=row.dataset.treeId;event.dataTransfer.setData('text/plain',draggingId);event.dataTransfer.effectAllowed='move';treeMenu.hidden=true;});
+  function clearDrop(){root.querySelectorAll('[data-drop]').forEach(row=>delete row.dataset.drop);}
+  root.addEventListener('dragover',event=>{
+    const row=event.target.closest('[data-tree-id]'),folder=event.target.closest('.pm-directory-label');
+    if(!draggingId||(!row&&!folder))return;
+    if(row&&descendants(draggingId).has(row.dataset.treeId))return;
+    event.preventDefault();clearDrop();
+    const target=row||folder,rect=target.getBoundingClientRect(),fraction=(event.clientY-rect.top)/rect.height;
+    target.dataset.drop=row?(fraction<.25?'before':fraction>.75?'after':'inside'):'inside';
+  });
+  root.addEventListener('drop',event=>{
+    const target=event.target.closest('[data-drop]');if(!draggingId||!target)return;
+    event.preventDefault();event.stopImmediatePropagation();
+    const moving=state.items.find(item=>item.id===draggingId),id=target.dataset.treeId,other=state.items.find(item=>item.id===id),mode=target.dataset.drop;
+    if(other&&descendants(moving.id).has(other.id)){clearDrop();return;}
+    const family=descendants(moving.id);
+    moving.parentId=other?(mode==='inside'?other.id:other.parentId):undefined;
+    const category=other?other.category:target.parentElement.dataset.pmDirectory;
+    for(const item of state.items)if(family.has(item.id))item.category=category;
+    state.items=state.items.filter(item=>item.id!==moving.id);
+    const index=other?state.items.findIndex(item=>item.id===other.id)+(mode==='after'?1:0):state.items.length;
+    state.items.splice(index,0,moving);if(other&&mode==='inside')expandedFiles.add(other.id);openDirectories.add(category);
+    clearDrop();draggingId=null;persist();render();
+  },true);
+  root.addEventListener('dragend',()=>{draggingId=null;clearDrop();});
   function renderDirectory(list) {
     const groups=new Map();
     for(const memory of list){
@@ -134,7 +208,7 @@
     if(other.length||!state.search)groups.set('',other);
     $m('#pm-memory-list').innerHTML=[...groups].map(([key,items])=>`<details class="pm-directory" data-pm-directory="${esc(key)}" ${state.search||openDirectories.has(key)?'open':''}>
       <summary class="pm-directory-label" title="${esc(directoryLabel(key))}">${folderIcon}<span>${esc(directoryLabel(key))}</span></summary>
-      <div class="pm-directory-files">${items.length?items.map(directoryEntries).join(''):'<div class="pm-empty">暂无记忆</div>'}</div>
+      <div class="pm-directory-files">${items.length?items.filter(item=>!state.items.some(parent=>parent.id===item.parentId)).map(item=>directoryEntries(item)).join(''):'<div class="pm-empty">暂无记忆</div>'}</div>
     </details>`).join('')||'<div class="pm-empty">暂无匹配记忆</div>';
   }
   function renderPreview() {
@@ -630,7 +704,6 @@
       returnFocus=()=>$m(`[data-pm-action="${CSS.escape(pmAction)}"][data-memory-id="${CSS.escape(memoryId)}"]`);
     }
     switch(button.dataset.pmAction){
-      case 'new':returnFocus=()=>button;editor(true);break;
       case 'edit':editor(false);break;
       case 'detail-edit':editor(false,showMemoryDetail);break;
       case 'read-file':openFileReader(state.items.find(memory=>memory.id===button.dataset.readerMemoryId),button.dataset.fileId);break;
@@ -664,7 +737,8 @@
         break;
       }
       case 'confirm-delete':{
-        const items=state.items.filter(m=>m.id!==button.dataset.deleteId);
+        const removed=descendants(button.dataset.deleteId);
+        const items=state.items.filter(m=>!removed.has(m.id));
         try{
           phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:null,preview:state.preview}));
           state.items=items;
@@ -710,8 +784,10 @@
       const sourceFiles=active.attachments.map(({id,key,name,ext,size,note})=>({id,key,name,ext,size,note}));
       const priorFileNames=(previous?.sourceFiles||[]).map(file=>file.name);
       const related=[...new Set([...(previous?.related||[]).filter(name=>!priorFileNames.includes(name)),...sourceFiles.map(file=>file.name)])];
-      const m={reviewStatus:'confirmed',id:previous?.id||'m-'+crypto.randomUUID(),title,content:active.mode==='import'?`${previous.content.trimEnd()}\n\n${content}`:content,category,source:previous?.source||(sourceFiles.length?'导入资料':'手动添加'),sourceFiles,related,updated:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date())};
-      const items=previous?state.items.map(x=>x.id===m.id?m:x):[m,...state.items];
+      const m={reviewStatus:'confirmed',id:previous?.id||'m-'+crypto.randomUUID(),title,content:active.mode==='import'?`${previous.content.trimEnd()}\n\n${content}`:content,category,source:previous?.source||(sourceFiles.length?'导入资料':'手动添加'),sourceFiles,related,parentId:previous?.parentId,updated:new Intl.DateTimeFormat('en-CA',{timeZone:'Asia/Shanghai'}).format(new Date())};
+      if(previous && previous.category!==category)m.parentId=undefined;
+      const family=previous?descendants(previous.id):new Set();
+      const items=previous?state.items.map(x=>x.id===m.id?m:family.has(x.id)?{...x,category}:x):[m,...state.items];
       phase2Storage.setItem('memory-demo-v1',JSON.stringify({items,selected:m.id,preview:state.preview}));
       state.items=items;
       state.search='';$m('#pm-search').value='';state.selected=m.id;state.entity=null;
@@ -764,6 +840,7 @@
     }
   };
   window.phase2SmallMemoryPreview={
+    createMemory(){returnFocus=()=>root.querySelector('#pm-search');editor(true);},
     set(enabled){state.preview=enabled;persist();renderPreview();},
     hasChat(platform){return state.items.some(item=>item.sourceType==='im'&&item.source===platform);},
     importChat(platform,content){

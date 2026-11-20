@@ -23,7 +23,7 @@
   } catch (_) {}
   const sources = {
     conversation:['Agent对话记忆','记住工作背景与偏好','conversation.svg'],
-    files:['文件记忆','从指定资料中形成记忆','folder.svg']
+    files:['文件记忆','导入 Markdown（.md）资料到记忆库','folder.svg']
   };
   const apps = [['feishu','飞书','feishu.png'],['dingtalk','钉钉','dingtalk.png'],['wecom','企业微信','wecom.png'],['wechat','个人微信','wechat.png']];
   const agents = [['workbuddy','WorkBuddy','workbuddy.png'],['trae','TRAE IDE 国内版','trae-cn.png'],['codex','Codex','codex.png']];
@@ -38,8 +38,8 @@
   const main = makeDialog('pmo-onboarding','pmo-title','pmo-main',`<div class="pmo-source-form">${closeButton('关闭开启长期记忆')}
     <header><h2 id="pmo-title" tabindex="-1">开启长期记忆</h2><p>记住工作背景与偏好，减少重复说明。</p></header>
     <div class="pmo-source-list">${Object.entries(sources).map(([id,[title,description,icon]]) => `<section class="pmo-source">
-      <div class="pmo-source-main"><span class="pmo-source-icon">${image(icon,36,36)}</span><div class="pmo-source-copy"><strong id="pmo-label-${id}">${title}</strong><p>${description}</p></div>${id === 'files' ? '<button type="button" class="pmo-range-action" id="pmo-folder-choose">选择文件夹</button>' : ''}${id === 'conversation' ? `<button type="button" class="pmo-switch" role="switch" aria-checked="false" aria-labelledby="pmo-label-${id}" data-pmo-source="${id}">${image('switch-off.svg',58,32,'pmo-switch-off')}<span class="pmo-switch-on" aria-hidden="true"></span></button>` : ''}</div>
-      ${id === 'files' ? '<div class="pmo-source-config" data-pmo-config="files" hidden><input type="file" id="pmo-folder-input" webkitdirectory multiple hidden><span class="pmo-folder-name" id="pmo-folder-name"></span></div>' : ''}</section>`).join('')}</div>
+      <div class="pmo-source-main"><span class="pmo-source-icon">${image(icon,36,36)}</span><div class="pmo-source-copy"><strong id="pmo-label-${id}">${title}</strong><p>${description}</p></div>${id === 'files' ? '<button type="button" class="pmo-range-action" id="pmo-folder-choose">导入</button>' : ''}${id === 'conversation' ? `<button type="button" class="pmo-switch" role="switch" aria-checked="false" aria-labelledby="pmo-label-${id}" data-pmo-source="${id}">${image('switch-off.svg',58,32,'pmo-switch-off')}<span class="pmo-switch-on" aria-hidden="true"></span></button>` : ''}</div>
+</section>`).join('')}</div>
     <div class="pmo-external-list">
       <button type="button" class="pmo-external-entry" id="pmo-open-im"><span class="pmo-source-icon">${image('im.svg',36,36)}</span><span class="pmo-source-copy"><strong>即时通讯记忆</strong><span>飞书、钉钉、企业微信、个人微信</span></span>${image('chevron.svg',20,20,'pmo-entry-arrow')}</button>
       <button type="button" class="pmo-external-entry" id="pmo-open-agents"><span class="pmo-source-icon">${image('agent.svg',36,36)}</span><span class="pmo-source-copy"><strong>第三方 Agent 记忆</strong><span>WorkBuddy、TRAE IDE 国内版、Codex</span></span>${image('chevron.svg',20,20,'pmo-entry-arrow')}</button>
@@ -101,11 +101,6 @@
     form.querySelectorAll('[data-pmo-source]').forEach(button => button.setAttribute('aria-checked',String(draft[button.dataset.pmoSource])));
     $('#pmo-title').textContent = context === 'settings' ? '本地记忆' : '开启长期记忆';
     $('.pmo-main-footer').hidden = context === 'settings';
-    $('#pmo-folder-choose').hidden = false;
-    $('#pmo-folder-choose').textContent = draft.folder ? '更换文件夹' : '选择文件夹';
-    $('[data-pmo-config="files"]').hidden = !draft.files || !draft.folder;
-    $('#pmo-folder-name').textContent = draft.folder;
-    $('#pmo-folder-name').hidden = !draft.folder;
     $('#pmo-submit').disabled = busy || (context !== 'settings' && !saved.authorized && !Object.keys(sources).some(id => draft[id]));
     if(!busy)$('#pmo-submit').textContent = context === 'settings' || saved.authorized ? '保存' : '开启所选记忆';
   }
@@ -170,10 +165,11 @@
       if(event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom){if(dialog === main)closeAll();else back(dialog);}
     });
   });
-  $('#pmo-folder-choose').addEventListener('click',() => $('#pmo-folder-input').click());
-  $('#pmo-folder-input').addEventListener('change',event => {
-    const file = event.target.files[0];if(!file)return;
-    draft.files = true;draft.folder = (file.webkitRelativePath || file.name).split('/')[0];event.target.value = '';renderMain();setError(main,'#pmo-error');saveInline();
+  $('#pmo-folder-choose').addEventListener('click',() => {
+    shownThisVisit = true;
+    closeAll();
+    setActiveTab('memory');
+    window.phase2SmallMemoryPreview.createMemory();
   });
   $('#pmo-submit').addEventListener('click',async () => {
     if(context === 'settings' || busy || (!saved.authorized && !Object.keys(sources).some(id => draft[id])))return;

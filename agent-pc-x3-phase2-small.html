@@ -10291,7 +10291,7 @@ display:flex;align-items:center;gap:16px}
                 <aside class="pm-library"><button type="button" class="pm-library-restore" data-pm-action="expand-library" aria-label="展开记忆列表" title="展开记忆列表">»</button>
                   <div class="pm-memory-library">
                   <label class="pm-search"><span aria-hidden="true">⌕</span><input data-pm-search id="pm-search" type="search" placeholder="搜索记忆标题或内容" aria-label="搜索记忆"><button type="button" data-pm-action="clear-search" aria-label="清空搜索" hidden>×</button></label>
-                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-list-new" data-pm-action="new" aria-label="新建记忆">＋ 新建</button><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
+                  <div class="pm-list-heading"><div class="pm-library-title"><strong>记忆库</strong></div><div class="pm-list-actions"><button type="button" class="pm-library-collapse" data-pm-action="collapse-library" aria-label="收起记忆列表" aria-expanded="true" title="收起记忆列表">«</button></div></div>
                   <nav id="pm-memory-list" class="pm-memory-list" aria-label="记忆目录"></nav>
                   </div>
 
@@ -20453,10 +20453,25 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
     })();
     </script>
     <script src="assets/phase2-small-memory-import.js"></script>
-    <script src="assets/phase2-small-memory.js?v=20261118-im-import"></script>
+    <script src="assets/phase2-small-memory.js?v=20261120-tree-style-fix"></script>
     <script src="assets/phase2-small-settings.js?v=20261102-small-scope"></script>
     <script src="assets/phase2-small-assistant.js?v=20261102-small-scope"></script>
     <style>
+      .pm-tree-row{display:flex;align-items:center;min-height:29px;border-radius:6px;gap:2px}
+      .pm-tree-row:hover,.pm-tree-row:focus-within{background:#ffffff10}
+      .pm-tree-row .pm-row-file{flex:1;min-width:0}
+      .pm-tree-toggle,.pm-tree-actions button{border:0;background:transparent;color:inherit;cursor:pointer;width:23px;height:27px;padding:0;font-size:18px}
+      .pm-tree-actions{display:flex;visibility:hidden;flex-shrink:0}
+      .pm-tree-row:hover .pm-tree-actions,.pm-tree-row:focus-within .pm-tree-actions{visibility:visible}
+      .pm-tree-actions button:hover{background:#ffffff15;border-radius:5px}
+      .pm-tree-menu{position:fixed;z-index:10000;width:170px;background:#202a30;color:#eaf0f4;border:1px solid #536372;border-radius:9px;box-shadow:0 8px 26px #0006;padding:5px}
+      .pm-tree-menu[hidden]{display:none}
+      .pm-tree-menu button{display:block;width:100%;text-align:left;padding:12px;border:0;border-radius:5px;background:transparent;color:inherit;font:inherit;cursor:pointer}
+      .pm-tree-menu button:hover{background:#ffffff12}
+      .pm-tree-row[data-drop="before"]{box-shadow:0 -2px #00cbd4}
+      .pm-tree-row[data-drop="after"]{box-shadow:0 2px #00cbd4}
+      [data-drop="inside"]{background:#00cbd425!important;outline:1px solid #00cbd4}
+      #pmo-folder-choose{box-sizing:border-box;width:88px;min-width:88px;max-width:88px;flex:0 0 88px;padding-inline:14px}
       .pmo-im .pmo-connect{width:auto;min-width:126px;padding-inline:12px;white-space:nowrap}
       .pmo-im-form{display:grid;gap:14px}
       .pmo-im-form label{display:grid;gap:6px;color:var(--pmo-muted)}
@@ -20468,7 +20483,7 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       .pmo-im-chats small{margin-left:auto;color:var(--pmo-muted)}
       .pmo-im-form .pmo-back{justify-self:start}
     </style>
-    <script src="assets/phase2-small-memory-onboarding.js?v=20261119-file-folder"></script>
+    <script src="assets/phase2-small-memory-onboarding.js?v=20261120-tree-style-fix"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
   <script>
 // Composer selections are demonstration metadata; no files are uploaded.
