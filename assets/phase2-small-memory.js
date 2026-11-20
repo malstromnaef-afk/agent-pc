@@ -621,7 +621,7 @@
 
   function editor(isNew, back=null, fromFileMemory=false) {
     const m=isNew?{title:'',content:'',category:''}:current();if(!m)return;
-    draft={mode:'edit',id:isNew?null:m.id,attachments:(m.sourceFiles||[]).map(file=>({...file})),pending:[],statuses:[],busy:false,saving:false};
+    draft={mode:'edit',fromFileMemory,id:isNew?null:m.id,attachments:(m.sourceFiles||[]).map(file=>({...file})),pending:[],statuses:[],busy:false,saving:false};
     showDialog(`<header class="pm-memory-dialog-header">
       <h3 id="pm-dialog-title">${isNew?'新建记忆':'修改记忆'}</h3>
       ${dialogCloseButton}
@@ -646,15 +646,15 @@
         ${fromFileMemory?`<section class="pm-paste-section" aria-label="导入其他记忆">
           <div class="pm-paste-card">
             <div class="pm-paste-heading">
-              <h4><span aria-hidden="true">1</span>复制以下提示词到其他 AI 对话中</h4>
-              <button type="button" class="pm-button" data-pm-action="copy-memory-prompt">复制</button>
+              <span class="pm-paste-step" aria-hidden="true">1</span><h4>复制以下提示词到其他 AI 对话中</h4>
+              <button type="button" class="pm-button" data-pm-action="copy-memory-prompt" aria-live="polite">复制</button>
             </div>
             <pre class="pm-paste-prompt" tabindex="0" aria-label="记忆整理提示词">${esc(fileMemoryPrompt)}</pre>
             <p class="pm-paste-status" role="status" hidden></p>
           </div>
           <div class="pm-paste-card">
-            <div class="pm-paste-heading"><h4><span aria-hidden="true">2</span>将结果粘贴到下方</h4></div>
-            <div class="pm-field pm-paste-field"><textarea name="content" aria-label="记忆内容" required placeholder="在此粘贴你的记忆"></textarea></div>
+            <div class="pm-paste-heading"><span class="pm-paste-step" aria-hidden="true">2</span><h4>将结果粘贴到下方</h4></div>
+            <textarea class="pm-paste-input" name="content" aria-label="记忆内容" required placeholder="在此粘贴你的记忆"></textarea>
           </div>
         </section>`:`<label class="pm-field">内容<textarea name="content" aria-label="记忆内容" required placeholder="输入或粘贴记忆内容，支持 Markdown">${esc(m.content)}</textarea></label>`}
         <div>
@@ -671,11 +671,12 @@
       </div>
       <div class="pm-dialog-actions pm-memory-dialog-actions">
         <button type="button" class="pm-button" data-pm-action="close-dialog">取消</button>
-        <button type="submit" class="pm-button pm-primary" data-pm-save>保存</button>
+        <button type="submit" class="pm-button pm-primary" data-pm-save>${fromFileMemory?'导入':'保存'}</button>
       </div>
     </form>`,{style:'editor',back});
     bindCategoryPicker();
     renderAttachments();
+    if(fromFileMemory)$m('.pm-paste-prompt').scrollTop=0;
   }
   function showMemoryDetail() {
     const memory=current();
@@ -732,7 +733,10 @@
     if(!draft||!dialog.open)return;
     $m('[data-pm-attachments]').innerHTML=(draft.mode==='import'?draft.pending:draft.attachments).map(file=>`<div class="pm-editor-file"><div><strong>${esc(file.name)}</strong><small>${esc(file.ext.toUpperCase())} · ${phase2MemoryFiles.size(file.size)} · ${draft.pending.some(record=>record.id===file.id)?'待保存':'已关联'}</small></div><button type="button" class="pm-detail-close" data-pm-action="remove-memory-file" data-file-id="${esc(file.id)}" aria-label="移除来源：${esc(file.name)}" ${draft.busy||draft.saving?'disabled':''}>×</button></div>`).join('');
     $m('[data-pm-import-status]').innerHTML=draft.statuses.map(status=>`<div class="pm-editor-status ${status.failed?'error':''}">${esc(status.name)}：${esc(status.message)}</div>`).join('');
-    const save=$m('[data-pm-save]');save.disabled=draft.busy||draft.saving||(draft.mode==='import'&&!draft.pending.length);save.textContent=draft.saving?'正在保存…':(draft.mode==='import'?'导入':'保存');
+    const save=$m('[data-pm-save]');
+    const action=draft.mode==='import'||draft.fromFileMemory?'导入':'保存';
+    save.disabled=draft.busy||draft.saving||(draft.mode==='import'&&!draft.pending.length);
+    save.textContent=draft.saving?`正在${action}…`:action;
     const preview=$m('[data-pm-import-preview]');if(preview)preview.hidden=!draft.pending.length;
     const chooseFiles=$m('[data-pm-action="choose-memory-files"]');
     if(chooseFiles)chooseFiles.disabled=draft.busy||draft.saving;
@@ -834,8 +838,11 @@
     const status=card.querySelector('[role="status"]');
     try {
       await navigator.clipboard.writeText(fileMemoryPrompt);
-      status.textContent='已复制提示词';
+      button.textContent='已复制';
+      status.hidden=true;
+      return;
     } catch (_) {
+      button.textContent='复制';
       const prompt=card.querySelector('.pm-paste-prompt');
       prompt.focus();
       const range=document.createRange();
@@ -977,7 +984,7 @@
       state.items=items;
       state.search='';$m('#pm-search').value='';state.selected=m.id;state.entity=null;
       openDirectories.add(category);
-      active.saving=false;render();closeDialog();memoryChanged();notice(active.mode==='import'?'已补充到当前记忆，原内容保留。':(previous?'记忆已修改。':'记忆已保存。'));
+      active.saving=false;render();closeDialog();memoryChanged();notice(active.mode==='import'?'已补充到当前记忆，原内容保留。':(previous?'记忆已修改。':active.fromFileMemory?'记忆已导入。':'记忆已保存。'));
     }catch(error){active.saving=false;e.target.querySelectorAll('input,textarea,select,button').forEach(control=>control.disabled=false);renderAttachments();$m('[data-pm-action="close-dialog"]').disabled=false;$m('#pm-form-error').hidden=false;$m('#pm-form-error').textContent=/[\u4e00-\u9fff]/.test(error.message)?error.message:'保存失败，本地存储空间不足或不可用。输入内容已保留。';}
   });
   dialog.addEventListener('cancel',e=>{e.preventDefault();closeDialog();});

@@ -320,11 +320,20 @@
 
 #memory .pm-paste-section{display:grid;gap:12px;min-width:0}
 #memory .pm-paste-card{min-width:0;border:1px solid #36393b;border-radius:12px;background:#1b1d1e}
-#memory .pm-paste-heading{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 14px;background:#242627;border-radius:11px 11px 0 0}
-#memory .pm-paste-heading h4{display:flex;align-items:center;gap:8px;margin:0;font-size:14px}
-#memory .pm-paste-heading h4 span{display:grid;place-items:center;flex:0 0 24px;height:24px;border-radius:6px;background:#131617;color:#eef2f4}
-#memory .pm-paste-heading .pm-button{flex:none;min-height:34px}
-#memory .pm-paste-prompt{max-height:150px;overflow:auto;overscroll-behavior:contain;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:12px 14px;color:#b8c2c8;font:inherit;line-height:1.6}
+#memory .pm-paste-heading{
+  display:grid;grid-template-columns:24px minmax(0,1fr) auto;align-items:center;gap:8px;
+  padding:12px 14px;background:#242627;border-radius:11px 11px 0 0;
+}
+#memory .pm-paste-heading h4{min-width:0;margin:0;font-size:14px;line-height:1.45;text-wrap:wrap}
+#memory .pm-paste-step{display:grid;place-items:center;height:24px;border-radius:6px;background:#131617;color:#eef2f4}
+#memory .pm-paste-heading .pm-button{min-height:34px;white-space:nowrap}
+#memory .pm-paste-prompt{max-height:150px;overflow:auto;scrollbar-gutter:stable;overscroll-behavior:contain;white-space:pre-wrap;overflow-wrap:anywhere;margin:0;padding:12px 14px;color:#a6a6a6;font-family:inherit;font-size:13px;font-weight:400;line-height:1.65}
 #memory .pm-paste-status{margin:0;padding:0 14px 10px;color:#afe3e6}
-#memory .pm-paste-field{padding:12px 14px 14px}
-#memory .pm-paste-field textarea{width:100%;box-sizing:border-box}
+#memory .pm-paste-input{
+  display:block;width:100%;box-sizing:border-box;padding:14px 16px;
+  border:0;border-radius:0 0 11px 11px;background:transparent;color:#f3f5f6;
+  font:inherit;line-height:1.6;resize:vertical;
+}
+#memory .pm-paste-input::placeholder{color:#9ca1a5}
+#memory .pm-paste-input:focus{outline:none}
+#memory .pm-paste-card:has(> .pm-paste-input:focus){border-color:#718d91}
