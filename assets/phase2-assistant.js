@@ -80,31 +80,32 @@
   const consent=document.createElement('dialog');consent.id='p2-screen-consent';consent.className='p2-screen-consent';
   consent.setAttribute('aria-labelledby','p2-screen-consent-title');
   consent.innerHTML=`
-    <h3 id="p2-screen-consent-title">自动读屏</h3>
-    <p>持续读取所选屏幕或区域的内容。</p>
+    <div class="p2-consent-heading">
+      <h3 id="p2-screen-consent-title">读屏</h3>
+      <div class="p2-consent-shortcut"><kbd id="p2-consent-shortcut-value">Ctrl + Alt + S</kbd> 框选 <kbd>Esc</kbd> 退出</div>
+    </div>
     <div class="p2-consent-range-group" role="group" aria-label="读取范围">
-      <strong class="p2-consent-range-title">读取范围</strong>
-      <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="display" checked><span>整个屏幕</span><small data-p2-consent-limit>最多选择 2 个</small></label>
+      <div class="p2-consent-choices">
+        <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="display" checked><span>整个屏幕</span></label>
+        <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="region"><span>框选区域</span></label>
+      </div>
       <div class="p2-display-options" id="p2-consent-displays" role="group" aria-label="读取显示器">
         <label><input type="checkbox" value="external" data-p2-consent-display>显示器 1 · 外接显示器</label>
         <label><input type="checkbox" value="builtin" data-p2-consent-display>显示器 2 · 自带小屏</label>
       </div>
-      <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="region"><span>框选区域</span></label>
-      <div class="p2-consent-shortcut" id="p2-consent-shortcut" hidden><span>快捷键</span><kbd id="p2-consent-shortcut-value">Ctrl + Alt + S</kbd></div>
     </div>
     <p class="p2-consent-error" role="alert" hidden></p>
-    <div class="p2-consent-actions"><button type="button" data-p2-consent="later">暂不开启</button><button type="button" class="primary" data-p2-consent="allow" disabled>授权并开启</button></div>`;
+    <div class="p2-consent-actions"><button type="button" data-p2-consent="later">取消</button><button type="button" class="primary" data-p2-consent="allow" disabled>开始读屏</button></div>`;
   document.body.append(consent);
   function openConsent(event) {
     if(voiceOpen)close();
     if(document.querySelector('dialog[open]'))return;
     const range=['display','region'].includes(event?.detail?.range)?event.detail.range:screenState.screenRange;
     consent.querySelectorAll('[name="p2-consent-range"]').forEach(input=>input.checked=input.value===range);
-    consent.querySelectorAll('[data-p2-consent-display]').forEach(input=>input.checked=screenState.displays.includes(input.value));
+    const displays=screenState.displays.length?screenState.displays:['external'];
+    consent.querySelectorAll('[data-p2-consent-display]').forEach(input=>input.checked=displays.includes(input.value));
     consent.querySelector('#p2-consent-shortcut-value').textContent=screenState.captureShortcut;
     updateConsentSelection();
-    consent.querySelector('[data-p2-consent="later"]').textContent=screenState.screenEnabled?'关闭读屏':'暂不开启';
-    consent.querySelector('[data-p2-consent="allow"]').textContent=screenState.screenEnabled?'保存修改':'授权并开启';
     consent.querySelector('.p2-consent-error').hidden=true;
     consent.showModal();
   }
@@ -113,8 +114,8 @@
   function updateConsentSelection(){
     const ids=selectedConsentDisplays(),region=selectedConsentRange()==='region';
     consent.querySelector('#p2-consent-displays').hidden=region;
-    consent.querySelector('[data-p2-consent-limit]').hidden=region;
-    consent.querySelector('#p2-consent-shortcut').hidden=!region;
+    consent.querySelector('[data-p2-consent="later"]').textContent=screenState.screenEnabled?'停止读屏':'取消';
+    consent.querySelector('[data-p2-consent="allow"]').textContent=region?'选择区域':screenState.screenEnabled?'应用修改':'开始读屏';
     consent.querySelectorAll('[data-p2-consent-display]').forEach(input=>input.disabled=region||(!input.checked&&ids.length>=2));
     consent.querySelector('[data-p2-consent="allow"]').disabled=!region&&(ids.length===0||ids.length>2);
     consent.querySelector('.p2-consent-error').hidden=true;

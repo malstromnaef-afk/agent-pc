@@ -62,7 +62,6 @@
 
 
 #screen-config .p2-interface-card{min-height:100px}
-body:has(#screen-config.active) #p2-capture-indicator{display:none}
 #screen-config .p2-language-field{display:grid;gap:8px;min-width:132px}
 #screen-config .p2-language-field label{color:var(--muted);font-size:12px;font-weight:400;line-height:20px}
 #screen-config .p2-language-field select{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:#25282e;color:var(--text);font:inherit;font-size:14px;color-scheme:dark;line-height:24px}

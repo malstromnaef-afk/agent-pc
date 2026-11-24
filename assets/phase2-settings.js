@@ -93,7 +93,7 @@
     if(!state.screenEnabled||!['display','region'].includes(range))return;
     cancelShortcut();
     if(range===state.screenRange){render();return;}
-    if(range==='region')update({...state,screenRange:'region'});
+    if(range==='region'){render();window.phase2ScreenReading.chooseRegion();}
     else update({...state,screenRange:'display',displays:state.displays.length?[...state.displays]:['external'],screenPaused:false,screenConsent:'granted'});
   }
   root.addEventListener('click',event=>{
@@ -107,8 +107,7 @@
     if(event.target.closest('#p2-screen-toggle')){
       cancelShortcut();
       if(state.screenEnabled)update({...state,screenEnabled:false,screenPaused:false});
-      else if(state.screenRange==='region')update({...state,screenEnabled:true,screenPaused:false,screenConsent:'granted'});
-      else window.phase2Settings.authorizeScreen(state.displays.length?state.displays:['external']);
+      else window.dispatchEvent(new CustomEvent('agentpc:screen-consent-request'));
       return;
     }
     if(event.target.closest('#p2-local-model-toggle')){update({...state,preferBuiltInModel:!state.preferBuiltInModel});return;}

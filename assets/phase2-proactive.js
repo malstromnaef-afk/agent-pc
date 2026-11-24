@@ -1,9 +1,7 @@
 /* Figma-matched UI prototype. Records and connector status are design fixtures;
  * this module never reads chats, executes tasks, or synchronizes cookies. */
 (() => {
-  const MODES = ['小卡片', '输入框预览'];
-  const PLACEMENTS = ['跟随窗口', '屏幕右下', '鼠标附近', '右上角'];
-  const defaults = {enabled:true, replyEnabled:false, taskEnabled:true, apps:[], aliases:[], mode:'小卡片', placement:'跟随窗口'};
+  const defaults = {enabled:true, replyEnabled:false, apps:[], aliases:[]};
   function clearReplyRecords(rows) {
     return rows.filter(row => !['已搁置', '已完成'].includes(row.status));
   }
@@ -26,13 +24,11 @@
   function restoreSettings(value) {
     const input = value && typeof value === 'object' ? value : {};
     const result = {...defaults, apps:[], aliases:[]};
-    for (const key of ['enabled', 'replyEnabled', 'taskEnabled']) {
+    for (const key of ['enabled', 'replyEnabled']) {
       if (typeof input[key] === 'boolean') result[key] = input[key];
     }
     result.apps = [...new Set((Array.isArray(input.apps) ? input.apps : []).filter(value => typeof value === 'string' && value.trim()).map(value => value.trim()))];
     result.aliases = (Array.isArray(input.aliases) ? input.aliases : []).reduce((all, x) => typeof x === 'string' ? addAlias(all, x) : all, []);
-    if (MODES.includes(input.mode)) result.mode = input.mode;
-    if (PLACEMENTS.includes(input.placement)) result.placement = input.placement;
     return result;
   }
   if (typeof module !== 'undefined' && module.exports) module.exports = {clearReplyRecords, addAlias, restoreSettings, normalizeInstalledApps};
@@ -223,68 +219,141 @@
     if (event.relatedTarget && !q('#pa-app-picker').contains(event.relatedTarget)) closeAppList();
   });
   const preview = q('#pa-mode-preview');
-  const previewImage = q('#pa-mode-preview-image');
-  const previewImages = {
-    card: {src:'assets/proactive-figma/reply-card-preview.png', width:1112, height:536, displayWidth:560, alt:'回复小卡片效果预览'},
-    input: {src:'assets/proactive-figma/reply-input-preview.png', width:1734, height:512, displayWidth:760, alt:'输入框预览效果'},
-    follow: {src:'assets/proactive-figma/placement-follow-preview.png', width:988, height:578, displayWidth:720, alt:'跟随窗口位置效果预览'},
-    bottom: {src:'assets/proactive-figma/placement-bottom-preview.png', width:992, height:580, displayWidth:720, alt:'屏幕右下位置效果预览'},
-    cursor: {src:'assets/proactive-figma/placement-cursor-preview.png', width:990, height:576, displayWidth:720, alt:'鼠标附近位置效果预览'},
-    top: {src:'assets/proactive-figma/placement-top-preview.png', width:988, height:584, displayWidth:720, alt:'右上角位置效果预览'}
-  };
-  let previewTrigger = null;
-  let previewCloseTimer;
+  const previewTitle = q('#pa-preview-title');
+  const completion = q('#pa-completion-preview');
+  const draftCard = q('#pa-completion-card');
+  const draft = q('#pa-completion-draft');
+  const exampleField = q('#pa-completion-field');
+  const completionStatus = q('#pa-completion-status');
+  const suggestions = [
+    '把景点和路线整理成三天行程',
+    '提取景点的开放时间和门票信息',
+    '比较不同路线的交通与耗时'
+  ];
+  const scene = document.createElement('div');
+  scene.className = 'pa-placement-preview pa-placement-desktop';
+  scene.hidden = true;
+  scene.innerHTML = `
+    <div class="pa-placement-window" aria-hidden="true">
+      <div class="pa-placement-window-head">旅行攻略 · 当前窗口</div>
+      <div class="pa-placement-window-body"><strong>正在浏览：旅行路线与景点</strong></div>
+    </div>
+    <section class="pa-suggestion-card" aria-label="Agent X3 行动建议">
+      <div class="pa-suggestion-brand">Agent X3</div>
+      <ol>${suggestions.map((text, index) => `<li><button type="button" data-placement-suggestion="${index}"><span aria-hidden="true">${index + 1}</span>${text}</button></li>`).join('')}</ol>
+      <div class="pa-suggestion-footer">
+        <span data-placement-status role="status">按 1/2/3 或点击，交给 Agent X3</span>
+        <button type="button" data-placement-copy aria-label="复制三条建议" title="复制"><i aria-hidden="true"></i></button>
+      </div>
+    </section>`;
+  preview.append(scene);
+  const placementStatus = scene.querySelector('[data-placement-status]');
+  const suggestionButtons = [...scene.querySelectorAll('[data-placement-suggestion]')];
+
   function hideModePreview() {
-    clearTimeout(previewCloseTimer);
-    preview.hidden = true;
-    previewTrigger = null;
+    if (preview.open) preview.close();
+    preview.removeAttribute('data-peek');
+    preview.inert = false;
   }
-  function deferHideModePreview() {
-    clearTimeout(previewCloseTimer);
-    previewCloseTimer = setTimeout(hideModePreview, 120);
+
+  function showModePreview(trigger, peek = false) {
+    if (preview.matches(':modal')) return;
+    hideModePreview();
+    const isCompletion = trigger.dataset.paPreview === 'completion';
+    previewTitle.textContent = isCompletion ? '输入补全效果' : '行动建议效果';
+    completion.hidden = !isCompletion;
+    scene.hidden = isCompletion;
+    if (isCompletion) {
+      draftCard.hidden = false;
+      exampleField.value = '';
+      completionStatus.textContent = '';
+    } else {
+      placementStatus.textContent = '按 1/2/3 或点击，交给 Agent X3';
+    }
+    if (peek) {
+      preview.inert = true;
+      preview.setAttribute('data-peek', '');
+      preview.setAttribute('open', '');
+      const anchor = trigger.getBoundingClientRect();
+      const {width, height} = preview.getBoundingClientRect();
+      const above = anchor.top - height - 10;
+      const x = Math.max(16, Math.min(anchor.right - width, innerWidth - width - 16));
+      const y = Math.max(16, Math.min(above >= 16 ? above : anchor.bottom + 10, innerHeight - height - 16));
+      preview.style.setProperty('--pa-peek-left', `${x}px`);
+      preview.style.setProperty('--pa-peek-top', `${y}px`);
+      return;
+    }
+    preview.showModal();
+    if (isCompletion) exampleField.focus();
+    else suggestionButtons[0].focus();
   }
-  function showModePreview(trigger) {
-    if (trigger.hidden || trigger.disabled || view !== 'settings') return;
-    clearTimeout(previewCloseTimer);
-    const image = previewImages[trigger.dataset.paPreview];
-    previewTrigger = trigger;
-    if (previewImage.getAttribute('src') !== image.src) previewImage.src = image.src;
-    previewImage.width = image.width;
-    previewImage.height = image.height;
-    previewImage.alt = image.alt;
-    preview.style.width = Math.min(image.displayWidth, window.innerWidth - 32) + 'px';
-    preview.hidden = false;
-    positionModePreview();
+
+  function fillCompletion() {
+    exampleField.setRangeText(draft.textContent, exampleField.selectionStart, exampleField.selectionEnd, 'end');
+    draftCard.hidden = true;
+    completionStatus.textContent = '草稿已填入，可以继续编辑。';
+    exampleField.focus();
   }
-  function positionModePreview() {
-    if (!previewTrigger || preview.hidden) return;
-    const anchor = previewTrigger.getBoundingClientRect();
-    const box = preview.getBoundingClientRect();
-    const left = Math.max(16, Math.min(anchor.right - box.width, window.innerWidth - box.width - 16));
-    let top = anchor.top - box.height - 12;
-    if (top < 16) top = anchor.bottom + 12;
-    top = Math.max(16, Math.min(top, window.innerHeight - box.height - 16));
-    preview.style.left = Math.round(left) + 'px';
-    preview.style.top = Math.round(top) + 'px';
-  }
-  previewImage.addEventListener('load', positionModePreview);
+
   qa('[data-pa-preview]').forEach(trigger => {
-    trigger.addEventListener('pointerenter', () => showModePreview(trigger));
-    trigger.addEventListener('pointerleave', deferHideModePreview);
-    trigger.addEventListener('focus', () => showModePreview(trigger));
-    trigger.addEventListener('blur', deferHideModePreview);
+    trigger.addEventListener('pointerenter', event => {
+      if (event.pointerType !== 'touch' && !trigger.disabled && !document.querySelector('dialog:modal')) showModePreview(trigger, true);
+    });
+    trigger.addEventListener('pointerleave', () => {
+      if (preview.hasAttribute('data-peek')) hideModePreview();
+    });
     trigger.addEventListener('click', () => showModePreview(trigger));
   });
-  preview.addEventListener('pointerenter', () => clearTimeout(previewCloseTimer));
-  preview.addEventListener('pointerleave', deferHideModePreview);
-  window.addEventListener('resize', hideModePreview);
-  window.addEventListener('scroll', event => {
-    if (!preview.contains(event.target)) hideModePreview();
-  }, true);
-  window.addEventListener('agentpc:settings-subpage', hideModePreview);
+  for (const event of ['scroll', 'resize']) {
+    window.addEventListener(event, () => {
+      if (preview.hasAttribute('data-peek')) hideModePreview();
+    }, true);
+  }
   document.addEventListener('keydown', event => {
-    if (event.key === 'Escape' && previewTrigger) hideModePreview();
+    if (event.key === 'Escape' && preview.hasAttribute('data-peek')) hideModePreview();
   });
+  q('[data-pa-preview-close]').addEventListener('click', hideModePreview);
+  q('#pa-completion-fill').addEventListener('click', fillCompletion);
+  exampleField.addEventListener('keydown', event => {
+    if (event.key !== 'Tab' || event.shiftKey || event.ctrlKey || event.metaKey || event.altKey || event.repeat || draftCard.hidden) return;
+    event.preventDefault();
+    fillCompletion();
+  });
+
+  suggestionButtons.forEach((button, index) => button.addEventListener('click', () => {
+    hideModePreview();
+    setActiveTab('voice');
+    qaRequestNewSession(() => {
+      const createdAt = new Date();
+      QA_STATE.mode = 'text';
+      QA_STATE.issue = '';
+      QA_STATE.messages.push({
+        messageId: `tabtab-${createdAt.getTime()}`,
+        role: 'user',
+        text: suggestions[index],
+        createdAt: createdAt.toISOString(),
+        time: nowText(),
+        inputType: 'text'
+      });
+      qaRender();
+      showLightToast('已在新对话中添加示例任务');
+    });
+  }));
+
+  scene.querySelector('[data-placement-copy]').addEventListener('click', async () => {
+    try {
+      await navigator.clipboard.writeText(suggestions.map((text, index) => `${index + 1}. ${text}`).join('\n'));
+      placementStatus.textContent = '已复制';
+    } catch {
+      placementStatus.textContent = '复制失败，请重试';
+    }
+  });
+  preview.addEventListener('keydown', event => {
+    if (scene.hidden || !/^[123]$/.test(event.key) || event.isComposing || event.ctrlKey || event.metaKey || event.altKey || event.repeat) return;
+    event.preventDefault();
+    suggestionButtons[Number(event.key) - 1].click();
+  });
+  window.addEventListener('agentpc:settings-subpage', hideModePreview);
   function feedback(value) {
     const el = q('#pa-feedback');
     el.textContent = value; el.hidden = false;
@@ -316,18 +385,7 @@
     renderAppTags();
     renderAppList();
     q('#pa-app-count').textContent = state.apps.length ? `已选 ${state.apps.length} 个` : '未选择应用';
-    qa('[data-pa-mode]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.paMode === state.mode)); el.disabled = !state.enabled; });
-    qa('[data-pa-mode-option]').forEach(option => {
-      const help = option.querySelector('[data-pa-preview]');
-      help.hidden = false;
-      help.disabled = !state.enabled;
-    });
-    qa('[data-pa-placement]').forEach(el => { el.setAttribute('aria-pressed', String(el.dataset.paPlacement === state.placement)); el.disabled = !state.enabled; });
-    qa('[data-pa-placement-option]').forEach(option => {
-      const help = option.querySelector('[data-pa-preview]');
-      help.hidden = false;
-      help.disabled = !state.enabled;
-    });
+    qa('[data-pa-preview]').forEach(button => { button.disabled = !state.enabled; });
     q('#pa-alias-input').disabled = !state.enabled;
     const tags = q('#pa-alias-tags'); tags.replaceChildren(); tags.hidden = !state.aliases.length;
     state.aliases.forEach(alias => {
@@ -411,8 +469,6 @@
     }
     const tab = target.closest('[data-pa-view]'); if (tab) { selectView(tab.dataset.paView); return; }
     const toggle = target.closest('[data-pa-toggle]'); if (toggle && !toggle.disabled) { save({...state,[toggle.dataset.paToggle]:!state[toggle.dataset.paToggle]}); return; }
-    const mode = target.closest('[data-pa-mode]'); if (mode && !mode.disabled) { save({...state, mode:mode.dataset.paMode}); return; }
-    const placement = target.closest('[data-pa-placement]'); if (placement && !placement.disabled) { save({...state, placement:placement.dataset.paPlacement}); return; }
     const remove = target.closest('[data-pa-remove-alias]'); if (remove && !remove.disabled) { save({...state, aliases:state.aliases.filter(x => x !== remove.dataset.paRemoveAlias)}); q('#pa-alias-input').focus(); return; }
     const record = target.closest('[data-pa-record]'); if (record) {
       const id = record.dataset.paRecord;
