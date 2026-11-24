@@ -7,8 +7,6 @@
 #screen-config .p2-system-line{display:flex;justify-content:space-between;align-items:center;gap:24px;padding:20px 0 0;border-top:1px solid var(--line)}
 #screen-config .p2-system-line strong,#screen-config .p2-system-line label{font-size:14px;font-weight:600;line-height:24px}#screen-config .p2-system-line p{color:var(--muted);font-size:12px;margin:8px 0 0;line-height:20px}
 #screen-config .p2-system-toggle{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:12px;line-height:20px}#screen-config .p2-system-toggle .toggle{height:44px;min-width:64px}
-#screen-config .p2-display-selection{margin-top:20px}#screen-config .p2-display-selection[hidden]{display:none}
-#screen-config .p2-display-selection select{min-height:44px;min-width:240px;border:1px solid var(--line);background:#20292f;color:var(--text);border-radius:9px;padding:0 12px;font:inherit;font-size:12px;line-height:20px}
 #screen-config .p2-folder-copy{min-width:0}#screen-config .p2-folder-path{display:block;color:var(--muted);font-size:12px;line-height:20px;margin-top:8px;overflow-wrap:anywhere}#screen-config .p2-system-line .soft-button{min-height:44px;flex-shrink:0}
 #screen-config .p2-cli-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
 #screen-config .p2-cli-card{display:flex;flex-direction:column;gap:20px;padding:20px;border:1px solid var(--line);border-radius:12px;background:rgba(255,255,255,.02)}
@@ -21,15 +19,10 @@
 #screen-config .p2-dialog-close{min-width:44px;min-height:44px;border:0;background:transparent;color:var(--muted);font-size:24px;cursor:pointer;line-height:32px}#screen-config .p2-system-dialog label{font-size:12px;display:block;margin-bottom:12px;line-height:20px}
 #screen-config .p2-system-dialog input{width:100%;min-height:44px;border:1px solid #49535b;background:#151b20;color:var(--text);border-radius:9px;padding:12px 12px;font:inherit;font-size:14px;box-sizing:border-box;line-height:24px}#screen-config .p2-system-dialog p{font-size:12px;color:var(--muted);line-height:20px;margin:16px 0}#screen-config .p2-system-dialog .p2-dialog-feedback{color:#f0bf79}
 #screen-config .p2-dialog-actions{display:flex;justify-content:flex-end;gap:12px;margin-top:24px}#screen-config .p2-dialog-actions button{min-height:44px}
-@media(max-width:900px){#screen-config .p2-cli-grid{grid-template-columns:1fr}#screen-config .p2-system-card{padding:20px}#screen-config .p2-system-line{flex-wrap:wrap;gap:16px}#screen-config .p2-display-selection select{max-width:100%;min-width:0;width:100%}}
 
 #screen-config .p2-system-card>.p2-system-line:first-child{padding-top:0;border-top:0}
 
 /* Keep the thumb centered in the 44px touch target in both states. */
-#screen-config #p2-screen-toggle{width:64px;height:44px;min-width:64px;flex:0 0 64px;padding:0;box-sizing:border-box;cursor:pointer}
-#screen-config #p2-screen-toggle::after{top:50%;transform:translateY(-50%);right:5px;left:auto;width:26px;height:26px}
-#screen-config #p2-screen-toggle.off::after{left:5px;right:auto}
-#screen-config #p2-screen-pause[hidden]{display:none}
 
 #screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle){width:64px;height:44px;min-width:64px;flex:0 0 64px;padding:0;box-sizing:border-box;cursor:pointer;background:#20e6e61a;border-color:#20e6e670}
 #screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle)::after{top:50%;transform:translateY(-50%);right:5px;left:auto;width:26px;height:26px;background:var(--cyan,#20e6e6);box-shadow:none}
@@ -56,32 +49,13 @@
 #screen-config .p2-fixed-shortcut{display:flex;align-items:center;justify-content:center;min-width:180px;min-height:44px;box-sizing:border-box;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:#ffffff03;color:var(--muted);font:inherit;font-size:12px;letter-spacing:.02em;line-height:20px}
 #screen-config .p2-capture-shortcut-help{margin:12px 0 0;color:var(--muted);font-size:12px;line-height:20px;text-align:right}
 #screen-config .p2-capture-shortcut-help[hidden]{display:none}
-#screen-config #p2-region-shortcut:not([hidden]){display:flex;align-items:center;justify-content:flex-end;gap:12px;flex-wrap:wrap}
-#screen-config .p2-region-shortcut-label{font-size:14px;color:var(--muted)}
-#screen-config .p2-region-start{min-height:34px;padding:4px 16px;border:1px solid var(--cyan);border-radius:8px;background:#142d30;color:var(--cyan);font-size:14px;line-height:24px}
 
 
 #screen-config .p2-interface-card{min-height:100px}
 #screen-config .p2-language-field{display:grid;gap:8px;min-width:132px}
 #screen-config .p2-language-field label{color:var(--muted);font-size:12px;font-weight:400;line-height:20px}
 #screen-config .p2-language-field select{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:8px;background:#25282e;color:var(--text);font:inherit;font-size:14px;color-scheme:dark;line-height:24px}
-#screen-config #p2-screen-range-options{margin-top:20px}
-#screen-config #p2-screen-range-options[hidden],#screen-config #p2-display-select[hidden],#screen-config #p2-region-shortcut[hidden]{display:none}
-#screen-config .p2-read-range-row{display:flex;align-items:center;justify-content:space-between;gap:24px;padding:20px 0;border-top:1px solid var(--line);min-height:44px}
-#screen-config .p2-read-range-row:last-of-type{padding-bottom:0}
-#screen-config .p2-range-choice{display:flex;align-items:center;gap:12px;min-height:44px;min-width:148px;flex-shrink:0;color:var(--text);font-size:14px;font-weight:600;cursor:pointer;line-height:24px}
-#screen-config .p2-range-choice input{width:20px;height:20px;margin:0;accent-color:var(--cyan);cursor:pointer}
-#screen-config .p2-range-choice small{display:block;margin-top:8px;color:var(--muted);font-size:12px;font-weight:400;line-height:20px}
-#screen-config #p2-display-select{display:flex;align-items:center;flex-wrap:wrap;justify-content:flex-end;gap:16px;min-width:0}
-#screen-config #p2-display-select label{border:0;background:transparent;padding:0;min-height:44px;gap:12px;font-size:12px;line-height:20px}
-#screen-config #p2-display-select label:has(input:checked){background:transparent!important;border:0!important}
-#screen-config #p2-display-select input{width:20px;height:20px}
-#screen-config #p2-screen-toggle{background:#20e6e61a;border-color:#20e6e670}
-#screen-config #p2-screen-toggle::after{background:var(--cyan);box-shadow:none}
-#screen-config #p2-screen-toggle.off{background:#343840;border-color:#49515b}
-#screen-config #p2-screen-toggle.off::after{background:#aab1bb}
-#screen-config .p2-range-choice input:focus-visible,#screen-config #p2-display-select input:focus-visible,#screen-config .p2-language-field select:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
-@media(max-width:900px){#screen-config .p2-read-range-row{flex-wrap:wrap;gap:12px}#screen-config #p2-display-select{justify-content:flex-start;width:100%}#screen-config #p2-display-select label{flex:1 1 200px}#screen-config #p2-region-shortcut{margin-left:auto}}
+#screen-config .p2-language-field select:focus-visible{outline:2px solid var(--cyan);outline-offset:4px}
 
 /* Figma 533:1003 — complete system settings, including the built-in model. */
 body:has(#screen-config.active){--p2-setting-line:#343b42;--p2-setting-muted:#929da9;background:#111516;color:#edf0f5;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif}
@@ -112,9 +86,9 @@ body:has(#screen-config.active) .topbar{display:none}
 #screen-config .p2-system-line strong{font-size:18px;font-weight:700;line-height:28px;color:#edf0f5}
 #screen-config .p2-system-line p{margin:4px 0 0;font-size:12px;line-height:20px;color:#929da9}
 #screen-config .p2-system-toggle{gap:12px;color:#929da9;font-size:14px;flex-shrink:0;line-height:24px}
-#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-screen-toggle,#p2-local-model-toggle){position:relative;display:grid;place-items:center;width:56px;min-width:56px;flex:0 0 56px;height:44px;min-height:44px;padding:0;border:0;background:transparent;box-shadow:none;border-radius:16px;cursor:pointer}
-#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-screen-toggle,#p2-local-model-toggle)::after{content:none}
-#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-screen-toggle,#p2-local-model-toggle):is(.off,:hover){background:transparent;border:0;box-shadow:none}
+#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-local-model-toggle){position:relative;display:grid;place-items:center;width:56px;min-width:56px;flex:0 0 56px;height:44px;min-height:44px;padding:0;border:0;background:transparent;box-shadow:none;border-radius:16px;cursor:pointer}
+#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-local-model-toggle)::after{content:none}
+#screen-config :is(#p2-pointer-toggle,#p2-pointer-shake-toggle,#p2-local-model-toggle):is(.off,:hover){background:transparent;border:0;box-shadow:none}
 #screen-config .p2-system-toggle .toggle img{display:block;width:56px;height:32px;pointer-events:none}
 #screen-config .p2-system-toggle .toggle .p2-toggle-off{display:none}
 #screen-config .p2-system-toggle .toggle.off .p2-toggle-off{display:block}
@@ -139,18 +113,6 @@ body:has(#screen-config.active) .topbar{display:none}
 #screen-config .p2-interface-card>.p2-system-line{min-height:46px}
 #screen-config .p2-language-field{min-width:180px}
 #screen-config .p2-language-field select{min-height:38px;height:38px;border-radius:8px;border-color:#343b42;background:#252a31;color:#edf0f5;text-align:center;font-size:16px;padding:0 24px;line-height:24px}
-#screen-config #p2-screen-range-options{margin:0}
-#screen-config .p2-screen-card:has(#p2-screen-range-options[hidden]){min-height:0}
-#screen-config .p2-read-range-row{padding:0;gap:24px;border-color:#343b42;min-height:76px}
-#screen-config .p2-read-range-row:last-of-type{min-height:56px}
-#screen-config .p2-range-choice{gap:16px;min-width:200px;font-size:16px;font-weight:760;min-height:44px;line-height:24px}
-#screen-config .p2-range-choice small{font-size:12px;margin-top:4px;color:#929da9;line-height:20px}
-#screen-config .p2-range-choice input{appearance:none;-webkit-appearance:none;flex-shrink:0;width:24px;height:24px;border:0;border-radius:50%;background:url('settings-figma/77eb0.svg') center/24px 24px no-repeat}
-#screen-config .p2-range-choice input:checked{background:url('settings-figma/6a289.svg') center/14px 14px no-repeat,url('settings-figma/eaed3.svg') center/24px 24px no-repeat}
-#screen-config #p2-display-select{gap:32px;flex-wrap:wrap;justify-content:flex-end}
-#screen-config #p2-display-select label{display:flex;align-items:center;gap:16px;min-height:44px;font-size:12px;color:#edf0f5;cursor:pointer;white-space:nowrap;line-height:20px}
-#screen-config #p2-display-select input{appearance:none;-webkit-appearance:none;width:24px;height:24px;border:1px solid #6d7a85;border-radius:2px;margin:0;flex-shrink:0;background:transparent;cursor:pointer}
-#screen-config #p2-display-select input:checked{border-color:#12d7dc;background:#12d7dc url('settings-figma/60cac.svg') center/24px 24px no-repeat}
 #screen-config .p2-local-model-card{padding:20px 24px;min-height:124px;border-radius:18px;display:flex;align-items:center;justify-content:space-between;gap:24px}
 #screen-config .p2-local-model-copy{flex:1;min-width:0;align-self:center}
 #screen-config .p2-local-model-summary{display:flex;align-items:baseline;gap:20px;flex-wrap:wrap}
@@ -201,8 +163,6 @@ body:has(#screen-config.active) .topbar{display:none}
  #screen-config .p2-local-model-controls{width:214px}
  #screen-config .p2-system-line{gap:16px}
  #screen-config .p2-pointer-slider{width:300px}
- #screen-config .p2-read-range-row{flex-wrap:wrap;padding:12px 0;gap:8px}
- #screen-config #p2-display-select{justify-content:flex-start;gap:20px;width:auto}
 }
 @media(max-width:900px){
 
@@ -225,9 +185,6 @@ body:has(#screen-config.active) .topbar{display:none}
  #screen-config .p2-local-model-controls{width:100%;flex-direction:row;align-items:center;justify-content:space-between;flex-wrap:wrap}
  #screen-config #p2-local-model-select{width:180px}
  #screen-config .p2-local-model-copy p{font-size:12px;line-height:20px}
- #screen-config #p2-display-select{width:100%;gap:4px}
- #screen-config #p2-display-select label{flex:1 1 240px}
- #screen-config .p2-read-range-row{padding:12px 0}
  #screen-config .p2-setting-label,#screen-config .p2-pointer-sensitivity-line label{font-size:16px;line-height:24px}
  #screen-config .p2-system-line .p2-capture-shortcut,#screen-config .p2-fixed-shortcut{min-width:144px;font-size:14px;line-height:24px}
 }

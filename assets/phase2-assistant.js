@@ -1,7 +1,6 @@
 /* Prototype interactions. Wake-word recognition and screen capture require a host service. */
 (() => {
   let voiceOpen=false, previousFocus=null, previousMode='text', renderPending=false;
-  let screenState=window.phase2Settings.getState();
 
   function activePreview(){return document.querySelector('.view.active [data-subscreen-preview]');}
   function removeVoiceLayers(){
@@ -77,62 +76,6 @@
   }
   function conversationChanged(){if(voiceOpen)renderVoice();}
 
-  const consent=document.createElement('dialog');consent.id='p2-screen-consent';consent.className='p2-screen-consent';
-  consent.setAttribute('aria-labelledby','p2-screen-consent-title');
-  consent.innerHTML=`
-    <div class="p2-consent-heading">
-      <h3 id="p2-screen-consent-title">读屏</h3>
-      <div class="p2-consent-shortcut"><kbd id="p2-consent-shortcut-value">Ctrl + Alt + S</kbd> 框选 <kbd>Esc</kbd> 退出</div>
-    </div>
-    <div class="p2-consent-range-group" role="group" aria-label="读取范围">
-      <div class="p2-consent-choices">
-        <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="display" checked><span>整个屏幕</span></label>
-        <label class="p2-consent-range"><input type="radio" name="p2-consent-range" value="region"><span>框选区域</span></label>
-      </div>
-      <div class="p2-display-options" id="p2-consent-displays" role="group" aria-label="读取显示器">
-        <label><input type="checkbox" value="external" data-p2-consent-display>显示器 1 · 外接显示器</label>
-        <label><input type="checkbox" value="builtin" data-p2-consent-display>显示器 2 · 自带小屏</label>
-      </div>
-    </div>
-    <p class="p2-consent-error" role="alert" hidden></p>
-    <div class="p2-consent-actions"><button type="button" data-p2-consent="later">取消</button><button type="button" class="primary" data-p2-consent="allow" disabled>开始读屏</button></div>`;
-  document.body.append(consent);
-  function openConsent(event) {
-    if(voiceOpen)close();
-    if(document.querySelector('dialog[open]'))return;
-    const range=['display','region'].includes(event?.detail?.range)?event.detail.range:screenState.screenRange;
-    consent.querySelectorAll('[name="p2-consent-range"]').forEach(input=>input.checked=input.value===range);
-    const displays=screenState.displays.length?screenState.displays:['external'];
-    consent.querySelectorAll('[data-p2-consent-display]').forEach(input=>input.checked=displays.includes(input.value));
-    consent.querySelector('#p2-consent-shortcut-value').textContent=screenState.captureShortcut;
-    updateConsentSelection();
-    consent.querySelector('.p2-consent-error').hidden=true;
-    consent.showModal();
-  }
-  function selectedConsentDisplays(){return [...consent.querySelectorAll('[data-p2-consent-display]:checked')].map(input=>input.value);}
-  function selectedConsentRange(){return consent.querySelector('[name="p2-consent-range"]:checked')?.value||'display';}
-  function updateConsentSelection(){
-    const ids=selectedConsentDisplays(),region=selectedConsentRange()==='region';
-    consent.querySelector('#p2-consent-displays').hidden=region;
-    consent.querySelector('[data-p2-consent="later"]').textContent=screenState.screenEnabled?'停止读屏':'取消';
-    consent.querySelector('[data-p2-consent="allow"]').textContent=region?'选择区域':screenState.screenEnabled?'应用修改':'开始读屏';
-    consent.querySelectorAll('[data-p2-consent-display]').forEach(input=>input.disabled=region||(!input.checked&&ids.length>=2));
-    consent.querySelector('[data-p2-consent="allow"]').disabled=!region&&(ids.length===0||ids.length>2);
-    consent.querySelector('.p2-consent-error').hidden=true;
-  }
-  consent.addEventListener('change',updateConsentSelection);
-  consent.addEventListener('click',async event=>{
-    const action=event.target.closest('[data-p2-consent]');if(!action)return;
-    if(action.disabled)return;
-    if(action.dataset.p2Consent==='allow'&&selectedConsentRange()==='region'){
-      consent.close();await window.phase2ScreenReading.chooseRegion();return;
-    }
-    const ok=action.dataset.p2Consent==='later'?window.phase2Settings.deferScreen():window.phase2Settings.authorizeScreen(selectedConsentDisplays());
-    if(ok){consent.close();if(action.dataset.p2Consent==='allow')window.phase2ScreenReading.flashDisplay();}
-    else{const error=consent.querySelector('.p2-consent-error');error.hidden=false;error.textContent='设置未保存，请重试。';}
-  });
-  consent.addEventListener('cancel',event=>{event.preventDefault();consent.close();});
-  consent.addEventListener('click',event=>{if(event.target!==consent)return;const rect=consent.getBoundingClientRect();if(event.clientX<rect.left||event.clientX>rect.right||event.clientY<rect.top||event.clientY>rect.bottom)consent.close();});
   document.addEventListener('click',event=>{
     const mirror=event.target.closest('.physical-screen-mirror-source');
     const control=event.target.closest('[data-p2-qa-control]');
@@ -147,16 +90,14 @@
     if(modal&&(mirror||modal.closest('[data-p2-global-voice]'))){event.preventDefault();event.stopImmediatePropagation();qaRoot()?.querySelector(':scope > #qa-modal-layer '+(modal.hasAttribute('data-qa-modal-cancel')?'[data-qa-modal-cancel]':'[data-qa-modal-confirm]'))?.click();return;}
     if(event.target.closest('[data-p2-voice-action="close"]')){event.preventDefault();event.stopImmediatePropagation();close();return;}
     const demo=event.target.closest('[data-p2-assistant-demo]');
-    if(demo){if(demo.dataset.p2AssistantDemo==='wake')wake();else if(demo.dataset.p2AssistantDemo==='transcript')receiveTranscript('请解释一下量子计算的基本原理');else openConsent();return;}
+    if(demo){if(demo.dataset.p2AssistantDemo==='wake')wake();else if(demo.dataset.p2AssistantDemo==='transcript')receiveTranscript('请解释一下量子计算的基本原理');return;}
 
   },true);
   document.addEventListener('input',event=>{
     if(event.target.dataset.p2QaControl!=='qa-drawer-search')return;
     const source=qaRoot()?.querySelector('#qa-drawer-search');if(source){source.value=event.target.value;qaRenderDrawer(source.value);}
   },true);
-  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&voiceOpen){event.preventDefault();close();}if(event.key==='F8'&&!consent.open){event.preventDefault();wake();}});
-  window.addEventListener('agentpc:screen-settings',event=>{screenState=event.detail;});
-  window.addEventListener('agentpc:screen-consent-request',openConsent);
+  document.addEventListener('keydown',event=>{if(event.key==='Escape'&&voiceOpen){event.preventDefault();close();}if(event.key==='F8'&&!document.querySelector('#p2-region-picker[open]')){event.preventDefault();wake();}});
   window.addEventListener('agentpc:voice-wake',wake);
   window.addEventListener('agentpc:voice-transcript',event=>receiveTranscript(event.detail?.text));
   window.phase2Assistant={wake,close,receiveTranscript,conversationChanged};
@@ -174,6 +115,4 @@
   }).observe(document.querySelector('main'),{subtree:true,attributes:true,attributeFilter:['class']});
   QA_STATE.mode='text';qaRender();
   if(!new URLSearchParams(location.search).has('page'))setActiveTab('voice');
-  // Memory has its own source setup dialog; retain the screen demo on other entries.
-  if(APP_STATE.currentPage !== "memory" && APP_STATE.currentPage !== "screen-config") openConsent();
 })();

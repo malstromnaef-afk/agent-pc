@@ -9876,11 +9876,11 @@ body.prototype-small .token-history-panel>.dev-field-notes{display:none!importan
     </style>
     <link rel="stylesheet" href="assets/phase2-memory-onboarding.css?v=20261022-memory-autosave">
     <link rel="stylesheet" href="assets/phase2-memory-sources.css?v=20261021-source-tabs">
-    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261123-screen-range">
+    <link rel="stylesheet" href="assets/phase2-settings.css?v=20261124-reading-session">
     <link rel="stylesheet" href="assets/phase2-memory-export.css?v=20261029-direct-memory-download">
-    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261124-tabtab-preview-label">
-    <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261123-screen-range">
-    <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261123-screen-range">
+    <link rel="stylesheet" href="assets/phase2-proactive.css?v=20261124-single-screen-reading">
+    <link rel="stylesheet" href="assets/phase2-assistant.css?v=20261124-direct-region-adjustment">
+    <link rel="stylesheet" href="assets/phase2-screen-reading.css?v=20261124-region-toolbar-stacked">
     <script src="assets/display-demo.js" defer></script>
     <link rel="stylesheet" href="assets/phase2-main-pages.css?v=20261028-page-titles">
     <link rel="stylesheet" href="assets/phase2-chat-layout.css?v=20261030-wide-composer">
@@ -10947,7 +10947,6 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
                   <small>原型状态演示（正式产品不展示）</small>
                   <button type="button" data-p2-assistant-demo="wake">演示全局唤醒</button>
                   <button type="button" data-p2-assistant-demo="transcript">演示识别结果</button>
-                  <button type="button" data-p2-assistant-demo="screen">首次屏幕授权演示</button>
                   <select id="qa-permission-demo" aria-label="切换麦克风权限状态">
                     <option value="first-use">首次使用</option>
                     <option value="requesting">等待系统授权结果</option>
@@ -11497,27 +11496,6 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
                   </div>
                   <p id="p2-pointer-exit-help" class="p2-capture-shortcut-help">再次按唤起快捷键退出，未发送内容保留为草稿。</p>
                 </section>
-                <section class="inner-card p2-system-card p2-screen-card" aria-label="自动读屏">
-                  <div class="p2-system-line">
-                    <div><strong>自动读屏</strong><p>持续读取所选屏幕或区域的内容。</p></div>
-                    <div class="p2-system-toggle"><span id="p2-screen-state">关闭</span><button type="button" class="toggle off" id="p2-screen-toggle" aria-label="开启自动读屏" aria-pressed="false"><img class="p2-toggle-on" src="assets/settings-figma/a3f5c.svg" width="56" height="32" alt=""><img class="p2-toggle-off" src="assets/settings-figma/1b902.svg" width="56" height="32" alt=""></button></div>
-                  </div>
-                  <div id="p2-screen-range-options" role="group" aria-label="读取范围" hidden>
-                    <div class="p2-read-range-row">
-                      <label class="p2-range-choice"><input type="radio" name="p2-screen-range" value="display" checked><span>整个屏幕<small>最多选择 2 个</small></span></label>
-                      <div id="p2-display-select" class="p2-display-options" role="group" aria-label="读取显示器">
-                        <label><input type="checkbox" value="external" data-p2-display>显示器 1 · 外接显示器</label>
-                        <label><input type="checkbox" value="builtin" data-p2-display>显示器 2 · 自带小屏</label>
-                      </div>
-                    </div>
-                    <div class="p2-read-range-row">
-                      <label class="p2-range-choice"><input type="radio" name="p2-screen-range" value="region"><span>框选区域</span></label>
-                      <div id="p2-region-shortcut" hidden><span class="p2-region-shortcut-label">快捷键</span><button type="button" class="soft-button p2-capture-shortcut" id="p2-capture-shortcut" aria-label="修改框选快捷键，当前为 Ctrl + Alt + S" aria-describedby="p2-capture-shortcut-help">Ctrl + Alt + S</button><button type="button" class="soft-button p2-region-start" id="p2-region-start">开始框选</button></div>
-                    </div>
-                    <p id="p2-capture-shortcut-help" class="p2-capture-shortcut-help" role="status" hidden>按 Ctrl／Alt 与字母或数字组合，Esc 取消。</p>
-                    <p id="p2-region-usage" class="p2-capture-shortcut-help" hidden>按快捷键开始框选，点击组合键可修改；Mac 使用 Control + Option + S。</p>
-                  </div>
-                </section>
                 <section class="inner-card p2-system-card p2-local-model-card" aria-labelledby="p2-local-model-heading">
                   <div class="p2-local-model-copy">
                     <div class="p2-local-model-summary"><h3 id="p2-local-model-heading">屏幕识别内置模型</h3><span id="p2-local-model-usage" title="原型演示数据，未接入实际用量统计">6个功能正在使用</span><span title="原型演示数据，未接入实际费用统计">已约$0.0511</span></div>
@@ -11551,7 +11529,7 @@ body:has(:is(#memory,#monitor,#usage,#screen-config).active) .main{padding-left:
                 <header class="pa-lead"><h2>主动辅助</h2><p>根据授权消息通知提前准备回复，也可以用 TabTab 获取输入补全和行动建议。</p></header>
                 <div class="pa-view-bar"><div class="pa-view-tabs" role="tablist" aria-label="主动辅助分类"><button type="button" role="tab" data-pa-view="settings" aria-controls="pa-settings" aria-selected="true">设置</button><button type="button" role="tab" data-pa-view="reply" aria-controls="pa-records" aria-selected="false">回复建议</button><button type="button" role="tab" data-pa-view="task" aria-controls="pa-records" aria-selected="false">任务建议</button></div><button type="button" class="pa-help" id="pa-help">ⓘ 使用帮助</button></div>
                 <div id="pa-settings">
-                  <section class="pa-card pa-master"><div class="pa-setting-row"><div class="pa-copy"><h3>主动辅助</h3><p>管理通知预起草回复和 TabTab 快捷辅助。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="enabled" aria-label="主动辅助" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div></section>
+                  <section class="pa-card pa-master"><div class="pa-setting-row"><div class="pa-copy"><h3>主动辅助</h3><p>开启后开始读屏，并启用 TabTab 快捷辅助和已开启的通知预起草回复。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="enabled" aria-label="主动辅助" aria-checked="true"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div></section>
                   <section class="pa-setting-section"><h3 class="pa-section-label">回复建议</h3><div class="pa-card">
                     <div class="pa-setting-row"><div class="pa-copy"><h3>通知预起草回复</h3><p>收到消息通知后提前准备草稿。回到对应会话，按 Tab 填入，由你发送。</p></div><button type="button" class="pa-switch" role="switch" data-pa-toggle="replyEnabled" aria-label="通知预起草回复" aria-checked="false"><img class="pa-switch-on" src="assets/proactive-figma/toggle-on.svg" width="56" height="30" alt=""><img class="pa-switch-off" src="assets/proactive-figma/toggle-off.svg" width="56" height="30" alt=""></button></div>
                     <div class="pa-setting-row pa-apps-row"><div class="pa-apps-head"><div class="pa-copy"><h3>关注应用</h3><p>只有选中的软件会被关注</p></div><span id="pa-app-count">未选择应用</span></div><div class="pa-app-picker" id="pa-app-picker"><div class="pa-app-field"><svg class="pa-app-search-icon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" aria-hidden="true" focusable="false"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 4.5 4.5"/></svg><div id="pa-app-tags" hidden></div><input id="pa-app-search" type="text" role="combobox" aria-label="关注应用" aria-expanded="false" aria-controls="pa-app-list" aria-autocomplete="list" aria-describedby="pa-app-status" placeholder="搜索应用名称" autocomplete="off"><button type="button" id="pa-app-expand" aria-label="展开应用列表" aria-expanded="false" aria-controls="pa-app-list">⌄</button></div><div id="pa-app-list" role="listbox" aria-label="本机已安装的应用" aria-multiselectable="true" hidden></div><p id="pa-app-status" role="status" hidden></p></div></div>
@@ -20731,10 +20709,10 @@ document.addEventListener("click", handleAgentStatePreviewPointer, true);
       .pmo-im-form .pmo-back{justify-self:start}
     </style>
     <script src="assets/phase2-small-memory.js?v=20261120-memory-import-title"></script>
-    <script src="assets/phase2-settings.js?v=20261123-screen-range"></script>
-    <script src="assets/phase2-proactive.js?v=20261124-tabtab-preview-label"></script>
-    <script src="assets/phase2-screen-reading.js?v=20261123-screen-range"></script>
-    <script src="assets/phase2-assistant.js?v=20261123-screen-range"></script>
+<script src="assets/phase2-settings.js?v=20261124-default-full-screen"></script>
+    <script src="assets/phase2-proactive.js?v=20261124-reading-session"></script>
+    <script src="assets/phase2-screen-reading.js?v=20261124-region-toolbar-stacked"></script>
+    <script src="assets/phase2-assistant.js?v=20261124-direct-region-adjustment"></script>
     <script src="assets/phase2-memory-onboarding.js?v=20261120-memory-paste-copy"></script>
     <script src="assets/phase2-memory-export.js?v=20261029-direct-memory-download"></script>
     <script src="assets/phase2-chat-layout.js?v=20261030-no-dev-notes"></script>

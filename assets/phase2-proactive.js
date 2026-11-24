@@ -359,13 +359,16 @@
     el.textContent = value; el.hidden = false;
     clearTimeout(feedbackTimer); feedbackTimer = setTimeout(() => { el.hidden = true; }, 2500);
   }
+  function publishSettings() {
+    window.dispatchEvent(new CustomEvent('agentpc:proactive-settings', {detail:{...state, apps:[...state.apps], aliases:[...state.aliases]}}));
+  }
   function save(next) {
     const clean = restoreSettings(next);
     try {
       storage.setItem(key, JSON.stringify(clean));
       state = clean;
       renderSettings();
-      window.dispatchEvent(new CustomEvent('agentpc:proactive-settings', {detail:{...state, apps:[...state.apps], aliases:[...state.aliases]}}));
+      publishSettings();
       return true;
     } catch (_) {
       renderSettings();
@@ -508,7 +511,7 @@
     if (typeof setConfigSubpage === 'function') setConfigSubpage(configTabs[index].dataset.phase2SettingTab);
     configTabs[index].focus();
   }));
-  renderSettings(); selectView('settings');
+  renderSettings(); selectView('settings'); publishSettings();
   if (state.apps.length) void readInstalledApps();
   function initialRoute() {
     const params = new URLSearchParams(location.search);
